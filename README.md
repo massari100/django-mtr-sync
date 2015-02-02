@@ -8,7 +8,7 @@ Full-feature package for easy importing and exporting of data
 - Model API - registers models for use  in package
 - Field settings:
   - maps model fields with data fields
-  - adds and removes fields
+  - adds and removes fields (ability to skip fields on import)
   - includes drag&drop sorting fields
 - Supports: CSV(native), XLS (using: xlwt-future, xlrd), XLSX (using: openpyxl optimized writer, reader mode, for fast processing of large volumes of data)
 - Saves import templates for the processing of data from various sources and for simplicity
