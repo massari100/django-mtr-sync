@@ -1,4 +1,4 @@
-# django-mtr-import-export
+# django-mtr-sync
 Full-feature package for easy importing and exporting of data
 
 ## Features:

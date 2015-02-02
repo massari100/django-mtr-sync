@@ -1,0 +1,1 @@
+default_app_config = 'mtr_sync.apps.MtrSyncConfig'

@@ -1,0 +1,13 @@
+# activate or create virtualenv for test project
+
+source /usr/local/bin/virtualenvwrapper.sh
+
+ENV_NAME="django-mtr-sync-3"
+PYTHON_BIN="/usr/bin/python3"
+
+if [ -n "$(lsvirtualenv | grep $ENV_NAME)" ]; then
+    workon $ENV_NAME
+else
+    mkvirtualenv $ENV_NAME -p $PYTHON_BIN
+    pip install -r requirements.txt
+fi
