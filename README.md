@@ -1,6 +1,8 @@
 # django-mtr-sync
 Full-feature package for easy importing and exporting of data
 
+Full description at [kickstarter][https://www.kickstarter.com/projects/1625615835/django-opensource-improved-import-export-package]
+
 ## Features:
 - Multilingual (i18n)
 - Uses Celery for background tasks and for processing large volumes of data
@@ -10,6 +12,7 @@ Full-feature package for easy importing and exporting of data
   - maps model fields with data fields
   - adds and removes fields (ability to skip fields on import)
   - includes drag&drop sorting fields
+  - related models(fields) import-export by choosing main model
 - Supports: CSV(native), XLS (using: xlwt-future, xlrd), XLSX (using: openpyxl optimized writer, reader mode, for fast processing of large volumes of data)
 - Saves import templates for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
