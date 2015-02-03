@@ -56,3 +56,6 @@ target/
 # SublimeText
 *.sublime-project
 *.sublime-workspace
+
+*.sqlite3
+tests/media

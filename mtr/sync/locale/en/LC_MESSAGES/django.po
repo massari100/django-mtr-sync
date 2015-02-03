@@ -1,0 +1,71 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# mtr group <inboxmtr@gmail.com>, 2015.
+#: admin.py:25
+msgid "mtr.sync:Link to file"
+msgstr "Link to file"
+
+#: apps.py:10
+msgid "mtr.sync:Data sync"
+msgstr "Data sync"
+
+#: models.py:44
+msgid "mtr.sync:Error"
+msgstr "Error"
+
+#: models.py:45
+msgid "mtr.sync:Running"
+msgstr "Running"
+
+#: models.py:46
+msgid "mtr.sync:Success"
+msgstr "Success"
+
+#: models.py:53
+msgid "mtr.sync:Export"
+msgstr "Export"
+
+#: models.py:54
+msgid "mtr.sync:Import"
+msgstr "Import"
+
+#: models.py:58
+msgid "mtr.sync:file"
+msgstr "file"
+
+#: models.py:60
+msgid "mtr.sync:status"
+msgstr "status"
+
+#: models.py:62
+msgid "mtr.sync:action"
+msgstr "action"
+
+#: models.py:65
+msgid "mtr.sync:started at"
+msgstr "started at"
+
+#: models.py:67
+msgid "mtr.sync:completed at"
+msgstr "completed at"
+
+#: models.py:69
+msgid "mtr.sync:updated at"
+msgstr "updated at"
+
+#: models.py:76
+msgid "mtr.sync:log entry"
+msgstr "log entry"
+
+#: models.py:77
+msgid "mtr.sync:log entries"
+msgstr "log entries"
+
+#: templates/mtr_sync/dashboard.html:3 templates/mtr_sync/dashboard.html:8
+msgid "mtr.sync:Data sync dashboard"
+msgstr "Data sync dashboard"
+
+#: templates/mtr_sync/dashboard.html:7
+msgid "mtr.sync:Home"
+msgstr "Home"
