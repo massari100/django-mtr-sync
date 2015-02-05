@@ -55,7 +55,7 @@ class LogEntry(models.Model):
     )
 
     buffer_file = models.FileField(
-        _('mtr.sync:file'), upload_to=FILE_PATH)
+        _('mtr.sync:file'), upload_to=FILE_PATH())
     status = models.PositiveSmallIntegerField(
         _('mtr.sync:status'), choices=STATUS_CHOICES)
     action = models.PositiveSmallIntegerField(
@@ -81,5 +81,5 @@ class LogEntry(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.started_at, self.get_status_display())
 
-    # def get_absolute_url(self):
-    #     return self.buffer_file.url
+    def get_absolute_url(self):
+        return self.buffer_file.url

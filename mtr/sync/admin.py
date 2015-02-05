@@ -17,10 +17,10 @@ class LogEntryAdmin(admin.ModelAdmin):
     date_hierarchy = 'started_at'
 
     def buffer_file_link(self, obj):
-        """ Display download link """
+        """Display download link"""
 
         return '<a href="{}">{}</a>'.format(
-            obj.buffer_file.url, os.path.basename(obj.buffer_file.name))
+            obj.get_absolute_url(), os.path.basename(obj.buffer_file.name))
 
     buffer_file_link.allow_tags = True
     buffer_file_link.short_description = _(
