@@ -3,11 +3,12 @@ import os
 from django.conf import settings
 
 # custom prefix for avoiding name colissions
-PREFIX = getattr(settings, 'SYNC_SETTINGS_PREFIX', 'SYNC')
+PREFIX = getattr(settings, 'MTR_SYNC_SETTINGS_PREFIX', 'MTR_SYNC')
 
 
 def getattr_with_prefix(name, default):
     """Shortcut for getting settings attribute with prefix"""
+
     return lambda: getattr(settings, '{}_{}'.format(PREFIX, name), default)
 
 
