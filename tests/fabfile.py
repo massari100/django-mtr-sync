@@ -7,7 +7,7 @@ APPS = ['mtr.sync']
 def clear():
     """Delete unnecessary and cached files"""
 
-    local("find . -name '~*'' -or -name '*.pyo' -or -name '*.pyc' "
+    local("find . -name '~*' -or -name '*.pyo' -or -name '*.pyc' "
         "-or -name 'Thubms.db' | xargs -I {} rm -v '{}'")
 
 

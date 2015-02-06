@@ -85,3 +85,9 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Celery settings
+BROKER_URL = 'memory://'
+BROKER_BACKEND = 'memory'
+CELERY_ALWAYS_EAGER = True
+CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
