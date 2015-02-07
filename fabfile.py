@@ -1,3 +1,5 @@
+import os
+
 from fabric.api import local, task, settings, hide, lcd
 
 APPS = ['mtr.sync']
@@ -36,3 +38,20 @@ def celery():
 
     with lcd(PROJECT_DIR):
         local('celery worker -A app')
+
+
+@task
+def locale(action='make', lang='en'):
+    """Make messages, and compile messages for listed apps"""
+
+    if action == 'make':
+        for app in APPS:
+            with lcd(os.path.join(*app.split('.'))):
+                local('django-admin.py makemessages -l {}'.format(lang))
+    elif action == 'compile':
+        for app in APPS:
+            with lcd(os.path.join(*app.split('.'))):
+                local('django-admin.py compilemessages -l {}'.format(lang))
+    else:
+        print('Invalid action: {}, available actions: "make"'
+            ', "compile"'.format(action))

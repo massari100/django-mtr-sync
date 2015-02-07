@@ -2,11 +2,11 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # mtr group <inboxmtr@gmail.com>, 2015.
-#: admin.py:25
+#: admin.py:27
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: apps.py:10
+#: apps.py:10 templates/mtr/sync/default/dashboard.html:10
 msgid "mtr.sync:Data sync"
 msgstr "Data sync"
 
@@ -62,10 +62,15 @@ msgstr "log entry"
 msgid "mtr.sync:log entries"
 msgstr "log entries"
 
-#: templates/mtr_sync/dashboard.html:3 templates/mtr_sync/dashboard.html:8
+#: templates/mtr/sync/default/dashboard.html:5
+#: templates/mtr/sync/default/dashboard.html:15
 msgid "mtr.sync:Data sync dashboard"
 msgstr "Data sync dashboard"
 
-#: templates/mtr_sync/dashboard.html:7
+#: templates/mtr/sync/default/dashboard.html:9
 msgid "mtr.sync:Home"
 msgstr "Home"
+
+#: templates/mtr/sync/default/dashboard.html:10
+msgid "mtr.sync:Dashboard"
+msgstr "Daashboard"

@@ -17,3 +17,15 @@ def dashboard(request):
     export_data.apply_async()
 
     return context
+
+
+def import_upload(request):
+    pass
+
+
+def import_settings(request):
+    pass
+
+
+def import_result(request):
+    pass
