@@ -1,6 +1,6 @@
 from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
 
+from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -57,7 +57,7 @@ class LogEntry(models.Model):
     buffer_file = models.FileField(
         _('mtr.sync:file'), upload_to=FILE_PATH())
     status = models.PositiveSmallIntegerField(
-        _('mtr.sync:status'), choices=STATUS_CHOICES)
+        _('mtr.sync:status'), choices=STATUS_CHOICES, default=RUNNING)
     action = models.PositiveSmallIntegerField(
         _('mtr.sync:action'), choices=ACTION_CHOICES, db_index=True)
 

@@ -1,6 +1,7 @@
-from fabric.api import local, task, settings, hide
+from fabric.api import local, task, settings, hide, lcd
 
 APPS = ['mtr.sync']
+PROJECT_DIR = 'tests'
 
 
 @task
@@ -17,11 +18,21 @@ def test():
 
     with settings(hide('warnings'), warn_only=True):
         test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), APPS))
-        local("./manage.py test {} --pattern='*.py'".format(test_apps))
+        with lcd(PROJECT_DIR):
+            local("./manage.py test {} --pattern='*.py'".format(test_apps))
 
 
 @task
 def run():
     """Run server"""
 
-    local("./manage.py runserver")
+    with lcd(PROJECT_DIR):
+        local('./manage.py runserver')
+
+
+@task
+def celery():
+    """Start celery worker"""
+
+    with lcd(PROJECT_DIR):
+        local('celery worker -A app')
