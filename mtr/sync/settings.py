@@ -24,3 +24,6 @@ FILE_PATH = getattr_with_prefix('FILE_PATH', get_buffer_file_path)
 
 # theme path
 THEME_PATH = getattr_with_prefix('THEME_PATH', 'default')
+
+# additional api for import and export to register
+IMPORT_FROM = getattr_with_prefix('IMPORT_FROM', [])

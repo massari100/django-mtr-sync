@@ -31,8 +31,36 @@ class RunningManager(models.Manager):
             .filter(status=self.model.RUNNING)
 
 
+class ActionsMixin(models.Model):
+    """Action choices mixin"""
+
+    EXPORT = 0
+    IMPORT = 1
+
+    ACTION_CHOICES = (
+        (EXPORT, _('mtr.actions:Export')),
+        (IMPORT, _('mtr.actions:Import'))
+    )
+
+    action = models.PositiveSmallIntegerField(
+        _('mtr.sync:action'), choices=ACTION_CHOICES, db_index=True)
+
+    class Meta:
+        abstract = True
+
+
 @python_2_unicode_compatible
-class LogEntry(models.Model):
+class Settings(ActionsMixin):
+    """Stores settings for imported and exported files"""
+
+    name = models.CharField(_('mtr.sync:name'), max_length=100)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible
+class Log(ActionsMixin):
     """Stores reports about imported and exported operations and link to files
     """
 
@@ -46,20 +74,10 @@ class LogEntry(models.Model):
         (SUCCESS, _('mtr.sync:Success'))
     )
 
-    EXPORT = 0
-    IMPORT = 1
-
-    ACTION_CHOICES = (
-        (EXPORT, _('mtr.sync:Export')),
-        (IMPORT, _('mtr.sync:Import'))
-    )
-
     buffer_file = models.FileField(
-        _('mtr.sync:file'), upload_to=FILE_PATH())
+        _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True)
     status = models.PositiveSmallIntegerField(
         _('mtr.sync:status'), choices=STATUS_CHOICES, default=RUNNING)
-    action = models.PositiveSmallIntegerField(
-        _('mtr.sync:action'), choices=ACTION_CHOICES, db_index=True)
 
     started_at = models.DateTimeField(
         _('mtr.sync:started at'), auto_now_add=True)
@@ -67,6 +85,11 @@ class LogEntry(models.Model):
         _('mtr.sync:completed at'), null=True, blank=True)
     updated_at = models.DateTimeField(
         _('mtr.sync:updated at'), auto_now=True)
+
+    settings = models.ForeignKey(
+        Settings, verbose_name=_('mtr.sync:used settings'),
+        null=True, blank=True
+    )
 
     export_objects = ExportManager()
     import_objects = ImportManager()

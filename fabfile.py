@@ -55,3 +55,11 @@ def locale(action='make', lang='en'):
     else:
         print('Invalid action: {}, available actions: "make"'
             ', "compile"'.format(action))
+
+
+@task
+def install():
+    """Install packages for testing"""
+
+    with lcd(PROJECT_DIR):
+        local('pip install -r requirements.txt')

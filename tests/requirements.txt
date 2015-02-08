@@ -3,3 +3,6 @@ pytz
 fabric
 ipython
 celery
+openpyxl
+xlwt-future
+xlrd

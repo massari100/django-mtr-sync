@@ -5,10 +5,10 @@ import os
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 
-from .models import LogEntry
+from .models import Log
 
 
-class LogEntryAdmin(admin.ModelAdmin):
+class LogAdmin(admin.ModelAdmin):
     list_display = (
         'started_at', 'action', 'status', 'completed_at', 'buffer_file_link')
     list_filter = ('action', 'status', 'started_at', 'completed_at')
@@ -26,4 +26,4 @@ class LogEntryAdmin(admin.ModelAdmin):
     buffer_file_link.short_description = _(
         'mtr.sync:Link to file')
 
-admin.site.register(LogEntry, LogEntryAdmin)
+admin.site.register(Log, LogAdmin)
