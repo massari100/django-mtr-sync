@@ -5,7 +5,7 @@ import os
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 
-from .models import Log
+from .models import Log, Settings, Field
 
 
 class LogAdmin(admin.ModelAdmin):
@@ -26,4 +26,17 @@ class LogAdmin(admin.ModelAdmin):
     buffer_file_link.short_description = _(
         'mtr.sync:Link to file')
 
+
+class FieldInline(admin.TabularInline):
+    # list_display = ('name', 'model', 'column')
+    extra = 0
+    model = Field
+
+
+class SettingsAdmin(admin.ModelAdmin):
+    list_display = ('name', 'action', 'main_model', 'created_at', 'updated_at')
+    # inlines = (FieldInline,)
+    # date_hierarchy = 'created_at'
+
 admin.site.register(Log, LogAdmin)
+admin.site.register(Settings, SettingsAdmin)

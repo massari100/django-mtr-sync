@@ -55,6 +55,53 @@ class Settings(ActionsMixin):
 
     name = models.CharField(_('mtr.sync:name'), max_length=100)
 
+    start_column = models.CharField(
+        _('mtr.sync:start column'), max_length=10, blank=True)
+    start_row = models.PositiveIntegerField(
+        _('mtr.sync:start row'), null=True, blank=True)
+
+    end_column = models.CharField(
+        _('mtr.sync:end column'), max_length=10, blank=True)
+    end_row = models.PositiveIntegerField(
+        _('mtr.sync:end row'), null=True, blank=True)
+
+    limit_upload_data = models.BooleanField(
+        _('mtr.sync:limit upload data'), default=False)
+
+    main_model = models.CharField(
+        _('mtr.sync:main model'), max_length=255)
+    main_model_id = models.PositiveIntegerField(
+        _('mtr.sync:main model object'), null=True, blank=True)
+
+    created_at = models.DateTimeField(
+        _('mtr.sync:created at'), auto_now_add=True)
+    updated_at = models.DateTimeField(
+        _('mtr.sync:updated at'), auto_now=True)
+
+    class Meta:
+        verbose_name = _('mtr.sync:settings')
+        verbose_name_plural = _('mtr.sync:settings')
+
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible
+class Field(models.Model):
+    name = models.CharField(_('mtr.sync:name'), max_length=255)
+    model = models.CharField(_('mtr.sync:model'), max_length=255)
+    column = models.CharField(_('mtr.sync:column'), max_length=255)
+
+    settings = models.ForeignKey(Settings, verbose_name=_('mtr.sync:settings'))
+
+    class Meta:
+        verbose_name = _('mtr.sync:field')
+        verbose_name_plural = _('mtr.sync:fields')
+
+        order_with_respect_to = 'settings'
+
     def __str__(self):
         return self.name
 

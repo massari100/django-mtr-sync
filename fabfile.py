@@ -63,3 +63,12 @@ def install():
 
     with lcd(PROJECT_DIR):
         local('pip install -r requirements.txt')
+
+
+@task
+def migrate():
+    """Make migrations and migrate"""
+
+    with lcd(PROJECT_DIR):
+        local('./manage.py makemigrations')
+        local('./manage.py migrate')
