@@ -10,57 +10,117 @@ msgstr "Link to file"
 msgid "mtr.sync:Data sync"
 msgstr "Data sync"
 
-#: models.py:44
-msgid "mtr.sync:Error"
-msgstr "Error"
-
-#: models.py:45
-msgid "mtr.sync:Running"
-msgstr "Running"
-
-#: models.py:46
-msgid "mtr.sync:Success"
-msgstr "Success"
-
-#: models.py:53
-msgid "mtr.sync:Export"
+#: models.py:41
+msgid "mtr.actions:Export"
 msgstr "Export"
 
-#: models.py:54
-msgid "mtr.sync:Import"
+#: models.py:42
+msgid "mtr.actions:Import"
 msgstr "Import"
 
-#: models.py:58
-msgid "mtr.sync:file"
-msgstr "file"
-
-#: models.py:60
-msgid "mtr.sync:status"
-msgstr "status"
-
-#: models.py:62
+#: models.py:46
 msgid "mtr.sync:action"
 msgstr "action"
 
-#: models.py:65
-msgid "mtr.sync:started at"
-msgstr "started at"
+#: models.py:56 models.py:93
+msgid "mtr.sync:name"
+msgstr "name"
 
-#: models.py:67
-msgid "mtr.sync:completed at"
-msgstr "completed at"
+#: models.py:59
+msgid "mtr.sync:start column"
+msgstr "start column"
+
+#: models.py:61
+msgid "mtr.sync:start row"
+msgstr "start row"
+
+#: models.py:64
+msgid "mtr.sync:end column"
+msgstr "end column"
+
+#: models.py:66
+msgid "mtr.sync:end row"
+msgstr "end row"
 
 #: models.py:69
+msgid "mtr.sync:limit upload data"
+msgstr "limit upload data"
+
+#: models.py:72
+msgid "mtr.sync:main model"
+msgstr "main model"
+
+#: models.py:74
+msgid "mtr.sync:main model object"
+msgstr "main model object"
+
+#: models.py:77
+msgid "mtr.sync:created at"
+msgstr "created at"
+
+#: models.py:79 models.py:134
 msgid "mtr.sync:updated at"
 msgstr "updated at"
 
-#: models.py:76
-msgid "mtr.sync:log entry"
-msgstr "log entry"
+#: models.py:82 models.py:83 models.py:97
+msgid "mtr.sync:settings"
+msgstr "settings"
 
-#: models.py:77
-msgid "mtr.sync:log entries"
-msgstr "log entries"
+#: models.py:94
+msgid "mtr.sync:model"
+msgstr "model"
+
+#: models.py:95
+msgid "mtr.sync:column"
+msgstr "column"
+
+#: models.py:100
+msgid "mtr.sync:field"
+msgstr "field"
+
+#: models.py:101
+msgid "mtr.sync:fields"
+msgstr "fields"
+
+#: models.py:119
+msgid "mtr.sync:Error"
+msgstr "Error"
+
+#: models.py:120
+msgid "mtr.sync:Running"
+msgstr "Running"
+
+#: models.py:121
+msgid "mtr.sync:Success"
+msgstr "Success"
+
+#: models.py:125
+msgid "mtr.sync:file"
+msgstr "file"
+
+#: models.py:127
+msgid "mtr.sync:status"
+msgstr "status"
+
+#: models.py:130
+msgid "mtr.sync:started at"
+msgstr "started at"
+
+#: models.py:132
+msgid "mtr.sync:completed at"
+msgstr "completed at"
+
+#: models.py:137
+msgid "mtr.sync:used settings"
+msgstr "used settings"
+
+#: models.py:146
+msgid "mtr.sync:report"
+msgstr "report"
+
+#: models.py:147
+msgid "mtr.sync:reports"
+msgstr "reports"
 
 #: templates/mtr/sync/default/dashboard.html:5
 #: templates/mtr/sync/default/dashboard.html:15

@@ -9,3 +9,8 @@ def export_data():
 @shared_task
 def import_data():
     return True
+
+
+@shared_task
+def check_periodic_export():
+    pass

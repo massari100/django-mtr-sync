@@ -5,10 +5,10 @@ import os
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 
-from .models import Log, Settings, Field
+from .models import Report, Settings, Field
 
 
-class LogAdmin(admin.ModelAdmin):
+class ReportAdmin(admin.ModelAdmin):
     list_display = (
         'started_at', 'action', 'status', 'completed_at', 'buffer_file_link')
     list_filter = ('action', 'status', 'started_at', 'completed_at')
@@ -28,15 +28,14 @@ class LogAdmin(admin.ModelAdmin):
 
 
 class FieldInline(admin.TabularInline):
-    # list_display = ('name', 'model', 'column')
     extra = 0
     model = Field
 
 
 class SettingsAdmin(admin.ModelAdmin):
     list_display = ('name', 'action', 'main_model', 'created_at', 'updated_at')
-    # inlines = (FieldInline,)
-    # date_hierarchy = 'created_at'
+    inlines = (FieldInline,)
+    date_hierarchy = 'created_at'
 
-admin.site.register(Log, LogAdmin)
+admin.site.register(Report, ReportAdmin)
 admin.site.register(Settings, SettingsAdmin)

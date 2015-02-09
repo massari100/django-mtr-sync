@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.utils.translation import gettext_lazy as _
@@ -24,7 +22,7 @@ class ImportManager(models.Manager):
 
 
 class RunningManager(models.Manager):
-    """Shortcut for running log entry queryset"""
+    """Shortcut for running Report entry queryset"""
 
     def get_queryset(self):
         return super(RunningManager, self).get_queryset() \
@@ -78,11 +76,30 @@ class Settings(ActionsMixin):
     updated_at = models.DateTimeField(
         _('mtr.sync:updated at'), auto_now=True)
 
+    processor = models.CharField(_('mtr.sync:processor'), max_length=255)
+
     class Meta:
         verbose_name = _('mtr.sync:settings')
         verbose_name_plural = _('mtr.sync:settings')
 
-        ordering = ['-created_at']
+        ordering = ('-id',)
+
+    def __str__(self):
+        return self.name
+
+
+@python_2_unicode_compatible
+class Filter(models.Model):
+    name = models.CharField(_('mtr.sync:name'), max_length=255)
+    description = models.TextField(
+        _('mtr.sync:description'), max_length=20000, null=True, blank=True)
+    template = models.TextField(_('mtr.sync:template'), max_length=50000)
+
+    class Meta:
+        verbose_name = _('mtr.sync:filter')
+        verbose_name_plural = _('mtr.sync:filters')
+
+        ordering = ('-id',)
 
     def __str__(self):
         return self.name
@@ -94,7 +111,14 @@ class Field(models.Model):
     model = models.CharField(_('mtr.sync:model'), max_length=255)
     column = models.CharField(_('mtr.sync:column'), max_length=255)
 
+    filters = models.ManyToManyField(Filter, through='FilterParams')
+
     settings = models.ForeignKey(Settings, verbose_name=_('mtr.sync:settings'))
+
+    def ordered_filters(self):
+        related = FilterParams.objects \
+            .filter(filter_related__in=self.filters.all()).order_by('_order')
+        return map(lambda r: r.filter_related, related)
 
     class Meta:
         verbose_name = _('mtr.sync:field')
@@ -106,8 +130,18 @@ class Field(models.Model):
         return self.name
 
 
+class FilterParams(models.Model):
+    _order = models.PositiveIntegerField(default=0)
+
+    filter_related = models.ForeignKey(Filter, related_name='filter_params')
+    field_related = models.ForeignKey(Field)
+
+    class Meta:
+        ordering = ('_order',)
+
+
 @python_2_unicode_compatible
-class Log(ActionsMixin):
+class Report(ActionsMixin):
     """Stores reports about imported and exported operations and link to files
     """
 
@@ -143,10 +177,10 @@ class Log(ActionsMixin):
     running_objects = RunningManager()
 
     class Meta:
-        verbose_name = _('mtr.sync:log entry')
-        verbose_name_plural = _('mtr.sync:log entries')
+        verbose_name = _('mtr.sync:report')
+        verbose_name_plural = _('mtr.sync:reports')
 
-        get_latest_by = '-started_at'
+        ordering = ('-id',)
 
     def __str__(self):
         return '{} - {}'.format(self.started_at, self.get_status_display())

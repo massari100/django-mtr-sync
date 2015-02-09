@@ -1,23 +1,39 @@
 from __future__ import unicode_literals
 
+from collections import OrderedDict
+
 from .settings import IMPORT_FROM
-
-
-class Processor(object):
-    """Base implementation of import and export operations"""
-
-    pass
 
 
 class ProcessorExists(Exception):
     pass
 
 
+class Processor(object):
+    """Base implementation of import and export operations"""
+
+    formats = OrderedDict()
+
+    def __init__(self, filepath, settings):
+        self.filepath = filepath
+        self.settings = settings
+
+    def export_data(self, queryset):
+        """Export data from queryset to file and return path"""
+
+        raise NotImplementedError
+
+    def import_data(self, data, model):
+        """Import data to model and return errors if exists"""
+
+        raise NotImplementedError
+
+
 class Manager(object):
-    """Manager for registering new formats"""
+    """Manager for registering new processors"""
 
     def __init__(self):
-        self.processors = {}
+        self.processors = OrderedDict()
 
     @classmethod
     def create(cls):
@@ -32,7 +48,7 @@ class Manager(object):
 
         if self.has_processor(cls):
             raise ProcessorExists('Processor already exists')
-        self.processors[cls.__name__] = cls()
+        self.processors[cls.__name__] = cls
 
         return cls
 
