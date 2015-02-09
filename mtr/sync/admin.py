@@ -5,7 +5,7 @@ import os
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 
-from .models import Report, Settings, Field
+from .models import Report, Settings, Field, FilterParams, Filter
 
 
 class ReportAdmin(admin.ModelAdmin):
@@ -27,15 +27,26 @@ class ReportAdmin(admin.ModelAdmin):
         'mtr.sync:Link to file')
 
 
-class FieldInline(admin.TabularInline):
+class FilterInline(admin.TabularInline):
+    model = FilterParams
     extra = 0
-    model = Field
+
+
+class FilterAdmin(admin.ModelAdmin):
+    list_display = ('name', 'description')
+
+
+class FieldAdmin(admin.ModelAdmin):
+    list_display = ('name', 'model', 'column', 'settings')
+    list_filter = ('settings',)
+    inlines = (FilterInline,)
 
 
 class SettingsAdmin(admin.ModelAdmin):
     list_display = ('name', 'action', 'main_model', 'created_at', 'updated_at')
-    inlines = (FieldInline,)
     date_hierarchy = 'created_at'
 
 admin.site.register(Report, ReportAdmin)
 admin.site.register(Settings, SettingsAdmin)
+admin.site.register(Field, FieldAdmin)
+admin.site.register(Filter, FilterAdmin)

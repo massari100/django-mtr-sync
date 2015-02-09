@@ -49,7 +49,7 @@ class ActionsMixin(models.Model):
 
 @python_2_unicode_compatible
 class Settings(ActionsMixin):
-    """Stores settings for imported and exported files"""
+    """Settings for imported and exported files"""
 
     name = models.CharField(_('mtr.sync:name'), max_length=100)
 
@@ -90,6 +90,8 @@ class Settings(ActionsMixin):
 
 @python_2_unicode_compatible
 class Filter(models.Model):
+    """Filter data using internal template"""
+
     name = models.CharField(_('mtr.sync:name'), max_length=255)
     description = models.TextField(
         _('mtr.sync:description'), max_length=20000, null=True, blank=True)
@@ -107,6 +109,8 @@ class Filter(models.Model):
 
 @python_2_unicode_compatible
 class Field(models.Model):
+    """Data mapping field for Settings"""
+
     name = models.CharField(_('mtr.sync:name'), max_length=255)
     model = models.CharField(_('mtr.sync:model'), max_length=255)
     column = models.CharField(_('mtr.sync:column'), max_length=255)
@@ -142,7 +146,7 @@ class FilterParams(models.Model):
 
 @python_2_unicode_compatible
 class Report(ActionsMixin):
-    """Stores reports about imported and exported operations and link to files
+    """Reports about imported and exported operations and link to files
     """
 
     ERROR = 0
