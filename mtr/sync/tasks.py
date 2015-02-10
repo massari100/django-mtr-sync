@@ -5,14 +5,14 @@ from .models import Settings
 
 
 @shared_task
-def export_data(params):
+def export_data(params, data):
     settings_id = params.get('id', False)
     if settings_id:
         settings = Settings.object.get(pk=settings_id)
     else:
         settings = Settings(**params)
 
-    manager.export_data(settings)
+    manager.export_data(settings, data)
 
 
 @shared_task

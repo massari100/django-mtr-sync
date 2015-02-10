@@ -2,9 +2,11 @@ from __future__ import unicode_literals
 
 from collections import OrderedDict
 
+from django.utils.six.moves import range
 from django.utils import timezone
+from django.core.files.base import ContentFile
 
-from .settings import IMPORT_FROM, LIMIT_PREVIEW, FILE_PATH
+from .settings import IMPORT_FROM, LIMIT_PREVIEW
 from .models import Report
 
 
@@ -19,10 +21,8 @@ class Processor(object):
     file_format = None
     file_description = None
 
-    def __init__(self, filepath, settings, queryset):
-        self.filepath = filepath
+    def __init__(self, settings):
         self.settings = settings
-        self.queryset = queryset
 
     def prepare(self):
         pass
@@ -73,7 +73,7 @@ class Processor(object):
     def export_data(self, data):
         """Export data from queryset to file and return path"""
 
-        report = Report.objects.create(action=Report.EXPORT)
+        report = Report.export_objects.create(action=Report.EXPORT)
 
         self.prepare()
 
@@ -84,7 +84,7 @@ class Processor(object):
         # start, end = self.dimensions(0, 0, worksheet.nrows, worksheet.ncols)
         start, end = self.dimensions(0, 0, data['rows'], data['cols'])
 
-        if self.settings.include_header:
+        if self.settings.include_header and self.settings.fields.all():
             header_data = map(lambda f: f.name, self.settings.fields.all())
 
             self.write(
@@ -93,21 +93,25 @@ class Processor(object):
             start['row'] += 1
             end['row'] += 1
 
+        cells = range(start['col'], end['col'])
         for rindex, row in enumerate(range(start['row'], end['row'])):
             row_data = []
-            for cindex, col in enumerate(range(start['col'], end['col'])):
-                row_data.append(next(data['items']))
-            self.write(row, row_data)
+            for cindex, col in enumerate(cells):
+                row_data.append(data['items'][rindex][cindex])
+            self.write(row, row_data, cells)
 
         # save external file and report
-        path = FILE_PATH()(report, str(report.id))
-        self.save(path)
+        # path = FILE_PATH()(
+        #     report, '{}{}'.format(str(report.id), self.file_format))
+        # path = timezone.now().strftime(path)
+        # self.save(path)
 
-        print path
-
-        report.buffer_file = path
         report.completed_at = timezone.now()
-        report.save()
+        report.status = Report.SUCCESS
+        report.buffer_file.save(
+            '{}{}'.format(str(report.id), self.file_format), ContentFile(''))
+
+        self.save(report.buffer_file.path)
 
         return report
 
@@ -155,6 +159,9 @@ class Manager(object):
         """Check if processor already exists"""
 
         return True if self.processors.get(cls.__name__, False) else False
+
+    def export_data(self, settings, data):
+        return self.processors[settings.processor](settings).export_data(data)
 
     def import_processors(self):
         """Import modules within IMPORT_FROM paths"""

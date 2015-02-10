@@ -1,10 +1,8 @@
 from __future__ import unicode_literals
 
 from django.utils.translation import gettext_lazy as _
-from django.utils.six.moves import range
 
 from .api import Processor, manager
-from .settings import FILE_PATH
 
 try:
     import xlrd
@@ -29,7 +27,7 @@ class XlsProcessor(Processor):
 
     def prepare(self):
         self._workbook = xlwt.Workbook('utf-8')
-        self._worksheet = self.workbook.add_sheet(self.settings.worksheet)
+        self._worksheet = self._workbook.add_sheet(self.settings.worksheet)
 
     def write(self, row, value, cells=None):
         # len(cells) == len(rows)
@@ -41,12 +39,9 @@ class XlsProcessor(Processor):
         self._workbook.save(name)
 
 
-
-
 # class XlsxProcessor(Processor):
 #     data_type = 'table'
 
 
 # class OdsProcessor(Processor):
 #     data_type = 'table'
-

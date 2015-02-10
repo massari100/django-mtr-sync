@@ -13,7 +13,7 @@ def dashboard(request):
         'last_exported': Report.export_objects.all()[:10]
     }
 
-    export_data.apply_async()
+    #export_data.apply_async()
 
     return context
 
