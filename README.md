@@ -20,10 +20,10 @@ Full description at [kickstarter page](https://www.kickstarter.com/projects/1625
 
 ## Additional features
 - Adapter API for supporting other formats
-- Adding support of JSON, YAML, XML, ODT
+- Adding support of JSON, YAML, XML, ODS
 - Data range settings (start, end cells in table), for example, if you need to import data where there is a header with logo or any other unnecessary information
 - Permission control for import settings using django auth, to minimize human errors. For example, this would allow only the manager to choose the settings template for import and to upload files without configuring
-- Export templates for (XLS, XLSX, ODT)
+- Export templates for (XLS, XLSX, ODS)
   - upload custom templates
   - set start cell of exporting data
 - Filtration

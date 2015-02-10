@@ -153,4 +153,4 @@ msgstr "Home"
 
 #: templates/mtr/sync/default/dashboard.html:10
 msgid "mtr.sync:Dashboard"
-msgstr "Daashboard"
+msgstr "Dashboard"

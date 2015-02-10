@@ -53,17 +53,17 @@ class Settings(ActionsMixin):
 
     name = models.CharField(_('mtr.sync:name'), max_length=100)
 
-    start_column = models.CharField(
+    start_col = models.CharField(
         _('mtr.sync:start column'), max_length=10, blank=True)
     start_row = models.PositiveIntegerField(
         _('mtr.sync:start row'), null=True, blank=True)
 
-    end_column = models.CharField(
+    end_col = models.CharField(
         _('mtr.sync:end column'), max_length=10, blank=True)
     end_row = models.PositiveIntegerField(
         _('mtr.sync:end row'), null=True, blank=True)
 
-    limit_upload_data = models.BooleanField(
+    limit_data = models.BooleanField(
         _('mtr.sync:limit upload data'), default=False)
 
     main_model = models.CharField(
@@ -77,6 +77,11 @@ class Settings(ActionsMixin):
         _('mtr.sync:updated at'), auto_now=True)
 
     processor = models.CharField(_('mtr.sync:processor'), max_length=255)
+    worksheet = models.CharField(
+        _('mtr.sync:worksheet page'), max_length=255, blank=True)
+
+    include_header = models.BooleanField(
+        _('mtr.sync:include header'), default=True)
 
     class Meta:
         verbose_name = _('mtr.sync:settings')
@@ -117,7 +122,8 @@ class Field(models.Model):
 
     filters = models.ManyToManyField(Filter, through='FilterParams')
 
-    settings = models.ForeignKey(Settings, verbose_name=_('mtr.sync:settings'))
+    settings = models.ForeignKey(
+        Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
 
     def ordered_filters(self):
         related = FilterParams.objects \
@@ -160,7 +166,7 @@ class Report(ActionsMixin):
     )
 
     buffer_file = models.FileField(
-        _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True)
+        _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
     status = models.PositiveSmallIntegerField(
         _('mtr.sync:status'), choices=STATUS_CHOICES, default=RUNNING)
 
