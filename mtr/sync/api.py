@@ -1,16 +1,20 @@
 from __future__ import unicode_literals
 
+import os
+
 from collections import OrderedDict
 
 from django.utils.six.moves import range
 from django.utils import timezone
-from django.core.files.base import ContentFile
 
-from .settings import IMPORT_FROM, LIMIT_PREVIEW
+from .settings import IMPORT_FROM, LIMIT_PREVIEW, FILE_PATH
 from .models import Report
 
 
-class ProcessorExists(Exception):
+class ProcessorDoesNotExists(Exception):
+    pass
+
+class ProcessorAlreadyExists(Exception):
     pass
 
 
@@ -27,7 +31,7 @@ class Processor(object):
     def prepare(self):
         pass
 
-    def col_index(self, value):
+    def col(self, value):
         """Return column index for given name"""
 
         raise NotImplementedError
@@ -37,7 +41,7 @@ class Processor(object):
 
         raise NotImplementedError
 
-    def read(self, row, value):
+    def read(self, row, value, cells=None):
         """Independend read from cell method"""
 
         raise NotImplementedError
@@ -75,13 +79,8 @@ class Processor(object):
 
         report = Report.export_objects.create(action=Report.EXPORT)
 
-        self.prepare()
+        self.create()
 
-        # using with template and xlutils.copy (not tested python3)
-        # openpyxl don't allow to write in single cell :( so we need to copy
-        # row from original xlsx file and replace values from new row
-        # implement this in write methood for openpyxl
-        # start, end = self.dimensions(0, 0, worksheet.nrows, worksheet.ncols)
         start, end = self.dimensions(0, 0, data['rows'], data['cols'])
 
         if self.settings.include_header and self.settings.fields.all():
@@ -97,21 +96,22 @@ class Processor(object):
         for rindex, row in enumerate(range(start['row'], end['row'])):
             row_data = []
             for cindex, col in enumerate(cells):
-                row_data.append(data['items'][rindex][cindex])
+                row_data.append(next(data['items']))
             self.write(row, row_data, cells)
 
         # save external file and report
-        # path = FILE_PATH()(
-        #     report, '{}{}'.format(str(report.id), self.file_format))
-        # path = timezone.now().strftime(path)
-        # self.save(path)
+        path = FILE_PATH()(report, '')
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        path = os.path.join(
+            path, '{}{}'.format(str(report.id), self.file_format))
+        self.save(path)
 
         report.completed_at = timezone.now()
         report.status = Report.SUCCESS
-        report.buffer_file.save(
-            '{}{}'.format(str(report.id), self.file_format), ContentFile(''))
-
-        self.save(report.buffer_file.path)
+        report.buffer_file = path
+        report.save()
 
         return report
 
@@ -139,7 +139,8 @@ class Manager(object):
         """Decorator to append new processor"""
 
         if self.has_processor(cls):
-            raise ProcessorExists('Processor already exists')
+            raise ProcessorAlreadyExists(
+                'Processor {} already exists'.format(cls.__name__))
         self.processors[cls.__name__] = cls
 
         if cls.position:
@@ -160,8 +161,27 @@ class Manager(object):
 
         return True if self.processors.get(cls.__name__, False) else False
 
+    def make_processor(self, settings):
+        """Create new processor instance if exists"""
+
+        processor = self.processors.get(settings.processor, None)
+
+        if processor is None:
+            raise ProcessorDoesNotExists(
+                'Processor {} does not exists'.format(settings.processor))
+
+        return processor(settings)
+
     def export_data(self, settings, data):
-        return self.processors[settings.processor](settings).export_data(data)
+        """Raw data export"""
+
+        processor = self.make_processor(settings)
+
+        return processor.export_data(data)
+
+    def prepare_data(self, settings):
+        """Prepare data using filters and settings"""
+        pass
 
     def import_processors(self):
         """Import modules within IMPORT_FROM paths"""

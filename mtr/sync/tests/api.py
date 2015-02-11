@@ -1,6 +1,8 @@
+import os
 import datetime
 
 from django.test import TestCase
+from django.utils.six.moves import range
 
 from ..api import Manager, Processor
 from ..processors import XlsProcessor
@@ -16,11 +18,6 @@ class ManagerTest(TestCase):
         self.manager = Manager.create()
         self.manager.register(XlsProcessor)
 
-        # don't creating settings in database just simulate
-        # passed data from view of modelform
-        self.settings = Settings(
-            processor=XlsProcessor.__name__, worksheet='test')
-
     def test_registering_and_unregistering_processor(self):
         self.manager.register(TestProcessor)
         self.assertEqual(self.manager.has_processor(TestProcessor), True)
@@ -29,8 +26,17 @@ class ManagerTest(TestCase):
         self.assertEqual(self.manager.has_processor(TestProcessor), False)
 
     def test_export_data_and_report_generation(self):
-        data = {'rows': 10, 'cols': 2, 'items': [[10, 10]]*10}
-        report = self.manager.export_data(self.settings, data)
+        settings = Settings(
+            processor=XlsProcessor.__name__, worksheet='test')
+        data = {'rows': 10, 'cols': 2, 'items': iter(range(0, 2*10))}
+        report = self.manager.export_data(settings, data)
 
+        # report generated
         self.assertEqual(report.status, report.SUCCESS)
+        self.assertEqual(report.action, report.EXPORT)
         self.assertIsInstance(report.completed_at, datetime.datetime)
+
+        # file saved
+        self.assertEqual(os.path.exists(report.buffer_file.path), True)
+        self.assertEqual(os.path.getsize(report.buffer_file.path) > 0, True)
+        self.assertEqual(os.remove(report.buffer_file.path), None)

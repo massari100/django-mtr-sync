@@ -17,7 +17,7 @@ def get_buffer_file_path(instance, filename):
 
     return os.path.join(
         settings.MEDIA_ROOT, 'sync', instance.get_action_display().lower(),
-        '%d%m%Y', filename.lower())
+        filename.lower())
 
 # used to generate custom file path
 FILE_PATH = getattr_with_prefix('FILE_PATH', get_buffer_file_path)
