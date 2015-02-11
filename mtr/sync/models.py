@@ -141,13 +141,11 @@ class Field(models.Model):
 
 
 class FilterParams(models.Model):
-    _order = models.PositiveIntegerField(default=0)
-
     filter_related = models.ForeignKey(Filter, related_name='filter_params')
     field_related = models.ForeignKey(Field)
 
     class Meta:
-        ordering = ('_order',)
+        order_with_respect_to = 'filter_related'
 
 
 @python_2_unicode_compatible

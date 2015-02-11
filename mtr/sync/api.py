@@ -6,13 +6,15 @@ from collections import OrderedDict
 
 from django.utils.six.moves import range
 from django.utils import timezone
+from django.db import models
 
 from .settings import IMPORT_FROM, LIMIT_PREVIEW, FILE_PATH
-from .models import Report
+from .models import Report, Settings
 
 
 class ProcessorDoesNotExists(Exception):
     pass
+
 
 class ProcessorAlreadyExists(Exception):
     pass
@@ -126,6 +128,7 @@ class Manager(object):
 
     def __init__(self):
         self.processors = OrderedDict()
+        self.models = self.get_models()
 
     @classmethod
     def create(cls):
@@ -134,6 +137,17 @@ class Manager(object):
         manager = cls()
         manager.import_processors()
         return manager
+
+    def make_settings(self, params):
+        """Create Settings Model from params"""
+
+        settings_id = params.get('id', False)
+        if settings_id:
+            settings = Settings.object.get(pk=settings_id)
+        else:
+            settings = Settings(**params)
+
+        return settings
 
     def register(self, cls):
         """Decorator to append new processor"""
@@ -172,16 +186,29 @@ class Manager(object):
 
         return processor(settings)
 
-    def export_data(self, settings, data):
+    def export_data(self, settings, data, from_params=False):
         """Raw data export"""
+
+        if from_params:
+            settings = self.make_settings(settings)
 
         processor = self.make_processor(settings)
 
         return processor.export_data(data)
 
-    def prepare_data(self, settings):
-        """Prepare data using filters and settings"""
-        pass
+    def get_models(self):
+        model_list = filter(
+            lambda m: getattr(m, 'ignore_sync', True), models.get_models())
+        model_list = filter(
+            lambda m: ['django', 'mtr.sync'] not in str(m.__module__))
+
+        return model_list
+
+    def prepare_data(self, settings, queryset):
+        """Prepare data using filters and settings and return iterator"""
+
+        # for field in settings.fields.all():
+        #     field.
 
     def import_processors(self):
         """Import modules within IMPORT_FROM paths"""

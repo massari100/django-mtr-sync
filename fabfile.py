@@ -15,21 +15,34 @@ def clear():
 
 
 @task
+def manage(command):
+    """Shortcut for manage.py file"""
+
+    with lcd(PROJECT_DIR):
+        local('./manage.py {}'.format(command))
+
+
+@task
 def test():
     """Test listed apps"""
 
     with settings(hide('warnings'), warn_only=True):
         test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), APPS))
-        with lcd(PROJECT_DIR):
-            local("./manage.py test {} --pattern='*.py'".format(test_apps))
+        manage("test {} --pattern='*.py'".format(test_apps))
 
 
 @task
 def run():
     """Run server"""
 
-    with lcd(PROJECT_DIR):
-        local('./manage.py runserver')
+    manage('runserver')
+
+
+@task
+def shell():
+    """Start interactive shell"""
+
+    manage('shell')
 
 
 @task
@@ -69,6 +82,22 @@ def install():
 def migrate():
     """Make migrations and migrate"""
 
+    manage('makemigrations')
+    manage('migrate')
+
+
+@task
+def recreate():
+    """Recreate new migrations from start and remove database"""
+
+    for app in APPS:
+        with lcd(os.path.join(*app.split('.'))):
+            local('rm -f ./migrations/*.py')
+            local('touch ./migrations/__init__.py')
     with lcd(PROJECT_DIR):
-        local('./manage.py makemigrations')
-        local('./manage.py migrate')
+        local('rm -f *.sqlite3')
+
+    migrate()
+
+    manage('createsuperuser --username app --email app@app.com --noinput')
+    manage('changepassword app')
