@@ -4,8 +4,8 @@ import datetime
 from django.test import TestCase
 from django.utils.six.moves import range
 
-from ..api.manager import Manager, Processor
-from ..api.processors import XlsProcessor
+from ..api.manager import Manager
+from ..api.processors import Processor, XlsProcessor
 from ..models import Settings
 
 

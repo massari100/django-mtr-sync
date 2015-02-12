@@ -1,9 +1,11 @@
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
 from .settings import FILE_PATH
-from .api.helpers import model_choices
+from .api import manager
+from .api.signals import export_started, export_completed
 
 
 class ExportManager(models.Manager):
@@ -69,7 +71,7 @@ class Settings(ActionsMixin):
 
     main_model = models.CharField(
         _('mtr.sync:main model'), max_length=255,
-        choices=model_choices())
+        choices=manager.model_choices())
     main_model_id = models.PositiveIntegerField(
         _('mtr.sync:main model object'), null=True, blank=True)
 
@@ -78,7 +80,8 @@ class Settings(ActionsMixin):
     updated_at = models.DateTimeField(
         _('mtr.sync:updated at'), auto_now=True)
 
-    processor = models.CharField(_('mtr.sync:processor'), max_length=255)
+    processor = models.CharField(_('mtr.sync:processor'), max_length=255,
+        choices=manager.processor_choices())
     worksheet = models.CharField(
         _('mtr.sync:worksheet page'), max_length=255, blank=True)
 
@@ -95,6 +98,18 @@ class Settings(ActionsMixin):
                 field.filters.append(filter_param.filter_related)
 
             yield field
+
+    @classmethod
+    def make_from_params(cls, params):
+        """Create Settings Model from params"""
+
+        settings_id = params.get('id', False)
+        if settings_id:
+            settings = cls.object.get(pk=settings_id)
+        else:
+            settings = cls(**params)
+
+        return settings
 
     class Meta:
         verbose_name = _('mtr.sync:settings')
@@ -203,3 +218,19 @@ class Report(ActionsMixin):
 
     def get_absolute_url(self):
         return self.buffer_file.url
+
+
+@receiver(export_started)
+def running_report(sender, **kwargs):
+    return Report.export_objects.create(action=Report.EXPORT)
+
+
+@receiver(export_completed)
+def success_report(sender, **kwargs):
+    report = kwargs['report']
+    report.completed_at = kwargs['date']
+    report.buffer_file = kwargs['path']
+    report.status = report.SUCCESS
+    report.save()
+
+    return report

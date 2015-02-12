@@ -44,8 +44,8 @@ class Migration(migrations.Migration):
             name='FilterParams',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('field_related', models.ForeignKey(to='mtr_sync.Field')),
-                ('filter_related', models.ForeignKey(related_name='filter_params', to='mtr_sync.Filter')),
+                ('field_related', models.ForeignKey(related_name='filter_params', to='mtr_sync.Field')),
+                ('filter_related', models.ForeignKey(to='mtr_sync.Filter')),
             ],
             options={
             },
@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
                 ('end_col', models.CharField(max_length=10, verbose_name='end column', blank=True)),
                 ('end_row', models.PositiveIntegerField(null=True, verbose_name='end row', blank=True)),
                 ('limit_data', models.BooleanField(default=False, verbose_name='limit upload data')),
-                ('main_model', models.CharField(max_length=255, verbose_name='main model')),
+                ('main_model', models.CharField(max_length=255, verbose_name='main model', choices=[(b'django.contrib.admin.models', 'log entry'), (b'django.contrib.auth.models', 'permission'), (b'django.contrib.auth.models', 'group'), (b'django.contrib.auth.models', 'user'), (b'django.contrib.contenttypes.models', 'content type'), (b'django.contrib.sessions.models', 'session'), (b'mtr.sync.models', 'settings'), (b'mtr.sync.models', 'filter'), (b'mtr.sync.models', 'field'), (b'mtr.sync.models', 'filter params'), (b'mtr.sync.models', 'report')])),
                 ('main_model_id', models.PositiveIntegerField(null=True, verbose_name='main model object', blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
@@ -103,7 +103,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AlterOrderWithRespectTo(
             name='filterparams',
-            order_with_respect_to='filter_related',
+            order_with_respect_to='field_related',
         ),
         migrations.AddField(
             model_name='field',

@@ -1,11 +1,14 @@
 from celery import shared_task
 
 from .api import manager
+from .models import Settings
 
 
 @shared_task
 def export_data(params, data=None):
-    manager.export_data(params, data, from_params=True)
+    settings = Settings.make_from_params(params)
+
+    manager.export_data(settings, data)
 
 
 @shared_task

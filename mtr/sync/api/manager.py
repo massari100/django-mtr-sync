@@ -1,126 +1,11 @@
 from __future__ import unicode_literals
 
-import os
-
 from collections import OrderedDict
 
-from django.utils.six.moves import range
-from django.utils import timezone
+from django.db import models
 
-from ..settings import IMPORT_FROM, LIMIT_PREVIEW, FILE_PATH
-from ..models import Report, Settings
-from .helpers import get_models
-
-
-class ProcessorDoesNotExists(Exception):
-    pass
-
-
-class ProcessorAlreadyExists(Exception):
-    pass
-
-
-class Processor(object):
-    """Base implementation of import and export operations"""
-
-    position = 0
-    file_format = None
-    file_description = None
-
-    def __init__(self, settings):
-        self.settings = settings
-
-    def prepare(self):
-        pass
-
-    def col(self, value):
-        """Return column index for given name"""
-
-        raise NotImplementedError
-
-    def write(self, row, value, cells=None):
-        """Independend write to cell method"""
-
-        raise NotImplementedError
-
-    def read(self, row, value, cells=None):
-        """Independend read from cell method"""
-
-        raise NotImplementedError
-
-    def dimensions(
-            self, start_row, start_col, end_row, end_col, preview=False):
-        """Return start, end table dimensions"""
-
-        start = {'row': start_row, 'col': start_col}
-        end = {'row': end_row, 'col': end_col}
-
-        if self.settings.limit_data:
-            if self.settings.start_row >= start_row:
-                start['row'] = self.settings.start_row
-            if self.settings.end_row <= end_row:
-                end['row'] = self.settings.end_row
-
-        limit = LIMIT_PREVIEW()
-        if preview and limit <= end_row:
-            end_row = limit
-
-        if self.settings.limit_data:
-            start_col_index = self.col(self.settings.start_col)
-            end_col_index = self.col(self.settings.end_col)
-
-            if start_col_index >= start_col:
-                start['col'] = start_col_index
-            if end_col_index <= end_col:
-                end['col'] = end_col_index
-
-        return (start, end)
-
-    def export_data(self, data):
-        """Export data from queryset to file and return path"""
-
-        report = Report.export_objects.create(action=Report.EXPORT)
-
-        self.create()
-
-        start, end = self.dimensions(0, 0, data['rows'], data['cols'])
-
-        if self.settings.include_header and self.settings.fields.all():
-            header_data = map(lambda f: f.name, self.settings.fields.all())
-
-            self.write(
-                start['row'], header_data, range(start['col'], end['col']))
-
-            start['row'] += 1
-            end['row'] += 1
-
-        cells = range(start['col'], end['col'])
-        for rindex, row in enumerate(range(start['row'], end['row'])):
-            row_data = []
-            for cindex, col in enumerate(cells):
-                row_data.append(next(data['items']))
-            self.write(row, row_data, cells)
-
-        # save external file and report
-        path = FILE_PATH()(report, '')
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        path = os.path.join(
-            path, '{}{}'.format(str(report.id), self.file_format))
-        self.save(path)
-
-        report.completed_at = timezone.now()
-        report.status = Report.SUCCESS
-        report.buffer_file = path
-        report.save()
-
-        return report
-
-    # def import_data(self):
-    #     """Import data to model and return errors if exists"""
-
-    #     raise NotImplementedError
+from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
+from ..settings import IMPORT_FROM
 
 
 class Manager(object):
@@ -128,7 +13,6 @@ class Manager(object):
 
     def __init__(self):
         self.processors = OrderedDict()
-        self.models = get_models()
 
     @classmethod
     def create(cls):
@@ -138,16 +22,24 @@ class Manager(object):
         manager.import_processors()
         return manager
 
-    def make_settings(self, params):
-        """Create Settings Model from params"""
+    def models_list(self):
+        model_list = filter(
+            lambda m: getattr(m, 'ignore_sync', True), models.get_models())
+        # model_list = filter(
+        #     lambda m: str(m.__module__) not in ['django', 'mtr.sync'])
+        return model_list
 
-        settings_id = params.get('id', False)
-        if settings_id:
-            settings = Settings.object.get(pk=settings_id)
-        else:
-            settings = Settings(**params)
+    def model_choices(self):
+        """Return all registered django models as choices"""
 
-        return settings
+        for model in self.models_list():
+            yield (model.__module__, model._meta.verbose_name)
+
+    def processor_choices(self):
+        """Return all registered processors"""
+
+        for processor in self.processors.values():
+            yield (processor.file_description, processor.__name__)
 
     def register(self, cls):
         """Decorator to append new processor"""
@@ -186,12 +78,9 @@ class Manager(object):
 
         return processor(settings)
 
-    def export_data(self, settings, data=None, from_params=False):
+    def export_data(self, settings, data=None):
         """Export data to file if no data passed,
         create queryset it from settings"""
-
-        if from_params:
-            settings = self.make_settings(settings)
 
         processor = self.make_processor(settings)
 
