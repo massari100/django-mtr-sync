@@ -14,32 +14,29 @@ class Manager(object):
     def __init__(self):
         self.processors = OrderedDict()
 
-    @classmethod
-    def create(cls):
-        """Create api manager and import processors"""
-
-        manager = cls()
-        manager.import_processors()
-        return manager
-
     def models_list(self):
         model_list = filter(
             lambda m: getattr(m, 'ignore_sync', True), models.get_models())
-        # model_list = filter(
-        #     lambda m: str(m.__module__) not in ['django', 'mtr.sync'])
+        model_list = filter(
+            lambda m: str(m.__module__).startswith('mtr.sync'), model_list)
         return model_list
 
     def model_choices(self):
         """Return all registered django models as choices"""
 
         for model in self.models_list():
-            yield (model.__module__, model._meta.verbose_name)
+            yield (model.__module__,
+                '{} | {}'.format(
+                    model._meta.app_label.title(),
+                    model._meta.verbose_name.title()))
 
     def processor_choices(self):
         """Return all registered processors"""
 
         for processor in self.processors.values():
-            yield (processor.file_description, processor.__name__)
+            yield (processor.__name__,
+                '{} | {}'.format(processor.file_format,
+                    processor.file_description))
 
     def register(self, cls):
         """Decorator to append new processor"""
@@ -125,4 +122,5 @@ class Manager(object):
             except ImportError:
                 print('Invalid module {}, unable to import'.format(module))
 
-manager = Manager.create()
+manager = Manager()
+manager.import_processors()

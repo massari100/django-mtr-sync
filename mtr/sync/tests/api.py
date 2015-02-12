@@ -4,8 +4,7 @@ import datetime
 from django.test import TestCase
 from django.utils.six.moves import range
 
-from ..api.manager import Manager
-from ..api.processors import Processor, XlsProcessor
+from ..api import Manager, Processor, XlsProcessor
 from ..models import Settings
 
 
@@ -15,7 +14,7 @@ class TestProcessor(Processor):
 
 class ManagerTest(TestCase):
     def setUp(self):
-        self.manager = Manager.create()
+        self.manager = Manager()
         self.manager.register(XlsProcessor)
 
     def test_registering_and_unregistering_processor(self):
