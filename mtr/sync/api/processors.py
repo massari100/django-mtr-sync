@@ -22,6 +22,9 @@ class Processor(object):
         self.settings = settings
         self.report = None
 
+        # TODO: move to settings
+        self.including_limits = 1
+
     def prepare(self):
         pass
 
@@ -40,7 +43,7 @@ class Processor(object):
 
         raise NotImplementedError
 
-    def dimensions(
+    def set_dimensions(
             self, start_row, start_col, end_row, end_col, preview=False):
         """Return start, end table dimensions"""
 
@@ -50,11 +53,11 @@ class Processor(object):
         if self.settings.limit_data:
             if self.settings.start_row and \
                     self.settings.start_row >= start_row:
-                start['row'] = self.settings.start_row
-                end['row'] += self.settings.start_row
+                start['row'] = self.settings.start_row - 1
+                end['row'] += start['row']
 
             if self.settings.end_row and \
-                    self.settings.end_row <= end_row:
+                    self.settings.end_row <= end['row']:
                 end['row'] = self.settings.end_row
 
         limit = LIMIT_PREVIEW()
@@ -66,42 +69,47 @@ class Processor(object):
                 start_col_index = self.col(self.settings.start_col)
 
                 if start_col_index >= start_col:
-                    start['col'] = start_col_index
-                    end['col'] += start_col_index
+                    start['col'] = start_col_index - 1
+                    end['col'] += start['col']
 
-            if self.settings.end_col:
-                end_col_index = self.col(self.settings.end_col)
-
-                if end_col_index <= end_col:
-                    end['col'] = end_col_index
+        self.start, self.end = start, end
+        self.cells = range(start['col'], end['col'])
+        self.rows = range(start['row'], end['row'])
 
         return (start, end)
 
     def export_data(self, data):
         """Export data from queryset to file and return path"""
 
+        # send signal to create report
         for response in export_started.send(self.__class__, processor=self):
             self.report = response[1]
 
+        self.set_dimensions(0, 0, data['rows'], data['cols'])
+
+        # create export file for write
         self.create()
 
-        start, end = self.dimensions(0, 0, data['rows'], data['cols'])
-
+        # write header
         if self.settings.include_header and self.settings.fields.all():
             header_data = map(lambda f: f.name, self.settings.fields.all())
 
-            self.write(
-                start['row'], header_data, range(start['col'], end['col']))
+            self.write(self.start['row'], header_data)
 
-            start['row'] += 1
-            end['row'] += 1
+            self.start['row'] += 1
+            self.rows = range(self.start['row'], self.end['row'])
 
-        cells = range(start['col'], end['col'])
-        for rindex, row in enumerate(range(start['row'], end['row'])):
+        # write data
+        data = data['items']
+        for row in self.rows:
             row_data = []
-            for cindex, col in enumerate(cells):
-                row_data.append(next(data['items']))
-            self.write(row, row_data, cells)
+
+            for col in self.cells:
+                row_data.append(next(data))
+
+            print row, col
+
+            self.write(row, row_data)
 
         # save external file and report
         path = FILE_PATH()(self.report, '')
@@ -114,6 +122,7 @@ class Processor(object):
         path = os.path.join(path, filename)
         self.save(path)
 
+        # send signal to save report
         for response in export_completed.send(
                 self.__class__, report=self.report,
                 date=timezone.now(),
@@ -161,20 +170,69 @@ class XlsProcessor(Processor):
         self._workbook = xlrd.open_workbook(self.settings.buffer_file)
         self._worksheet = self._workbook(self.settings.worksheet)
 
-    def write(self, row, value, cells=None):
-        for index, cell in enumerate(cells):
+    def write(self, row, value):
+        for index, cell in enumerate(self.cells):
             self._worksheet.write(row, cell, value[index])
 
-    def read(self, row, cells=None):
-        for index, cell in enumerate(cells):
+    def read(self, row):
+        for index, cell in enumerate(self.cells):
             yield self._worksheet.cell_value(row, cell)
 
     def save(self, name):
         self._workbook.save(name)
 
 
-# class XlsxProcessor(Processor):
-#     data_type = 'table'
+try:
+    import openpyxl
+except ImportError:
+    pass
+
+
+@manager.register
+class XlsxProcessor(Processor):
+    file_format = '.xlsx'
+    file_description = _('mtr.sync:Microsoft Excel 2007/2010/2013 XML')
+
+    def col(self, value):
+        if value.isdigit():
+            return int(value)
+
+        return openpyxl.cell.column_index_from_string(value)
+
+    def create(self):
+        self._workbook = openpyxl.Workbook(optimized_write=True)
+        self._worksheet = self._workbook.create_sheet()
+        self._worksheet.name = self.settings.worksheet
+        self._prepend = [None, ]
+
+        # prepend rows and cols
+        if self.start['row'] > 0:
+            for i in range(0, self.start['row']):
+                self._worksheet.append([])
+
+        if self.start['col'] > 0:
+            self._prepend *= self.start['col']
+
+    def open(self):
+        self._workbook = xlrd.open_workbook(self.settings.buffer_file)
+        self._worksheet = self._workbook(self.settings.worksheet)
+
+    def write(self, row, value):
+        # if we have cells we need to copy from templated file all row
+        # and merge cells into
+
+        value = self._prepend + value
+
+        self._worksheet.append(value[:self.end['col']])
+
+    def read(self, row, cells):
+        # using optimized reader
+        # for index, cell in enumerate(cells):
+        #     yield self._worksheet.cell_value(row, cell)
+        pass
+
+    def save(self, name):
+        self._workbook.save(name)
 
 
 # class OdsProcessor(Processor):

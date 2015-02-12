@@ -61,8 +61,6 @@ class Settings(ActionsMixin):
     start_row = models.PositiveIntegerField(
         _('mtr.sync:start row'), null=True, blank=True)
 
-    end_col = models.CharField(
-        _('mtr.sync:end column'), max_length=10, blank=True)
     end_row = models.PositiveIntegerField(
         _('mtr.sync:end row'), null=True, blank=True)
 
