@@ -9,6 +9,7 @@ from django.contrib import admin
 from django import forms
 
 from .models import Report, Settings, Field, FilterParams, Filter
+from .tasks import export_data
 
 
 class ReportAdmin(admin.ModelAdmin):
@@ -101,6 +102,7 @@ class SettingsAdmin(admin.ModelAdmin):
     )
     date_hierarchy = 'created_at'
     inlines = (FieldInline,)
+    actions = ['run']
 
     def get_inline_instances(self, request, obj=None):
         """Show inlines only in saved models"""
@@ -111,6 +113,12 @@ class SettingsAdmin(admin.ModelAdmin):
             return inlines
         else:
             return []
+
+    def run(self, request, queryset):
+        for settings in queryset:
+            export_data.apply_async(args=[{'id': settings.id}])
+
+    run.short_description = _('mtr.sync:Sync data')
 
 admin.site.register(Report, ReportAdmin)
 admin.site.register(Settings, SettingsAdmin)

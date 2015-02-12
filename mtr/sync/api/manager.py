@@ -89,12 +89,7 @@ class Manager(object):
         return processor.export_data(data)
 
     def prepare_queryset(self, settings):
-        current_model = None
-
-        for model in self.models:
-            if model.__module__ == settings.main_model:
-                current_model = model
-                break
+        current_model = settings.model_class()
 
         # TODO: filter data to export
 
@@ -103,7 +98,7 @@ class Manager(object):
     def filtered_data(self, settings, queryset):
         """Prepare data using filters from settings and return iterator"""
 
-        fields = settings.field_with_filters()
+        fields = list(settings.fields_with_filters())
 
         data = {
             'rows': len(queryset),
@@ -121,7 +116,8 @@ class Manager(object):
             try:
                 __import__(module)
             except ImportError:
-                print('Invalid module {}, unable to import'.format(module))
+                raise ImportError(
+                    'Invalid module {}, unable to import'.format(module))
 
 manager = Manager()
 manager.import_processors()

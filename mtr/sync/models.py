@@ -90,12 +90,12 @@ class Settings(ActionsMixin):
 
     def fields_with_filters(self):
         fields = self.fields.prefetch_related(
-            'fields__filter_params__filter_related').all()
+            'filter_params__filter_related').all()
         for field in fields:
-            field.filters = []
+            field.filters_queue = []
 
             for filter_param in field.filter_params.all():
-                field.filters.append(filter_param.filter_related)
+                field.filters_queue.append(filter_param.filter_related)
 
             yield field
 
@@ -105,22 +105,24 @@ class Settings(ActionsMixin):
 
         settings_id = params.get('id', False)
         if settings_id:
-            settings = cls.object.get(pk=settings_id)
+            settings = cls.objects.get(pk=settings_id)
         else:
             settings = cls(**params)
 
         return settings
 
-    def model_attributes(self):
-        main_model = self.main_model
+    def model_class(self):
+        """Return class for name in main_model"""
+
         for mmodel in manager.models_list():
             if self.main_model.split('.')[-1] == mmodel.__name__:
-                main_model = mmodel
-                break
+                return mmodel
+
+    def model_attributes(self):
 
         # TODO: filter available fields
 
-        for name in main_model._meta.get_all_field_names():
+        for name in self.model_class()._meta.get_all_field_names():
             yield (name, name)
 
     class Meta:
@@ -167,7 +169,7 @@ class Field(models.Model):
     def process(self, item):
         # TODO: process by all filters
 
-        value = getattr(item, self.column)
+        value = getattr(item, self.attribute)
 
         return value
 
@@ -228,6 +230,7 @@ class Report(ActionsMixin):
     export_objects = ExportManager()
     import_objects = ImportManager()
     running_objects = RunningManager()
+    objects = models.Manager()
 
     class Meta:
         verbose_name = _('mtr.sync:report')
@@ -239,7 +242,8 @@ class Report(ActionsMixin):
         return '{} - {}'.format(self.started_at, self.get_status_display())
 
     def get_absolute_url(self):
-        return self.buffer_file.url
+        if self.buffer_file:
+            return self.buffer_file.url
 
 
 @receiver(export_started)

@@ -48,9 +48,13 @@ class Processor(object):
         end = {'row': end_row, 'col': end_col}
 
         if self.settings.limit_data:
-            if self.settings.start_row >= start_row:
+            if self.settings.start_row and \
+                    self.settings.start_row >= start_row:
                 start['row'] = self.settings.start_row
-            if self.settings.end_row <= end_row:
+                end['row'] += self.settings.start_row
+
+            if self.settings.end_row and \
+                    self.settings.end_row <= end_row:
                 end['row'] = self.settings.end_row
 
         limit = LIMIT_PREVIEW()
@@ -58,13 +62,18 @@ class Processor(object):
             end_row = limit
 
         if self.settings.limit_data:
-            start_col_index = self.col(self.settings.start_col)
-            end_col_index = self.col(self.settings.end_col)
+            if self.settings.start_col:
+                start_col_index = self.col(self.settings.start_col)
 
-            if start_col_index >= start_col:
-                start['col'] = start_col_index
-            if end_col_index <= end_col:
-                end['col'] = end_col_index
+                if start_col_index >= start_col:
+                    start['col'] = start_col_index
+                    end['col'] += start_col_index
+
+            if self.settings.end_col:
+                end_col_index = self.col(self.settings.end_col)
+
+                if end_col_index <= end_col:
+                    end['col'] = end_col_index
 
         return (start, end)
 
@@ -99,13 +108,16 @@ class Processor(object):
         if not os.path.exists(path):
             os.makedirs(path)
 
-        path = os.path.join(
-            path, '{}{}'.format(str(self.report.id), self.file_format))
+        # TODO: add filename to settings
+        filename = '{}{}'.format(str(self.report.id), self.file_format)
+
+        path = os.path.join(path, filename)
         self.save(path)
 
         for response in export_completed.send(
                 self.__class__, report=self.report,
-                date=timezone.now(), path=path):
+                date=timezone.now(),
+                path=FILE_PATH()(self.report, filename, relative=True)):
             self.report = response[1]
 
         return self.report
@@ -131,6 +143,9 @@ class XlsProcessor(Processor):
 
     def col(self, value):
         """Small xlrd hack to get column index"""
+
+        if value.isdigit():
+            return int(value)
 
         index = 0
         value = value.strip().upper()
