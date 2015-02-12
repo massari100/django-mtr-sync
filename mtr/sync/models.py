@@ -111,6 +111,18 @@ class Settings(ActionsMixin):
 
         return settings
 
+    def model_attributes(self):
+        main_model = self.main_model
+        for mmodel in manager.models_list():
+            if self.main_model.split('.')[-1] == mmodel.__name__:
+                main_model = mmodel
+                break
+
+        # TODO: filter available fields
+
+        for name in main_model._meta.get_all_field_names():
+            yield (name, name)
+
     class Meta:
         verbose_name = _('mtr.sync:settings')
         verbose_name_plural = _('mtr.sync:settings')
@@ -145,13 +157,19 @@ class Field(models.Model):
     """Data mapping field for Settings"""
 
     name = models.CharField(_('mtr.sync:name'), max_length=255)
-    model = models.CharField(_('mtr.sync:model'), max_length=255)
-    column = models.CharField(_('mtr.sync:column'), max_length=255)
+    attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
 
     filters = models.ManyToManyField(Filter, through='FilterParams')
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
+
+    def process(self, item):
+        # TODO: process by all filters
+
+        value = getattr(item, self.column)
+
+        return value
 
     class Meta:
         verbose_name = _('mtr.sync:field')
@@ -164,10 +182,14 @@ class Field(models.Model):
 
 
 class FilterParams(models.Model):
-    filter_related = models.ForeignKey(Filter)
+    filter_related = models.ForeignKey(
+        Filter, verbose_name=_('mtr.sync:filter'))
     field_related = models.ForeignKey(Field, related_name='filter_params')
 
     class Meta:
+        verbose_name = _('mtr.sync:filter')
+        verbose_name_plural = _('mtr.sync:filters')
+
         order_with_respect_to = 'field_related'
 
 

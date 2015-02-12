@@ -15,17 +15,18 @@ class Manager(object):
         self.processors = OrderedDict()
 
     def models_list(self):
-        model_list = filter(
+        mlist = filter(
             lambda m: getattr(m, 'ignore_sync', True), models.get_models())
-        model_list = filter(
-            lambda m: str(m.__module__).startswith('mtr.sync'), model_list)
-        return model_list
+        mlist = filter(
+            lambda m: str(m.__module__).startswith('mtr.sync'), mlist)
+        return mlist
 
     def model_choices(self):
         """Return all registered django models as choices"""
 
         for model in self.models_list():
-            yield (model.__module__,
+            yield (
+                '{}.{}'.format(model.__module__, model.__name__),
                 '{} | {}'.format(
                     model._meta.app_label.title(),
                     model._meta.verbose_name.title()))

@@ -16,8 +16,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=255, verbose_name='name')),
-                ('model', models.CharField(max_length=255, verbose_name='model')),
-                ('column', models.CharField(max_length=255, verbose_name='column')),
+                ('attribute', models.CharField(max_length=255, verbose_name='mtr.sync:model attribute')),
             ],
             options={
                 'verbose_name': 'field',
@@ -80,11 +79,11 @@ class Migration(migrations.Migration):
                 ('end_col', models.CharField(max_length=10, verbose_name='end column', blank=True)),
                 ('end_row', models.PositiveIntegerField(null=True, verbose_name='end row', blank=True)),
                 ('limit_data', models.BooleanField(default=False, verbose_name='limit upload data')),
-                ('main_model', models.CharField(max_length=255, verbose_name='main model', choices=[(b'django.contrib.admin.models', 'log entry'), (b'django.contrib.auth.models', 'permission'), (b'django.contrib.auth.models', 'group'), (b'django.contrib.auth.models', 'user'), (b'django.contrib.contenttypes.models', 'content type'), (b'django.contrib.sessions.models', 'session'), (b'mtr.sync.models', 'settings'), (b'mtr.sync.models', 'filter'), (b'mtr.sync.models', 'field'), (b'mtr.sync.models', 'filter params'), (b'mtr.sync.models', 'report')])),
+                ('main_model', models.CharField(max_length=255, verbose_name='main model', choices=[(b'mtr.sync.models', 'Mtr_Sync | Settings'), (b'mtr.sync.models', 'Mtr_Sync | Filter'), (b'mtr.sync.models', 'Mtr_Sync | Field'), (b'mtr.sync.models', 'Mtr_Sync | Filter Params'), (b'mtr.sync.models', 'Mtr_Sync | Report')])),
                 ('main_model_id', models.PositiveIntegerField(null=True, verbose_name='main model object', blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
-                ('processor', models.CharField(max_length=255, verbose_name='processor')),
+                ('processor', models.CharField(max_length=255, verbose_name='processor', choices=[(b'XlsProcessor', '.xls | Microsoft Excel 97/2000/XP/2003')])),
                 ('worksheet', models.CharField(max_length=255, verbose_name='mtr.sync:worksheet page', blank=True)),
                 ('include_header', models.BooleanField(default=True, verbose_name='mtr.sync:include header')),
             ],

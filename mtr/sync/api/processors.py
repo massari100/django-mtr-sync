@@ -127,7 +127,7 @@ except ImportError:
 @manager.register
 class XlsProcessor(Processor):
     file_format = '.xls'
-    file_description = _('Microsoft Excel 97/2000/XP/2003')
+    file_description = _('mtr.sync:Microsoft Excel 97/2000/XP/2003')
 
     def col(self, value):
         """Small xlrd hack to get column index"""
