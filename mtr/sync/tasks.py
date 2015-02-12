@@ -4,7 +4,7 @@ from .api import manager
 
 
 @shared_task
-def export_data(params, data):
+def export_data(params, data=None):
     manager.export_data(params, data, from_params=True)
 
 

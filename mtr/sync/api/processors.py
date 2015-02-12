@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from django.utils.translation import gettext_lazy as _
 
-from .api import Processor, manager
+from .manager import Processor, manager
 
 try:
     import xlrd
@@ -10,6 +10,8 @@ try:
 except ImportError:
     pass
 
+
+# TODO: default import configuration, import dependencies
 
 @manager.register
 class XlsProcessor(Processor):
@@ -39,7 +41,7 @@ class XlsProcessor(Processor):
 
     def read(self, row, cells=None):
         for index, cell in enumerate(cells):
-            yield self._worksheet.cell(row, cell)
+            yield self._worksheet.cell_value(row, cell)
 
     def save(self, name):
         self._workbook.save(name)

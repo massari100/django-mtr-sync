@@ -3,6 +3,7 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from .settings import FILE_PATH
+from .api.helpers import model_choices
 
 
 class ExportManager(models.Manager):
@@ -67,7 +68,8 @@ class Settings(ActionsMixin):
         _('mtr.sync:limit upload data'), default=False)
 
     main_model = models.CharField(
-        _('mtr.sync:main model'), max_length=255)
+        _('mtr.sync:main model'), max_length=255,
+        choices=model_choices())
     main_model_id = models.PositiveIntegerField(
         _('mtr.sync:main model object'), null=True, blank=True)
 
@@ -82,6 +84,17 @@ class Settings(ActionsMixin):
 
     include_header = models.BooleanField(
         _('mtr.sync:include header'), default=True)
+
+    def fields_with_filters(self):
+        fields = self.fields.prefetch_related(
+            'fields__filter_params__filter_related').all()
+        for field in fields:
+            field.filters = []
+
+            for filter_param in field.filter_params.all():
+                field.filters.append(filter_param.filter_related)
+
+            yield field
 
     class Meta:
         verbose_name = _('mtr.sync:settings')
@@ -125,11 +138,6 @@ class Field(models.Model):
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
 
-    def ordered_filters(self):
-        related = FilterParams.objects \
-            .filter(filter_related__in=self.filters.all()).order_by('_order')
-        return map(lambda r: r.filter_related, related)
-
     class Meta:
         verbose_name = _('mtr.sync:field')
         verbose_name_plural = _('mtr.sync:fields')
@@ -141,11 +149,11 @@ class Field(models.Model):
 
 
 class FilterParams(models.Model):
-    filter_related = models.ForeignKey(Filter, related_name='filter_params')
-    field_related = models.ForeignKey(Field)
+    filter_related = models.ForeignKey(Filter)
+    field_related = models.ForeignKey(Field, related_name='filter_params')
 
     class Meta:
-        order_with_respect_to = 'filter_related'
+        order_with_respect_to = 'field_related'
 
 
 @python_2_unicode_compatible

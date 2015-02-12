@@ -6,10 +6,10 @@ from collections import OrderedDict
 
 from django.utils.six.moves import range
 from django.utils import timezone
-from django.db import models
 
-from .settings import IMPORT_FROM, LIMIT_PREVIEW, FILE_PATH
-from .models import Report, Settings
+from ..settings import IMPORT_FROM, LIMIT_PREVIEW, FILE_PATH
+from ..models import Report, Settings
+from .helpers import get_models
 
 
 class ProcessorDoesNotExists(Exception):
@@ -128,7 +128,7 @@ class Manager(object):
 
     def __init__(self):
         self.processors = OrderedDict()
-        self.models = self.get_models()
+        self.models = get_models()
 
     @classmethod
     def create(cls):
@@ -186,29 +186,46 @@ class Manager(object):
 
         return processor(settings)
 
-    def export_data(self, settings, data, from_params=False):
-        """Raw data export"""
+    def export_data(self, settings, data=None, from_params=False):
+        """Export data to file if no data passed,
+        create queryset it from settings"""
 
         if from_params:
             settings = self.make_settings(settings)
 
         processor = self.make_processor(settings)
 
+        if data is None:
+            queryset = self.prepare_queryset(settings)
+            data = self.filtered_data(settings, queryset)
+
         return processor.export_data(data)
 
-    def get_models(self):
-        model_list = filter(
-            lambda m: getattr(m, 'ignore_sync', True), models.get_models())
-        model_list = filter(
-            lambda m: ['django', 'mtr.sync'] not in str(m.__module__))
+    def prepare_queryset(self, settings):
+        current_model = None
 
-        return model_list
+        for model in self.models:
+            if model.__module__ == settings.main_model:
+                current_model = model
+                break
 
-    def prepare_data(self, settings, queryset):
-        """Prepare data using filters and settings and return iterator"""
+        # TODO: filter data to export
 
-        # for field in settings.fields.all():
-        #     field.
+        return current_model.objects.all()
+
+    def filtered_data(self, settings, queryset):
+        """Prepare data using filters from settings and return iterator"""
+
+        fields = settings.field_with_filters()
+
+        data = {
+            'rows': len(queryset),
+            'cols': len(fields),
+            'items': (
+                field.process(item) for item in queryset for field in fields)
+        }
+
+        return data
 
     def import_processors(self):
         """Import modules within IMPORT_FROM paths"""
