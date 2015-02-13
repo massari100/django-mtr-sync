@@ -2,13 +2,25 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # mtr group <inboxmtr@gmail.com>, 2015.
-#: admin.py:30
+#: admin.py:29
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: api/processors.py:130
+#: admin.py:122
+msgid "mtr.sync:Data synchronization started in background."
+msgstr "Data synchronization started in background."
+
+#: admin.py:124
+msgid "mtr.sync:Sync data"
+msgstr "Sync data"
+
+#: api/processors.py:149
 msgid "mtr.sync:Microsoft Excel 97/2000/XP/2003"
 msgstr "Microsoft Excel 97/2000/XP/2003"
+
+#: api/processors.py:192
+msgid "mtr.sync:Microsoft Excel 2007/2010/2013 XML"
+msgstr "Microsoft Excel 2007/2010/2013 XML"
 
 #: apps.py:10 templates/mtr/sync/default/dashboard.html:10
 msgid "mtr.sync:Data sync"
@@ -26,7 +38,7 @@ msgstr "Import"
 msgid "mtr.sync:action"
 msgstr "action"
 
-#: models.py:57 models.py:140 models.py:159
+#: models.py:57 models.py:156 models.py:178
 msgid "mtr.sync:name"
 msgstr "name"
 
@@ -39,114 +51,118 @@ msgid "mtr.sync:start row"
 msgstr "start row"
 
 #: models.py:65
-msgid "mtr.sync:end column"
-msgstr "end column"
-
-#: models.py:67
 msgid "mtr.sync:end row"
 msgstr "end row"
 
-#: models.py:70
+#: models.py:68
 msgid "mtr.sync:limit upload data"
 msgstr "limit upload data"
 
-#: models.py:73
+#: models.py:71
 msgid "mtr.sync:main model"
 msgstr "main model"
 
-#: models.py:76
+#: models.py:74
 msgid "mtr.sync:main model object"
 msgstr "main model object"
 
-#: models.py:79
+#: models.py:77
 msgid "mtr.sync:created at"
 msgstr "created at"
 
-#: models.py:81 models.py:217
+#: models.py:79 models.py:261
 msgid "mtr.sync:updated at"
 msgstr "updated at"
 
-#: models.py:83
+#: models.py:82
 msgid "mtr.sync:processor"
 msgstr "processor"
 
-#: models.py:86
+#: models.py:85
 msgid "mtr.sync:worksheet page"
 msgstr "worksheet page"
 
-#: models.py:89
+#: models.py:88
 msgid "mtr.sync:include header"
 msgstr "include header"
 
-#: models.py:127 models.py:128 models.py:165
+#: models.py:91
+msgid "mtr.sync:custom filename"
+msgstr "custom filename"
+
+#: models.py:143 models.py:144 models.py:184
 msgid "mtr.sync:settings"
 msgstr "settings"
 
-#: models.py:142
+#: models.py:158
 msgid "mtr.sync:description"
 msgstr "description"
 
-#: models.py:143
+#: models.py:159
 msgid "mtr.sync:template"
 msgstr "template"
 
-#: models.py:146
+#: models.py:162 models.py:216 models.py:230
 msgid "mtr.sync:filter"
 msgstr "filter"
 
-#: models.py:147
+#: models.py:163 models.py:231
 msgid "mtr.sync:filters"
 msgstr "filters"
 
-#: models.py:160
+#: models.py:176 models.py:213
+msgid "mtr.sync:order"
+msgstr "order"
+
+#: models.py:179
 msgid "mtr.sync:model attribute"
 msgstr "model attribute"
 
-#: models.py:175
+#: models.py:201
 msgid "mtr.sync:field"
 msgstr "field"
 
-#: models.py:176
+#: models.py:202
 msgid "mtr.sync:fields"
 msgstr "fields"
 
-#: models.py:202
+#: models.py:246
 msgid "mtr.sync:Error"
 msgstr "Error"
 
-#: models.py:203
+#: models.py:247
 msgid "mtr.sync:Running"
 msgstr "Running"
 
-#: models.py:204
+#: models.py:248
 msgid "mtr.sync:Success"
 msgstr "Success"
 
-#: models.py:208
+#: models.py:252
 msgid "mtr.sync:file"
 msgstr "file"
 
-#: models.py:210
+#: models.py:254
 msgid "mtr.sync:status"
 msgstr "status"
 
-#: models.py:213
+#: models.py:257
 msgid "mtr.sync:started at"
 msgstr "started at"
 
-#: models.py:215
+#: models.py:259
 msgid "mtr.sync:completed at"
 msgstr "completed at"
 
-#: models.py:220
+#: models.py:264
 msgid "mtr.sync:used settings"
 msgstr "used settings"
 
-#: models.py:229
+#: models.py:274
 msgid "mtr.sync:report"
 msgstr "report"
 
-#: models.py:230
+#: models.py:275
 msgid "mtr.sync:reports"
 msgstr "reports"
 

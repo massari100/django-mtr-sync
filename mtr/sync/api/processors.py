@@ -22,9 +22,6 @@ class Processor(object):
         self.settings = settings
         self.report = None
 
-        # TODO: move to settings
-        self.including_limits = 1
-
     def prepare(self):
         pass
 
@@ -97,6 +94,9 @@ class Processor(object):
             self.write(self.start['row'], header_data)
 
             self.start['row'] += 1
+            if not self.settings.limit_data:
+                self.end['row'] += 1
+
             self.rows = range(self.start['row'], self.end['row'])
 
         # write data
@@ -107,8 +107,6 @@ class Processor(object):
             for col in self.cells:
                 row_data.append(next(data))
 
-            print row, col
-
             self.write(row, row_data)
 
         # save external file and report
@@ -116,8 +114,8 @@ class Processor(object):
         if not os.path.exists(path):
             os.makedirs(path)
 
-        # TODO: add filename to settings
-        filename = '{}{}'.format(str(self.report.id), self.file_format)
+        filename = '{}{}'.format(
+            str(self.report.id) or self.settings.filename, self.file_format)
 
         path = os.path.join(path, filename)
         self.save(path)
@@ -203,7 +201,7 @@ class XlsxProcessor(Processor):
         self._workbook = openpyxl.Workbook(optimized_write=True)
         self._worksheet = self._workbook.create_sheet()
         self._worksheet.name = self.settings.worksheet
-        self._prepend = [None, ]
+        self._prepend = None
 
         # prepend rows and cols
         if self.start['row'] > 0:
@@ -211,6 +209,7 @@ class XlsxProcessor(Processor):
                 self._worksheet.append([])
 
         if self.start['col'] > 0:
+            self._prepend = [None, ]
             self._prepend *= self.start['col']
 
     def open(self):
@@ -221,7 +220,8 @@ class XlsxProcessor(Processor):
         # if we have cells we need to copy from templated file all row
         # and merge cells into
 
-        value = self._prepend + value
+        if self._prepend:
+            value = self._prepend + value
 
         self._worksheet.append(value[:self.end['col']])
 
@@ -234,6 +234,45 @@ class XlsxProcessor(Processor):
     def save(self, name):
         self._workbook.save(name)
 
+# import odf
+
 
 # class OdsProcessor(Processor):
-#     data_type = 'table'
+#     file_format = '.ods'
+#     file_description = 'mtr.sync:ODF Spreadsheet'
+
+#     def col(self, value):
+#         """Small xlrd hack to get column index"""
+
+#         if value.isdigit():
+#             return int(value)
+
+#         index = 0
+#         value = value.strip().upper()
+#         while index:
+#             if xlrd.colname(index) == value:
+#                 return index
+
+#     def create(self):
+#         self._workbook = odf.opendocument.OpenDocumentSpreadsheet()
+#         self._table = odf.table.Table()
+#         self._worksheet = self._workbook.spreadsheet.addElement(self._table)
+
+#     def open(self):
+#         self._workbook = xlrd.open_workbook(self.settings.buffer_file)
+#         self._worksheet = self._workbook(self.settings.worksheet)
+
+#     def write(self, row, value):
+#         table_row = odf.table.TableRow()
+#         self._table.addElement(table_row)
+#         for index, cell in enumerate(self.cells):
+#             table_cell = odf.table.TableCell()
+#             table_row =
+#             self._worksheet.write(row, cell, value[index])
+
+#     def read(self, row):
+#         for index, cell in enumerate(self.cells):
+#             yield self._worksheet.cell_value(row, cell)
+
+#     def save(self, name):
+#         self._workbook.save(name)

@@ -78,13 +78,20 @@ class Settings(ActionsMixin):
     updated_at = models.DateTimeField(
         _('mtr.sync:updated at'), auto_now=True)
 
-    processor = models.CharField(_('mtr.sync:processor'), max_length=255,
+    processor = models.CharField(
+        _('mtr.sync:processor'), max_length=255,
         choices=manager.processor_choices())
     worksheet = models.CharField(
         _('mtr.sync:worksheet page'), max_length=255, blank=True)
 
     include_header = models.BooleanField(
         _('mtr.sync:include header'), default=True)
+
+    filename = models.CharField(
+        _('mtr.sync:custom filename'), max_length=255, blank=True)
+
+    buffer_file = models.FileField(
+        _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
 
     def fields_with_filters(self):
         fields = self.fields.prefetch_related(
@@ -116,12 +123,24 @@ class Settings(ActionsMixin):
             if self.main_model.split('.')[-1] == mmodel.__name__:
                 return mmodel
 
+    def get_field_by_name(self, model, name):
+        for field in model._meta.fields:
+            if field.name == name:
+                return field
+
     def model_attributes(self):
 
         # TODO: filter available fields
 
-        for name in self.model_class()._meta.get_all_field_names():
-            yield (name, name)
+        model = self.model_class()
+        for name in model._meta.get_all_field_names():
+            field = self.get_field_by_name(model, name)
+
+            label = name
+            if field:
+                label = field.verbose_name
+
+            yield (name, label.capitalize())
 
     class Meta:
         verbose_name = _('mtr.sync:settings')
@@ -156,8 +175,12 @@ class Filter(models.Model):
 class Field(models.Model):
     """Data mapping field for Settings"""
 
+    order = models.PositiveIntegerField(
+        _('mtr.sync:order'), null=True, blank=True)
+
     name = models.CharField(_('mtr.sync:name'), max_length=255)
     attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
+    skip = models.BooleanField(_('mtr.sync:skips'), default=False)
 
     filters = models.ManyToManyField(Filter, through='FilterParams')
 
@@ -171,26 +194,47 @@ class Field(models.Model):
 
         return value
 
+    def save(self, *args, **kwargs):
+        if self.order is None:
+            self.order = self.__class__.objects \
+                .filter(settings=self.settings).count() + 1
+
+        super(Field, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = _('mtr.sync:field')
         verbose_name_plural = _('mtr.sync:fields')
 
-        order_with_respect_to = 'settings'
+        ordering = ['order']
 
     def __str__(self):
         return self.name
 
 
+@python_2_unicode_compatible
 class FilterParams(models.Model):
+    order = models.PositiveIntegerField(
+        _('mtr.sync:order'), null=True, blank=True)
+
     filter_related = models.ForeignKey(
         Filter, verbose_name=_('mtr.sync:filter'))
     field_related = models.ForeignKey(Field, related_name='filter_params')
+
+    def save(self, *args, **kwargs):
+        if self.order is None:
+            self.order = self.__class__.objects \
+                .filter(field_related=self.field_related).count() + 1
+
+        super(FilterParams, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.filter_related.name
 
     class Meta:
         verbose_name = _('mtr.sync:filter')
         verbose_name_plural = _('mtr.sync:filters')
 
-        order_with_respect_to = 'field_related'
+        ordering = ['order']
 
 
 @python_2_unicode_compatible
@@ -222,7 +266,7 @@ class Report(ActionsMixin):
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:used settings'),
-        null=True, blank=True
+        null=True, blank=True, related_name='reports'
     )
 
     export_objects = ExportManager()

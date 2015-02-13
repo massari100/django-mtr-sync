@@ -15,10 +15,13 @@ class Migration(migrations.Migration):
             name='Field',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('order', models.PositiveIntegerField(null=True, verbose_name='mtr.sync:order', blank=True)),
                 ('name', models.CharField(max_length=255, verbose_name='name')),
                 ('attribute', models.CharField(max_length=255, verbose_name='model attribute')),
+                ('skip', models.BooleanField(default=False, verbose_name='mtr.sync:skips')),
             ],
             options={
+                'ordering': ['order'],
                 'verbose_name': 'field',
                 'verbose_name_plural': 'fields',
             },
@@ -43,10 +46,12 @@ class Migration(migrations.Migration):
             name='FilterParams',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('order', models.PositiveIntegerField(null=True, verbose_name='mtr.sync:order', blank=True)),
                 ('field_related', models.ForeignKey(related_name='filter_params', to='mtr_sync.Field')),
                 ('filter_related', models.ForeignKey(verbose_name='filter', to='mtr_sync.Filter')),
             ],
             options={
+                'ordering': ['order'],
                 'verbose_name': 'filter',
                 'verbose_name_plural': 'filters',
             },
@@ -87,6 +92,8 @@ class Migration(migrations.Migration):
                 ('processor', models.CharField(max_length=255, verbose_name='processor', choices=[(b'XlsProcessor', '.xls | Microsoft Excel 97/2000/XP/2003'), (b'XlsxProcessor', '.xlsx | mtr.sync:Microsoft Excel 2007/2010/2013 XML')])),
                 ('worksheet', models.CharField(max_length=255, verbose_name='worksheet page', blank=True)),
                 ('include_header', models.BooleanField(default=True, verbose_name='include header')),
+                ('filename', models.CharField(max_length=255, verbose_name='mtr.sync:custom filename', blank=True)),
+                ('buffer_file', models.FileField(db_index=True, upload_to=mtr.sync.settings.get_buffer_file_path, verbose_name='file', blank=True)),
             ],
             options={
                 'ordering': ('-id',),
@@ -98,12 +105,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='report',
             name='settings',
-            field=models.ForeignKey(verbose_name='used settings', blank=True, to='mtr_sync.Settings', null=True),
+            field=models.ForeignKey(related_name='reports', verbose_name='used settings', blank=True, to='mtr_sync.Settings', null=True),
             preserve_default=True,
-        ),
-        migrations.AlterOrderWithRespectTo(
-            name='filterparams',
-            order_with_respect_to='field_related',
         ),
         migrations.AddField(
             model_name='field',
@@ -116,9 +119,5 @@ class Migration(migrations.Migration):
             name='settings',
             field=models.ForeignKey(related_name='fields', verbose_name='settings', to='mtr_sync.Settings'),
             preserve_default=True,
-        ),
-        migrations.AlterOrderWithRespectTo(
-            name='field',
-            order_with_respect_to='settings',
         ),
     ]

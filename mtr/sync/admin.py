@@ -1,5 +1,3 @@
-from __future__ import unicode_literals
-
 import os
 
 from functools import partial
@@ -14,7 +12,7 @@ from .tasks import export_data
 
 class ReportAdmin(admin.ModelAdmin):
     list_display = (
-        'started_at', 'action', 'status', 'completed_at', 'buffer_file_link')
+        'action', 'status', 'started_at', 'completed_at', 'buffer_file_link')
     list_filter = ('action', 'status', 'started_at', 'completed_at')
     search_fields = ('buffer_file',)
     readonly_fields = ('completed_at',)
@@ -41,9 +39,6 @@ class FilterAdmin(admin.ModelAdmin):
 
 
 class FieldForm(forms.ModelForm):
-    class Meta:
-        model = Field
-
     def __init__(self, *args, **kwargs):
         """Replace default attribute field to selectbox with choices"""
 
@@ -59,6 +54,10 @@ class FieldForm(forms.ModelForm):
             self.fields['attribute'] = forms.ChoiceField(
                 label=self.fields['attribute'].label,
                 choices=settings.model_attributes())
+
+    class Meta:
+        exclude = []
+        model = Field
 
 
 class FieldAdmin(admin.ModelAdmin):
@@ -117,6 +116,10 @@ class SettingsAdmin(admin.ModelAdmin):
     def run(self, request, queryset):
         for settings in queryset:
             export_data.apply_async(args=[{'id': settings.id}])
+
+            self.message_user(
+                request,
+                _('mtr.sync:Data synchronization started in background.'))
 
     run.short_description = _('mtr.sync:Sync data')
 

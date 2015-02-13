@@ -6,3 +6,4 @@ celery
 openpyxl
 xlwt-future
 xlrd
+odfpy
