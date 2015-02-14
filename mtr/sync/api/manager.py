@@ -17,8 +17,8 @@ class Manager(object):
     def models_list(self):
         mlist = filter(
             lambda m: getattr(m, 'ignore_sync', True), models.get_models())
-        mlist = filter(
-            lambda m: str(m.__module__).startswith('mtr.sync'), mlist)
+        # mlist = filter(
+        #     lambda m: str(m.__module__).startswith('mtr.sync'), mlist)
         return mlist
 
     def model_choices(self):
@@ -35,8 +35,10 @@ class Manager(object):
         """Return all registered processors"""
 
         for processor in self.processors.values():
-            yield (processor.__name__,
-                '{} | {}'.format(processor.file_format,
+            yield (
+                processor.__name__,
+                '{} | {}'.format(
+                    processor.file_format,
                     processor.file_description))
 
     def register(self, cls):

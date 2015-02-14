@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             name='Field',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('order', models.PositiveIntegerField(null=True, verbose_name='mtr.sync:order', blank=True)),
+                ('order', models.PositiveIntegerField(null=True, verbose_name='order', blank=True)),
                 ('name', models.CharField(max_length=255, verbose_name='name')),
                 ('attribute', models.CharField(max_length=255, verbose_name='model attribute')),
                 ('skip', models.BooleanField(default=False, verbose_name='mtr.sync:skips')),
@@ -46,7 +46,7 @@ class Migration(migrations.Migration):
             name='FilterParams',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('order', models.PositiveIntegerField(null=True, verbose_name='mtr.sync:order', blank=True)),
+                ('order', models.PositiveIntegerField(null=True, verbose_name='order', blank=True)),
                 ('field_related', models.ForeignKey(related_name='filter_params', to='mtr_sync.Field')),
                 ('filter_related', models.ForeignKey(verbose_name='filter', to='mtr_sync.Filter')),
             ],
@@ -89,10 +89,10 @@ class Migration(migrations.Migration):
                 ('main_model_id', models.PositiveIntegerField(null=True, verbose_name='main model object', blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
-                ('processor', models.CharField(max_length=255, verbose_name='processor', choices=[(b'XlsProcessor', '.xls | Microsoft Excel 97/2000/XP/2003'), (b'XlsxProcessor', '.xlsx | mtr.sync:Microsoft Excel 2007/2010/2013 XML')])),
+                ('processor', models.CharField(max_length=255, verbose_name='processor', choices=[(b'XlsProcessor', '.xls | Microsoft Excel 97/2000/XP/2003'), (b'XlsxProcessor', '.xlsx | Microsoft Excel 2007/2010/2013 XML')])),
                 ('worksheet', models.CharField(max_length=255, verbose_name='worksheet page', blank=True)),
                 ('include_header', models.BooleanField(default=True, verbose_name='include header')),
-                ('filename', models.CharField(max_length=255, verbose_name='mtr.sync:custom filename', blank=True)),
+                ('filename', models.CharField(max_length=255, verbose_name='custom filename', blank=True)),
                 ('buffer_file', models.FileField(db_index=True, upload_to=mtr.sync.settings.get_buffer_file_path, verbose_name='file', blank=True)),
             ],
             options={

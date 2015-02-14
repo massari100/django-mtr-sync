@@ -115,10 +115,13 @@ class Processor(object):
             os.makedirs(path)
 
         filename = '{}{}'.format(
-            str(self.report.id) or self.settings.filename, self.file_format)
+            self.settings.filename or str(self.report.id), self.file_format)
 
         path = os.path.join(path, filename)
         self.save(path)
+
+        if self.settings.id:
+            self.report.settings = self.settings
 
         # send signal to save report
         for response in export_completed.send(
