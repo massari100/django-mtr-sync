@@ -101,3 +101,10 @@ def recreate():
 
     manage('createsuperuser --username app --email app@app.com --noinput')
     manage('changepassword app')
+
+
+@task
+def subl():
+    """Start Sublime editor"""
+
+    local('subl project.sublime-project')

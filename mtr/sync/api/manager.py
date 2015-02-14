@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from collections import OrderedDict
+from itertools import ifilterfalse
 
 from django.db import models
 
@@ -15,10 +16,8 @@ class Manager(object):
         self.processors = OrderedDict()
 
     def models_list(self):
-        mlist = filter(
-            lambda m: getattr(m, 'ignore_sync', True), models.get_models())
-        # mlist = filter(
-        #     lambda m: str(m.__module__).startswith('mtr.sync'), mlist)
+        mlist = ifilterfalse(
+            lambda m: getattr(m, 'ignore_sync', False), models.get_models())
         return mlist
 
     def model_choices(self):
@@ -86,21 +85,37 @@ class Manager(object):
 
         if data is None:
             queryset = self.prepare_queryset(settings)
-            data = self.filtered_data(settings, queryset)
+            data = self.prepare_data(settings, queryset)
 
         return processor.export_data(data)
 
     def prepare_queryset(self, settings):
         current_model = settings.model_class()
 
-        # TODO: filter data to export
+        # TODO: add aditional fields or methods
 
-        return current_model.objects.all()
+        # TODO: automatic select_related, prefetch_related
 
-    def filtered_data(self, settings, queryset):
+        if getattr(current_model, 'sync_queryset', None):
+            queryset = current_model.sync_queryset(settings)
+        else:
+            queryset = current_model.objects.all()
+
+        return queryset
+
+    def prepare_data(self, settings, queryset):
         """Prepare data using filters from settings and return iterator"""
 
         fields = list(settings.fields_with_filters())
+
+        if settings.end_row:
+            rows = settings.end_row
+            if settings.start_row:
+                rows -= settings.start_row
+            else:
+                rows -= 1
+
+            queryset = queryset[:rows]
 
         data = {
             'rows': len(queryset),

@@ -64,9 +64,6 @@ class Settings(ActionsMixin):
     end_row = models.PositiveIntegerField(
         _('mtr.sync:end row'), null=True, blank=True)
 
-    limit_data = models.BooleanField(
-        _('mtr.sync:limit upload data'), default=False)
-
     main_model = models.CharField(
         _('mtr.sync:main model'), max_length=255,
         choices=manager.model_choices())
@@ -79,7 +76,7 @@ class Settings(ActionsMixin):
         _('mtr.sync:updated at'), auto_now=True)
 
     processor = models.CharField(
-        _('mtr.sync:processor'), max_length=255,
+        _('mtr.sync:format'), max_length=255,
         choices=manager.processor_choices())
     worksheet = models.CharField(
         _('mtr.sync:worksheet page'), max_length=255, blank=True)
@@ -95,7 +92,7 @@ class Settings(ActionsMixin):
 
     def fields_with_filters(self):
         fields = self.fields.prefetch_related(
-            'filter_params__filter_related').all()
+            'filter_params__filter_related').exclude(skip=True).all()
         for field in fields:
             field.filters_queue = []
 
@@ -180,7 +177,7 @@ class Field(models.Model):
 
     name = models.CharField(_('mtr.sync:name'), max_length=255)
     attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
-    skip = models.BooleanField(_('mtr.sync:skips'), default=False)
+    skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
     filters = models.ManyToManyField(Filter, through='FilterParams')
 

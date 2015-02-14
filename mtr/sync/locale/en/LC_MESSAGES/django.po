@@ -14,11 +14,11 @@ msgstr "Data synchronization started in background."
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
-#: api/processors.py:149
+#: api/processors.py:150
 msgid "mtr.sync:Microsoft Excel 97/2000/XP/2003"
 msgstr "Microsoft Excel 97/2000/XP/2003"
 
-#: api/processors.py:192
+#: api/processors.py:193
 msgid "mtr.sync:Microsoft Excel 2007/2010/2013 XML"
 msgstr "Microsoft Excel 2007/2010/2013 XML"
 
@@ -55,42 +55,42 @@ msgid "mtr.sync:end row"
 msgstr "end row"
 
 #: models.py:68
-msgid "mtr.sync:limit upload data"
-msgstr "limit upload data"
-
-#: models.py:71
 msgid "mtr.sync:main model"
 msgstr "main model"
 
-#: models.py:74
+#: models.py:71
 msgid "mtr.sync:main model object"
 msgstr "main model object"
 
-#: models.py:77
+#: models.py:74
 msgid "mtr.sync:created at"
 msgstr "created at"
 
-#: models.py:79 models.py:261
+#: models.py:76 models.py:262
 msgid "mtr.sync:updated at"
 msgstr "updated at"
 
-#: models.py:82
-msgid "mtr.sync:processor"
-msgstr "processor"
+#: models.py:79
+msgid "mtr.sync:format"
+msgstr "format"
 
-#: models.py:85
+#: models.py:82
 msgid "mtr.sync:worksheet page"
 msgstr "worksheet page"
 
-#: models.py:88
+#: models.py:85
 msgid "mtr.sync:include header"
 msgstr "include header"
 
-#: models.py:91
+#: models.py:88
 msgid "mtr.sync:custom filename"
 msgstr "custom filename"
 
-#: models.py:143 models.py:144 models.py:184
+#: models.py:91 models.py:253
+msgid "mtr.sync:file"
+msgstr "file"
+
+#: models.py:143 models.py:144 models.py:185
 msgid "mtr.sync:settings"
 msgstr "settings"
 
@@ -102,15 +102,15 @@ msgstr "description"
 msgid "mtr.sync:template"
 msgstr "template"
 
-#: models.py:162 models.py:216 models.py:230
+#: models.py:162 models.py:217 models.py:231
 msgid "mtr.sync:filter"
 msgstr "filter"
 
-#: models.py:163 models.py:231
+#: models.py:163 models.py:232
 msgid "mtr.sync:filters"
 msgstr "filters"
 
-#: models.py:176 models.py:213
+#: models.py:176 models.py:214
 msgid "mtr.sync:order"
 msgstr "order"
 
@@ -118,51 +118,51 @@ msgstr "order"
 msgid "mtr.sync:model attribute"
 msgstr "model attribute"
 
-#: models.py:201
+#: models.py:180
+msgid "mtr.sync:skip"
+msgstr "skip"
+
+#: models.py:202
 msgid "mtr.sync:field"
 msgstr "field"
 
-#: models.py:202
+#: models.py:203
 msgid "mtr.sync:fields"
 msgstr "fields"
 
-#: models.py:246
+#: models.py:247
 msgid "mtr.sync:Error"
 msgstr "Error"
 
-#: models.py:247
+#: models.py:248
 msgid "mtr.sync:Running"
 msgstr "Running"
 
-#: models.py:248
+#: models.py:249
 msgid "mtr.sync:Success"
 msgstr "Success"
 
-#: models.py:252
-msgid "mtr.sync:file"
-msgstr "file"
-
-#: models.py:254
+#: models.py:255
 msgid "mtr.sync:status"
 msgstr "status"
 
-#: models.py:257
+#: models.py:258
 msgid "mtr.sync:started at"
 msgstr "started at"
 
-#: models.py:259
+#: models.py:260
 msgid "mtr.sync:completed at"
 msgstr "completed at"
 
-#: models.py:264
+#: models.py:265
 msgid "mtr.sync:used settings"
 msgstr "used settings"
 
-#: models.py:274
+#: models.py:275
 msgid "mtr.sync:report"
 msgstr "report"
 
-#: models.py:275
+#: models.py:276
 msgid "mtr.sync:reports"
 msgstr "reports"
 

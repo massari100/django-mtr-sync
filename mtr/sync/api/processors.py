@@ -47,27 +47,25 @@ class Processor(object):
         start = {'row': start_row, 'col': start_col}
         end = {'row': end_row, 'col': end_col}
 
-        if self.settings.limit_data:
-            if self.settings.start_row and \
-                    self.settings.start_row >= start_row:
-                start['row'] = self.settings.start_row - 1
-                end['row'] += start['row']
+        if self.settings.start_row and \
+                self.settings.start_row >= start_row:
+            start['row'] = self.settings.start_row - 1
+            end['row'] += start['row']
 
-            if self.settings.end_row and \
-                    self.settings.end_row <= end['row']:
-                end['row'] = self.settings.end_row
+        if self.settings.end_row and \
+                self.settings.end_row <= end['row']:
+            end['row'] = self.settings.end_row
 
         limit = LIMIT_PREVIEW()
         if preview and limit <= end_row:
             end_row = limit
 
-        if self.settings.limit_data:
-            if self.settings.start_col:
-                start_col_index = self.col(self.settings.start_col)
+        if self.settings.start_col:
+            start_col_index = self.col(self.settings.start_col)
 
-                if start_col_index >= start_col:
-                    start['col'] = start_col_index - 1
-                    end['col'] += start['col']
+            if start_col_index >= start_col:
+                start['col'] = start_col_index - 1
+                end['col'] += start['col']
 
         self.start, self.end = start, end
         self.cells = range(start['col'], end['col'])
@@ -94,7 +92,7 @@ class Processor(object):
             self.write(self.start['row'], header_data)
 
             self.start['row'] += 1
-            if not self.settings.limit_data:
+            if self.settings.end_row:
                 self.end['row'] += 1
 
             self.rows = range(self.start['row'], self.end['row'])
