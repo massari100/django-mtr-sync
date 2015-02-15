@@ -16,9 +16,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('order', models.PositiveIntegerField(null=True, verbose_name='order', blank=True)),
-                ('name', models.CharField(max_length=255, verbose_name='name')),
+                ('name', models.CharField(max_length=255, verbose_name='name', blank=True)),
                 ('attribute', models.CharField(max_length=255, verbose_name='model attribute')),
-                ('skip', models.BooleanField(default=False, verbose_name='mtr.sync:skips')),
+                ('skip', models.BooleanField(default=False, verbose_name='skip')),
             ],
             options={
                 'ordering': ['order'],
@@ -47,8 +47,8 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('order', models.PositiveIntegerField(null=True, verbose_name='order', blank=True)),
-                ('field_related', models.ForeignKey(related_name='filter_params', to='mtr_sync.Field')),
-                ('filter_related', models.ForeignKey(verbose_name='filter', to='mtr_sync.Filter')),
+                ('field_related', models.ForeignKey(related_name='filter_params', to='mtr/sync.Field')),
+                ('filter_related', models.ForeignKey(verbose_name='filter', to='mtr/sync.Filter')),
             ],
             options={
                 'ordering': ['order'],
@@ -84,11 +84,11 @@ class Migration(migrations.Migration):
                 ('start_col', models.CharField(max_length=10, verbose_name='start column', blank=True)),
                 ('start_row', models.PositiveIntegerField(null=True, verbose_name='start row', blank=True)),
                 ('end_row', models.PositiveIntegerField(null=True, verbose_name='end row', blank=True)),
-                ('main_model', models.CharField(max_length=255, verbose_name='main model', choices=[('django.contrib.admin.models.LogEntry', 'Admin | Log Entry'), ('django.contrib.auth.models.Permission', 'Auth | Permission'), ('django.contrib.auth.models.Group', 'Auth | Group'), ('django.contrib.auth.models.User', 'Auth | User'), ('django.contrib.contenttypes.models.ContentType', 'Contenttypes | Content Type'), ('django.contrib.sessions.models.Session', 'Sessions | Session'), ('mtr.sync.models.Settings', 'Mtr_Sync | Settings'), ('mtr.sync.models.Filter', 'Mtr_Sync | Filter'), ('mtr.sync.models.Field', 'Mtr_Sync | Field'), ('mtr.sync.models.FilterParams', 'Mtr_Sync | Filter'), ('mtr.sync.models.Report', 'Mtr_Sync | Report'), ('app.models.Person', 'App | Person')])),
+                ('main_model', models.CharField(max_length=255, verbose_name='main model', choices=[('django.contrib.admin.models.LogEntry', 'Admin | Log Entry'), ('django.contrib.auth.models.Permission', 'Auth | Permission'), ('django.contrib.auth.models.Group', 'Auth | Group'), ('django.contrib.auth.models.User', 'Auth | User'), ('django.contrib.contenttypes.models.ContentType', 'Contenttypes | Content Type'), ('django.contrib.sessions.models.Session', 'Sessions | Session'), ('mtr.sync.models.Settings', 'Mtr/Sync | Settings'), ('mtr.sync.models.Filter', 'Mtr/Sync | Filter'), ('mtr.sync.models.Field', 'Mtr/Sync | Field'), ('mtr.sync.models.FilterParams', 'Mtr/Sync | Filter'), ('mtr.sync.models.Report', 'Mtr/Sync | Report'), ('app.models.Person', 'App | Person')])),
                 ('main_model_id', models.PositiveIntegerField(null=True, verbose_name='main model object', blank=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
                 ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
-                ('processor', models.CharField(max_length=255, verbose_name='mtr.sync:format', choices=[(b'XlsProcessor', '.xls | Microsoft Excel 97/2000/XP/2003'), (b'XlsxProcessor', '.xlsx | Microsoft Excel 2007/2010/2013 XML')])),
+                ('processor', models.CharField(max_length=255, verbose_name='format', choices=[(b'XlsProcessor', '.xls | Microsoft Excel 97/2000/XP/2003'), (b'XlsxProcessor', '.xlsx | Microsoft Excel 2007/2010/2013 XML')])),
                 ('worksheet', models.CharField(max_length=255, verbose_name='worksheet page', blank=True)),
                 ('include_header', models.BooleanField(default=True, verbose_name='include header')),
                 ('filename', models.CharField(max_length=255, verbose_name='custom filename', blank=True)),
@@ -104,19 +104,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='report',
             name='settings',
-            field=models.ForeignKey(related_name='reports', verbose_name='used settings', blank=True, to='mtr_sync.Settings', null=True),
+            field=models.ForeignKey(related_name='reports', verbose_name='used settings', blank=True, to='mtr/sync.Settings', null=True),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='field',
             name='filters',
-            field=models.ManyToManyField(to='mtr_sync.Filter', through='mtr_sync.FilterParams'),
+            field=models.ManyToManyField(to='mtr/sync.Filter', through='mtr/sync.FilterParams'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='field',
             name='settings',
-            field=models.ForeignKey(related_name='fields', verbose_name='settings', to='mtr_sync.Settings'),
+            field=models.ForeignKey(related_name='fields', verbose_name='settings', to='mtr/sync.Settings'),
             preserve_default=True,
         ),
     ]

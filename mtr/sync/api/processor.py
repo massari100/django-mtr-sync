@@ -5,7 +5,8 @@ import os
 from django.utils.six.moves import range
 from django.utils import timezone
 
-from .signals import export_started, export_completed
+from .signals import export_started, export_completed, \
+    import_started, import_completed
 from ..settings import LIMIT_PREVIEW, FILE_PATH
 
 
@@ -16,8 +17,9 @@ class Processor(object):
     file_format = None
     file_description = None
 
-    def __init__(self, settings):
+    def __init__(self, settings, manager):
         self.settings = settings
+        self.manager = manager
         self.report = None
 
     def col(self, value):
@@ -127,7 +129,33 @@ class Processor(object):
 
         return self.report
 
-    # def import_data(self):
-    #     """Import data to model and return errors if exists"""
+    def import_data(self, data):
+        """Import data to model and return errors if exists"""
 
-    #     raise NotImplementedError
+        # send signal to create report
+        for response in import_started.send(self.__class__, processor=self):
+            self.report = response[1]
+
+        self.set_dimensions(0, 0, data['rows'], data['cols'])
+
+        self.open()
+
+        # read data
+
+        # TODO: prerocess data
+        # TODO: transaction management
+
+        # data = data['items']
+        # for row in self.rows:
+        #     row_data = self.read(row)
+
+        if self.settings.id:
+            self.report.settings = self.settings
+
+        # send signal to save report
+        for response in import_completed.send(
+                self.__class__, report=self.report,
+                date=timezone.now()):
+            self.report = response[1]
+
+        self.open()

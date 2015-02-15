@@ -6,7 +6,7 @@ from itertools import ifilterfalse
 from django.db import models
 
 from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
-from ..settings import IMPORT_PROCESSORS
+from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
 class Manager(object):
@@ -15,15 +15,21 @@ class Manager(object):
     def __init__(self):
         self.processors = OrderedDict()
 
+    def model_settings(self, model):
+        return getattr(model, MODEL_SETTINGS_NAME(), {})
+
     def models_list(self):
         mlist = ifilterfalse(
-            lambda m: getattr(m, 'ignore_sync', False), models.get_models())
+            lambda m: self.model_settings(m).get('ignore', False),
+            models.get_models())
         return mlist
 
     def model_choices(self):
         """Return all registered django models as choices"""
 
         for model in self.models_list():
+            # TODO: replace app name from app settings
+
             yield (
                 '{}.{}'.format(model.__module__, model.__name__),
                 '{} | {}'.format(
@@ -75,7 +81,7 @@ class Manager(object):
             raise ProcessorDoesNotExists(
                 'Processor {} does not exists'.format(settings.processor))
 
-        return processor(settings)
+        return processor(settings, self)
 
     def export_data(self, settings, data=None):
         """Export data to file if no data passed,
@@ -91,13 +97,15 @@ class Manager(object):
 
     def prepare_queryset(self, settings):
         current_model = settings.model_class()
+        model_settings = settings.model_settings(current_model)
+        queryset = model_settings.get('queryset', None)
 
         # TODO: add aditional fields or methods
 
         # TODO: automatic select_related, prefetch_related
 
-        if getattr(current_model, 'sync_queryset', None):
-            queryset = current_model.sync_queryset(settings)
+        if queryset:
+            queryset = queryset(settings)
         else:
             queryset = current_model.objects.all()
 

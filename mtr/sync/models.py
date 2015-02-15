@@ -1,9 +1,11 @@
+from itertools import ifilter
+
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
-from .settings import FILE_PATH
+from .settings import FILE_PATH, MODEL_SETTINGS_NAME
 from .api import manager
 from .api.signals import export_started, export_completed
 
@@ -116,6 +118,8 @@ class Settings(ActionsMixin):
     def model_class(self):
         """Return class for name in main_model"""
 
+        # TODO: move logic to manager from model
+
         for mmodel in manager.models_list():
             if self.main_model.split('.')[-1] == mmodel.__name__:
                 return mmodel
@@ -126,11 +130,14 @@ class Settings(ActionsMixin):
                 return field
 
     def model_attributes(self):
-
-        # TODO: filter available fields
-
         model = self.model_class()
-        for name in model._meta.get_all_field_names():
+        settings = manager.model_settings(model)
+
+        exclude = settings.get('exclude', [])
+        fields = ifilter(
+            lambda f: f not in exclude, model._meta.get_all_field_names())
+
+        for name in fields:
             field = self.get_field_by_name(model, name)
 
             label = name
@@ -186,6 +193,7 @@ class Field(models.Model):
 
     def process(self, item):
         # TODO: process by all filters
+        # TODO: manual setted filters
 
         value = getattr(item, self.attribute)
 

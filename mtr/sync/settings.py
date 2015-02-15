@@ -36,5 +36,9 @@ IMPORT_PROCESSORS = getattr_with_prefix('IMPORT_PROCESSORS', [
     'mtr.sync.api.processors.xlsx',
 ])
 
+# model attribute where settings placed
+MODEL_SETTINGS_NAME = getattr_with_prefix(
+    'MODEL_SETTINGS_NAME', 'sync_settings')
+
 # limit preview of data on settings page
 LIMIT_PREVIEW = getattr_with_prefix('LIMIT_PREVIEW', 20)
