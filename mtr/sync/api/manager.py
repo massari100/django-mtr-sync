@@ -6,7 +6,7 @@ from itertools import ifilterfalse
 from django.db import models
 
 from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
-from ..settings import IMPORT_FROM
+from ..settings import IMPORT_PROCESSORS
 
 
 class Manager(object):
@@ -127,14 +127,10 @@ class Manager(object):
         return data
 
     def import_processors(self):
-        """Import modules within IMPORT_FROM paths"""
+        """Import modules within IMPORT_PROCESSORS paths"""
 
-        for module in IMPORT_FROM():
-            try:
-                __import__(module)
-            except ImportError:
-                raise ImportError(
-                    'Invalid module {}, unable to import'.format(module))
+        for module in IMPORT_PROCESSORS():
+            __import__(module)
 
 manager = Manager()
 manager.import_processors()

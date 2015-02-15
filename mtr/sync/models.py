@@ -175,7 +175,7 @@ class Field(models.Model):
     order = models.PositiveIntegerField(
         _('mtr.sync:order'), null=True, blank=True)
 
-    name = models.CharField(_('mtr.sync:name'), max_length=255)
+    name = models.CharField(_('mtr.sync:name'), max_length=255, blank=True)
     attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 

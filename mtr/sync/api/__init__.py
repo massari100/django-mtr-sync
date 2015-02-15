@@ -1,2 +1,2 @@
 from .manager import *
-from .processors import *
+from .processor import *
