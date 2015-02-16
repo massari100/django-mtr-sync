@@ -83,6 +83,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(max_length=100, verbose_name='name')),
                 ('start_col', models.CharField(max_length=10, verbose_name='start column', blank=True)),
                 ('start_row', models.PositiveIntegerField(null=True, verbose_name='start row', blank=True)),
+                ('end_col', models.CharField(max_length=10, verbose_name='mtr.sync:end column', blank=True)),
                 ('end_row', models.PositiveIntegerField(null=True, verbose_name='end row', blank=True)),
                 ('main_model', models.CharField(max_length=255, verbose_name='main model', choices=[('django.contrib.admin.models.LogEntry', 'Admin | Log Entry'), ('django.contrib.auth.models.Permission', 'Auth | Permission'), ('django.contrib.auth.models.Group', 'Auth | Group'), ('django.contrib.auth.models.User', 'Auth | User'), ('django.contrib.contenttypes.models.ContentType', 'Contenttypes | Content Type'), ('django.contrib.sessions.models.Session', 'Sessions | Session'), ('mtr.sync.models.Settings', 'Mtr/Sync | Settings'), ('mtr.sync.models.Filter', 'Mtr/Sync | Filter'), ('mtr.sync.models.Field', 'Mtr/Sync | Field'), ('mtr.sync.models.FilterParams', 'Mtr/Sync | Filter'), ('mtr.sync.models.Report', 'Mtr/Sync | Report'), ('app.models.Person', 'App | Person')])),
                 ('main_model_id', models.PositiveIntegerField(null=True, verbose_name='main model object', blank=True)),

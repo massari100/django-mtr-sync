@@ -28,17 +28,22 @@ class XlsProcessor(Processor):
         self._workbook = xlwt.Workbook('utf-8')
         self._worksheet = self._workbook.add_sheet(self.settings.worksheet)
 
-    def open(self):
-        self._workbook = xlrd.open_workbook(self.settings.buffer_file)
-        self._worksheet = self._workbook(self.settings.worksheet)
+    def open(self, path):
+        self._workbook = xlrd.open_workbook(path)
+        self._worksheet = self._workbook.sheet_by_name(
+            self.settings.worksheet)
+
+        return self._worksheet.nrows, self._worksheet.ncols
 
     def write(self, row, value):
         for index, cell in enumerate(self.cells):
             self._worksheet.write(row, cell, value[index])
 
     def read(self, row):
+        data = []
         for index, cell in enumerate(self.cells):
-            yield self._worksheet.cell_value(row, cell)
+            data.append(self._worksheet.cell_value(row, cell))
+        return data
 
     def save(self, name):
         self._workbook.save(name)

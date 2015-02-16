@@ -9,13 +9,12 @@ from .models import Person
 class PersonAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'surname', 'security_level', 'gender')
-    # list_filter = ('name', 'surname', 'security_level', 'gender')
 
-    actions = ['copy_1000']
+    actions = ['copy_100']
 
-    def copy_1000(self, request, queryset):
+    def copy_100(self, request, queryset):
         for item in queryset.all():
-            for i in range(1000):
+            for i in range(100):
                 name = list(item.name)
                 shuffle(name)
                 name = ''.join(name)
@@ -30,7 +29,7 @@ class PersonAdmin(admin.ModelAdmin):
                     gender=choice(['M', 'F']),
                     security_level=choice(range(100))
                 )
-    copy_1000.short_description = 'Copy 1000 objects with random data'
+    copy_100.short_description = 'Copy 100 objects with random data'
 
 
 admin.site.register(Person, PersonAdmin)

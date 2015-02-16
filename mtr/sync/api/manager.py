@@ -24,6 +24,35 @@ class Manager(object):
             models.get_models())
         return mlist
 
+    def get_field_by_name(self, model, name):
+        for field in model._meta.fields:
+            if field.name == name:
+                return field
+
+    def model_attributes(self, model):
+        model = self.model_class(model)
+        settings = self.model_settings(model)
+
+        exclude = settings.get('exclude', [])
+        fields = ifilterfalse(
+            lambda f: f in exclude, model._meta.get_all_field_names())
+
+        for name in fields:
+            field = self.get_field_by_name(model, name)
+
+            label = name
+            if field:
+                label = field.verbose_name
+
+            yield (name, label.capitalize())
+
+    def model_class(self, settings):
+        """Return class for name in main_model"""
+
+        for mmodel in self.models_list():
+            if settings.main_model.split('.')[-1] == mmodel.__name__:
+                return mmodel
+
     def model_choices(self):
         """Return all registered django models as choices"""
 
@@ -90,14 +119,14 @@ class Manager(object):
         processor = self.make_processor(settings)
 
         if data is None:
-            queryset = self.prepare_queryset(settings)
-            data = self.prepare_data(settings, queryset)
+            queryset = self.prepare_export_queryset(settings)
+            data = self.prepare_export_data(processor, queryset)
 
         return processor.export_data(data)
 
-    def prepare_queryset(self, settings):
-        current_model = settings.model_class()
-        model_settings = settings.model_settings(current_model)
+    def prepare_export_queryset(self, settings):
+        current_model = self.model_class(settings)
+        model_settings = self.model_settings(current_model)
         queryset = model_settings.get('queryset', None)
 
         # TODO: add aditional fields or methods
@@ -111,9 +140,11 @@ class Manager(object):
 
         return queryset
 
-    def prepare_data(self, settings, queryset):
-        """Prepare data using filters from settings and return iterator"""
+    def prepare_export_data(self, processor, queryset):
+        """Prepare data using filters from settings
+        and return data with dimensions"""
 
+        settings = processor.settings
         fields = list(settings.fields_with_filters())
 
         if settings.end_row:
@@ -125,20 +156,60 @@ class Manager(object):
 
             queryset = queryset[:rows]
 
+        if settings.end_col:
+            cols = processor.col(settings.end_col)
+            if settings.start_col:
+                cols -= processor.col(settings.start_col)
+            else:
+                cols -= 1
+
+            fields = fields[:cols]
+
         data = {
-            'rows': len(queryset),
+            'rows': queryset.count(),
             'cols': len(fields),
             'items': (
-                field.process(item) for item in queryset for field in fields)
+                self.process_value(field, getattr(item, field.attribute))
+                for item in queryset
+                for field in fields
+            )
         }
 
         return data
 
-    def import_processors(self):
+    def import_data(self, settings, path=None):
+        """Import data to database"""
+
+        processor = self.make_processor(settings)
+        model = self.model_class(settings)
+
+        return processor.import_data(model, path)
+
+    def prepare_import_data(self, processor, data):
+        """Prepare data using filters from settings and return iterator"""
+
+        settings = processor.settings
+        fields = list(settings.fields_with_filters())
+
+        for row in data:
+            attrs = {}
+            for index, field in enumerate(fields):
+                col = processor.col(field.name) if field.name else index
+                value = self.process_value(field, row[col])
+                attrs[field.attribute] = value
+            yield attrs
+
+    def process_value(self, field, value):
+        # TODO: process by all filters
+        # TODO: manual setted filters
+
+        return value
+
+    def import_processors_modules(self):
         """Import modules within IMPORT_PROCESSORS paths"""
 
         for module in IMPORT_PROCESSORS():
             __import__(module)
 
 manager = Manager()
-manager.import_processors()
+manager.import_processors_modules()

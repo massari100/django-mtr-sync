@@ -37,3 +37,15 @@ def render_to(template, *args, **kwargs):
         return wrapper
 
     return decorator
+
+
+def make_from_params(cls, params):
+    """Create or fetch Model instance from params"""
+
+    instance_id = params.get('id', False)
+    if instance_id:
+        instance = cls.objects.get(pk=instance_id)
+    else:
+        instance = cls(**params)
+
+    return instance

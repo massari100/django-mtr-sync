@@ -7,7 +7,7 @@ from django.contrib import admin
 from django import forms
 
 from .models import Report, Settings, Field, FilterParams, Filter
-from .tasks import export_data
+from .api import manager
 
 
 class ReportAdmin(admin.ModelAdmin):
@@ -53,7 +53,7 @@ class FieldForm(forms.ModelForm):
 
             self.fields['attribute'] = forms.ChoiceField(
                 label=self.fields['attribute'].label,
-                choices=settings.model_attributes())
+                choices=manager.model_attributes(settings))
 
     class Meta:
         exclude = []
@@ -81,7 +81,7 @@ class FieldInline(admin.TabularInline):
     def formfield_for_dbfield(self, db_field, **kwargs):
         """Replace inline attribute field to selectbox with choices"""
 
-        parent = kwargs.pop('obj')
+        settings = kwargs.pop('obj')
 
         field = super(
             FieldInline, self).formfield_for_dbfield(db_field, **kwargs)
@@ -89,7 +89,7 @@ class FieldInline(admin.TabularInline):
         if db_field.name == 'attribute':
             field = forms.ChoiceField(
                 label=field.label,
-                choices=parent.model_attributes())
+                choices=manager.model_attributes(settings))
 
         return field
 
@@ -114,8 +114,10 @@ class SettingsAdmin(admin.ModelAdmin):
             return []
 
     def run(self, request, queryset):
+        """Run action with selected settings"""
+
         for settings in queryset:
-            export_data.apply_async(args=[{'id': settings.id}])
+            settings.run()
 
             self.message_user(
                 request,

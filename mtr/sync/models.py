@@ -1,13 +1,12 @@
-from itertools import ifilter
-
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
-from .settings import FILE_PATH, MODEL_SETTINGS_NAME
+from .settings import FILE_PATH
 from .api import manager
-from .api.signals import export_started, export_completed
+from .api.signals import export_started, export_completed, \
+    import_started, import_completed
 
 
 class ExportManager(models.Manager):
@@ -63,6 +62,8 @@ class Settings(ActionsMixin):
     start_row = models.PositiveIntegerField(
         _('mtr.sync:start row'), null=True, blank=True)
 
+    end_col = models.CharField(
+        _('mtr.sync:end column'), max_length=10, blank=True)
     end_row = models.PositiveIntegerField(
         _('mtr.sync:end row'), null=True, blank=True)
 
@@ -103,48 +104,13 @@ class Settings(ActionsMixin):
 
             yield field
 
-    @classmethod
-    def make_from_params(cls, params):
-        """Create Settings Model from params"""
+    def run(self):
+        from .tasks import export_data, import_data
 
-        settings_id = params.get('id', False)
-        if settings_id:
-            settings = cls.objects.get(pk=settings_id)
-        else:
-            settings = cls(**params)
-
-        return settings
-
-    def model_class(self):
-        """Return class for name in main_model"""
-
-        # TODO: move logic to manager from model
-
-        for mmodel in manager.models_list():
-            if self.main_model.split('.')[-1] == mmodel.__name__:
-                return mmodel
-
-    def get_field_by_name(self, model, name):
-        for field in model._meta.fields:
-            if field.name == name:
-                return field
-
-    def model_attributes(self):
-        model = self.model_class()
-        settings = manager.model_settings(model)
-
-        exclude = settings.get('exclude', [])
-        fields = ifilter(
-            lambda f: f not in exclude, model._meta.get_all_field_names())
-
-        for name in fields:
-            field = self.get_field_by_name(model, name)
-
-            label = name
-            if field:
-                label = field.verbose_name
-
-            yield (name, label.capitalize())
+        if self.action == self.EXPORT:
+            export_data.apply_async(args=[{'id': self.id}])
+        elif self.action == self.IMPORT:
+            import_data.apply_async(args=[{'id': self.id}])
 
     class Meta:
         verbose_name = _('mtr.sync:settings')
@@ -190,14 +156,6 @@ class Field(models.Model):
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
-
-    def process(self, item):
-        # TODO: process by all filters
-        # TODO: manual setted filters
-
-        value = getattr(item, self.attribute)
-
-        return value
 
     def save(self, *args, **kwargs):
         if self.order is None:
@@ -294,15 +252,31 @@ class Report(ActionsMixin):
 
 
 @receiver(export_started)
-def running_report(sender, **kwargs):
+def create_export_report(sender, **kwargs):
     return Report.export_objects.create(action=Report.EXPORT)
 
 
 @receiver(export_completed)
-def success_report(sender, **kwargs):
+def save_export_report(sender, **kwargs):
     report = kwargs['report']
     report.completed_at = kwargs['date']
     report.buffer_file = kwargs['path']
+    report.status = report.SUCCESS
+    report.save()
+
+    return report
+
+
+@receiver(import_started)
+def create_import_report(sender, **kwargs):
+    return Report.import_objects.create(
+        buffer_file=kwargs['path'], action=Report.IMPORT)
+
+
+@receiver(import_completed)
+def save_import_report(sender, **kwargs):
+    report = kwargs['report']
+    report.completed_at = kwargs['date']
     report.status = report.SUCCESS
     report.save()
 

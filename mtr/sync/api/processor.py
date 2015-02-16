@@ -38,7 +38,8 @@ class Processor(object):
         raise NotImplementedError
 
     def set_dimensions(
-            self, start_row, start_col, end_row, end_col, preview=False):
+            self, start_row, start_col, end_row, end_col, preview=False,
+            import_data=False):
         """Return start, end table dimensions"""
 
         start = {'row': start_row, 'col': start_col}
@@ -59,10 +60,23 @@ class Processor(object):
 
         if self.settings.start_col:
             start_col_index = self.col(self.settings.start_col)
-
             if start_col_index >= start_col:
                 start['col'] = start_col_index - 1
-                end['col'] += start['col']
+                # end['col'] += start['col']
+                # TODO: fix col resize when reading
+                # end['col'] -= start['col']
+
+        if self.settings.end_col:
+            end_col_index = self.col(self.settings.end_col)
+            if end_col_index <= end_col:
+                end['col'] = end_col_index
+
+        if self.settings.include_header and import_data:
+            start['row'] += 1
+
+        if import_data:
+            end['row'] -= 1
+        # end['col'] -= 1
 
         self.start, self.end = start, end
         self.cells = range(start['col'], end['col'])
@@ -129,25 +143,33 @@ class Processor(object):
 
         return self.report
 
-    def import_data(self, data):
+    def import_data(self, model, path=None):
         """Import data to model and return errors if exists"""
 
+        path = path or self.settings.buffer_file.path
+
         # send signal to create report
-        for response in import_started.send(self.__class__, processor=self):
+        for response in import_started.send(self.__class__, processor=self,
+                path=path):
             self.report = response[1]
 
-        self.set_dimensions(0, 0, data['rows'], data['cols'])
+        # open file and set dimensions
+        max_rows, max_cols = self.open(path)
+        self.set_dimensions(0, 0, max_rows, max_cols, import_data=True)
 
-        self.open()
-
-        # read data
-
-        # TODO: prerocess data
         # TODO: transaction management
+        # TODO: update if, create if, delete if
 
-        # data = data['items']
-        # for row in self.rows:
-        #     row_data = self.read(row)
+        rows = (self.read(row) for row in self.rows)
+        data = self.manager.prepare_import_data(self, rows)
+
+        # models_to_create = []
+        for attr in data:
+            # models_to_create(model(**data))
+            model.objects.create(**attr)
+
+            # TODO: bulk create or with save
+        # model.objects.bulk_create(models_to_create)
 
         if self.settings.id:
             self.report.settings = self.settings
@@ -155,7 +177,8 @@ class Processor(object):
         # send signal to save report
         for response in import_completed.send(
                 self.__class__, report=self.report,
-                date=timezone.now()):
+                date=timezone.now(),
+                path=path):
             self.report = response[1]
 
-        self.open()
+        return self.report
