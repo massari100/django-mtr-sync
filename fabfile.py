@@ -2,7 +2,7 @@ import os
 
 from fabric.api import local, task, settings, hide, lcd
 
-APPS = ['mtr.sync']
+APPS = ['app']
 PROJECT_DIR = 'tests'
 
 

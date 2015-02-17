@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from django.contrib.auth.models import User
 
-from ..helpers import themed
+from mtr.sync.helpers import themed
 
 
 class DashboardPageTest(TestCase):

@@ -9,6 +9,9 @@ from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
 from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
+# TODO: naming decorator for handlers, processors, filters, settings
+
+
 class Manager(object):
     """Manager for data processors"""
 
@@ -29,8 +32,10 @@ class Manager(object):
             if field.name == name:
                 return field
 
-    def model_attributes(self, model):
-        model = self.model_class(model)
+    def model_attributes(self, settings):
+        """Return iterator of fields names by given mode_path"""
+
+        model = self.model_class(settings)
         settings = self.model_settings(model)
 
         exclude = settings.get('exclude', [])
@@ -48,6 +53,8 @@ class Manager(object):
 
     def model_class(self, settings):
         """Return class for name in main_model"""
+
+        # TODO: use module
 
         for mmodel in self.models_list():
             if settings.main_model.split('.')[-1] == mmodel.__name__:
@@ -151,8 +158,7 @@ class Manager(object):
             rows = settings.end_row
             if settings.start_row:
                 rows -= settings.start_row
-            else:
-                rows -= 1
+                rows += 1
 
             queryset = queryset[:rows]
 

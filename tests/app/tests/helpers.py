@@ -2,8 +2,8 @@ import os
 
 from django.test import TestCase
 
-from ..settings import PREFIX, THEME_PATH
-from ..helpers import themed
+from mtr.sync.settings import PREFIX, THEME_PATH
+from mtr.sync.helpers import themed
 
 
 class ThemedTest(TestCase):

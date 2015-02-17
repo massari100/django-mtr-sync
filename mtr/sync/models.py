@@ -94,6 +94,8 @@ class Settings(ActionsMixin):
         _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
 
     def fields_with_filters(self):
+        """Return iterator of fields with filters"""
+
         fields = self.fields.prefetch_related(
             'filter_params__filter_related').exclude(skip=True).all()
         for field in fields:
@@ -104,7 +106,19 @@ class Settings(ActionsMixin):
 
             yield field
 
+    def create_default_fields(self):
+        """Create all fields for selected model"""
+
+        fields = []
+
+        for name, label in manager.model_attributes(self):
+            fields.append(self.fields.create(attribute=name))
+
+        return fields
+
     def run(self):
+        """Run import or export task from celery"""
+
         from .tasks import export_data, import_data
 
         if self.action == self.EXPORT:
@@ -280,7 +294,5 @@ def save_import_report(sender, **kwargs):
     report.completed_at = kwargs['date']
     report.status = report.SUCCESS
     report.save()
-
-    print report.id
 
     return report
