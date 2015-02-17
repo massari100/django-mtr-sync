@@ -85,7 +85,7 @@ class Manager(object):
 
         if cls.position:
             self.processors = OrderedDict(
-                sorted(self.processors.items(), key=lambda p: p.position))
+                sorted(self.processors.items(), key=lambda p: p[1].position))
 
         return cls
 
@@ -157,17 +157,17 @@ class Manager(object):
             queryset = queryset[:rows]
 
         if settings.end_col:
-            cols = processor.col(settings.end_col)
+            cols = processor.column(settings.end_col)
             if settings.start_col:
-                cols -= processor.col(settings.start_col)
-            else:
-                cols -= 1
+                cols -= processor.column(settings.start_col)
+                cols += 1
 
             fields = fields[:cols]
 
         data = {
             'rows': queryset.count(),
             'cols': len(fields),
+            'fields': fields,
             'items': (
                 self.process_value(field, getattr(item, field.attribute))
                 for item in queryset
@@ -194,7 +194,7 @@ class Manager(object):
         for row in data:
             attrs = {}
             for index, field in enumerate(fields):
-                col = processor.col(field.name) if field.name else index
+                col = processor.column(field.name) if field.name else index
                 value = self.process_value(field, row[col])
                 attrs[field.attribute] = value
             yield attrs

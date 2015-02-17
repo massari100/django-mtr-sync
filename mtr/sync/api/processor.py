@@ -22,10 +22,18 @@ class Processor(object):
         self.manager = manager
         self.report = None
 
-    def col(self, value):
+    def column_index(self, value):
         """Return column index for given name"""
 
         raise NotImplementedError
+
+    def column(self, value):
+        """Wrapper on self.column"""
+
+        if value.isdigit():
+            return int(value)
+
+        return self.column_index(value)
 
     def write(self, row, value, cells=None):
         """Independend write to cell method"""
@@ -46,29 +54,30 @@ class Processor(object):
         end = {'row': end_row, 'col': end_col}
 
         if self.settings.start_row and \
-                self.settings.start_row >= start_row:
+                self.settings.start_row > start_row:
             start['row'] = self.settings.start_row - 1
             end['row'] += start['row']
 
         if self.settings.end_row and \
-                self.settings.end_row <= end['row']:
+                self.settings.end_row < end['row']:
             end['row'] = self.settings.end_row
 
         limit = LIMIT_PREVIEW()
-        if preview and limit <= end_row:
+        if preview and limit < end_row:
             end_row = limit
 
         if self.settings.start_col:
-            start_col_index = self.col(self.settings.start_col)
-            if start_col_index >= start_col:
+            start_col_index = self.column(self.settings.start_col)
+            if start_col_index > start_col:
                 start['col'] = start_col_index - 1
-                # end['col'] += start['col']
-                # TODO: fix col resize when reading
-                # end['col'] -= start['col']
+
+                if not import_data:
+                    end['col'] += start['col']
 
         if self.settings.end_col:
-            end_col_index = self.col(self.settings.end_col)
-            if end_col_index <= end_col:
+            end_col_index = self.column(self.settings.end_col)
+
+            if end_col_index < end['col']:
                 end['col'] = end_col_index
 
         if self.settings.include_header and import_data:
@@ -76,7 +85,6 @@ class Processor(object):
 
         if import_data:
             end['row'] -= 1
-        # end['col'] -= 1
 
         self.start, self.end = start, end
         self.cells = range(start['col'], end['col'])
@@ -97,10 +105,10 @@ class Processor(object):
         self.create()
 
         # write header
-        if self.settings.include_header and self.settings.fields.all():
+        if self.settings.include_header and data['fields']:
             header_data = map(
                 lambda f: f.name or f.attribute,
-                self.settings.fields.all())
+                data['fields'])
 
             self.write(self.start['row'], header_data)
 
@@ -177,8 +185,7 @@ class Processor(object):
         # send signal to save report
         for response in import_completed.send(
                 self.__class__, report=self.report,
-                date=timezone.now(),
-                path=path):
+                date=timezone.now()):
             self.report = response[1]
 
         return self.report

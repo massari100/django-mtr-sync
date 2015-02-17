@@ -232,10 +232,10 @@ class Report(ActionsMixin):
         null=True, blank=True, related_name='reports'
     )
 
+    objects = models.Manager()
     export_objects = ExportManager()
     import_objects = ImportManager()
     running_objects = RunningManager()
-    objects = models.Manager()
 
     class Meta:
         verbose_name = _('mtr.sync:report')
@@ -269,6 +269,7 @@ def save_export_report(sender, **kwargs):
 
 @receiver(import_started)
 def create_import_report(sender, **kwargs):
+    print "SIGNAL CALLED!"
     return Report.import_objects.create(
         buffer_file=kwargs['path'], action=Report.IMPORT)
 
@@ -279,5 +280,7 @@ def save_import_report(sender, **kwargs):
     report.completed_at = kwargs['date']
     report.status = report.SUCCESS
     report.save()
+
+    print report.id
 
     return report

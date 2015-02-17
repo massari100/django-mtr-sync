@@ -7,22 +7,27 @@ from ..processor import Processor
 from ..manager import manager
 
 
+class NoIndexFound(Exception):
+    pass
+
+
 @manager.register
 class XlsProcessor(Processor):
     file_format = '.xls'
     file_description = _('mtr.sync:Microsoft Excel 97/2000/XP/2003')
 
-    def col(self, value):
+    def column_index(self, value):
         """Small xlrd hack to get column index"""
-
-        if value.isdigit():
-            return int(value)
 
         index = 0
         value = value.strip().upper()
-        while index:
+
+        while True:
             if xlrd.colname(index) == value:
                 return index
+            index += 1
+            if index > 16384:
+                raise NoIndexFound
 
     def create(self):
         self._workbook = xlwt.Workbook('utf-8')

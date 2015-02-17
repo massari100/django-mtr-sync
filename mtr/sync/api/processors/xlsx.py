@@ -11,10 +11,7 @@ class XlsxProcessor(Processor):
     file_format = '.xlsx'
     file_description = _('mtr.sync:Microsoft Excel 2007/2010/2013 XML')
 
-    def col(self, value):
-        if value.isdigit():
-            return int(value)
-
+    def column_index(self, value):
         return openpyxl.cell.column_index_from_string(value)
 
     def create(self):
