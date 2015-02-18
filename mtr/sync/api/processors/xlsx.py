@@ -17,7 +17,7 @@ class XlsxProcessor(Processor):
     def create(self):
         self._workbook = openpyxl.Workbook(optimized_write=True)
         self._worksheet = self._workbook.create_sheet()
-        self._worksheet.name = self.settings.worksheet
+        self._worksheet.title = self.settings.worksheet
         self._prepend = None
 
         # prepend rows and cols

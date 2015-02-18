@@ -30,6 +30,9 @@ class Processor(object):
     def column(self, value):
         """Wrapper on self.column"""
 
+        if isinstance(value, int):
+            return value
+
         if value.isdigit():
             return int(value)
 
@@ -113,8 +116,7 @@ class Processor(object):
             self.write(self.start['row'], header_data)
 
             self.start['row'] += 1
-            if self.settings.end_row:
-                self.end['row'] += 1
+            self.end['row'] += 1
 
             self.rows = range(self.start['row'], self.end['row'])
 
