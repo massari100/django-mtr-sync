@@ -48,4 +48,5 @@ class ManagerTest(TestCase):
             self.manager.register(processor)
 
         ordered_processors = [TestProcessor, SecondProcessor, ThirdProcesor]
-        self.assertEqual(self.manager.processors.values(), ordered_processors)
+        self.assertEqual(
+            list(self.manager.processors.values()), ordered_processors)

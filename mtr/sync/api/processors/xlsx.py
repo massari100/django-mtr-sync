@@ -30,6 +30,16 @@ class XlsxProcessor(Processor):
             self._prepend *= self.start['col']
 
     def open(self):
+        self._workbook = openpyxl.load_workbook(
+            self.settings.buffer_file.path, use_iterators=True)
+        self._worksheet = self._workbook.get_sheet_by_name(
+            self.settings.worksheet)
+        return self._worksheet
+
+    def get_row_values(self, row, current_row):
+        for index, value in enumerate(current_row):
+            if index == row and row:
+                return value
         self._workbook = openpyxl.open_workbook(self.settings.buffer_file)
         self._worksheet = self._workbook(self.settings.worksheet)
 
@@ -43,6 +53,7 @@ class XlsxProcessor(Processor):
         self._worksheet.append(value[:self.end['col']])
 
     def read(self, row, cells):
+
         # using optimized reader
         # for index, cell in enumerate(cells):
         #     yield self._worksheet.cell_value(row, cell)

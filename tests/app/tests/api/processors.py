@@ -21,43 +21,31 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
     def check_values(self, worksheet, instance, row, index_prepend=0):
         for index, field in enumerate(self.fields):
             value = getattr(instance, field.attribute)
-
             sheet_value = worksheet.cell_value(row, index+index_prepend)
 
             self.assertEqual(value, sheet_value)
 
 
-# class XlsxProcessorTest(ProcessorTestMixin, TestCase):
-#     MODEL = Person
-#     PROCESSOR = xlsx.XlsxProcessor
+class XlsxProcessorTest(ProcessorTestMixin, TestCase):
+    MODEL = Person
+    PROCESSOR = xlsx.XlsxProcessor
 
-#     def open_report(self, report):
-#         workbook = xlsx.openpyxl.load_workbook(
-#             report.buffer_file.path, use_iterators=True)
-#         worksheet = workbook.get_sheet_by_name(self.settings.worksheet)
-#         return worksheet
+    def open_report(self, report):
+        workbook = xlsx.openpyxl.load_workbook(
+            report.buffer_file.path, use_iterators=True)
+        worksheet = workbook.get_sheet_by_name(self.settings.worksheet)
+        return worksheet
 
-#     def check_values(self, worksheet, instance, row, index_prepend=0):
-        # self._current_row = getattr(
-        #     self, '_current_row', worksheet.iter_rows())
+    def get_row_values(self, row, current_row):
+        for index, value in enumerate(current_row):
+            if index == row and row:
+                return value
 
-        # row_values = []
-        # for index, field in enumerate(self.fields):
-        #     row_values.append(getattr(instance, field.attribute))
+    def check_values(self, worksheet, instance, row, index_prepend=0):
+        row_values = self.get_row_values(row, worksheet.iter_rows())
 
+        for index, field in enumerate(self.fields):
+            value = getattr(instance, field.attribute)
+            sheet_value = row_values[index + index_prepend].value
 
-        # for row in worksheet.iter_rows(): # it brings a new method: iter_rows()
-
-        #     for cell in row:
-
-        #         print cell.value
-
-        # row_value = next(self._current_row)
-        # while row > self._current_row.index:
-        #     row_value = next(self._current_row)
-
-        # print row_value
-
-        # sheet_value = worksheet.cell_value(row, index+index_prepend)
-
-        # self.assertEqual(value, sheet_value)
+            self.assertEqual(value, sheet_value)

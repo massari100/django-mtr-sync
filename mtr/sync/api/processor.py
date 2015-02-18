@@ -67,7 +67,7 @@ class Processor(object):
 
         limit = LIMIT_PREVIEW()
         if preview and limit < end_row:
-            end_row = limit
+            end_row = limit + start['row'] - 1
 
         if self.settings.start_col:
             start_col_index = self.column(self.settings.start_col)
@@ -109,9 +109,9 @@ class Processor(object):
 
         # write header
         if self.settings.include_header and data['fields']:
-            header_data = map(
+            header_data = list(map(
                 lambda f: f.name or f.attribute,
-                data['fields'])
+                data['fields']))
 
             self.write(self.start['row'], header_data)
 

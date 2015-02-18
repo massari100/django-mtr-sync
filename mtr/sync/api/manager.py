@@ -1,8 +1,7 @@
 from __future__ import unicode_literals
 
 from collections import OrderedDict
-from itertools import ifilterfalse
-
+from django.utils.six.moves import filterfalse
 from django.db import models
 
 from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
@@ -22,7 +21,7 @@ class Manager(object):
         return getattr(model, MODEL_SETTINGS_NAME(), {})
 
     def models_list(self):
-        mlist = ifilterfalse(
+        mlist = filterfalse(
             lambda m: self.model_settings(m).get('ignore', False),
             models.get_models())
         return mlist
@@ -39,7 +38,7 @@ class Manager(object):
         settings = self.model_settings(model)
 
         exclude = settings.get('exclude', [])
-        fields = ifilterfalse(
+        fields = filterfalse(
             lambda f: f in exclude, model._meta.get_all_field_names())
 
         for name in fields:

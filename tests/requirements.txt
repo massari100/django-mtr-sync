@@ -3,7 +3,7 @@ pytz
 fabric
 ipython
 celery
-openpyxl
+hg+https://yaroslavprogrammer@bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
 xlwt-future
 xlrd
 odfpy

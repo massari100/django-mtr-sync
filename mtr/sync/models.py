@@ -185,7 +185,7 @@ class Field(models.Model):
         ordering = ['order']
 
     def __str__(self):
-        return self.name
+        return self.name or self.attribute
 
 
 @python_2_unicode_compatible
@@ -283,7 +283,6 @@ def save_export_report(sender, **kwargs):
 
 @receiver(import_started)
 def create_import_report(sender, **kwargs):
-    print "SIGNAL CALLED!"
     return Report.import_objects.create(
         buffer_file=kwargs['path'], action=Report.IMPORT)
 
