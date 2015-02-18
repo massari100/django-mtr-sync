@@ -18,7 +18,6 @@ class XlsxProcessor(Processor):
         self._workbook = openpyxl.Workbook(optimized_write=True)
         self._worksheet = self._workbook.create_sheet()
         self._worksheet.title = self.settings.worksheet
-        self._prepend = None
 
         # prepend rows and cols
         if self.start['row'] > 0:
@@ -29,35 +28,39 @@ class XlsxProcessor(Processor):
             self._prepend = [None, ]
             self._prepend *= self.start['col']
 
-    def open(self):
-        self._workbook = openpyxl.load_workbook(
-            self.settings.buffer_file.path, use_iterators=True)
+    def open(self, path):
+        self._workbook = openpyxl.load_workbook(path, use_iterators=True)
         self._worksheet = self._workbook.get_sheet_by_name(
             self.settings.worksheet)
-        return self._worksheet
+        self._rows = self._worksheet.iter_rows()
+        self._rows_counter = 0
 
-    def get_row_values(self, row, current_row):
-        for index, value in enumerate(current_row):
-            if index == row and row:
-                return value
-        self._workbook = openpyxl.open_workbook(self.settings.buffer_file)
-        self._worksheet = self._workbook(self.settings.worksheet)
+        return (
+            self._worksheet.get_highest_row(),
+            self._worksheet.get_highest_column())
 
     def write(self, row, value):
-        # if we have cells we need to copy from templated file all row
-        # and merge cells into
-
         if self._prepend:
             value = self._prepend + value
 
         self._worksheet.append(value[:self.end['col']])
 
-    def read(self, row, cells):
+    def read(self, row):
+        value = None
+        row += 1
 
-        # using optimized reader
-        # for index, cell in enumerate(cells):
-        #     yield self._worksheet.cell_value(row, cell)
-        pass
+        if not row:
+            value = next(self._rows)
+
+        if not value:
+            while self._rows_counter < row:
+                self._rows_counter += 1
+                value = next(self._rows)
+
+        readed = []
+        for item in value[self.start['col']:self.end['col']]:
+            readed.append(item.value)
+        return readed
 
     def save(self, name):
         self._workbook.save(name)

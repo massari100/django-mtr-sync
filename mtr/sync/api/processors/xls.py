@@ -46,7 +46,7 @@ class XlsProcessor(Processor):
 
     def read(self, row):
         data = []
-        for index, cell in enumerate(self.cells):
+        for cell in enumerate(self.cells):
             data.append(self._worksheet.cell_value(row, cell))
         return data
 
