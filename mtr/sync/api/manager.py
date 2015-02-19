@@ -8,9 +8,6 @@ from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
 from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
-# TODO: naming decorator for handlers, processors, filters, settings
-
-
 class Manager(object):
     """Manager for data processors"""
 
@@ -81,9 +78,7 @@ class Manager(object):
                     processor.file_format,
                     processor.file_description))
 
-    def register(self, cls):
-        """Decorator to append new processor"""
-
+    def _register_processor(self, cls):
         if self.has_processor(cls):
             raise ProcessorAlreadyExists(
                 'Processor {} already exists'.format(cls.__name__))
@@ -95,10 +90,24 @@ class Manager(object):
 
         return cls
 
-    def unregister(self, cls):
+    def register(self, name, cls=None):
+        """Decorator to append new processors, handlers"""
+
+        func = None
+
+        if name == 'processor':
+            func = self._register_processor
+
+        if cls:
+            return func(cls)
+        else:
+            return func
+
+    def unregister(self, name, cls):
         """Decorator to pop processor"""
 
-        self.processors.pop(cls.__name__, None)
+        if name == 'processor':
+            self.processors.pop(cls.__name__, None)
 
         return cls
 

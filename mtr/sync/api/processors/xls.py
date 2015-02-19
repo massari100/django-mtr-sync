@@ -11,7 +11,7 @@ class NoIndexFound(Exception):
     pass
 
 
-@manager.register
+@manager.register('processor')
 class XlsProcessor(Processor):
     file_format = '.xls'
     file_description = _('mtr.sync:Microsoft Excel 97/2000/XP/2003')

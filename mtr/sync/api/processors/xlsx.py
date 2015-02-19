@@ -6,7 +6,7 @@ from ..processor import Processor
 from ..manager import manager
 
 
-@manager.register
+@manager.register('processor')
 class XlsxProcessor(Processor):
     file_format = '.xlsx'
     file_description = _('mtr.sync:Microsoft Excel 2007/2010/2013 XML')
@@ -15,6 +15,7 @@ class XlsxProcessor(Processor):
         return openpyxl.cell.column_index_from_string(value)
 
     def create(self):
+        self._prepend = None
         self._workbook = openpyxl.Workbook(optimized_write=True)
         self._worksheet = self._workbook.create_sheet()
         self._worksheet.title = self.settings.worksheet

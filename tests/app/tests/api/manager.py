@@ -26,17 +26,17 @@ class ManagerTest(TestCase):
             processor=XlsProcessor.__name__, worksheet='test')
 
     def test_registering_and_unregistering_processor(self):
-        self.manager.register(TestProcessor)
+        self.manager.register('processor', TestProcessor)
         self.assertTrue(self.manager.has_processor(TestProcessor))
 
-        self.manager.unregister(TestProcessor)
+        self.manager.unregister('processor', TestProcessor)
         self.assertFalse(self.manager.has_processor(TestProcessor))
 
     def test_register_already_registered_processor(self):
-        self.manager.register(TestProcessor)
+        self.manager.register('processor', TestProcessor)
 
         with self.assertRaises(ProcessorAlreadyExists):
-            self.manager.register(TestProcessor)
+            self.manager.register('processor', TestProcessor)
 
     def test_make_processor_not_exist(self):
         with self.assertRaises(ProcessorDoesNotExists):
@@ -45,7 +45,7 @@ class ManagerTest(TestCase):
     def test_processor_ordering(self):
         unordered_processors = [ThirdProcesor, TestProcessor, SecondProcessor]
         for processor in unordered_processors:
-            self.manager.register(processor)
+            self.manager.register('processor', processor)
 
         ordered_processors = [TestProcessor, SecondProcessor, ThirdProcesor]
         self.assertEqual(

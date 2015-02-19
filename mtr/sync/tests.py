@@ -16,7 +16,7 @@ class ProcessorTestMixin(object):
         self.model = self.MODEL
 
         self.manager = Manager()
-        self.manager.register(self.PROCESSOR)
+        self.manager.register('processor', self.PROCESSOR)
 
         self.instance = self.model.objects.create(name='test instance',
             surname='test surname', gender='M', security_level=10)
@@ -90,3 +90,5 @@ class ProcessorTestMixin(object):
             end_row, start_col)
 
         self.check_file_existence_and_delete(report)
+
+    # TODO: add import test with dimensions
