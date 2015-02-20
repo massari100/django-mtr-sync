@@ -6,19 +6,23 @@
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: admin.py:122
+#: admin.py:101
+msgid "mtr.sync:create settings for fields"
+msgstr "create settings for fields"
+
+#: admin.py:148
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "Data synchronization started in background."
 
-#: admin.py:124
+#: admin.py:150
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
-#: api/processors.py:150
+#: api/processors/xls.py:17
 msgid "mtr.sync:Microsoft Excel 97/2000/XP/2003"
 msgstr "Microsoft Excel 97/2000/XP/2003"
 
-#: api/processors.py:193
+#: api/processors/xlsx.py:12
 msgid "mtr.sync:Microsoft Excel 2007/2010/2013 XML"
 msgstr "Microsoft Excel 2007/2010/2013 XML"
 
@@ -26,143 +30,147 @@ msgstr "Microsoft Excel 2007/2010/2013 XML"
 msgid "mtr.sync:Data sync"
 msgstr "Data sync"
 
-#: models.py:42
+#: models.py:47
 msgid "mtr.actions:Export"
 msgstr "Export"
 
-#: models.py:43
+#: models.py:48
 msgid "mtr.actions:Import"
 msgstr "Import"
 
-#: models.py:47
+#: models.py:52
 msgid "mtr.sync:action"
 msgstr "action"
 
-#: models.py:57 models.py:156 models.py:178
+#: models.py:63 models.py:149 models.py:172
 msgid "mtr.sync:name"
 msgstr "name"
 
-#: models.py:60
+#: models.py:66
 msgid "mtr.sync:start column"
 msgstr "start column"
 
-#: models.py:62
+#: models.py:68
 msgid "mtr.sync:start row"
 msgstr "start row"
 
-#: models.py:65
+#: models.py:71
+msgid "mtr.sync:end column"
+msgstr "end column"
+
+#: models.py:73
 msgid "mtr.sync:end row"
 msgstr "end row"
 
-#: models.py:68
+#: models.py:76
 msgid "mtr.sync:main model"
 msgstr "main model"
 
-#: models.py:71
+#: models.py:79
 msgid "mtr.sync:main model object"
 msgstr "main model object"
 
-#: models.py:74
+#: models.py:82
 msgid "mtr.sync:created at"
 msgstr "created at"
 
-#: models.py:76 models.py:262
+#: models.py:84 models.py:250
 msgid "mtr.sync:updated at"
 msgstr "updated at"
 
-#: models.py:79
+#: models.py:87
 msgid "mtr.sync:format"
 msgstr "format"
 
-#: models.py:82
+#: models.py:90
 msgid "mtr.sync:worksheet page"
 msgstr "worksheet page"
 
-#: models.py:85
+#: models.py:93
 msgid "mtr.sync:include header"
 msgstr "include header"
 
-#: models.py:88
+#: models.py:96
 msgid "mtr.sync:custom filename"
 msgstr "custom filename"
 
-#: models.py:91 models.py:253
+#: models.py:99 models.py:241
 msgid "mtr.sync:file"
 msgstr "file"
 
-#: models.py:143 models.py:144 models.py:185
+#: models.py:135 models.py:136 models.py:179
 msgid "mtr.sync:settings"
 msgstr "settings"
 
-#: models.py:158
+#: models.py:151
 msgid "mtr.sync:description"
 msgstr "description"
 
-#: models.py:159
+#: models.py:152
 msgid "mtr.sync:template"
 msgstr "template"
 
-#: models.py:162 models.py:217 models.py:231
+#: models.py:155 models.py:204 models.py:218
 msgid "mtr.sync:filter"
 msgstr "filter"
 
-#: models.py:163 models.py:232
+#: models.py:156 models.py:219
 msgid "mtr.sync:filters"
 msgstr "filters"
 
-#: models.py:176 models.py:214
+#: models.py:170 models.py:201
 msgid "mtr.sync:order"
 msgstr "order"
 
-#: models.py:179
+#: models.py:173
 msgid "mtr.sync:model attribute"
 msgstr "model attribute"
 
-#: models.py:180
+#: models.py:174
 msgid "mtr.sync:skip"
 msgstr "skip"
 
-#: models.py:202
+#: models.py:189
 msgid "mtr.sync:field"
 msgstr "field"
 
-#: models.py:203
+#: models.py:190
 msgid "mtr.sync:fields"
 msgstr "fields"
 
-#: models.py:247
+#: models.py:235
 msgid "mtr.sync:Error"
 msgstr "Error"
 
-#: models.py:248
+#: models.py:236
 msgid "mtr.sync:Running"
 msgstr "Running"
 
-#: models.py:249
+#: models.py:237
 msgid "mtr.sync:Success"
 msgstr "Success"
 
-#: models.py:255
+#: models.py:243
 msgid "mtr.sync:status"
 msgstr "status"
 
-#: models.py:258
+#: models.py:246
 msgid "mtr.sync:started at"
 msgstr "started at"
 
-#: models.py:260
+#: models.py:248
 msgid "mtr.sync:completed at"
 msgstr "completed at"
 
-#: models.py:265
+#: models.py:253
 msgid "mtr.sync:used settings"
 msgstr "used settings"
 
-#: models.py:275
+#: models.py:263
 msgid "mtr.sync:report"
 msgstr "report"
 
-#: models.py:276
+#: models.py:264
 msgid "mtr.sync:reports"
 msgstr "reports"
 

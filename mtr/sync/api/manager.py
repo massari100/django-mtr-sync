@@ -9,6 +9,7 @@ from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
 class Manager(object):
+
     """Manager for data processors"""
 
     def __init__(self):

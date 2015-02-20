@@ -39,6 +39,7 @@ class FilterAdmin(admin.ModelAdmin):
 
 
 class FieldForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
         """Replace default attribute field to selectbox with choices"""
 
@@ -94,6 +95,28 @@ class FieldInline(admin.TabularInline):
         return field
 
 
+class SettingsForm(forms.ModelForm):
+
+    create_fields = forms.BooleanField(
+        label=_('mtr.sync:auto create settings for fields'),
+        initial=False)
+
+    def save(self, commit=True):
+        create_fields = self.cleaned_data.get('create_fields', False)
+
+        settings = super(SettingsForm, self).save(commit=commit)
+        settings.save()
+
+        if create_fields:
+            settings.create_default_fields()
+
+        return settings
+
+    class Meta:
+        exclude = []
+        model = Settings
+
+
 class SettingsAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'action', 'main_model',
@@ -102,6 +125,7 @@ class SettingsAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     inlines = (FieldInline,)
     actions = ['run']
+    form = SettingsForm
 
     def get_inline_instances(self, request, obj=None):
         """Show inlines only in saved models"""

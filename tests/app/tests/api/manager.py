@@ -20,6 +20,7 @@ class ThirdProcesor(Processor):
 
 
 class ManagerTest(TestCase):
+
     def setUp(self):
         self.manager = Manager()
         self.settings = Settings(

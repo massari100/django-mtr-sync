@@ -13,15 +13,15 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('name', models.CharField(max_length=255, verbose_name=b'name')),
-                ('surname', models.CharField(max_length=255, verbose_name=b'surname')),
-                ('gender', models.CharField(max_length=255, verbose_name=b'gender', choices=[(b'M', b'Male'), (b'F', b'Female')])),
-                ('security_level', models.PositiveIntegerField(verbose_name=b'security level')),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
+                ('name', models.CharField(max_length=255, verbose_name='name')),
+                ('surname', models.CharField(max_length=255, verbose_name='surname')),
+                ('gender', models.CharField(max_length=255, verbose_name='gender', choices=[('M', 'Male'), ('F', 'Female')])),
+                ('security_level', models.PositiveIntegerField(verbose_name='security level')),
             ],
             options={
-                'verbose_name': 'person',
                 'verbose_name_plural': 'persons',
+                'verbose_name': 'person',
             },
             bases=(models.Model,),
         ),

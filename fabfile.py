@@ -2,7 +2,8 @@ import os
 
 from fabric.api import local, task, settings, hide, lcd
 
-APPS = ['app']
+APPS = ['mtr.sync']
+PROJECT_APPS = ['app']
 PROJECT_DIR = 'tests'
 
 
@@ -27,7 +28,10 @@ def test():
     """Test listed apps"""
 
     with settings(hide('warnings'), warn_only=True):
-        test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), APPS))
+        apps = []
+        apps.extend(PROJECT_APPS)
+        apps.extend(APPS)
+        test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), apps))
         manage("test {} --pattern='*.py'".format(test_apps))
 
 
@@ -107,4 +111,4 @@ def recreate():
 def subl():
     """Start Sublime editor"""
 
-    local('subl project.sublime-project')
+    local('subl project.sublime-workspace')

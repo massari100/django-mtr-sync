@@ -10,6 +10,7 @@ from .api.signals import export_started, export_completed, \
 
 
 class ExportManager(models.Manager):
+
     """Shortcut for export queryset"""
 
     def get_queryset(self):
@@ -18,6 +19,7 @@ class ExportManager(models.Manager):
 
 
 class ImportManager(models.Manager):
+
     """Shortcut for import queryset"""
 
     def get_queryset(self):
@@ -26,6 +28,7 @@ class ImportManager(models.Manager):
 
 
 class RunningManager(models.Manager):
+
     """Shortcut for running Report entry queryset"""
 
     def get_queryset(self):
@@ -34,6 +37,7 @@ class RunningManager(models.Manager):
 
 
 class ActionsMixin(models.Model):
+
     """Action choices mixin"""
 
     EXPORT = 0
@@ -53,6 +57,7 @@ class ActionsMixin(models.Model):
 
 @python_2_unicode_compatible
 class Settings(ActionsMixin):
+
     """Settings for imported and exported files"""
 
     name = models.CharField(_('mtr.sync:name'), max_length=100)
@@ -138,6 +143,7 @@ class Settings(ActionsMixin):
 
 @python_2_unicode_compatible
 class Filter(models.Model):
+
     """Filter data using internal template"""
 
     name = models.CharField(_('mtr.sync:name'), max_length=255)
@@ -157,6 +163,7 @@ class Filter(models.Model):
 
 @python_2_unicode_compatible
 class Field(models.Model):
+
     """Data mapping field for Settings"""
 
     order = models.PositiveIntegerField(
@@ -216,6 +223,7 @@ class FilterParams(models.Model):
 
 @python_2_unicode_compatible
 class Report(ActionsMixin):
+
     """Reports about imported and exported operations and link to files
     """
 

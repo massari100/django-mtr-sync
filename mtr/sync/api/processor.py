@@ -11,6 +11,7 @@ from ..settings import LIMIT_PREVIEW, FILE_PATH
 
 
 class Processor(object):
+
     """Base implementation of import and export operations"""
 
     position = 0
