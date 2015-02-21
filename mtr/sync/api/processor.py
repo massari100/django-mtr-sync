@@ -60,7 +60,9 @@ class Processor(object):
         if self.settings.start_row and \
                 self.settings.start_row > start_row:
             start['row'] = self.settings.start_row - 1
-            end['row'] += start['row']
+
+            if not import_data:
+                end['row'] += start['row']
 
         if self.settings.end_row and \
                 self.settings.end_row < end['row']:

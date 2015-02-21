@@ -98,8 +98,8 @@ class FieldInline(admin.TabularInline):
 class SettingsForm(forms.ModelForm):
 
     create_fields = forms.BooleanField(
-        label=_('mtr.sync:auto create settings for fields'),
-        initial=False)
+        label=_('mtr.sync:Create settings for fields'),
+        initial=False, required=False)
 
     def save(self, commit=True):
         create_fields = self.cleaned_data.get('create_fields', False)

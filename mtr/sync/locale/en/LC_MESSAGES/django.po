@@ -7,8 +7,8 @@ msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
 #: admin.py:101
-msgid "mtr.sync:create settings for fields"
-msgstr "create settings for fields"
+msgid "mtr.sync:Create settings for fields"
+msgstr "Create settings for fields"
 
 #: admin.py:148
 msgid "mtr.sync:Data synchronization started in background."

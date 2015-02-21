@@ -24,7 +24,7 @@ class XlsProcessor(Processor):
 
         while True:
             if xlrd.colname(index) == value:
-                return index
+                return index - 1
             index += 1
             if index > 16384:
                 raise NoIndexFound
@@ -46,7 +46,7 @@ class XlsProcessor(Processor):
 
     def read(self, row):
         data = []
-        for cell in enumerate(self.cells):
+        for cell in self.cells:
             data.append(self._worksheet.cell_value(row, cell))
         return data
 
