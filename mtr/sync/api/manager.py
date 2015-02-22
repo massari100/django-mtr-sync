@@ -25,25 +25,40 @@ class Manager(object):
         return mlist
 
     def get_field_by_name(self, model, name):
+        """Return model field or custom method"""
+
         for field in model._meta.fields:
             if field.name == name:
                 return field
+
+        custom = getattr(model, name, None)
+        if custom:
+            custom._sync_custom_field = True
+
+        return custom
 
     def model_attributes(self, settings):
         """Return iterator of fields names by given mode_path"""
 
         model = self.model_class(settings)
-        settings = self.model_settings(model)
+        msettings = self.model_settings(model)
 
-        exclude = settings.get('exclude', [])
+        exclude = msettings.get('exclude', [])
+        fields = model._meta.get_all_field_names()
+        fields += msettings.get('fields', [])
+
         fields = filterfalse(
-            lambda f: f in exclude, model._meta.get_all_field_names())
+            lambda f: f in exclude, fields)
 
         for name in fields:
             field = self.get_field_by_name(model, name)
 
             label = name
-            if field:
+            custom_label = getattr(field, '_sync_custom_field', False)
+
+            if custom_label:
+                label = getattr(field, 'short_description', field.__name__)
+            elif field:
                 label = field.verbose_name
 
             yield (name, label.capitalize())
@@ -51,18 +66,15 @@ class Manager(object):
     def model_class(self, settings):
         """Return class for name in main_model"""
 
-        # TODO: use module
-
         for mmodel in self.models_list():
-            if settings.main_model.split('.')[-1] == mmodel.__name__:
+            if settings.main_model == '{}.{}'.format(
+                    mmodel.__module__, mmodel.__name__):
                 return mmodel
 
     def model_choices(self):
         """Return all registered django models as choices"""
 
         for model in self.models_list():
-            # TODO: replace app name from app settings
-
             yield (
                 '{}.{}'.format(model.__module__, model.__name__),
                 '{} | {}'.format(
@@ -184,7 +196,8 @@ class Manager(object):
             'cols': len(fields),
             'fields': fields,
             'items': (
-                self.process_value(field, getattr(item, field.attribute))
+                self.process_value(
+                    field, self.process_attribute(item, field))
                 for item in queryset
                 for field in fields
             )
@@ -213,6 +226,14 @@ class Manager(object):
                 value = self.process_value(field, row[col])
                 attrs[field.attribute] = value
             yield attrs
+
+    def process_attribute(self, model, field):
+        attr = getattr(model, field.attribute)
+
+        if hasattr(attr, '__call__'):
+            attr = attr(self, field)
+
+        return attr
 
     def process_value(self, field, value):
         # TODO: process by all filters
