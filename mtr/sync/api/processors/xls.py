@@ -29,7 +29,8 @@ class XlsProcessor(Processor):
             if index > 16384:
                 raise NoIndexFound
 
-    def create(self):
+    def create(self, path):
+        self._path = path
         self._workbook = xlwt.Workbook('utf-8')
         self._worksheet = self._workbook.add_sheet(self.settings.worksheet)
 
@@ -50,5 +51,5 @@ class XlsProcessor(Processor):
             data.append(self._worksheet.cell_value(row, cell))
         return data
 
-    def save(self, name):
-        self._workbook.save(name)
+    def save(self):
+        self._workbook.save(self._path)

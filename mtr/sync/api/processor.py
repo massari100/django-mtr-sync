@@ -107,8 +107,18 @@ class Processor(object):
 
         self.set_dimensions(0, 0, data['rows'], data['cols'])
 
+        # save external file and report
+        path = FILE_PATH()(self.report, '')
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        filename = '{}{}'.format(
+            self.settings.filename or str(self.report.id), self.file_format)
+
+        path = os.path.join(path, filename)
+
         # create export file for write
-        self.create()
+        self.create(path)
 
         # write header
         if self.settings.include_header and data['fields']:
@@ -133,16 +143,7 @@ class Processor(object):
 
             self.write(row, row_data)
 
-        # save external file and report
-        path = FILE_PATH()(self.report, '')
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        filename = '{}{}'.format(
-            self.settings.filename or str(self.report.id), self.file_format)
-
-        path = os.path.join(path, filename)
-        self.save(path)
+        self.save()
 
         if self.settings.id:
             self.report.settings = self.settings

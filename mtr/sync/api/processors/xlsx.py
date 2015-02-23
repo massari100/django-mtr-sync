@@ -14,8 +14,9 @@ class XlsxProcessor(Processor):
     def column_index(self, value):
         return openpyxl.cell.column_index_from_string(value)
 
-    def create(self):
+    def create(self, path):
         self._prepend = None
+        self._path = path
         self._workbook = openpyxl.Workbook(optimized_write=True)
         self._worksheet = self._workbook.create_sheet()
         self._worksheet.title = self.settings.worksheet
@@ -63,5 +64,5 @@ class XlsxProcessor(Processor):
             readed.append(item.value)
         return readed
 
-    def save(self, name):
-        self._workbook.save(name)
+    def save(self):
+        self._workbook.save(self._path)
