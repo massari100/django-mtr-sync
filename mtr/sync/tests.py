@@ -71,7 +71,6 @@ class ProcessorTestMixin(object):
         self.settings.end_row = 250
 
         report = self.check_report_success(delete=False)
-        worksheet = self.open_report(report)
 
         start_row = self.settings.start_row - 1
         end_row = self.settings.end_row - 1
@@ -83,8 +82,11 @@ class ProcessorTestMixin(object):
         if self.queryset.count() < end_row:
             end_row = self.queryset.count() + start_row - 1
 
+        worksheet = self.open_report(report)
         self.check_values(
             worksheet, self.queryset.first(), start_row, start_col)
+
+        worksheet = self.open_report(report)
         self.check_values(
             worksheet, self.queryset.get(pk=end_row - start_row + 1),
             end_row, start_col)

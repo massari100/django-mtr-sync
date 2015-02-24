@@ -36,13 +36,13 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
         worksheet = workbook.get_sheet_by_name(self.settings.worksheet)
         return worksheet
 
-    def get_row_values(self, row, current_row):
+    def _get_row_values(self, row, current_row):
         for index, value in enumerate(current_row):
             if index == row and row:
                 return value
 
     def check_values(self, worksheet, instance, row, index_prepend=0):
-        row_values = self.get_row_values(row, worksheet.iter_rows())
+        row_values = self._get_row_values(row, worksheet.iter_rows())
 
         for index, field in enumerate(self.fields):
             value = getattr(instance, field.attribute)
@@ -55,22 +55,34 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
     MODEL = Person
     PROCESSOR = csv.CsvProcessor
 
-    # def open_report(self, report):
-    #     workbook = xlsx.openpyxl.load_workbook(
-    #         report.buffer_file.path, use_iterators=True)
-    #     worksheet = workbook.get_sheet_by_name(self.settings.worksheet)
-    #     return worksheet
+    def open_report(self, report):
+        self._types = (int, )
+        self._f = open(report.buffer_file.path)
+        return csv.csv.reader(self._f)
 
-    # def get_row_values(self, row, current_row):
-    #     for index, value in enumerate(current_row):
-    #         if index == row and row:
-    #             return value
+    def _get_row_values(self, row, current_row):
+        for index, value in enumerate(current_row):
+            if index == row and row:
+                return value
 
-    # def check_values(self, worksheet, instance, row, index_prepend=0):
-    #     row_values = self.get_row_values(row, worksheet.iter_rows())
+    def _convert(self, value):
+        # TODO: embed in to processor
 
-    #     for index, field in enumerate(self.fields):
-    #         value = getattr(instance, field.attribute)
-    #         sheet_value = row_values[index + index_prepend].value
+        for convert in self._types:
+            try:
+                return convert(value)
+            except ValueError:
+                continue
 
-    #         self.assertEqual(value, sheet_value)
+        return value
+
+    def check_values(self, reader, instance, row, index_prepend=0):
+        row_values = self._get_row_values(row, reader)
+
+        for index, field in enumerate(self.fields):
+            value = getattr(instance, field.attribute)
+            sheet_value = self._convert(row_values[index + index_prepend])
+
+            self.assertEqual(value, sheet_value)
+
+        self._f.close()
