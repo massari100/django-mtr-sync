@@ -33,7 +33,9 @@ class CsvProcessor(Processor):
             self._prepend *= self.start['col']
 
     def open(self, path):
+        self._f = open(path, 'r')
         self._reader = csv.reader(self._f)
+        self._rows_counter = 0
 
         maxrows = 0
         maxcols = 0
@@ -67,7 +69,7 @@ class CsvProcessor(Processor):
 
         readed = []
         for item in value[self.start['col']:self.end['col']]:
-            readed.append(item.value)
+            readed.append(item)
         return readed
 
     def save(self):

@@ -56,22 +56,7 @@ class ProcessorTestMixin(object):
 
         return report
 
-    def open_report(self, report):
-        """Open data file and return worksheet or other data source"""
-
-        raise NotImplementedError
-
-    def test_create_export_file_and_report_generation(self):
-        self.check_report_success()
-
-    def test_export_dimension_settings(self):
-        self.settings.start_row = 25
-        self.settings.start_col = 10
-        self.settings.end_col = 12
-        self.settings.end_row = 250
-
-        report = self.check_report_success(delete=False)
-
+    def check_sheet_values_and_delete_report(self, report):
         start_row = self.settings.start_row - 1
         end_row = self.settings.end_row - 1
         start_col = self.settings.start_col - 1
@@ -93,4 +78,37 @@ class ProcessorTestMixin(object):
 
         self.check_file_existence_and_delete(report)
 
-    # TODO: add import test with dimensions
+    def open_report(self, report):
+        """Open data file and return worksheet or other data source"""
+
+        raise NotImplementedError
+
+    def test_create_export_file_and_report_generation(self):
+        self.check_report_success()
+
+    def test_export_dimension_settings(self):
+        self.settings.start_row = 25
+        self.settings.start_col = 10
+        self.settings.end_col = 12
+        self.settings.end_row = 250
+
+        report = self.check_report_success(delete=False)
+
+        self.check_sheet_values_and_delete_report(report)
+
+    def test_import_data(self):
+        self.settings.start_row = 25
+        self.settings.start_col = 10
+        self.settings.end_col = 13
+        self.settings.end_row = 250
+
+        report = self.check_report_success(delete=False)
+
+        self.queryset.delete()
+
+        self.settings.action = self.settings.IMPORT
+        self.settings.buffer_file = report.buffer_file
+
+        self.manager.import_data(self.settings)
+
+        self.check_sheet_values_and_delete_report(report)

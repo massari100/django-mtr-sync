@@ -157,8 +157,6 @@ class Manager(object):
         model_settings = self.model_settings(current_model)
         queryset = model_settings.get('queryset', None)
 
-        # TODO: add aditional fields or methods
-
         # TODO: automatic select_related, prefetch_related
 
         if queryset:
@@ -218,6 +216,14 @@ class Manager(object):
 
         settings = processor.settings
         fields = list(settings.fields_with_filters())
+
+        if settings.end_col:
+            cols = processor.column(settings.end_col)
+            if settings.start_col:
+                cols -= processor.column(settings.start_col)
+                cols += 1
+
+            fields = fields[:cols]
 
         for row in data:
             attrs = {}
