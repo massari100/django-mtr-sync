@@ -7,27 +7,10 @@ from ..processor import Processor
 from ..manager import manager
 
 
-class NoIndexFound(Exception):
-    pass
-
-
 @manager.register('processor')
 class XlsProcessor(Processor):
     file_format = '.xls'
     file_description = _('mtr.sync:Microsoft Excel 97/2000/XP/2003')
-
-    def column_index(self, value):
-        """Small xlrd hack to get column index"""
-
-        index = 0
-        value = value.strip().upper()
-
-        while True:
-            if xlrd.colname(index) == value:
-                return index - 1
-            index += 1
-            if index > 16384:
-                raise NoIndexFound
 
     def create(self, path):
         self._path = path

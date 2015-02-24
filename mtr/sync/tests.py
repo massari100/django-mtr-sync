@@ -29,6 +29,7 @@ class ProcessorTestMixin(object):
             main_model='{}.{}'.format(
                 self.model.__module__, self.model.__name__),
             include_header=False)
+        self.processor = self.manager.make_processor(self.settings)
 
         self.fields = self.settings.create_default_fields()
 
@@ -59,9 +60,10 @@ class ProcessorTestMixin(object):
     def check_sheet_values_and_delete_report(self, report):
         start_row = self.settings.start_row - 1
         end_row = self.settings.end_row - 1
-        start_col = self.settings.start_col - 1
+        start_col = self.processor.column(self.settings.start_col) - 1
 
-        fields_limit = self.settings.end_col - self.settings.start_col + 1
+        fields_limit = self.settings.end_col - \
+            self.processor.column(self.settings.start_col) + 1
         self.fields = self.fields[:fields_limit]
 
         if self.queryset.count() < end_row:
@@ -88,7 +90,7 @@ class ProcessorTestMixin(object):
 
     def test_export_dimension_settings(self):
         self.settings.start_row = 25
-        self.settings.start_col = 10
+        self.settings.start_col = 'J'
         self.settings.end_col = 12
         self.settings.end_row = 250
 

@@ -11,11 +11,6 @@ class CsvProcessor(Processor):
     file_format = '.csv'
     file_description = _('mtr.sync:CSV (;)')
 
-    def column_index(self, value):
-        # TODO: csv warning index only in settings
-
-        return value
-
     def create(self, path):
         # TODO: csv additional settings
 

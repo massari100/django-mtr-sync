@@ -11,9 +11,6 @@ class XlsxProcessor(Processor):
     file_format = '.xlsx'
     file_description = _('mtr.sync:Microsoft Excel 2007/2010/2013 XML')
 
-    def column_index(self, value):
-        return openpyxl.cell.column_index_from_string(value)
-
     def create(self, path):
         self._prepend = None
         self._path = path

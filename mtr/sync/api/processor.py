@@ -10,6 +10,10 @@ from .signals import export_started, export_completed, \
 from ..settings import LIMIT_PREVIEW, FILE_PATH
 
 
+class NoIndexFound(Exception):
+    pass
+
+
 class Processor(object):
 
     """Base implementation of import and export operations"""
@@ -22,11 +26,27 @@ class Processor(object):
         self.settings = settings
         self.manager = manager
         self.report = None
+        self._chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
     def column_index(self, value):
         """Return column index for given name"""
 
-        raise NotImplementedError
+        for index in range(0, 18279):
+            name = ''
+
+            while True:
+                q, r = divmod(index, 26)
+                name = self._chars[r] + name
+
+                if not q:
+                    if name == value:
+                        return index + 1
+                    else:
+                        break
+
+                index = q - 1
+
+        raise NoIndexFound
 
     def column(self, value):
         """Wrapper on self.column"""
