@@ -6,11 +6,17 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 from django import forms
 
-from .models import Report, Settings, Field, FilterParams, Filter
+from .models import Report, Settings, Field, FilterParams, Filter, Error
 from .api import manager
 
 
+class ErrorInline(admin.TabularInline):
+    model = Error
+    extra = 0
+
+
 class ReportAdmin(admin.ModelAdmin):
+    inlines = (ErrorInline,)
     list_display = (
         'action', 'status', 'started_at', 'completed_at', 'buffer_file_link')
     list_filter = ('action', 'status', 'started_at', 'completed_at')

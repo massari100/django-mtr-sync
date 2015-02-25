@@ -9,7 +9,7 @@ from ..manager import manager
 @manager.register('processor')
 class CsvProcessor(Processor):
     file_format = '.csv'
-    file_description = _('mtr.sync:CSV (;)')
+    file_description = _('mtr.sync:CSV')
 
     def create(self, path):
         # TODO: csv additional settings

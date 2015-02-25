@@ -60,6 +60,13 @@ class Settings(ActionsMixin):
 
     """Settings for imported and exported files"""
 
+    BULK = 0
+    SEPARATE = 1
+    PROCESSING_METHOD_CHOICES = (
+        (BULK, _('mtr.sync:bulk')),
+        (SEPARATE, _('mtr.sync:separate'))
+    )
+
     name = models.CharField(_('mtr.sync:name'), max_length=100)
 
     start_col = models.CharField(
@@ -97,6 +104,10 @@ class Settings(ActionsMixin):
 
     buffer_file = models.FileField(
         _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+
+    processing_method = models.PositiveSmallIntegerField(
+        _('mtr.sync:processing method'), choices=PROCESSING_METHOD_CHOICES,
+        default=BULK)
 
     def fields_with_filters(self):
         """Return iterator of fields with filters"""
@@ -166,8 +177,8 @@ class Field(models.Model):
 
     """Data mapping field for Settings"""
 
-    order = models.PositiveIntegerField(
-        _('mtr.sync:order'), null=True, blank=True)
+    position = models.PositiveIntegerField(
+        _('mtr.sync:position'), null=True, blank=True)
 
     name = models.CharField(_('mtr.sync:name'), max_length=255, blank=True)
     attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
@@ -179,8 +190,8 @@ class Field(models.Model):
         Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
 
     def save(self, *args, **kwargs):
-        if self.order is None:
-            self.order = self.__class__.objects \
+        if self.position is None:
+            self.position = self.__class__.objects \
                 .filter(settings=self.settings).count() + 1
 
         super(Field, self).save(*args, **kwargs)
@@ -189,7 +200,7 @@ class Field(models.Model):
         verbose_name = _('mtr.sync:field')
         verbose_name_plural = _('mtr.sync:fields')
 
-        ordering = ['order']
+        ordering = ['position']
 
     def __str__(self):
         return self.name or self.attribute
@@ -197,16 +208,16 @@ class Field(models.Model):
 
 @python_2_unicode_compatible
 class FilterParams(models.Model):
-    order = models.PositiveIntegerField(
-        _('mtr.sync:order'), null=True, blank=True)
+    position = models.PositiveIntegerField(
+        _('mtr.sync:position'), null=True, blank=True)
 
     filter_related = models.ForeignKey(
         Filter, verbose_name=_('mtr.sync:filter'))
     field_related = models.ForeignKey(Field, related_name='filter_params')
 
     def save(self, *args, **kwargs):
-        if self.order is None:
-            self.order = self.__class__.objects \
+        if self.position is None:
+            self.position = self.__class__.objects \
                 .filter(field_related=self.field_related).count() + 1
 
         super(FilterParams, self).save(*args, **kwargs)
@@ -218,7 +229,7 @@ class FilterParams(models.Model):
         verbose_name = _('mtr.sync:filter')
         verbose_name_plural = _('mtr.sync:filters')
 
-        ordering = ['order']
+        ordering = ['position']
 
 
 @python_2_unicode_compatible
@@ -250,8 +261,8 @@ class Report(ActionsMixin):
         _('mtr.sync:updated at'), auto_now=True)
 
     settings = models.ForeignKey(
-        Settings, verbose_name=_('mtr.sync:used settings'),
-        null=True, blank=True, related_name='reports'
+        Settings, verbose_name=_('mtr.sync:settings'),
+        related_name='reports', null=True, blank=True
     )
 
     objects = models.Manager()
@@ -303,3 +314,30 @@ def save_import_report(sender, **kwargs):
     report.save()
 
     return report
+
+
+@python_2_unicode_compatible
+class Error(models.Model):
+
+    """Report errors with info about step where raised"""
+
+    FORMAT = 0
+
+    STEP_CHOICES = (
+        (FORMAT, _('mtr.sync:file format')),
+    )
+
+    report = models.ForeignKey(Report)
+
+    position = models.PositiveSmallIntegerField(
+        _('mtr.sync:position'), null=True, blank=True)
+    message = models.TextField(_('mtr.sync:message'), max_length=10000)
+    step = models.PositiveSmallIntegerField(
+        _('mtr.sync:step'), choices=STEP_CHOICES, default=FORMAT)
+
+    class Meta:
+        verbose_name = _('mtr.sync:error')
+        verbose_name_plural = _('mtr.sync:errors')
+
+    def __str__(self):
+        return self.message
