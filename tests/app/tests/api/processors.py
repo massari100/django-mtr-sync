@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.test import TestCase
 
 from mtr.sync.tests import ProcessorTestMixin
-from mtr.sync.api.processors import xls, xlsx, csv
+from mtr.sync.api.processors import xls, xlsx, csv, ods
 
 from ...models import Person
 
@@ -62,6 +62,41 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
 
     def _get_row_values(self, row, current_row):
         for index, value in enumerate(current_row):
+            if index == row and row:
+                return value
+
+    def _convert(self, value):
+        # TODO: embed in to processor
+
+        for convert in self._types:
+            try:
+                return convert(value)
+            except ValueError:
+                continue
+
+        return value
+
+    def check_values(self, reader, instance, row, index_prepend=0):
+        row_values = self._get_row_values(row, reader)
+
+        for index, field in enumerate(self.fields):
+            value = getattr(instance, field.attribute)
+            sheet_value = self._convert(row_values[index + index_prepend])
+
+            self.assertEqual(value, sheet_value)
+
+        self._f.close()
+
+
+class OdsProcessorTest(ProcessorTestMixin, TestCase):
+    MODEL = Person
+    PROCESSOR = ods.OdsProcessor
+
+    def open_report(self, report):
+        return ods.odf.opendocument.load(report.buffer_file.path)
+
+    def _get_row_values(self, row, current_row):
+        for index, value in enumerate(current_row.childNodes[:]):
             if index == row and row:
                 return value
 

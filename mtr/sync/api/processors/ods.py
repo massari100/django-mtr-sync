@@ -17,9 +17,11 @@ class OdsProcessor(Processor):
         self._table = odf.table.Table(self.worksheet.name)
         self._worksheet = self._workbook.spreadsheet.addElement(self._table)
 
-    def open(self):
-        # TODO: rewrite
-        pass
+    def open(self, path):
+        self._path = path
+        self._workbook = odf.opendocument.load(self._path)
+
+        # TODO: get element by type Table, iter childs and convert values
 
     def write(self, row, value):
         table_row = odf.table.TableRow()
