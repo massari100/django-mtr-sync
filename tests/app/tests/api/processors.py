@@ -56,7 +56,6 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
     PROCESSOR = csv.CsvProcessor
 
     def open_report(self, report):
-        self._types = (int, )
         self._f = open(report.buffer_file.path)
         return csv.csv.reader(self._f)
 
@@ -65,23 +64,13 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
             if index == row and row:
                 return value
 
-    def _convert(self, value):
-        # TODO: embed in to processor
-
-        for convert in self._types:
-            try:
-                return convert(value)
-            except ValueError:
-                continue
-
-        return value
-
     def check_values(self, reader, instance, row, index_prepend=0):
         row_values = self._get_row_values(row, reader)
 
         for index, field in enumerate(self.fields):
             value = getattr(instance, field.attribute)
-            sheet_value = self._convert(row_values[index + index_prepend])
+            sheet_value = self.processor._convert(
+                row_values[index + index_prepend])
 
             self.assertEqual(value, sheet_value)
 
@@ -100,23 +89,13 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
             if index == row and row:
                 return value
 
-    def _convert(self, value):
-        # TODO: embed in to processor
-
-        for convert in self._types:
-            try:
-                return convert(value)
-            except ValueError:
-                continue
-
-        return value
-
     def check_values(self, reader, instance, row, index_prepend=0):
         row_values = self._get_row_values(row, reader)
 
         for index, field in enumerate(self.fields):
             value = getattr(instance, field.attribute)
-            sheet_value = self._convert(row_values[index + index_prepend])
+            sheet_value = self.processor.convert(
+                row_values[index + index_prepend])
 
             self.assertEqual(value, sheet_value)
 

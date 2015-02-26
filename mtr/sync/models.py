@@ -60,13 +60,6 @@ class Settings(ActionsMixin):
 
     """Settings for imported and exported files"""
 
-    BULK = 0
-    SEPARATE = 1
-    PROCESSING_METHOD_CHOICES = (
-        (BULK, _('mtr.sync:bulk')),
-        (SEPARATE, _('mtr.sync:separate'))
-    )
-
     name = models.CharField(_('mtr.sync:name'), max_length=100)
 
     start_col = models.CharField(
@@ -104,10 +97,6 @@ class Settings(ActionsMixin):
 
     buffer_file = models.FileField(
         _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
-
-    processing_method = models.PositiveSmallIntegerField(
-        _('mtr.sync:processing method'), choices=PROCESSING_METHOD_CHOICES,
-        default=BULK)
 
     def fields_with_filters(self):
         """Return iterator of fields with filters"""

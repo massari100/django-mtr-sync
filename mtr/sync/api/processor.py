@@ -27,6 +27,7 @@ class Processor(object):
         self.manager = manager
         self.report = None
         self._chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        self._types = (int,)
 
     def column_index(self, value):
         """Return column index for given name"""
@@ -47,6 +48,17 @@ class Processor(object):
                 index = q - 1
 
         raise NoIndexFound
+
+    def _convert(self, value):
+        # TODO: embed in to processor
+
+        for convert in self._types:
+            try:
+                return convert(value)
+            except ValueError:
+                continue
+
+        return value
 
     def column(self, value):
         """Wrapper on self.column"""
@@ -197,13 +209,9 @@ class Processor(object):
         rows = (self.read(row) for row in self.rows)
         data = self.manager.prepare_import_data(self, rows)
 
-        # models_to_create = []
         for attr in data:
-            # models_to_create(model(**data))
-            model.objects.create(**attr)
-
-            # TODO: bulk create or with save
-        # model.objects.bulk_create(models_to_create)
+            instance = model(**attr)
+            instance.save()
 
         if self.settings.id:
             self.report.settings = self.settings
