@@ -19,8 +19,11 @@ class XlsProcessor(Processor):
 
     def open(self, path):
         self._workbook = xlrd.open_workbook(path)
-        self._worksheet = self._workbook.sheet_by_name(
-            self.settings.worksheet)
+
+        if not self.settings.worksheet:
+            self.settings.worksheet = self._workbook.sheet_names()[0]
+
+        self._worksheet = self._workbook.sheet_by_name(self.settings.worksheet)
 
         return self._worksheet.nrows, self._worksheet.ncols
 

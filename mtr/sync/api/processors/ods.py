@@ -26,6 +26,7 @@ class OdsProcessor(Processor):
     def write(self, row, value):
         table_row = odf.table.TableRow()
         self._table.addElement(table_row)
+
         for index, cell in enumerate(self.cells):
             table_cell = odf.table.TableCell()
             table_row.addElement(table_cell)

@@ -129,10 +129,20 @@ class Manager(object):
 
         return True if self.processors.get(cls.__name__, False) else False
 
-    def make_processor(self, settings):
+    def make_processor(self, settings, from_extension=False):
         """Create new processor instance if exists"""
 
-        processor = self.processors.get(settings.processor, None)
+        processor = None
+
+        if from_extension:
+            extension = settings.buffer_file.path.split('.')[-1]
+            for pr in self.processors.values():
+                if pr.file_format.strip('.') == extension:
+                    processor = pr
+                    settings.processor = processor.__name__
+                    break
+        else:
+            processor = self.processors.get(settings.processor, None)
 
         if processor is None:
             raise ProcessorDoesNotExists(

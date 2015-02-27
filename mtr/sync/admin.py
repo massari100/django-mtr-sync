@@ -107,16 +107,31 @@ class SettingsForm(forms.ModelForm):
         label=_('mtr.sync:Create settings for fields'),
         initial=False, required=False)
 
+    populate = forms.BooleanField(
+        label=_('mtr.sync:Populate settings from file'),
+        initial=False, required=False)
+
     def save(self, commit=True):
         create_fields = self.cleaned_data.get('create_fields', False)
+        populate = self.cleaned_data.get('populate', False)
 
         settings = super(SettingsForm, self).save(commit=commit)
+
         settings.save()
 
         if create_fields:
-            settings.create_default_fields()
+            settings.create_default_fields(exclude=['id'])
+
+        if settings.action == settings.IMPORT \
+                and settings.buffer_file and populate:
+            settings.populate_from_buffer_file()
+
+        settings.save()
 
         return settings
+
+    def __init__(self, *args, **kwargs):
+        super(SettingsForm, self).__init__(*args, **kwargs)
 
     class Meta:
         exclude = []

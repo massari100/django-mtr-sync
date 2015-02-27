@@ -29,8 +29,13 @@ class XlsxProcessor(Processor):
 
     def open(self, path):
         self._workbook = openpyxl.load_workbook(path, use_iterators=True)
+
+        if not self.settings.worksheet:
+            self.settings.worksheet = self._workbook.get_sheet_names()[0]
+
         self._worksheet = self._workbook.get_sheet_by_name(
             self.settings.worksheet)
+
         self._rows = self._worksheet.iter_rows()
         self._rows_counter = 0
 
