@@ -115,26 +115,46 @@ class Manager(object):
 
         return cls
 
-    def register(self, name, cls=None):
+    def _register_dict(self, type_name, func_name):
+        """Return decorator for adding functions as key, value to dict"""
+
+        # TODO: preregister custom filters as user filters
+
+        def decorator(func):
+            items = getattr(self, type_name, None)
+            new_name = func_name or func.__name__
+            if items is not None:
+                items[new_name] = func
+            return func
+
+        return decorator
+
+    def register(self, type_name, item=None, name=None):
         """Decorator to append new processors, handlers"""
 
         func = None
 
-        if name == 'processor':
+        if type_name == 'processor':
             func = self._register_processor
+        else:
+            func = self._register_dict(type_name, name)
 
-        if cls:
-            return func(cls)
+        if item:
+            return func(item)
         else:
             return func
 
-    def unregister(self, name, cls):
-        """Decorator to pop processor"""
+    def unregister(self, name, item=None):
+        """Decorator to pop dict items"""
 
         if name == 'processor':
-            self.processors.pop(cls.__name__, None)
+            self.processors.pop(item.__name__, None)
+        else:
+            items = getattr(self, name, None)
+            if items is not None:
+                items.pop(item, None)
 
-        return cls
+        return item
 
     def has_processor(self, cls):
         """Check if processor already exists"""
@@ -264,9 +284,17 @@ class Manager(object):
 
         return attr
 
+    def process_filter(self, field_filter, value):
+        """Methd for processing filter from filter
+        field or registered in manager"""
+
+        # TODO: process by filter
+
+        return value
+
     def process_value(self, field, value, action=None, export=False):
-        # TODO: process by all filters
-        # TODO: manual setted filters
+        for field_filter in field.filters_queue:
+            value = self.process_filter(field_filter, value)
 
         if export:
             return value

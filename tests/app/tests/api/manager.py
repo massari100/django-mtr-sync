@@ -51,3 +51,17 @@ class ManagerTest(TestCase):
         ordered_processors = [TestProcessor, SecondProcessor, ThirdProcesor]
         self.assertEqual(
             list(self.manager.processors.values()), ordered_processors)
+
+    def test_registering_dict_instance_attributes(self):
+        @self.manager.register('filters', name='test')
+        def some_filter():
+            return None
+
+        self.assertEqual(
+            list(self.manager.filters.keys())[0], 'test')
+        self.assertEqual(
+            list(self.manager.filters.values())[0], some_filter)
+
+        self.assertEqual(
+            self.manager.unregister('filters', 'test'), 'test')
+        self.assertEqual(self.manager.filters, {})
