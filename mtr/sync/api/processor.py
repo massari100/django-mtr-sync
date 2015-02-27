@@ -50,8 +50,6 @@ class Processor(object):
         raise NoIndexFound
 
     def _convert(self, value):
-        # TODO: embed in to processor
-
         for convert in self._types:
             try:
                 return convert(value)
@@ -209,8 +207,8 @@ class Processor(object):
         rows = (self.read(row) for row in self.rows)
         data = self.manager.prepare_import_data(self, rows)
 
-        for attr in data:
-            instance = model(**attr)
+        for _model in data:
+            instance = model(**_model['attrs'])
             instance.save()
 
         if self.settings.id:

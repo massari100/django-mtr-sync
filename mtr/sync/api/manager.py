@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from collections import OrderedDict
+
 from django.utils.six.moves import filterfalse
 from django.db import models
 
@@ -12,8 +13,12 @@ class Manager(object):
 
     """Manager for data processors"""
 
+    # TODO: move some methods to Processor class
+
     def __init__(self):
         self.processors = OrderedDict()
+        self.filters = dict()
+        self.handlers = dict()
 
     def model_settings(self, model):
         return getattr(model, MODEL_SETTINGS_NAME(), {})
@@ -80,6 +85,13 @@ class Manager(object):
                 '{} | {}'.format(
                     model._meta.app_label.title(),
                     model._meta.verbose_name.title()))
+
+    def queryset_choices(self):
+        # TODO: return querysets
+
+        return (
+            ('', ''),
+        )
 
     def processor_choices(self):
         """Return all registered processors"""
@@ -205,7 +217,7 @@ class Manager(object):
             'fields': fields,
             'items': (
                 self.process_value(
-                    field, self.process_attribute(item, field))
+                    field, self.process_attribute(item, field), export=True)
                 for item in queryset
                 for field in fields
             )
@@ -236,12 +248,13 @@ class Manager(object):
             fields = fields[:cols]
 
         for row in data:
-            attrs = {}
+            model = {'attrs': {}, 'action': None}
             for index, field in enumerate(fields):
                 col = processor.column(field.name) if field.name else index
-                value = self.process_value(field, row[col])
-                attrs[field.attribute] = value
-            yield attrs
+                action, value = self.process_value(field, row[col])
+                model['attrs'][field.attribute] = value
+                model['action'] = action
+            yield model
 
     def process_attribute(self, model, field):
         attr = getattr(model, field.attribute)
@@ -251,11 +264,14 @@ class Manager(object):
 
         return attr
 
-    def process_value(self, field, value):
+    def process_value(self, field, value, action=None, export=False):
         # TODO: process by all filters
         # TODO: manual setted filters
 
-        return value
+        if export:
+            return value
+        else:
+            return action, value
 
     def import_processors_modules(self):
         """Import modules within IMPORT_PROCESSORS paths"""

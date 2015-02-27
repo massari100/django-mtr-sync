@@ -5,3 +5,5 @@ export_completed = Signal(['report', 'completed_at', 'path'])
 
 import_started = Signal([])
 import_completed = Signal(['report', 'completed_at'])
+
+error_raised = Signal(['exception'])

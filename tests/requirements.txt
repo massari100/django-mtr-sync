@@ -6,5 +6,5 @@ celery
 hg+https://bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
 xlwt-future
 xlrd
-odfpy
+git+https://github.com/eea/odfpy#egg=odfpy
 six

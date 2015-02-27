@@ -6,7 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from .settings import FILE_PATH
 from .api import manager
 from .api.signals import export_started, export_completed, \
-    import_started, import_completed
+    import_started, import_completed, error_raised
+from .api.exceptions import ErrorChoicesMixin
 
 
 class ExportManager(models.Manager):
@@ -97,6 +98,9 @@ class Settings(ActionsMixin):
 
     buffer_file = models.FileField(
         _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+
+    queryset = models.CharField(_('mtr.sync:queryset'), max_length=255,
+        choices=manager.queryset_choices(), blank=True)
 
     def fields_with_filters(self):
         """Return iterator of fields with filters"""
@@ -338,23 +342,18 @@ def save_import_report(sender, **kwargs):
 
 
 @python_2_unicode_compatible
-class Error(models.Model):
+class Error(models.Model, ErrorChoicesMixin):
 
     """Report errors with info about step where raised"""
 
-    FORMAT = 0
-
-    STEP_CHOICES = (
-        (FORMAT, _('mtr.sync:file format')),
-    )
-
-    report = models.ForeignKey(Report)
+    report = models.ForeignKey(Report, related_name='errors')
 
     position = models.PositiveSmallIntegerField(
         _('mtr.sync:position'), null=True, blank=True)
     message = models.TextField(_('mtr.sync:message'), max_length=10000)
     step = models.PositiveSmallIntegerField(
-        _('mtr.sync:step'), choices=STEP_CHOICES, default=FORMAT)
+        _('mtr.sync:step'), choices=ErrorChoicesMixin.STEP_CHOICES,
+        default=ErrorChoicesMixin.UNDEFINED)
 
     class Meta:
         verbose_name = _('mtr.sync:error')

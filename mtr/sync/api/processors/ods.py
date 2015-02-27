@@ -1,6 +1,9 @@
 from django.utils.translation import gettext_lazy as _
 
 import odf
+import odf.opendocument
+import odf.table
+import odf.text
 
 from ..processor import Processor
 from ..manager import manager
@@ -14,7 +17,7 @@ class OdsProcessor(Processor):
     def create(self, path):
         self._path = path
         self._workbook = odf.opendocument.OpenDocumentSpreadsheet()
-        self._table = odf.table.Table(self.worksheet.name)
+        self._table = odf.table.Table(name=self.settings.worksheet)
         self._worksheet = self._workbook.spreadsheet.addElement(self._table)
 
     def open(self, path):
