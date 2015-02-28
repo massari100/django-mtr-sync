@@ -1,9 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 
-import odf
-import odf.opendocument
-import odf.table
-import odf.text
+import ezodf
 
 from ..processor import Processor
 from ..manager import manager
@@ -16,28 +13,32 @@ class OdsProcessor(Processor):
 
     def create(self, path):
         self._path = path
-        self._workbook = odf.opendocument.OpenDocumentSpreadsheet()
-        self._table = odf.table.Table(name=self.settings.worksheet)
-        self._worksheet = self._workbook.spreadsheet.addElement(self._table)
+        self._workbook = ezodf.newdoc(doctype='ods', filename=path)
+        self._worksheet = ezodf.Table(self.settings.worksheet)
+        self._workbook.sheets.append(self._worksheet)
 
     def open(self, path):
-        self._path = path
-        self._workbook = odf.opendocument.load(self._path)
+        ezodf.config.set_table_expand_strategy('all')
 
-        # TODO: get element by type Table, iter childs and convert values
+        self._path = path
+        self._workbook = ezodf.opendoc(self._path)
+
+        ezodf.config.reset_table_expand_strategy()
+
+        if not self.settings.worksheet:
+            self.settings.worksheet = self._workbook.sheets[0].name
+
+        self._worksheet = self._workbook.sheets[self.settings.worksheet]
+
+        return self._worksheet.nrows(), self._worksheet.ncols()
 
     def write(self, row, value):
-        table_row = odf.table.TableRow()
-        self._table.addElement(table_row)
-
         for index, cell in enumerate(self.cells):
-            table_cell = odf.table.TableCell()
-            table_row.addElement(table_cell)
-            table_cell.addElement(odf.text.P(text=value[index]))
+            self._worksheet[row, cell].set_value(value[index])
 
     def read(self, row):
         for index, cell in enumerate(self.cells):
-            yield self._worksheet.cell_value(row, cell)
+            yield self._worksheet[row, cell].value
 
     def save(self):
         self._workbook.save(self._path)
