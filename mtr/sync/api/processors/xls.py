@@ -35,6 +35,7 @@ class XlsProcessor(Processor):
         data = []
         for cell in self.cells:
             data.append(self._worksheet.cell_value(row, cell))
+
         return data
 
     def save(self):

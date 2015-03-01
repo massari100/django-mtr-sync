@@ -29,23 +29,26 @@ class Processor(object):
         self._chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
         self._types = (int,)
 
+    def column_name(self, index):
+        name = ''
+
+        while True:
+            q, r = divmod(index, 26)
+            name = self._chars[r] + name
+
+            if not q:
+                return name
+
+            index = q - 1
+
     def column_index(self, value):
         """Return column index for given name"""
 
         for index in range(0, 18279):
-            name = ''
+            name = self.column_name(index)
 
-            while True:
-                q, r = divmod(index, 26)
-                name = self._chars[r] + name
-
-                if not q:
-                    if name == value:
-                        return index + 1
-                    else:
-                        break
-
-                index = q - 1
+            if name == value:
+                return index
 
         raise NoIndexFound
 
@@ -118,9 +121,6 @@ class Processor(object):
 
         if self.settings.include_header and import_data:
             start['row'] += 1
-
-        if import_data:
-            end['row'] -= 1
 
         self.start, self.end = start, end
         self.cells = range(start['col'], end['col'])

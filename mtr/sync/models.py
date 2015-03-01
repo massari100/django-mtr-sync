@@ -131,7 +131,6 @@ class Settings(ActionsMixin):
 
             for col_index, col in enumerate(row):
                 if col:
-                    print(row)
                     start_col = col_index + 1
                     index = max_row
                     break

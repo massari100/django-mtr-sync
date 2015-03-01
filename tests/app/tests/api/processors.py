@@ -34,10 +34,11 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
         workbook = xlsx.openpyxl.load_workbook(
             report.buffer_file.path, use_iterators=True)
         worksheet = workbook.get_sheet_by_name(self.settings.worksheet)
+
         return worksheet
 
-    def _get_row_values(self, row, current_row):
-        for index, value in enumerate(current_row):
+    def _get_row_values(self, row, rows):
+        for index, value in enumerate(rows):
             if index == row and row:
                 return value
 
@@ -57,10 +58,11 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
 
     def open_report(self, report):
         self._f = open(report.buffer_file.path)
+
         return csv.csv.reader(self._f)
 
-    def _get_row_values(self, row, current_row):
-        for index, value in enumerate(current_row):
+    def _get_row_values(self, row, reader):
+        for index, value in enumerate(reader):
             if index == row and row:
                 return value
 
@@ -82,21 +84,16 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
     PROCESSOR = ods.OdsProcessor
 
     def open_report(self, report):
-        return ods.odf.opendocument.load(report.buffer_file.path)
+        workbook = ods.ezodf.opendoc(report.buffer_file.path)
+        worksheet = workbook.sheets[self.settings.worksheet]
 
-    def _get_row_values(self, row, current_row):
-        for index, value in enumerate(current_row.childNodes[:]):
-            if index == row and row:
-                return value
+        return worksheet
 
-    def check_values(self, reader, instance, row, index_prepend=0):
-        row_values = self._get_row_values(row, reader)
+    def check_values(self, worksheet, instance, row, index_prepend=0):
+        row_values = worksheet.row(row)
 
         for index, field in enumerate(self.fields):
             value = getattr(instance, field.attribute)
-            sheet_value = self.processor.convert(
-                row_values[index + index_prepend])
+            sheet_value = row_values[index + index_prepend].value
 
             self.assertEqual(value, sheet_value)
-
-        self._f.close()

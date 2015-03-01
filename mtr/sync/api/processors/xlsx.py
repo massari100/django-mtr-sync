@@ -16,18 +16,18 @@ class XlsxProcessor(Processor):
     file_description = _('mtr.sync:Microsoft Excel 2007/2010/2013 XML')
 
     def create(self, path):
-        self._prepend = None
         self._path = path
+        self._prepend = None
         self._workbook = openpyxl.Workbook(optimized_write=True)
         self._worksheet = self._workbook.create_sheet()
         self._worksheet.title = self.settings.worksheet
 
         # prepend rows and cols
-        if self.start['row'] > 0:
+        if self.start['row'] > 1:
             for i in range(0, self.start['row']):
                 self._worksheet.append([])
 
-        if self.start['col'] > 0:
+        if self.start['col'] > 1:
             self._prepend = [None, ]
             self._prepend *= self.start['col']
 
@@ -68,6 +68,7 @@ class XlsxProcessor(Processor):
         readed = []
         for item in value[self.start['col']:self.end['col']]:
             readed.append(item.value)
+
         return readed
 
     def save(self):

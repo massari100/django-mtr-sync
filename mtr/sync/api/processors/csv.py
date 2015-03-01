@@ -21,11 +21,11 @@ class CsvProcessor(Processor):
         self._writer = csv.writer(self._f)
 
         # prepend rows and cols
-        if self.start['row'] > 0:
+        if self.start['row'] > 1:
             for i in range(0, self.start['row']):
                 self._writer.writerow([])
 
-        if self.start['col'] > 0:
+        if self.start['col'] > 1:
             self._prepend = [None, ]
             self._prepend *= self.start['col']
 
@@ -67,6 +67,7 @@ class CsvProcessor(Processor):
         readed = []
         for item in value[self.start['col']:self.end['col']]:
             readed.append(item)
+
         return readed
 
     def save(self):
