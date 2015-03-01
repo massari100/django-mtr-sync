@@ -3,14 +3,16 @@ from __future__ import unicode_literals
 import os
 import datetime
 
-from mtr.sync.api import Manager
+from django.test import TestCase
+
+from mtr.sync.api import Manager, Processor
 from mtr.sync.models import Settings
 
 
 class ProcessorTestMixin(object):
     MODEL = None
     PROCESSOR = None
-    MODEL_COUNT = 50
+    MODEL_COUNT = 100
 
     def setUp(self):
         self.model = self.MODEL
@@ -85,6 +87,11 @@ class ProcessorTestMixin(object):
 
         raise NotImplementedError
 
+    def check_values(self, worksheet, instance, row, index_prepend=0):
+        """Check instance values within data"""
+
+        raise NotImplementedError
+
     def test_create_export_file_and_report_generation(self):
         self.check_report_success()
 
@@ -102,12 +109,16 @@ class ProcessorTestMixin(object):
         # TODO: refactor code to works with values smaller then 3
         # e.g. start_row = 1
 
-        self.settings.start_row = 25
+        self.settings.start_row = 3
         self.settings.start_col = 10
         self.settings.end_col = 13
         self.settings.end_row = 250
 
         report = self.check_report_success(delete=False)
+
+        before = self.settings.end_row - self.settings.start_row + 1
+        if before > self.queryset.count():
+            before = self.queryset.count()
 
         self.queryset.delete()
 
@@ -117,3 +128,23 @@ class ProcessorTestMixin(object):
         self.manager.import_data(self.settings)
 
         self.check_sheet_values_and_delete_report(report)
+
+        self.assertEqual(before, self.queryset.count())
+
+
+class ProcessorTest(TestCase):
+
+    def setUp(self):
+        self.manager = Manager()
+        self.processor = Processor(self.manager, None)
+
+    def test_column_index_value_transform(self):
+        self.assertEqual(
+            self.processor.column_name(0), 'A')
+        self.assertEqual(
+            self.processor.column_name(25), 'Z')
+
+        self.assertEqual(
+            self.processor.column_index('A'), 0)
+        self.assertEqual(
+            self.processor.column_index('Z'), 25)

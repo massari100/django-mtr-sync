@@ -15,16 +15,9 @@ class OdsProcessor(Processor):
         self._path = path
         self._prepend = None
         self._workbook = ezodf.newdoc(doctype='ods', filename=path)
-        self._worksheet = ezodf.Table(self.settings.worksheet)
+        self._worksheet = ezodf.Table(self.settings.worksheet,
+            size=(self.end['row'], self.end['col']))
         self._workbook.sheets.append(self._worksheet)
-
-        # prepend rows and cols
-        # TODO: strange bug exposes only when start_row = 25 and test passed
-        if self.start['row'] > 11:
-            self._worksheet.append_rows(self.start['row'] - 10)
-
-        if self.start['col'] > 0:
-            self._worksheet.append_columns(self.start['col'])
 
     def open(self, path):
         ezodf.config.set_table_expand_strategy('all')
@@ -42,8 +35,6 @@ class OdsProcessor(Processor):
         return self._worksheet.nrows(), self._worksheet.ncols()
 
     def write(self, row, value):
-        self._worksheet.append_rows(1)
-
         for index, cell in enumerate(self.cells):
             self._worksheet[row, cell].set_value(value[index])
 

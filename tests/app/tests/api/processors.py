@@ -61,13 +61,13 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
 
         return csv.csv.reader(self._f)
 
-    def _get_row_values(self, row, reader):
-        for index, value in enumerate(reader):
+    def _get_row_values(self, row, worksheet):
+        for index, value in enumerate(worksheet):
             if index == row and row:
                 return value
 
-    def check_values(self, reader, instance, row, index_prepend=0):
-        row_values = self._get_row_values(row, reader)
+    def check_values(self, worksheet, instance, row, index_prepend=0):
+        row_values = self._get_row_values(row, worksheet)
 
         for index, field in enumerate(self.fields):
             value = getattr(instance, field.attribute)
