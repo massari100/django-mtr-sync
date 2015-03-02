@@ -7,3 +7,4 @@ import_started = Signal([])
 import_completed = Signal(['report', 'completed_at'])
 
 error_raised = Signal(['exception'])
+filter_registered = Signal(['name', 'label', 'description'])

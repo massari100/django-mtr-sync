@@ -135,7 +135,7 @@ class ProcessorTestMixin(object):
         before_data = list(self.manager.prepare_export_data(
             self.processor, self.queryset)['items'])
 
-        @self.manager.register('filter')
+        @self.manager.register('filter', label='multiply by 10')
         def test_filter(value, field, action):
             if value.isnumber():
                 value *= 10
@@ -149,9 +149,9 @@ class ProcessorTestMixin(object):
         after_data = self.manager.prepare_export_data(
             self.processor, self.queryset)['items']
 
-        for index, item in zip(before_data, after_data):
-            if index % 1 == 0:
-                self.assertEqual(item)
+        for before_item, after_item in zip(before_data, after_data):
+            if isinstance(before_item, int) or before_item.isnumber():
+                self.assertEqual(before_item, after_item / 10)
 
 
 class ProcessorTest(TestCase):

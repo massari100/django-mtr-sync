@@ -6,6 +6,7 @@ from django.utils.six.moves import filterfalse
 from django.db import models
 
 from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
+from .signals import filter_registered
 from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
@@ -239,7 +240,7 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
         self.filters = dict()
         self.handlers = dict()
 
-    def _register_dict(self, type_name, func_name):
+    def _register_dict(self, type_name, func_name, **kwargs):
         """Return decorator for adding functions as key, value to dict"""
 
         # TODO: preregister custom filters as user filters
@@ -247,13 +248,26 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
         def decorator(func):
             items = getattr(self, type_name, None)
             new_name = func_name or func.__name__
+
             if items is not None:
                 items[new_name] = func
+                self._dict_registered(
+                    type_name, new_name, func, items, **kwargs)
+
             return func
 
         return decorator
 
-    def register(self, type_name, item=None, name=None):
+    def _dict_registered(self, type_name, func_name, func, items, **kwargs):
+        """After registering decorator handler"""
+
+        if type_name == 'filter':
+            label = kwargs.get('label', None) or func_name
+            description = kwargs.get('description', None)
+            filter_registered.send(self.__class__, name=func_name,
+                label=label, description=description)
+
+    def register(self, type_name, item=None, name=None, **kwargs):
         """Decorator to append new processors, handlers"""
 
         func = None
@@ -261,7 +275,7 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
         if type_name == 'processor':
             func = self._register_processor
         else:
-            func = self._register_dict(type_name, name)
+            func = self._register_dict(type_name, name, **kwargs)
 
         if item:
             return func(item)
@@ -298,9 +312,11 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
 
         return action, value
 
-    def process_value(self, field, value, action=None, export=False):
+    def process_value(self, field, value, export=False, action=None):
+        process_action = 'export' if export else 'import'
         for field_filter in field.filters_queue:
-            action, value = self.process_filter(field, field_filter, value)
+            action, value = self.process_filter(
+                field, field_filter, value, process_action)
 
         if export:
             return value

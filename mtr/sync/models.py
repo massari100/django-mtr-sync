@@ -6,7 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from .settings import FILE_PATH
 from .api import manager
 from .api.signals import export_started, export_completed, \
-    import_started, import_completed, error_raised
+    import_started, import_completed, error_raised, filter_registered
 from .api.exceptions import ErrorChoicesMixin
 
 
@@ -181,8 +181,8 @@ class Filter(models.Model):
 
     """Filter data using internal template"""
 
-    label = models.CharField(_('mtr.sync:name'), max_length=255)
     name = models.CharField(_('mtr.sync:name'), max_length=255)
+    label = models.CharField(_('mtr.sync:name'), max_length=255)
     description = models.TextField(
         _('mtr.sync:description'), max_length=20000, null=True, blank=True)
 
@@ -228,6 +228,16 @@ class Field(models.Model):
 
     def __str__(self):
         return self.name or self.attribute
+
+
+@receiver(filter_registered)
+def create_filter(sender, **kwargs):
+    print('I CALLED!')
+    Filter.objects.get_or_create(
+        name=kwargs['name'], defaults={
+            'label': kwargs['label'],
+            'description': kwargs['description']
+        })
 
 
 @python_2_unicode_compatible
