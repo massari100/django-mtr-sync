@@ -12,7 +12,8 @@ def clear():
     """Delete unnecessary and cached files"""
 
     local("find . -name '~*' -or -name '*.pyo' -or -name '*.pyc' "
-        "-or -name 'Thubms.db' | xargs -I {} rm -v '{}'")
+        "-or -name '__pycache__' -or -name 'Thubms.db' "
+        "| xargs -I {} rm -vrf '{}'")
 
 
 @task

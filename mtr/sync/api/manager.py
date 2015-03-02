@@ -9,27 +9,9 @@ from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
 from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
-class Manager(object):
+class ModelManagerMixin(object):
 
-    """Manager for data processors"""
-
-    # TODO: move some methods to Processor class
-
-    def __init__(self):
-        self.processors = OrderedDict()
-        self.filters = dict()
-        self.handlers = dict()
-
-    def model_settings(self, model):
-        return getattr(model, MODEL_SETTINGS_NAME(), {})
-
-    def models_list(self):
-        mlist = filterfalse(
-            lambda m: self.model_settings(m).get('ignore', False),
-            models.get_models())
-        return mlist
-
-    def get_field_by_name(self, model, name):
+    def get_model_field_by_name(self, model, name):
         """Return model field or custom method"""
 
         for field in model._meta.fields:
@@ -41,6 +23,15 @@ class Manager(object):
             custom._sync_custom_field = True
 
         return custom
+
+    def model_settings(self, model):
+        return getattr(model, MODEL_SETTINGS_NAME(), {})
+
+    def models_list(self):
+        mlist = filterfalse(
+            lambda m: self.model_settings(m).get('ignore', False),
+            models.get_models())
+        return mlist
 
     def model_attributes(self, settings):
         """Return iterator of fields names by given mode_path"""
@@ -56,7 +47,7 @@ class Manager(object):
             lambda f: f in exclude, fields)
 
         for name in fields:
-            field = self.get_field_by_name(model, name)
+            field = self.get_model_field_by_name(model, name)
 
             label = name
             custom_label = getattr(field, '_sync_custom_field', False)
@@ -93,6 +84,9 @@ class Manager(object):
             ('', ''),
         )
 
+
+class ProcessorManagerMixin(object):
+
     def processor_choices(self):
         """Return all registered processors"""
 
@@ -114,47 +108,6 @@ class Manager(object):
                 sorted(self.processors.items(), key=lambda p: p[1].position))
 
         return cls
-
-    def _register_dict(self, type_name, func_name):
-        """Return decorator for adding functions as key, value to dict"""
-
-        # TODO: preregister custom filters as user filters
-
-        def decorator(func):
-            items = getattr(self, type_name, None)
-            new_name = func_name or func.__name__
-            if items is not None:
-                items[new_name] = func
-            return func
-
-        return decorator
-
-    def register(self, type_name, item=None, name=None):
-        """Decorator to append new processors, handlers"""
-
-        func = None
-
-        if type_name == 'processor':
-            func = self._register_processor
-        else:
-            func = self._register_dict(type_name, name)
-
-        if item:
-            return func(item)
-        else:
-            return func
-
-    def unregister(self, name, item=None):
-        """Decorator to pop dict items"""
-
-        if name == 'processor':
-            self.processors.pop(item.__name__, None)
-        else:
-            items = getattr(self, name, None)
-            if items is not None:
-                items.pop(item, None)
-
-        return item
 
     def has_processor(self, cls):
         """Check if processor already exists"""
@@ -275,6 +228,57 @@ class Manager(object):
                 model['attrs'][field.attribute] = value
                 model['action'] = action
             yield model
+
+
+class Manager(ProcessorManagerMixin, ModelManagerMixin):
+
+    """Manager for data processors"""
+
+    def __init__(self):
+        self.processors = OrderedDict()
+        self.filters = dict()
+        self.handlers = dict()
+
+    def _register_dict(self, type_name, func_name):
+        """Return decorator for adding functions as key, value to dict"""
+
+        # TODO: preregister custom filters as user filters
+
+        def decorator(func):
+            items = getattr(self, type_name, None)
+            new_name = func_name or func.__name__
+            if items is not None:
+                items[new_name] = func
+            return func
+
+        return decorator
+
+    def register(self, type_name, item=None, name=None):
+        """Decorator to append new processors, handlers"""
+
+        func = None
+
+        if type_name == 'processor':
+            func = self._register_processor
+        else:
+            func = self._register_dict(type_name, name)
+
+        if item:
+            return func(item)
+        else:
+            return func
+
+    def unregister(self, name, item=None):
+        """Decorator to pop dict items"""
+
+        if name == 'processor':
+            self.processors.pop(item.__name__, None)
+        else:
+            items = getattr(self, name, None)
+            if items is not None:
+                items.pop(item, None)
+
+        return item
 
     def process_attribute(self, model, field):
         attr = getattr(model, field.attribute)
