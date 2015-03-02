@@ -232,7 +232,6 @@ class Field(models.Model):
 
 @receiver(filter_registered)
 def create_filter(sender, **kwargs):
-    print('I CALLED!')
     Filter.objects.get_or_create(
         name=kwargs['name'], defaults={
             'label': kwargs['label'],

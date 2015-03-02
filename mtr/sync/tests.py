@@ -6,19 +6,22 @@ import datetime
 from django.test import TestCase
 
 from mtr.sync.api import Manager, Processor
-from mtr.sync.models import Settings, Filter, FilterParams
+from mtr.sync.models import Settings
 
 
-class ProcessorTestMixin(object):
+class ApiTestMixin(object):
     MODEL = None
     PROCESSOR = None
     MODEL_COUNT = 50
+    CREATE_PROCESSOR_AT_SETUP = True
 
     def setUp(self):
         self.model = self.MODEL
 
         self.manager = Manager()
-        self.manager.register('processor', self.PROCESSOR)
+
+        if self.CREATE_PROCESSOR_AT_SETUP:
+            self.manager.register('processor', self.PROCESSOR)
 
         self.instance = self.model.objects.create(name='test instance',
             surname='test surname', gender='M', security_level=10)
@@ -31,9 +34,14 @@ class ProcessorTestMixin(object):
             main_model='{}.{}'.format(
                 self.model.__module__, self.model.__name__),
             include_header=False)
-        self.processor = self.manager.make_processor(self.settings)
 
-        self.fields = self.settings.create_default_fields()
+        if self.CREATE_PROCESSOR_AT_SETUP:
+            self.processor = self.manager.make_processor(self.settings)
+
+            self.fields = self.settings.create_default_fields()
+
+
+class ProcessorTestMixin(ApiTestMixin):
 
     def check_file_existence_and_delete(self, report):
         """Delete report file"""
@@ -130,28 +138,6 @@ class ProcessorTestMixin(object):
         self.check_sheet_values_and_delete_report(report)
 
         self.assertEqual(before, self.queryset.count())
-
-    def test_value_filters(self):
-        before_data = list(self.manager.prepare_export_data(
-            self.processor, self.queryset)['items'])
-
-        @self.manager.register('filter', label='multiply by 10')
-        def test_filter(value, field, action):
-            if value.isnumber():
-                value *= 10
-            return value
-
-        filter_related = Filter.objects.get(name='test_filter')
-        field_related = self.fields.get(attribute='id')
-        FilterParams.objects.create(
-            filter_related=filter_related, field_related=field_related)
-
-        after_data = self.manager.prepare_export_data(
-            self.processor, self.queryset)['items']
-
-        for before_item, after_item in zip(before_data, after_data):
-            if isinstance(before_item, int) or before_item.isnumber():
-                self.assertEqual(before_item, after_item / 10)
 
 
 class ProcessorTest(TestCase):

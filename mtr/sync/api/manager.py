@@ -246,7 +246,7 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
         # TODO: preregister custom filters as user filters
 
         def decorator(func):
-            items = getattr(self, type_name, None)
+            items = getattr(self, '{}s'.format(type_name), None)
             new_name = func_name or func.__name__
 
             if items is not None:
@@ -260,7 +260,6 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
 
     def _dict_registered(self, type_name, func_name, func, items, **kwargs):
         """After registering decorator handler"""
-
         if type_name == 'filter':
             label = kwargs.get('label', None) or func_name
             description = kwargs.get('description', None)
@@ -282,13 +281,13 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
         else:
             return func
 
-    def unregister(self, name, item=None):
+    def unregister(self, type_name, item=None):
         """Decorator to pop dict items"""
 
-        if name == 'processor':
+        if type_name == 'processor':
             self.processors.pop(item.__name__, None)
         else:
-            items = getattr(self, name, None)
+            items = getattr(self, '{}s'.format(type_name), None)
             if items is not None:
                 items.pop(item, None)
 
@@ -302,15 +301,18 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
 
         return attr
 
-    def process_filter(self, field, field_filter, value):
-        """Methd for processing filter from filter
-        field or registered in manager"""
+    def process_filter(self, field, field_filter, value, process_action):
+        """Method for processing filter from
+        field filters registered in manager"""
 
-        filter_func = self.filters.get(field, field_filter.name, None)
+        filter_func = self.filters.get(field_filter.name, None)
         if filter_func:
-            action, value = filter_func(value, field)
+            value = filter_func(value, field, process_action)
 
-        return action, value
+        if isinstance(value, tuple):
+            return value
+        else:
+            return None, value
 
     def process_value(self, field, value, export=False, action=None):
         process_action = 'export' if export else 'import'
