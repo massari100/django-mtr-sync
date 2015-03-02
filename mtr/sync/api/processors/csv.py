@@ -18,7 +18,7 @@ class CsvProcessor(Processor):
 
         self._prepend = None
         self._f = open(path, 'w')
-        self._writer = csv.writer(self._f)
+        self._writer = csv.writer(self._f, dialect='excel')
 
         # prepend rows and cols
         if self.start['row'] > 1:
@@ -31,7 +31,7 @@ class CsvProcessor(Processor):
 
     def open(self, path):
         self._f = open(path, 'r')
-        self._reader = csv.reader(self._f)
+        self._reader = csv.reader(self._f, dialect='excel')
         self._rows_counter = 0
 
         maxrows = 0

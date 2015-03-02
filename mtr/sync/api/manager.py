@@ -288,17 +288,19 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
 
         return attr
 
-    def process_filter(self, field_filter, value):
+    def process_filter(self, field, field_filter, value):
         """Methd for processing filter from filter
         field or registered in manager"""
 
-        # TODO: process by filter
+        filter_func = self.filters.get(field, field_filter.name, None)
+        if filter_func:
+            action, value = filter_func(value, field)
 
-        return value
+        return action, value
 
     def process_value(self, field, value, action=None, export=False):
         for field_filter in field.filters_queue:
-            value = self.process_filter(field_filter, value)
+            action, value = self.process_filter(field, field_filter, value)
 
         if export:
             return value

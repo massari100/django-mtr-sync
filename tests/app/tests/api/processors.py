@@ -71,8 +71,7 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
 
         for index, field in enumerate(self.fields):
             value = getattr(instance, field.attribute)
-            sheet_value = self.processor._convert(
-                row_values[index + index_prepend])
+            sheet_value = row_values[index + index_prepend]
 
             self.assertEqual(value, sheet_value)
 

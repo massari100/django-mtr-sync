@@ -6,13 +6,13 @@ import datetime
 from django.test import TestCase
 
 from mtr.sync.api import Manager, Processor
-from mtr.sync.models import Settings
+from mtr.sync.models import Settings, Filter, FilterParams
 
 
 class ProcessorTestMixin(object):
     MODEL = None
     PROCESSOR = None
-    MODEL_COUNT = 100
+    MODEL_COUNT = 50
 
     def setUp(self):
         self.model = self.MODEL
@@ -130,6 +130,28 @@ class ProcessorTestMixin(object):
         self.check_sheet_values_and_delete_report(report)
 
         self.assertEqual(before, self.queryset.count())
+
+    def test_value_filters(self):
+        before_data = list(self.manager.prepare_export_data(
+            self.processor, self.queryset)['items'])
+
+        @self.manager.register('filter')
+        def test_filter(value, field, action):
+            if value.isnumber():
+                value *= 10
+            return value
+
+        filter_related = Filter.objects.get(name='test_filter')
+        field_related = self.fields.get(attribute='id')
+        FilterParams.objects.create(
+            filter_related=filter_related, field_related=field_related)
+
+        after_data = self.manager.prepare_export_data(
+            self.processor, self.queryset)['items']
+
+        for index, item in zip(before_data, after_data):
+            if index % 1 == 0:
+                self.assertEqual(item)
 
 
 class ProcessorTest(TestCase):

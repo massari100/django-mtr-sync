@@ -181,10 +181,10 @@ class Filter(models.Model):
 
     """Filter data using internal template"""
 
+    label = models.CharField(_('mtr.sync:name'), max_length=255)
     name = models.CharField(_('mtr.sync:name'), max_length=255)
     description = models.TextField(
         _('mtr.sync:description'), max_length=20000, null=True, blank=True)
-    template = models.TextField(_('mtr.sync:template'), max_length=50000)
 
     class Meta:
         verbose_name = _('mtr.sync:filter')
