@@ -30,9 +30,9 @@ class ErrorChoicesMixin(object):
     )
 
 
-class ProcessorDoesNotExists(Exception):
+class ItemDoesNotRegistered(Exception):
     pass
 
 
-class ProcessorAlreadyExists(Exception):
+class ItemAlreadyRegistered(Exception):
     pass

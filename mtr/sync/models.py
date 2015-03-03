@@ -6,7 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from .settings import FILE_PATH
 from .api import manager
 from .api.signals import export_started, export_completed, \
-    import_started, import_completed, error_raised, filter_registered
+    import_started, import_completed, error_raised, manager_registered, \
+    receiver_for
 from .api.exceptions import ErrorChoicesMixin
 
 
@@ -230,12 +231,13 @@ class Field(models.Model):
         return self.name or self.attribute
 
 
-@receiver(filter_registered)
+@receiver(manager_registered)
+@receiver_for('filter')
 def create_filter(sender, **kwargs):
     Filter.objects.get_or_create(
-        name=kwargs['name'], defaults={
-            'label': kwargs['label'],
-            'description': kwargs['description']
+        name=kwargs['func_name'], defaults={
+            'label': kwargs.get('label', None) or kwargs['func_name'],
+            'description': kwargs.get('description', None)
         })
 
 

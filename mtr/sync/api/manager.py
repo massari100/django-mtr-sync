@@ -5,8 +5,8 @@ from collections import OrderedDict
 from django.utils.six.moves import filterfalse
 from django.db import models
 
-from .exceptions import ProcessorAlreadyExists, ProcessorDoesNotExists
-from .signals import filter_registered
+from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
+from .signals import manager_registered
 from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
@@ -98,23 +98,6 @@ class ProcessorManagerMixin(object):
                     processor.file_format,
                     processor.file_description))
 
-    def _register_processor(self, cls):
-        if self.has_processor(cls):
-            raise ProcessorAlreadyExists(
-                'Processor {} already exists'.format(cls.__name__))
-        self.processors[cls.__name__] = cls
-
-        if cls.position:
-            self.processors = OrderedDict(
-                sorted(self.processors.items(), key=lambda p: p[1].position))
-
-        return cls
-
-    def has_processor(self, cls):
-        """Check if processor already exists"""
-
-        return True if self.processors.get(cls.__name__, False) else False
-
     def make_processor(self, settings, from_extension=False):
         """Create new processor instance if exists"""
 
@@ -127,12 +110,8 @@ class ProcessorManagerMixin(object):
                     processor = pr
                     settings.processor = processor.__name__
                     break
-        else:
-            processor = self.processors.get(settings.processor, None)
 
-        if processor is None:
-            raise ProcessorDoesNotExists(
-                'Processor {} does not exists'.format(settings.processor))
+        processor = self.get_or_raise('processor', settings.processor)
 
         return processor(settings, self)
 
@@ -236,58 +215,76 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
     """Manager for data processors"""
 
     def __init__(self):
-        self.processors = OrderedDict()
-        self.filters = dict()
-        self.handlers = dict()
+        # TODO: split functionality for mixins init here
+
+        pass
+
+    def _make_key(self, key):
+        return '{}s'.format(key)
+
+    def get_or_raise(self, name, key):
+        value = getattr(self, self._make_key(name), {})
+        value = value.get(key, None)
+
+        if value is None:
+            raise ItemDoesNotRegistered(
+                '{} not registered at {}'.format(key, name))
+
+        return value
+
+    def has(self, name, key):
+        for value in getattr(self, self._make_key(name), {}).values():
+            if value == key:
+                return True
+        return False
 
     def _register_dict(self, type_name, func_name, **kwargs):
-        """Return decorator for adding functions as key, value to dict"""
+        """Return decorator for adding functions as key, value to dict
+        and send manager_registered signal to handle new params"""
 
         def decorator(func):
-            items = getattr(self, '{}s'.format(type_name), None)
+            key = self._make_key(type_name)
+            values = getattr(self, key, OrderedDict())
+            position = getattr(func, 'position', 0)
             new_name = func_name or func.__name__
 
-            if items is not None:
-                items[new_name] = func
-                self._dict_registered(
-                    type_name, new_name, func, items, **kwargs)
+            if values is not None:
+                if values.get(new_name, None) is not None:
+                    raise ItemAlreadyRegistered(
+                        '{} already registred at {}'.format(new_name, key))
+
+                values[new_name] = func
+                if position:
+                    values = OrderedDict(
+                        sorted(
+                            values.items(),
+                            key=lambda p: getattr(p[1], 'position', 0)))
+                setattr(self, key, values)
+
+                kwargs.update({
+                    'type_name': type_name,
+                    'func_name': new_name,
+                    'func': func
+                })
+                manager_registered.send(self, **kwargs)
 
             return func
 
         return decorator
 
-    def _dict_registered(self, type_name, func_name, func, items, **kwargs):
-        """After registering decorator handler"""
-        if type_name == 'filter':
-            label = kwargs.get('label', None) or func_name
-            description = kwargs.get('description', None)
-            filter_registered.send(self.__class__, name=func_name,
-                label=label, description=description)
-
     def register(self, type_name, item=None, name=None, **kwargs):
-        """Decorator to append new processors, handlers"""
+        """Decorator and function to config new processors, handlers"""
 
-        func = None
+        func = self._register_dict(type_name, name, **kwargs)
 
-        if type_name == 'processor':
-            func = self._register_processor
-        else:
-            func = self._register_dict(type_name, name, **kwargs)
-
-        if item:
-            return func(item)
-        else:
-            return func
+        return func(item) if item else func
 
     def unregister(self, type_name, item=None):
         """Decorator to pop dict items"""
 
-        if type_name == 'processor':
-            self.processors.pop(item.__name__, None)
-        else:
-            items = getattr(self, '{}s'.format(type_name), None)
-            if items is not None:
-                items.pop(item, None)
+        items = getattr(self, self._make_key(type_name), None)
+        if items is not None:
+            items.pop(getattr(item, '__name__', item), None)
 
         return item
 

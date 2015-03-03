@@ -11,6 +11,7 @@ build:
                 command: 'fab test:with_coverage'
                 coverage:
                     file: '.coverage'
+                    format: 'py-cc'
 checks:
     python:
         code_rating: true
