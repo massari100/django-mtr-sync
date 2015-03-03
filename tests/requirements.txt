@@ -10,3 +10,4 @@ ezodf
 lxml
 six
 virtualenvwrapper
+coverage
