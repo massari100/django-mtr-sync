@@ -1,7 +1,16 @@
-# django-mtr-sync
-Full-feature package for easy importing and exporting of data
+# Full-feature package for easy importing and exporting of data
 
-Full description at [kickstarter page](https://www.kickstarter.com/projects/1625615835/django-opensource-improved-import-export-package)
+## django-mtr-sync (warning: beta product)
+
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/?branch=master)
+
+[![Code Coverage](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/?branch=master)
+
+[![Build Status](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/build.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/build-status/master)
+
+Project updates here [http://mtr.website](http://mtr.website)
+
+Thank you guys for funding this project at [kickstarter](https://www.kickstarter.com/projects/1625615835/django-opensource-improved-import-export-package)
 
 ## Features:
 - Multilingual (i18n)
