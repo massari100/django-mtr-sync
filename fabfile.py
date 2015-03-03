@@ -1,6 +1,6 @@
 import os
 
-from fabric.api import local, task, settings, hide, lcd
+from fabric.api import local, task, lcd
 
 APPS = ['mtr.sync']
 PROJECT_APPS = ['app']
@@ -17,23 +17,36 @@ def clear():
 
 
 @task
-def manage(command):
+def manage(command, prefix=None, nocd=False):
     """Shortcut for manage.py file"""
 
-    with lcd(PROJECT_DIR):
-        local('./manage.py {}'.format(command))
+    run = '{}/manage.py {{}}'.format(PROJECT_DIR if nocd else '.')
+
+    if prefix:
+        run = '{} {}'.format(prefix, run)
+
+    if nocd:
+        local(run.format(command))
+    else:
+        with lcd(PROJECT_DIR):
+            local(run.format(command))
 
 
 @task
-def test():
+def test(with_coverage=False):
     """Test listed apps"""
 
-    with settings(hide('warnings'), warn_only=True):
-        apps = []
-        apps.extend(PROJECT_APPS)
-        apps.extend(APPS)
-        test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), apps))
-        manage("test {} --pattern='*.py'".format(test_apps))
+    apps = []
+    apps.extend(PROJECT_APPS)
+    apps.extend(APPS)
+    test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), apps))
+    command = "test {} --pattern='*.py'".format(test_apps)
+
+    if with_coverage:
+        with_coverage = "coverage run --omit=*.virtualenvs/*," \
+            "*migrations/*.py,*/admin.py"
+
+    manage(command, prefix=with_coverage, nocd=with_coverage)
 
 
 @task

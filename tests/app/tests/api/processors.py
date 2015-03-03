@@ -72,7 +72,8 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
         for index, field in enumerate(self.fields):
             value = getattr(instance, field.attribute)
             sheet_value = row_values[index + index_prepend]
-
+            if sheet_value.isdigit():
+                sheet_value = int(sheet_value)
             self.assertEqual(value, sheet_value)
 
         self._f.close()

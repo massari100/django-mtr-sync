@@ -243,8 +243,6 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
     def _register_dict(self, type_name, func_name, **kwargs):
         """Return decorator for adding functions as key, value to dict"""
 
-        # TODO: preregister custom filters as user filters
-
         def decorator(func):
             items = getattr(self, '{}s'.format(type_name), None)
             new_name = func_name or func.__name__

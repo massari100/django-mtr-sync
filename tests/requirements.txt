@@ -9,3 +9,4 @@ xlrd
 ezodf
 lxml
 six
+virtualenvwrapper
