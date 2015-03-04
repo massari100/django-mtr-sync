@@ -11,6 +11,7 @@ from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
 class ModelManagerMixin(object):
+    # TODO: refactor model fields managament
 
     def get_model_field_by_name(self, model, name):
         """Return model field or custom method"""
@@ -34,7 +35,7 @@ class ModelManagerMixin(object):
             models.get_models())
         return mlist
 
-    def model_attributes(self, settings):
+    def model_attributes(self, settings, prefix=None):
         """Return iterator of fields names by given mode_path"""
 
         model = self.model_class(settings)
@@ -42,6 +43,12 @@ class ModelManagerMixin(object):
 
         exclude = msettings.get('exclude', [])
         fields = model._meta.get_all_field_names()
+
+        for field in fields:
+            if isinstance(field, models.ForeignKey):
+                # get_model_field_by_name(model)
+                pass
+
         fields += msettings.get('fields', [])
 
         fields = filterfalse(

@@ -8,6 +8,7 @@ from django import forms
 
 from .models import Report, Settings, Field, FilterParams, Filter, Error
 from .api import manager
+from .settings import REGISTER_AT_ADMIN
 
 
 class ErrorInline(admin.TabularInline):
@@ -170,7 +171,8 @@ class SettingsAdmin(admin.ModelAdmin):
 
     run.short_description = _('mtr.sync:Sync data')
 
-admin.site.register(Report, ReportAdmin)
-admin.site.register(Settings, SettingsAdmin)
-admin.site.register(Field, FieldAdmin)
-admin.site.register(Filter, FilterAdmin)
+if REGISTER_AT_ADMIN():
+    admin.site.register(Report, ReportAdmin)
+    admin.site.register(Settings, SettingsAdmin)
+    admin.site.register(Field, FieldAdmin)
+    admin.site.register(Filter, FilterAdmin)

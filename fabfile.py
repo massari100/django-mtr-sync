@@ -34,7 +34,7 @@ def manage(command, prefix=None, nocd=False):
 
 
 @task
-def test(with_coverage=False):
+def test(coverage=False):
     """Test listed apps"""
 
     apps = []
@@ -43,11 +43,11 @@ def test(with_coverage=False):
     test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), apps))
     command = "test {} --pattern='*.py'".format(test_apps)
 
-    if with_coverage:
-        with_coverage = "coverage run --omit=*.virtualenvs/*," \
-            "*migrations/*.py,*/admin.py"
+    if coverage:
+        coverage = "coverage run --omit=*.virtualenvs/*," \
+            "*migrations/*.py,./tests/*,*/admin.py"
 
-    manage(command, prefix=with_coverage, nocd=with_coverage)
+    manage(command, prefix=coverage, nocd=coverage)
 
 
 @task

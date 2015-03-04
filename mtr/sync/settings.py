@@ -42,3 +42,6 @@ MODEL_SETTINGS_NAME = getattr_with_prefix(
 
 # limit preview of data on settings page
 LIMIT_PREVIEW = getattr_with_prefix('LIMIT_PREVIEW', 20)
+
+# register models at admin for debugging
+REGISTER_AT_ADMIN = getattr_with_prefix('REGISTER_AT_ADMIN', True)
