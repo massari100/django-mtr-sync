@@ -50,7 +50,7 @@ class ModelManagerMixin(object):
         fields += msettings.get('fields', [])
 
         fields = filterfalse(
-            lambda f: f in exclude, fields)
+            lambda f: f in exclude or '_id' in f, fields)
 
         for name in fields:
             custom, field = self.get_model_field_by_name(model, name)

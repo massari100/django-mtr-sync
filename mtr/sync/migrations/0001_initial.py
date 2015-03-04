@@ -2,8 +2,8 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import mtr.sync.api.exceptions
 import mtr.sync.settings
+import mtr.sync.api.exceptions
 
 
 class Migration(migrations.Migration):
@@ -15,29 +15,29 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Error',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('position', models.PositiveSmallIntegerField(verbose_name='position', null=True, blank=True)),
-                ('message', models.TextField(verbose_name='message', max_length=10000)),
-                ('step', models.PositiveSmallIntegerField(verbose_name='step', default=10, choices=[(0, 'mtr.sync:prepare queryset'), (1, 'mtr.sync:prepare data'), (2, 'mtr.sync:setup dimensions for file'), (3, 'mtr.sync:open file'), (4, 'mtr.sync:create file'), (5, 'mtr.sync:write header'), (6, 'mtr.sync:write data'), (7, 'mtr.sync:save file'), (8, 'mtr.sync:read file'), (9, 'mtr.sync:import data'), (10, 'mtr.sync:unexpected error')])),
+                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('position', models.PositiveSmallIntegerField(null=True, blank=True, verbose_name='position')),
+                ('message', models.TextField(max_length=10000, verbose_name='message')),
+                ('step', models.PositiveSmallIntegerField(choices=[(0, 'mtr.sync:prepare queryset'), (1, 'mtr.sync:prepare data'), (2, 'mtr.sync:setup dimensions for file'), (3, 'mtr.sync:open file'), (4, 'mtr.sync:create file'), (5, 'mtr.sync:write header'), (6, 'mtr.sync:write data'), (7, 'mtr.sync:save file'), (8, 'mtr.sync:read file'), (9, 'mtr.sync:import data'), (10, 'mtr.sync:unexpected error')], verbose_name='step', default=10)),
             ],
             options={
-                'verbose_name': 'error',
                 'verbose_name_plural': 'errors',
+                'verbose_name': 'error',
             },
             bases=(models.Model, mtr.sync.api.exceptions.ErrorChoicesMixin),
         ),
         migrations.CreateModel(
             name='Field',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('position', models.PositiveIntegerField(verbose_name='position', null=True, blank=True)),
-                ('name', models.CharField(verbose_name='name', max_length=255, blank=True)),
-                ('attribute', models.CharField(verbose_name='model attribute', max_length=255)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('position', models.PositiveIntegerField(null=True, blank=True, verbose_name='position')),
+                ('name', models.CharField(max_length=255, blank=True, verbose_name='name')),
+                ('attribute', models.CharField(max_length=255, verbose_name='model attribute')),
                 ('skip', models.BooleanField(verbose_name='skip', default=False)),
             ],
             options={
-                'verbose_name': 'field',
                 'verbose_name_plural': 'fields',
+                'verbose_name': 'field',
                 'ordering': ['position'],
             },
             bases=(models.Model,),
@@ -45,14 +45,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Filter',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('label', models.CharField(verbose_name='name', max_length=255)),
-                ('name', models.CharField(verbose_name='name', max_length=255)),
-                ('description', models.TextField(verbose_name='description', max_length=20000, null=True, blank=True)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=255, verbose_name='name')),
+                ('label', models.CharField(max_length=255, verbose_name='name')),
+                ('description', models.TextField(null=True, max_length=20000, blank=True, verbose_name='description')),
             ],
             options={
-                'verbose_name': 'filter',
                 'verbose_name_plural': 'filters',
+                'verbose_name': 'filter',
                 'ordering': ('-id',),
             },
             bases=(models.Model,),
@@ -60,14 +60,14 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='FilterParams',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('position', models.PositiveIntegerField(verbose_name='position', null=True, blank=True)),
-                ('field_related', models.ForeignKey(to='mtrsync.Field', related_name='filter_params')),
-                ('filter_related', models.ForeignKey(verbose_name='filter', to='mtrsync.Filter')),
+                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('position', models.PositiveIntegerField(null=True, blank=True, verbose_name='position')),
+                ('field_related', models.ForeignKey(related_name='filter_params', to='mtrsync.Field')),
+                ('filter_related', models.ForeignKey(to='mtrsync.Filter', verbose_name='filter')),
             ],
             options={
-                'verbose_name': 'filter',
                 'verbose_name_plural': 'filters',
+                'verbose_name': 'filter',
                 'ordering': ['position'],
             },
             bases=(models.Model,),
@@ -75,17 +75,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Report',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('action', models.PositiveSmallIntegerField(verbose_name='action', db_index=True, choices=[(0, 'Export'), (1, 'Import')])),
-                ('buffer_file', models.FileField(verbose_name='file', db_index=True, upload_to=mtr.sync.settings.get_buffer_file_path, blank=True)),
-                ('status', models.PositiveSmallIntegerField(verbose_name='status', default=1, choices=[(0, 'Error'), (1, 'Running'), (2, 'Success')])),
-                ('started_at', models.DateTimeField(verbose_name='started at', auto_now_add=True)),
-                ('completed_at', models.DateTimeField(verbose_name='completed at', null=True, blank=True)),
-                ('updated_at', models.DateTimeField(verbose_name='updated at', auto_now=True)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('action', models.PositiveSmallIntegerField(choices=[(0, 'Export'), (1, 'Import')], verbose_name='action', db_index=True)),
+                ('buffer_file', models.FileField(upload_to=mtr.sync.settings.get_buffer_file_path, blank=True, verbose_name='file', db_index=True)),
+                ('status', models.PositiveSmallIntegerField(choices=[(0, 'Error'), (1, 'Running'), (2, 'Success')], verbose_name='status', default=1)),
+                ('started_at', models.DateTimeField(auto_now_add=True, verbose_name='started at')),
+                ('completed_at', models.DateTimeField(null=True, blank=True, verbose_name='completed at')),
+                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
             ],
             options={
-                'verbose_name': 'report',
                 'verbose_name_plural': 'reports',
+                'verbose_name': 'report',
                 'ordering': ('-id',),
             },
             bases=(models.Model,),
@@ -93,27 +93,27 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Settings',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('action', models.PositiveSmallIntegerField(verbose_name='action', db_index=True, choices=[(0, 'Export'), (1, 'Import')])),
-                ('name', models.CharField(verbose_name='name', max_length=100)),
-                ('start_col', models.CharField(verbose_name='start column', max_length=10, blank=True)),
-                ('start_row', models.PositiveIntegerField(verbose_name='start row', null=True, blank=True)),
-                ('end_col', models.CharField(verbose_name='end column', max_length=10, blank=True)),
-                ('end_row', models.PositiveIntegerField(verbose_name='end row', null=True, blank=True)),
-                ('main_model', models.CharField(verbose_name='main model', max_length=255, choices=[('django.contrib.admin.models.LogEntry', 'Admin | Log Entry'), ('django.contrib.auth.models.Permission', 'Auth | Permission'), ('django.contrib.auth.models.Group', 'Auth | Group'), ('django.contrib.auth.models.User', 'Auth | User'), ('django.contrib.contenttypes.models.ContentType', 'Contenttypes | Content Type'), ('django.contrib.sessions.models.Session', 'Sessions | Session'), ('mtr.sync.models.Settings', 'Mtrsync | Settings'), ('mtr.sync.models.Filter', 'Mtrsync | Filter'), ('mtr.sync.models.Field', 'Mtrsync | Field'), ('mtr.sync.models.FilterParams', 'Mtrsync | Filter'), ('mtr.sync.models.Report', 'Mtrsync | Report'), ('mtr.sync.models.Error', 'Mtrsync | Error'), ('app.models.Person', 'App | Person')])),
-                ('main_model_id', models.PositiveIntegerField(verbose_name='main model object', null=True, blank=True)),
-                ('created_at', models.DateTimeField(verbose_name='created at', auto_now_add=True)),
-                ('updated_at', models.DateTimeField(verbose_name='updated at', auto_now=True)),
-                ('processor', models.CharField(verbose_name='format', max_length=255, choices=[('XlsProcessor', '.xls | Microsoft Excel 97/2000/XP/2003'), ('XlsxProcessor', '.xlsx | Microsoft Excel 2007/2010/2013 XML')])),
-                ('worksheet', models.CharField(verbose_name='worksheet page', max_length=255, blank=True)),
+                ('id', models.AutoField(primary_key=True, auto_created=True, serialize=False, verbose_name='ID')),
+                ('action', models.PositiveSmallIntegerField(choices=[(0, 'Export'), (1, 'Import')], verbose_name='action', db_index=True)),
+                ('name', models.CharField(max_length=100, verbose_name='name')),
+                ('start_col', models.CharField(max_length=10, blank=True, verbose_name='start column')),
+                ('start_row', models.PositiveIntegerField(null=True, blank=True, verbose_name='start row')),
+                ('end_col', models.CharField(max_length=10, blank=True, verbose_name='end column')),
+                ('end_row', models.PositiveIntegerField(null=True, blank=True, verbose_name='end row')),
+                ('main_model', models.CharField(max_length=255, choices=[('django.contrib.admin.models.LogEntry', 'Admin | Log Entry'), ('django.contrib.auth.models.Permission', 'Auth | Permission'), ('django.contrib.auth.models.Group', 'Auth | Group'), ('django.contrib.auth.models.User', 'Auth | User'), ('django.contrib.contenttypes.models.ContentType', 'Contenttypes | Content Type'), ('django.contrib.sessions.models.Session', 'Sessions | Session'), ('mtr.sync.models.Settings', 'Mtrsync | Settings'), ('mtr.sync.models.Filter', 'Mtrsync | Filter'), ('mtr.sync.models.Field', 'Mtrsync | Field'), ('mtr.sync.models.FilterParams', 'Mtrsync | Filter'), ('mtr.sync.models.Report', 'Mtrsync | Report'), ('mtr.sync.models.Error', 'Mtrsync | Error'), ('app.models.Office', 'App | Office'), ('app.models.Tag', 'App | Tag'), ('app.models.Person', 'App | Person')], verbose_name='main model')),
+                ('main_model_id', models.PositiveIntegerField(null=True, blank=True, verbose_name='main model object')),
+                ('created_at', models.DateTimeField(auto_now_add=True, verbose_name='created at')),
+                ('updated_at', models.DateTimeField(auto_now=True, verbose_name='updated at')),
+                ('processor', models.CharField(max_length=255, choices=[('XlsProcessor', '.xls | Microsoft Excel 97/2000/XP/2003'), ('XlsxProcessor', '.xlsx | Microsoft Excel 2007/2010/2013 XML'), ('OdsProcessor', '.ods | ODF Spreadsheet'), ('CsvProcessor', '.csv | CSV')], verbose_name='format')),
+                ('worksheet', models.CharField(max_length=255, blank=True, verbose_name='worksheet page')),
                 ('include_header', models.BooleanField(verbose_name='include header', default=True)),
-                ('filename', models.CharField(verbose_name='custom filename', max_length=255, blank=True)),
-                ('buffer_file', models.FileField(verbose_name='file', db_index=True, upload_to=mtr.sync.settings.get_buffer_file_path, blank=True)),
-                ('queryset', models.CharField(verbose_name='mtr.sync:queryset', max_length=255, choices=[('', '')], blank=True)),
+                ('filename', models.CharField(max_length=255, blank=True, verbose_name='custom filename')),
+                ('buffer_file', models.FileField(upload_to=mtr.sync.settings.get_buffer_file_path, blank=True, verbose_name='file', db_index=True)),
+                ('queryset', models.CharField(max_length=255, choices=[('', '')], verbose_name='mtr.sync:queryset', blank=True)),
             ],
             options={
-                'verbose_name': 'settings',
                 'verbose_name_plural': 'settings',
+                'verbose_name': 'settings',
                 'ordering': ('-id',),
             },
             bases=(models.Model,),
@@ -121,25 +121,25 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='report',
             name='settings',
-            field=models.ForeignKey(verbose_name='settings', to='mtrsync.Settings', related_name='reports', null=True, blank=True),
+            field=models.ForeignKey(blank=True, null=True, related_name='reports', to='mtrsync.Settings', verbose_name='settings'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='field',
             name='filters',
-            field=models.ManyToManyField(through='mtrsync.FilterParams', to='mtrsync.Filter'),
+            field=models.ManyToManyField(to='mtrsync.Filter', through='mtrsync.FilterParams'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='field',
             name='settings',
-            field=models.ForeignKey(verbose_name='settings', to='mtrsync.Settings', related_name='fields'),
+            field=models.ForeignKey(related_name='fields', to='mtrsync.Settings', verbose_name='settings'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='error',
             name='report',
-            field=models.ForeignKey(to='mtrsync.Report', related_name='errors'),
+            field=models.ForeignKey(related_name='errors', to='mtrsync.Report'),
             preserve_default=True,
         ),
     ]

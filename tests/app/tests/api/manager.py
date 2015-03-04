@@ -96,3 +96,9 @@ class ManagerTest(ApiTestMixin, TestCase):
             if data_counter % 1:
                 self.assertEqual(before_item, after_item / 10)
             data_counter += 1
+
+    def test_model_attributes(self):
+        fields = self.manager.model_attributes(self.settings)
+        fields = list(map(lambda f: f[0], fields))
+
+        self.assertEqual(['id', 'name'], fields)
