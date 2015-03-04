@@ -11,3 +11,5 @@ lxml
 six
 virtualenvwrapper
 coverage
+sphinx
+sphinx_rtd_theme

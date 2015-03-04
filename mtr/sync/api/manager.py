@@ -202,11 +202,13 @@ class ProcessorManagerMixin(object):
 
         for row in data:
             model = {'attrs': {}, 'action': None}
+
             for index, field in enumerate(fields):
                 col = processor.column(field.name) if field.name else index
                 action, value = self.process_value(field, row[col])
                 model['attrs'][field.attribute] = value
                 model['action'] = action
+
             yield model
 
 

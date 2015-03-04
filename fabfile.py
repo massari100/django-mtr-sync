@@ -5,6 +5,7 @@ from fabric.api import local, task, lcd
 APPS = ['mtr.sync']
 PROJECT_APPS = ['app']
 PROJECT_DIR = 'tests'
+DOCS_DIR = 'docs'
 
 
 @task
@@ -126,3 +127,15 @@ def subl():
     """Start Sublime editor"""
 
     local('subl project.sublime-workspace')
+
+
+@task
+def docs(action='make'):
+    """Sphinx docs generation"""
+
+    with lcd(DOCS_DIR):
+        if action == 'make':
+            local('make html')
+        else:
+            print('Invalid action: {}, available actions: "make"'
+                ', "compile"'.format(action))
