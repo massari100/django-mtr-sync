@@ -36,5 +36,13 @@ class Person(models.Model):
                 security_level=random.choice(range(100))
             )
 
+    @property
+    def custom_method(self):
+        return '{} {}'.format(self.name, self.surname)
+
     def __str__(self):
         return self.name
+
+    sync_settings = {
+        'fields': ['custom_method'],
+    }

@@ -106,7 +106,7 @@ class ProcessorTestMixin(ApiTestMixin):
     def test_export_dimension_settings(self):
         self.settings.start_row = 25
         self.settings.start_col = 'J'
-        self.settings.end_col = 12
+        self.settings.end_col = 14
         self.settings.end_row = 250
 
         report = self.check_report_success(delete=False)
@@ -119,7 +119,7 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.settings.start_row = 3
         self.settings.start_col = 10
-        self.settings.end_col = 13
+        self.settings.end_col = 14
         self.settings.end_row = 250
 
         report = self.check_report_success(delete=False)

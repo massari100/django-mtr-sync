@@ -18,13 +18,11 @@ class ModelManagerMixin(object):
 
         for field in model._meta.fields:
             if field.name == name:
-                return field
+                return False, field
 
         custom = getattr(model, name, None)
-        if custom:
-            custom._sync_custom_field = True
 
-        return custom
+        return True, custom
 
     def model_settings(self, model):
         return getattr(model, MODEL_SETTINGS_NAME(), {})
@@ -55,12 +53,13 @@ class ModelManagerMixin(object):
             lambda f: f in exclude, fields)
 
         for name in fields:
-            field = self.get_model_field_by_name(model, name)
+            custom, field = self.get_model_field_by_name(model, name)
 
             label = name
-            custom_label = getattr(field, '_sync_custom_field', False)
 
-            if custom_label:
+            if custom:
+                if isinstance(field, property):
+                    field = field.fget
                 label = getattr(field, 'short_description', field.__name__)
             elif field:
                 label = field.verbose_name
@@ -153,7 +152,14 @@ class ProcessorManagerMixin(object):
         and return data with dimensions"""
 
         settings = processor.settings
-        fields = list(settings.fields_with_filters())
+        model = self.model_class(settings)
+        msettings = self.model_settings(model)
+
+        exclude = msettings.get('exclude', [])
+
+        fields = settings.fields_with_filters()
+        fields = list(filterfalse(
+            lambda f: f.attribute in exclude, fields))
 
         if settings.end_row:
             rows = settings.end_row

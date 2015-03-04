@@ -150,7 +150,6 @@ class Settings(ActionsMixin):
 
         if not exclude:
             exclude = []
-
         for name, label in manager.model_attributes(self):
             if name not in exclude:
                 fields.append(self.fields.create(attribute=name))

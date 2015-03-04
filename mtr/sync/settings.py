@@ -31,9 +31,11 @@ FILE_PATH = getattr_with_prefix('FILE_PATH', get_buffer_file_path)
 THEME_PATH = getattr_with_prefix('THEME_PATH', 'default')
 
 # additional api for import and export to register
-IMPORT_PROCESSORS = getattr_with_prefix('IMPORT_PROCESSORS', [
+IMPORT_PROCESSORS = getattr_with_prefix('PROCESSORS', [
     'mtr.sync.api.processors.xls',
     'mtr.sync.api.processors.xlsx',
+    'mtr.sync.api.processors.ods',
+    'mtr.sync.api.processors.csv'
 ])
 
 # model attribute where settings placed
