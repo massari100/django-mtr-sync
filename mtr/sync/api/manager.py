@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 from django.utils.six.moves import filterfalse
 from django.db import models
+from django.db.models.fields.related import ReverseManyRelatedObjectsDescriptor
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .signals import manager_registered
@@ -18,11 +19,9 @@ class ModelManagerMixin(object):
 
         for field in model._meta.fields:
             if field.name == name:
-                return False, field
+                return field
 
-        custom = getattr(model, name, None)
-
-        return True, custom
+        return getattr(model, name, None)
 
     def model_settings(self, model):
         return getattr(model, MODEL_SETTINGS_NAME(), {})
@@ -33,38 +32,49 @@ class ModelManagerMixin(object):
             models.get_models())
         return mlist
 
-    def model_attributes(self, settings, prefix=None):
+    def model_attributes(self, settings, prefix=None, model=None, parent=None):
         """Return iterator of fields names by given mode_path"""
 
-        model = self.model_class(settings)
+        model = model or self.model_class(settings)
         msettings = self.model_settings(model)
 
         exclude = msettings.get('exclude', [])
         fields = model._meta.get_all_field_names()
-
-        for field in fields:
-            if isinstance(field, models.ForeignKey):
-                # get_model_field_by_name(model)
-                pass
-
         fields += msettings.get('fields', [])
-
         fields = filterfalse(
             lambda f: f in exclude or '_id' in f, fields)
 
         for name in fields:
-            custom, field = self.get_model_field_by_name(model, name)
+            field = self.get_model_field_by_name(model, name)
+
+            if field is None:
+                continue
 
             label = name
+            child_attrs = None
 
-            if custom:
-                if isinstance(field, property):
-                    field = field.fget
-                label = getattr(field, 'short_description', field.__name__)
-            elif field:
-                label = field.verbose_name
+            if isinstance(field, models.ForeignKey):
+                child_attrs = self.model_attributes(
+                        settings, prefix='{}|_fk_|'.format(name),
+                        model=field.rel.to, parent=model)
+            elif isinstance(field, ReverseManyRelatedObjectsDescriptor):
+                print('reversed many')
+            elif isinstance(field, property):
+                field = field.fget
 
-            yield (name, label.capitalize())
+            label = getattr(
+                field, '__name__', getattr(
+                    field, 'short_description', getattr(
+                        field, 'verbose_name', repr(field))))
+
+            if prefix:
+                name = ''.join((prefix, name))
+
+            if child_attrs:
+                for name, label in child_attrs:
+                    yield (name, label)
+            else:
+                yield (name, label.capitalize())
 
     def model_class(self, settings):
         """Return class for name in main_model"""
@@ -83,6 +93,45 @@ class ModelManagerMixin(object):
                 '{} | {}'.format(
                     model._meta.app_label.title(),
                     model._meta.verbose_name.title()))
+
+    def process_attribute(self, model, field):
+        """Process all atribute path to retrieve value"""
+
+        if '|_fk_|' in field.attribute:
+            attributes = field.attribute.split('|_fk_|')
+            attr = getattr(model, attributes[0], None)
+
+            if '|_fk_|' in attributes[1] or '|_m_|' in attributes[1]:
+                attr = self.process_attribute(self, attr, attributes[1])
+        else:
+            attr = getattr(model, field.attribute)
+        return attr
+
+    def process_filter(self, field, field_filter, value, process_action):
+        """Method for processing filter from
+        field filters registered in manager"""
+
+        filter_func = self.filters.get(field_filter.name, None)
+        if filter_func:
+            value = filter_func(value, field, process_action)
+
+        if isinstance(value, tuple):
+            return value
+        else:
+            return None, value
+
+    def process_value(self, field, value, export=False, action=None):
+        """Process value with filters and actions"""
+
+        process_action = 'export' if export else 'import'
+        for field_filter in field.filters_queue:
+            action, value = self.process_filter(
+                field, field_filter, value, process_action)
+
+        if export:
+            return value
+        else:
+            return action, value
 
     def queryset_choices(self):
         # TODO: return querysets
@@ -302,38 +351,6 @@ class Manager(ProcessorManagerMixin, ModelManagerMixin):
             items.pop(getattr(item, '__name__', item), None)
 
         return item
-
-    def process_attribute(self, model, field):
-        attr = getattr(model, field.attribute)
-
-        if hasattr(attr, '__call__'):
-            attr = attr(self, field)
-
-        return attr
-
-    def process_filter(self, field, field_filter, value, process_action):
-        """Method for processing filter from
-        field filters registered in manager"""
-
-        filter_func = self.filters.get(field_filter.name, None)
-        if filter_func:
-            value = filter_func(value, field, process_action)
-
-        if isinstance(value, tuple):
-            return value
-        else:
-            return None, value
-
-    def process_value(self, field, value, export=False, action=None):
-        process_action = 'export' if export else 'import'
-        for field_filter in field.filters_queue:
-            action, value = self.process_filter(
-                field, field_filter, value, process_action)
-
-        if export:
-            return value
-        else:
-            return action, value
 
     def import_processors_modules(self):
         """Import modules within IMPORT_PROCESSORS paths"""

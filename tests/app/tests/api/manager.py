@@ -101,4 +101,7 @@ class ManagerTest(ApiTestMixin, TestCase):
         fields = self.manager.model_attributes(self.settings)
         fields = list(map(lambda f: f[0], fields))
 
-        self.assertEqual(['id', 'name'], fields)
+        self.assertEqual([
+            'gender', 'id', 'name', 'office|_fk_|address',
+            'office|_fk_|id', 'office|_fk_|office', 'security_level',
+            'surname', 'custom_method', ], fields)
