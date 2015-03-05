@@ -7,7 +7,7 @@ from mtr.sync.api.exceptions import ItemAlreadyRegistered, \
     ItemDoesNotRegistered
 from mtr.sync.models import Filter, FilterParams
 
-from ...models import Person
+from ...models import Person, Office
 
 
 class TestProcessor(Processor):
@@ -24,6 +24,7 @@ class ThirdProcesor(Processor):
 
 class ManagerTest(ApiTestMixin, TestCase):
     MODEL = Person
+    RELATED_MODEL = Office
     PROCESSOR = XlsProcessor
     CREATE_PROCESSOR_AT_SETUP = False
 
@@ -102,6 +103,20 @@ class ManagerTest(ApiTestMixin, TestCase):
         fields = list(map(lambda f: f[0], fields))
 
         self.assertEqual([
-            'gender', 'id', 'name', 'office|_fk_|address',
-            'office|_fk_|id', 'office|_fk_|office', 'security_level',
+            'gender', 'id', 'name', 'office.address',
+            'office.id', 'office.office', 'security_level',
             'surname', 'custom_method', ], fields)
+
+    def test_process_attribute(self):
+        self.assertEqual(
+            self.manager.process_attribute(
+                self.instance, 'name'), self.instance.name)
+        self.assertEqual(
+            self.manager.process_attribute(
+                self.instance, 'office.address'), self.instance.office.address)
+        self.assertEqual(
+            self.manager.process_attribute(
+                self.instance, 'notexist'), None)
+        self.assertEqual(
+            self.manager.process_attribute(
+                self.instance, 'office.notexist.attr'), None)

@@ -208,7 +208,30 @@ class Processor(object):
         data = self.manager.prepare_import_data(self, rows)
 
         for _model in data:
-            instance = model(**_model['attrs'])
+            main_model_attrs = {}
+            related_models = {}
+
+            # TODO: sub-fields
+
+            for key in _model['attrs'].keys():
+                if '.' in key:
+                    key_model, key_attr = key.split('.')
+
+                    attrs = related_models.get(key_model, {})
+                    attrs[key_attr] = _model['attrs'][key]
+                    related_models[key_model] = attrs
+                else:
+                    main_model_attrs[key] = _model['attrs'][key]
+            instance = model(**main_model_attrs)
+
+            for key in related_models.keys():
+                related_model = self.manager.get_model_field_by_name(
+                    instance, key).rel.to
+                related_instance = related_model(**related_models[key])
+                related_instance.save()
+
+                setattr(instance, key, related_instance)
+
             instance.save()
 
         if self.settings.id:

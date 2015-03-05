@@ -55,7 +55,7 @@ class ModelManagerMixin(object):
 
             if isinstance(field, models.ForeignKey):
                 child_attrs = self.model_attributes(
-                        settings, prefix='{}|_fk_|'.format(name),
+                        settings, prefix='{}.'.format(name),
                         model=field.rel.to, parent=model)
             elif isinstance(field, ReverseManyRelatedObjectsDescriptor):
                 print('reversed many')
@@ -94,17 +94,19 @@ class ModelManagerMixin(object):
                     model._meta.app_label.title(),
                     model._meta.verbose_name.title()))
 
-    def process_attribute(self, model, field):
+    def process_attribute(self, model, attribute):
         """Process all atribute path to retrieve value"""
 
-        if '|_fk_|' in field.attribute:
-            attributes = field.attribute.split('|_fk_|')
+        if '.' in attribute:
+            attributes = attribute.split('.')
             attr = getattr(model, attributes[0], None)
 
-            if '|_fk_|' in attributes[1] or '|_m_|' in attributes[1]:
+            if '.' in attributes[1] or '|_m_|' in attributes[1]:
                 attr = self.process_attribute(self, attr, attributes[1])
+            else:
+                attr = getattr(attr, attributes[1], None)
         else:
-            attr = getattr(model, field.attribute)
+            attr = getattr(model, attribute, None)
         return attr
 
     def process_filter(self, field, field_filter, value, process_action):
@@ -232,7 +234,8 @@ class ProcessorManagerMixin(object):
             'fields': fields,
             'items': (
                 self.process_value(
-                    field, self.process_attribute(item, field), export=True)
+                    field, self.process_attribute(
+                        item, field.attribute), export=True)
                 for item in queryset
                 for field in fields
             )

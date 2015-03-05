@@ -11,12 +11,14 @@ from mtr.sync.models import Settings
 
 class ApiTestMixin(object):
     MODEL = None
+    RELATED_MODEL = None
     PROCESSOR = None
     MODEL_COUNT = 50
     CREATE_PROCESSOR_AT_SETUP = True
 
     def setUp(self):
         self.model = self.MODEL
+        self.relatedmodel = self.RELATED_MODEL
 
         self.manager = Manager()
 
@@ -25,6 +27,9 @@ class ApiTestMixin(object):
 
         self.instance = self.model.objects.create(name='test instance',
             surname='test surname', gender='M', security_level=10)
+        self.r_instance = self.relatedmodel.objects.create(
+            office='test', address='addr')
+        self.instance.office = self.r_instance
         self.instance.populate(self.MODEL_COUNT)
         self.queryset = self.model.objects.all()
 
@@ -106,7 +111,7 @@ class ProcessorTestMixin(ApiTestMixin):
     def test_export_dimension_settings(self):
         self.settings.start_row = 25
         self.settings.start_col = 'J'
-        self.settings.end_col = 14
+        self.settings.end_col = 18
         self.settings.end_row = 250
 
         report = self.check_report_success(delete=False)
@@ -119,7 +124,7 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.settings.start_row = 3
         self.settings.start_col = 10
-        self.settings.end_col = 14
+        self.settings.end_col = 18
         self.settings.end_row = 250
 
         report = self.check_report_success(delete=False)

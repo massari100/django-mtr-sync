@@ -61,10 +61,12 @@ class Person(models.Model):
 
             self.__class__.objects.create(
                 name=name,
+                office=self.office,
                 surname=surname,
                 gender=random.choice(['M', 'F']),
                 security_level=random.choice(range(100))
             )
+        self.save()
 
     @property
     def custom_method(self):
