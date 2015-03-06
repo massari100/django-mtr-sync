@@ -103,9 +103,9 @@ class ManagerTest(ApiTestMixin, TestCase):
         fields = list(map(lambda f: f[0], fields))
 
         self.assertEqual([
-            'gender', 'id', 'name', 'office.address',
-            'office.id', 'office.office', 'security_level',
-            'surname', 'custom_method', ], fields)
+            'id', 'name', 'surname', 'gender', 'security_level',
+            'office.id', 'office.office', 'office.address',
+            'custom_method'], fields)
 
     def test_process_attribute(self):
         self.assertEqual(

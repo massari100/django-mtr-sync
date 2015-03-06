@@ -222,11 +222,12 @@ class Processor(object):
                     related_models[key_model] = attrs
                 else:
                     main_model_attrs[key] = _model['attrs'][key]
+
             instance = model(**main_model_attrs)
+            model_fields = self.manager.get_model_fields(model)
 
             for key in related_models.keys():
-                related_model = self.manager.get_model_field_by_name(
-                    instance, key).rel.to
+                related_model = model_fields.get(key).rel.to
                 related_instance = related_model(**related_models[key])
                 related_instance.save()
 

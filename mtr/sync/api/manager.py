@@ -4,7 +4,7 @@ from collections import OrderedDict
 
 from django.utils.six.moves import filterfalse
 from django.db import models
-from django.db.models.fields.related import ReverseManyRelatedObjectsDescriptor
+from django.db.models.fields import Field as ModelField
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .signals import manager_registered
@@ -14,14 +14,29 @@ from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 class ModelManagerMixin(object):
     # TODO: refactor model fields managament
 
-    def get_model_field_by_name(self, model, name):
+    def get_model_fields(self, model):
         """Return model field or custom method"""
 
-        for field in model._meta.fields:
-            if field.name == name:
-                return field
+        opts = model._meta
+        sortable_virtual_fields = [f for f in opts.virtual_fields
+            if isinstance(f, ModelField)]
+        fields_arr = sorted(
+            opts.concrete_fields + sortable_virtual_fields + opts.many_to_many)
 
-        return getattr(model, name, None)
+        msettings = self.model_settings(model)
+        exclude = msettings.get('exclude', [])
+        custom_fields = msettings.get('custom_fields', [])
+        ordered_fields = []
+
+        for field in fields_arr:
+            if field.name not in exclude:
+                ordered_fields.append((field.name, field))
+
+        for field in custom_fields:
+            if field not in exclude:
+                ordered_fields.append((field, getattr(model, field, None)))
+
+        return OrderedDict(ordered_fields)
 
     def model_settings(self, model):
         return getattr(model, MODEL_SETTINGS_NAME(), {})
@@ -36,29 +51,16 @@ class ModelManagerMixin(object):
         """Return iterator of fields names by given mode_path"""
 
         model = model or self.model_class(settings)
-        msettings = self.model_settings(model)
 
-        exclude = msettings.get('exclude', [])
-        fields = model._meta.get_all_field_names()
-        fields += msettings.get('fields', [])
-        fields = filterfalse(
-            lambda f: f in exclude or '_id' in f, fields)
-
-        for name in fields:
-            field = self.get_model_field_by_name(model, name)
-
-            if field is None:
-                continue
-
+        for name, field in self.get_model_fields(model).items():
             label = name
             child_attrs = None
 
-            if isinstance(field, models.ForeignKey):
+            if isinstance(field, models.ForeignKey) or \
+                    isinstance(field, models.ManyToManyField):
                 child_attrs = self.model_attributes(
                         settings, prefix='{}.'.format(name),
                         model=field.rel.to, parent=model)
-            elif isinstance(field, ReverseManyRelatedObjectsDescriptor):
-                print('reversed many')
             elif isinstance(field, property):
                 field = field.fget
 
@@ -101,7 +103,7 @@ class ModelManagerMixin(object):
             attributes = attribute.split('.')
             attr = getattr(model, attributes[0], None)
 
-            if '.' in attributes[1] or '|_m_|' in attributes[1]:
+            if '.' in attributes[1]:
                 attr = self.process_attribute(self, attr, attributes[1])
             else:
                 attr = getattr(attr, attributes[1], None)

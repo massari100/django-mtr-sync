@@ -80,6 +80,6 @@ class Person(models.Model):
         return self.name
 
     sync_settings = {
-        'fields': ['custom_method'],
+        'custom_fields': ['custom_method'],
         'exclude': ['some_excluded_field']
     }
