@@ -43,7 +43,7 @@ class Person(models.Model):
         max_digits=10, decimal_places=3, null=True)
 
     office = models.ForeignKey(Office, null=True, blank=True)
-    # tags = models.ManyToManyField(Tag)
+    tags = models.ManyToManyField(Tag)
 
     class Meta:
         verbose_name = 'person'

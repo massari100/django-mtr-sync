@@ -121,7 +121,7 @@ class SettingsForm(forms.ModelForm):
         settings.save()
 
         if create_fields:
-            settings.create_default_fields(exclude=['id'])
+            settings.create_default_fields()
 
         if settings.action == settings.IMPORT \
                 and settings.buffer_file and populate:

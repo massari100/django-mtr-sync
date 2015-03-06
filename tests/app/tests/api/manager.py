@@ -105,6 +105,7 @@ class ManagerTest(ApiTestMixin, TestCase):
         self.assertEqual([
             'id', 'name', 'surname', 'gender', 'security_level',
             'office.id', 'office.office', 'office.address',
+            'tags.id', 'tags.name',
             'custom_method'], fields)
 
     def test_process_attribute(self):

@@ -74,7 +74,8 @@ class ModelManagerMixin(object):
 
             if child_attrs:
                 for name, label in child_attrs:
-                    yield (name, label)
+                    yield (name, '{} | {}'.format(
+                        field.rel.to._meta.verbose_name, label).capitalize())
             else:
                 yield (name, label.capitalize())
 
@@ -105,10 +106,12 @@ class ModelManagerMixin(object):
 
             if '.' in attributes[1]:
                 attr = self.process_attribute(self, attr, attributes[1])
+                print(type(attr))
             else:
                 attr = getattr(attr, attributes[1], None)
         else:
             attr = getattr(model, attribute, None)
+
         return attr
 
     def process_filter(self, field, field_filter, value, process_action):

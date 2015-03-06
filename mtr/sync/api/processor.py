@@ -4,6 +4,7 @@ import os
 
 from django.utils.six.moves import range
 from django.utils import timezone
+from django.db import models
 
 from .signals import export_started, export_completed, \
     import_started, import_completed
@@ -17,6 +18,8 @@ class NoIndexFound(Exception):
 class Processor(object):
 
     """Base implementation of import and export operations"""
+
+    # TODO: add managing none fields
 
     position = 0
     file_format = None
@@ -227,11 +230,17 @@ class Processor(object):
             model_fields = self.manager.get_model_fields(model)
 
             for key in related_models.keys():
-                related_model = model_fields.get(key).rel.to
+                related_field = model_fields.get(key)
+
+                related_model = related_field.rel.to
                 related_instance = related_model(**related_models[key])
                 related_instance.save()
 
-                setattr(instance, key, related_instance)
+                if isinstance(related_field, models.ForeignKey):
+                    setattr(instance, key, related_instance)
+                elif isinstance(related_field, models.ManyToManyField):
+                    items = getattr(instance, key)
+                    items.add(related_instance)
 
             instance.save()
 
