@@ -59,13 +59,16 @@ class Person(models.Model):
             random.shuffle(surname)
             surname = ''.join(surname)
 
-            self.__class__.objects.create(
+            newobj = self.__class__(
                 name=name,
                 office=self.office,
                 surname=surname,
                 gender=random.choice(['M', 'F']),
                 security_level=random.choice(range(100))
             )
+            newobj.save()
+            newobj.tags.add(*self.tags.all())
+            newobj.save()
         self.save()
 
     @property

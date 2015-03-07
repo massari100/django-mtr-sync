@@ -6,12 +6,13 @@ from mtr.sync.tests import ProcessorTestMixin
 from mtr.sync.api import manager
 from mtr.sync.api.processors import xls, xlsx, csv, ods
 
-from ...models import Person, Office
+from ...models import Person, Office, Tag
 
 
 class XlsProcessorTest(ProcessorTestMixin, TestCase):
     MODEL = Person
     RELATED_MODEL = Office
+    RELATED_MANY = Tag
     PROCESSOR = xls.XlsProcessor
 
     def open_report(self, report):
@@ -25,12 +26,13 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
             value = manager.process_attribute(instance, field.attribute)
             sheet_value = worksheet.cell_value(row, index+index_prepend)
 
-            self.assertEqual(value, sheet_value)
+            self.assertEqual(value if value else '', sheet_value)
 
 
 class XlsxProcessorTest(ProcessorTestMixin, TestCase):
     MODEL = Person
     RELATED_MODEL = Office
+    RELATED_MANY = Tag
     PROCESSOR = xlsx.XlsxProcessor
 
     def open_report(self, report):
@@ -58,6 +60,7 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
 class CsvProcessorTest(ProcessorTestMixin, TestCase):
     MODEL = Person
     RELATED_MODEL = Office
+    RELATED_MANY = Tag
     PROCESSOR = csv.CsvProcessor
 
     def open_report(self, report):
@@ -86,6 +89,7 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
 class OdsProcessorTest(ProcessorTestMixin, TestCase):
     MODEL = Person
     RELATED_MODEL = Office
+    RELATED_MANY = Tag
     PROCESSOR = ods.OdsProcessor
 
     def open_report(self, report):
@@ -100,5 +104,5 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
         for index, field in enumerate(self.fields):
             value = manager.process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend].value
-
-            self.assertEqual(value, sheet_value)
+            print(sheet_value)
+            self.assertEqual(value if value else '', sheet_value)

@@ -45,6 +45,7 @@ class ModelManagerMixin(object):
         mlist = filterfalse(
             lambda m: self.model_settings(m).get('ignore', False),
             models.get_models())
+
         return mlist
 
     def model_attributes(self, settings, prefix=None, model=None, parent=None):
@@ -55,12 +56,12 @@ class ModelManagerMixin(object):
         for name, field in self.get_model_fields(model).items():
             label = name
             child_attrs = None
+            m_prefix = None
 
-            if isinstance(field, models.ForeignKey) or \
-                    isinstance(field, models.ManyToManyField):
-                child_attrs = self.model_attributes(
-                        settings, prefix='{}.'.format(name),
-                        model=field.rel.to, parent=model)
+            if isinstance(field, models.ForeignKey):
+                m_prefix = '{}|_fk_|'
+            elif isinstance(field, models.ManyToManyField):
+                m_prefix = '{}|_m_|'
             elif isinstance(field, property):
                 field = field.fget
 
@@ -69,6 +70,10 @@ class ModelManagerMixin(object):
                     field, 'short_description', getattr(
                         field, 'verbose_name', repr(field))))
 
+            if m_prefix:
+                child_attrs = self.model_attributes(
+                        settings, m_prefix.format(name),
+                        model=field.rel.to, parent=model)
             if prefix:
                 name = ''.join((prefix, name))
 
@@ -100,14 +105,34 @@ class ModelManagerMixin(object):
     def process_attribute(self, model, attribute):
         """Process all atribute path to retrieve value"""
 
-        if '.' in attribute:
-            attributes = attribute.split('.')
+        # TODO: refactor attributes
+
+        if '|_fk_|' in attribute:
+            attributes = attribute.split('|_fk_|')
             attr = getattr(model, attributes[0], None)
 
-            if '.' in attributes[1]:
+            if '|_' in attributes[1]:
                 attr = self.process_attribute(self, attr, attributes[1])
-                print(type(attr))
             else:
+                attr = getattr(attr, attributes[1], None)
+        elif '|_m_|' in attribute:
+            attributes = attribute.split('|_m_|')
+            attr = getattr(model, attributes[0], None)
+
+            if '|_' in attributes[1]:
+                attr = self.process_attribute(self, attr, attributes[1])
+            else:
+                if attr:
+                    attr = attr.all()
+                    value = []
+
+                    for item in attr:
+                        value.append(getattr(item, attributes[1], None))
+
+                    return value
+                else:
+                    return []
+
                 attr = getattr(attr, attributes[1], None)
         else:
             attr = getattr(model, attribute, None)

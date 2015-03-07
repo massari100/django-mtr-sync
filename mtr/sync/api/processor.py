@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 import os
 
 from django.utils.six.moves import range
+from django.utils.encoding import smart_text
 from django.utils import timezone
 from django.db import models
 
@@ -168,11 +169,17 @@ class Processor(object):
 
         # write data
         data = data['items']
+
         for row in self.rows:
             row_data = []
 
             for col in self.cells:
-                row_data.append(next(data))
+                value = next(data)
+                value = value if value else ''
+                if isinstance(value, list) or isinstance(value, tuple):
+                    value = ','.join(map(lambda v: smart_text(v), value))
+
+                row_data.append(value)
 
             self.write(row, row_data)
 
@@ -213,15 +220,22 @@ class Processor(object):
         for _model in data:
             main_model_attrs = {}
             related_models = {}
-
             # TODO: sub-fields
 
             for key in _model['attrs'].keys():
-                if '.' in key:
-                    key_model, key_attr = key.split('.')
+                if '|_fk_|' in key:
+                    key_model, key_attr = key.split('|_fk_|')
 
                     attrs = related_models.get(key_model, {})
                     attrs[key_attr] = _model['attrs'][key]
+                    related_models[key_model] = attrs
+                elif '|_m_|' in key:
+                    key_model, key_attr = key.split('|_m_|')
+
+                    value = _model['attrs'][key]
+
+                    attrs = related_models.get(key_model, {})
+                    attrs[key_attr] = value
                     related_models[key_model] = attrs
                 else:
                     main_model_attrs[key] = _model['attrs'][key]
@@ -229,18 +243,36 @@ class Processor(object):
             instance = model(**main_model_attrs)
             model_fields = self.manager.get_model_fields(model)
 
+            # TODO: refactor many to many attrs
+
             for key in related_models.keys():
                 related_field = model_fields.get(key)
-
                 related_model = related_field.rel.to
-                related_instance = related_model(**related_models[key])
-                related_instance.save()
 
                 if isinstance(related_field, models.ForeignKey):
+                    related_instance = related_model(**related_models[key])
+                    related_instance.save()
+
                     setattr(instance, key, related_instance)
                 elif isinstance(related_field, models.ManyToManyField):
-                    items = getattr(instance, key)
-                    items.add(related_instance)
+                    instance_attrs = []
+                    rel_values = list(related_models[key].values())
+                    indexes = len(rel_values[0].split(','))
+
+                    for index in range(indexes):
+                        instance_values = {}
+                        for k in related_models[key].keys():
+                            value = related_models[key][k] \
+                                .split(',')[index]
+                            if value.isdigit():
+                                value = int(value)
+                            instance_values[k] = value
+                    instance_attrs.append(instance_values)
+
+                    for instance_attr in instance_attrs:
+                        items = getattr(instance, key)
+                        instance_attr.pop('id', None)
+                        items.create(**instance_attr)
 
             instance.save()
 
