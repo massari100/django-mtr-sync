@@ -8,8 +8,9 @@ from django.db.models.fields import Field as ModelField
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .signals import manager_registered
-from .helpers import column_value
-from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
+from .helpers import column_value, make_model_class, \
+    models_list, model_settings
+from ..settings import IMPORT_PROCESSORS
 
 
 class ModelManagerMixin(object):
@@ -24,7 +25,7 @@ class ModelManagerMixin(object):
         fields_arr = sorted(
             opts.concrete_fields + sortable_virtual_fields + opts.many_to_many)
 
-        msettings = self.model_settings(model)
+        msettings = model_settings(model)
         exclude = msettings.get('exclude', [])
         custom_fields = msettings.get('custom_fields', [])
         ordered_fields = []
@@ -39,20 +40,10 @@ class ModelManagerMixin(object):
 
         return OrderedDict(ordered_fields)
 
-    def model_settings(self, model):
-        return getattr(model, MODEL_SETTINGS_NAME(), {})
-
-    def models_list(self):
-        mlist = filterfalse(
-            lambda m: self.model_settings(m).get('ignore', False),
-            models.get_models())
-
-        return mlist
-
     def model_attributes(self, settings, prefix=None, model=None, parent=None):
         """Return iterator of fields names by given mode_path"""
 
-        model = model or self.model_class(settings)
+        model = model or make_model_class(settings)
 
         for name, field in self.get_model_fields(model).items():
             label = name
@@ -88,7 +79,7 @@ class ModelManagerMixin(object):
     def model_class(self, settings):
         """Return class for name in main_model"""
 
-        for mmodel in self.models_list():
+        for mmodel in models_list():
             if settings.main_model == '{}.{}'.format(
                     mmodel.__module__, mmodel.__name__):
                 return mmodel
@@ -96,7 +87,7 @@ class ModelManagerMixin(object):
     def model_choices(self):
         """Return all registered django models as choices"""
 
-        for model in self.models_list():
+        for model in models_list():
             yield (
                 '{}.{}'.format(model.__module__, model.__name__),
                 '{} | {}'.format(
@@ -217,8 +208,8 @@ class ProcessorManagerMixin(object):
 
     def prepare_export_queryset(self, settings):
         current_model = self.model_class(settings)
-        model_settings = self.model_settings(current_model)
-        queryset = model_settings.get('queryset', None)
+        msettings = model_settings(current_model)
+        queryset = msettings.get('queryset', None)
 
         # TODO: automatic select_related, prefetch_related
 
@@ -234,8 +225,8 @@ class ProcessorManagerMixin(object):
         and return data with dimensions"""
 
         settings = processor.settings
-        model = self.model_class(settings)
-        msettings = self.model_settings(model)
+        model = make_model_class(settings)
+        msettings = model_settings(model)
 
         exclude = msettings.get('exclude', [])
 
