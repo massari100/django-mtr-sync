@@ -66,6 +66,10 @@ class CsvProcessor(Processor):
 
         readed = []
         for item in value[self.start['col']:self.end['col']]:
+            # TODO: value convert
+
+            if item.isdigit():
+                item = int(item)
             readed.append(item)
 
         return readed

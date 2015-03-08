@@ -8,6 +8,7 @@ from django.db.models.fields import Field as ModelField
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .signals import manager_registered
+from .helpers import column_value
 from ..settings import IMPORT_PROCESSORS, MODEL_SETTINGS_NAME
 
 
@@ -251,9 +252,9 @@ class ProcessorManagerMixin(object):
             queryset = queryset[:rows]
 
         if settings.end_col:
-            cols = processor.column(settings.end_col)
+            cols = column_value(settings.end_col)
             if settings.start_col:
-                cols -= processor.column(settings.start_col)
+                cols -= column_value(settings.start_col)
                 cols += 1
 
             fields = fields[:cols]
@@ -288,9 +289,9 @@ class ProcessorManagerMixin(object):
         fields = list(settings.fields_with_filters())
 
         if settings.end_col:
-            cols = processor.column(settings.end_col)
+            cols = column_value(settings.end_col)
             if settings.start_col:
-                cols -= processor.column(settings.start_col)
+                cols -= column_value(settings.start_col)
                 cols += 1
 
             fields = fields[:cols]
@@ -299,7 +300,7 @@ class ProcessorManagerMixin(object):
             model = {'attrs': {}, 'action': None}
 
             for index, field in enumerate(fields):
-                col = processor.column(field.name) if field.name else index
+                col = column_value(field.name) if field.name else index
                 action, value = self.process_value(field, row[col])
                 model['attrs'][field.attribute] = value
                 model['action'] = action

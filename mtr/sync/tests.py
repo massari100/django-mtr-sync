@@ -3,9 +3,8 @@ from __future__ import unicode_literals
 import os
 import datetime
 
-from django.test import TestCase
-
-from mtr.sync.api import Manager, Processor
+from mtr.sync.api import Manager
+from mtr.sync.api.helpers import column_value
 from mtr.sync.models import Settings
 
 
@@ -30,12 +29,12 @@ class ApiTestMixin(object):
             surname='test surname', gender='M', security_level=10)
         self.r_instance = self.relatedmodel.objects.create(
             office='test', address='addr')
-        self.tags = [
-            self.RELATED_MANY(name='test'), self.RELATED_MANY(name='test1')]
+        # self.tags = [
+        #     self.RELATED_MANY(name='test'), self.RELATED_MANY(name='test1')]
 
-        for tag in self.tags:
-            tag.save()
-            self.instance.tags.add(tag)
+        # for tag in self.tags:
+        #     tag.save()
+        #     self.instance.tags.add(tag)
 
         self.instance.office = self.r_instance
         self.instance.save()
@@ -85,10 +84,10 @@ class ProcessorTestMixin(ApiTestMixin):
     def check_sheet_values_and_delete_report(self, report):
         start_row = self.settings.start_row - 1
         end_row = self.settings.end_row - 1
-        start_col = self.processor.column(self.settings.start_col) - 1
+        start_col = column_value(self.settings.start_col) - 1
 
         fields_limit = self.settings.end_col - \
-            self.processor.column(self.settings.start_col) + 1
+            column_value(self.settings.start_col) + 1
         self.fields = self.fields[:fields_limit]
 
         if self.queryset.count() < end_row:
@@ -153,21 +152,3 @@ class ProcessorTestMixin(ApiTestMixin):
         self.check_sheet_values_and_delete_report(report)
 
         self.assertEqual(before, self.queryset.count())
-
-
-class ProcessorTest(TestCase):
-
-    def setUp(self):
-        self.manager = Manager()
-        self.processor = Processor(self.manager, None)
-
-    def test_column_index_value_transform(self):
-        self.assertEqual(
-            self.processor.column_name(0), 'A')
-        self.assertEqual(
-            self.processor.column_name(25), 'Z')
-
-        self.assertEqual(
-            self.processor.column_index('A'), 0)
-        self.assertEqual(
-            self.processor.column_index('Z'), 25)

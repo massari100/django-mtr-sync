@@ -9,11 +9,8 @@ from django.db import models
 
 from .signals import export_started, export_completed, \
     import_started, import_completed
+from .helpers import column_value
 from ..settings import LIMIT_PREVIEW, FILE_PATH
-
-
-class NoIndexFound(Exception):
-    pass
 
 
 class Processor(object):
@@ -30,51 +27,6 @@ class Processor(object):
         self.settings = settings
         self.manager = manager
         self.report = None
-        self._chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-        self._types = (int,)
-
-    def column_name(self, index):
-        name = ''
-
-        while True:
-            q, r = divmod(index, 26)
-            name = self._chars[r] + name
-
-            if not q:
-                return name
-
-            index = q - 1
-
-    def column_index(self, value):
-        """Return column index for given name"""
-
-        for index in range(0, 18279):
-            name = self.column_name(index)
-
-            if name == value:
-                return index
-
-        raise NoIndexFound
-
-    def _convert(self, value):
-        for convert in self._types:
-            try:
-                return convert(value)
-            except ValueError:
-                continue
-
-        return value
-
-    def column(self, value):
-        """Wrapper on self.column"""
-
-        if isinstance(value, int):
-            return value
-
-        if value.isdigit():
-            return int(value)
-
-        return self.column_index(value)
 
     def write(self, row, value, cells=None):
         """Independend write to cell method"""
@@ -86,51 +38,53 @@ class Processor(object):
 
         raise NotImplementedError
 
+    def _set_rows_dimensions(self, preview=False, import_data=False):
+        if self.settings.start_row and \
+                self.settings.start_row > self.start['row']:
+            self.start['row'] = self.settings.start_row - 1
+
+            if not import_data:
+                self.end['row'] += self.start['row']
+
+        if self.settings.end_row and \
+                self.settings.end_row < self.end['row']:
+            self.end['row'] = self.settings.end_row
+
+        limit = LIMIT_PREVIEW()
+        if preview and limit < self.end['row']:
+            self.end['row'] = limit + self.start['row'] - 1
+
+        if self.settings.include_header and import_data:
+            self.start['row'] += 1
+
+    def _set_cols_dimensions(self, import_data=False):
+        if self.settings.start_col:
+            start_col_index = column_value(self.settings.start_col)
+            if start_col_index > self.start['col']:
+                self.start['col'] = start_col_index - 1
+
+                if not import_data:
+                    self.end['col'] += self.start['col']
+
+        if self.settings.end_col:
+            end_col_index = column_value(self.settings.end_col)
+
+            if end_col_index < self.end['col']:
+                self.end['col'] = end_col_index
+
     def set_dimensions(
             self, start_row, start_col, end_row, end_col, preview=False,
             import_data=False):
         """Return start, end table dimensions"""
 
-        start = {'row': start_row, 'col': start_col}
-        end = {'row': end_row, 'col': end_col}
+        self.start = {'row': start_row, 'col': start_col}
+        self.end = {'row': end_row, 'col': end_col}
 
-        if self.settings.start_row and \
-                self.settings.start_row > start_row:
-            start['row'] = self.settings.start_row - 1
+        self._set_rows_dimensions(preview, import_data)
+        self._set_cols_dimensions(import_data)
 
-            if not import_data:
-                end['row'] += start['row']
-
-        if self.settings.end_row and \
-                self.settings.end_row < end['row']:
-            end['row'] = self.settings.end_row
-
-        limit = LIMIT_PREVIEW()
-        if preview and limit < end_row:
-            end_row = limit + start['row'] - 1
-
-        if self.settings.start_col:
-            start_col_index = self.column(self.settings.start_col)
-            if start_col_index > start_col:
-                start['col'] = start_col_index - 1
-
-                if not import_data:
-                    end['col'] += start['col']
-
-        if self.settings.end_col:
-            end_col_index = self.column(self.settings.end_col)
-
-            if end_col_index < end['col']:
-                end['col'] = end_col_index
-
-        if self.settings.include_header and import_data:
-            start['row'] += 1
-
-        self.start, self.end = start, end
-        self.cells = range(start['col'], end['col'])
-        self.rows = range(start['row'], end['row'])
-
-        return (start, end)
+        self.cells = range(self.start['col'], self.end['col'])
+        self.rows = range(self.start['row'], self.end['row'])
 
     def export_data(self, data):
         """Export data from queryset to file and return path"""
@@ -229,14 +183,14 @@ class Processor(object):
                     attrs = related_models.get(key_model, {})
                     attrs[key_attr] = _model['attrs'][key]
                     related_models[key_model] = attrs
-                elif '|_m_|' in key:
-                    key_model, key_attr = key.split('|_m_|')
+                # elif '|_m_|' in key:
+                #     key_model, key_attr = key.split('|_m_|')
 
-                    value = _model['attrs'][key]
+                #     value = _model['attrs'][key]
 
-                    attrs = related_models.get(key_model, {})
-                    attrs[key_attr] = value
-                    related_models[key_model] = attrs
+                #     attrs = related_models.get(key_model, {})
+                #     attrs[key_attr] = value
+                #     related_models[key_model] = attrs
                 else:
                     main_model_attrs[key] = _model['attrs'][key]
 
@@ -254,25 +208,25 @@ class Processor(object):
                     related_instance.save()
 
                     setattr(instance, key, related_instance)
-                elif isinstance(related_field, models.ManyToManyField):
-                    instance_attrs = []
-                    rel_values = list(related_models[key].values())
-                    indexes = len(rel_values[0].split(','))
+                # elif isinstance(related_field, models.ManyToManyField):
+                #     instance_attrs = []
+                #     rel_values = list(related_models[key].values())
+                #     indexes = len(rel_values[0].split(','))
 
-                    for index in range(indexes):
-                        instance_values = {}
-                        for k in related_models[key].keys():
-                            value = related_models[key][k] \
-                                .split(',')[index]
-                            if value.isdigit():
-                                value = int(value)
-                            instance_values[k] = value
-                    instance_attrs.append(instance_values)
+                #     for index in range(indexes):
+                #         instance_values = {}
+                #         for k in related_models[key].keys():
+                #             value = related_models[key][k] \
+                #                 .split(',')[index]
+                #             if value.isdigit():
+                #                 value = int(value)
+                #             instance_values[k] = value
+                #     instance_attrs.append(instance_values)
 
-                    for instance_attr in instance_attrs:
-                        items = getattr(instance, key)
-                        instance_attr.pop('id', None)
-                        items.create(**instance_attr)
+                #     for instance_attr in instance_attrs:
+                #         items = getattr(instance, key)
+                #         instance_attr.pop('id', None)
+                #         items.create(**instance_attr)
 
             instance.save()
 

@@ -104,5 +104,4 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
         for index, field in enumerate(self.fields):
             value = manager.process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend].value
-            print(sheet_value)
             self.assertEqual(value if value else '', sheet_value)
