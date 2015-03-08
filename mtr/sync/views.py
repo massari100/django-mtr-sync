@@ -1,6 +1,6 @@
 from django.contrib.admin.views.decorators import staff_member_required
 
-from .models import Report
+from .models import Report, Settings
 from .helpers import render_to
 
 
@@ -8,11 +8,17 @@ from .helpers import render_to
 @render_to('dashboard.html')
 def dashboard(request):
     context = {
-        'last_imported': Report.import_objects.all()[:10],
-        'last_exported': Report.export_objects.all()[:10]
+        'last_reports': Report.objects.all()[:10],
+        'new_settings': Settings.objects.all()[:10]
     }
 
     return context
+
+
+@staff_member_required
+@render_to('export.html')
+def export_settings(request):
+    return {}
 
 
 def import_upload(request):

@@ -1,0 +1,24 @@
+{% extends 'admin/base_site.html' %}
+
+{% load i18n %}
+
+{% block title %}{% trans 'mtr.sync:Data sync dashboard' %}{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'mtr.sync:Home' %}</a>
+&rsaquo; {% trans 'mtr.sync:Data sync' %} &rsaquo; {% trans 'mtr.sync:Export' %}
+</div>
+{% endblock %}
+
+{% block content %}
+<h1>{% trans 'mtr.sync:Export' %}</h1>
+
+<div id="content-main">
+
+test
+
+<div style="clear:both;"></div>
+
+</div>
+{% endblock %}

@@ -16,80 +16,56 @@
 
 <div id="content-main">
 
-<div class="module" style="width: 350px; margin-right: 20px; float: left;">
+<div style="margin: 15px 0 20px 0">
+    <a href="{% url 'mtr.sync:export' %}" style="float: none" class="button default">Export data</a>
+    <a href="javascript:" style="float: none" class="button default">Import data</a>
+</div>
+
+<div class="module" style="width: 600px; margin-right: 20px; float: left;">
 <table style="width: 100%">
-    <caption>Last imported</caption>
+    <caption>{% trans 'mtr.sync:Last reports' %}</caption>
+    <thead>
+        <th>Settings</th>
+        <th>Acion</th>
+        <th>Date</th>
+        <th>Result</th>
+        <th>Link</th>
+    </thead>
     <tbody>
-        <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>test</td>
-            <td>test</td>
+        {% for report in last_reports %}
+        <tr>
+            <td>{{ report.settings.name }}</td>
+            <td>{{ report.get_action_display }}</td>
+            <td>{{ report.completed_at }}</td>
+            <td>{{ report.get_status_display }}</td>
+            <td><a href="{{ report.buffer_file.url }}">{{ report.buffer_file.name }}</a></td>
         </tr>
-         <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>tes</td>
-            <td>2</td>
-        </tr>
-         <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>3</td>
-            <td>4</td>
-        </tr>
+        {% endfor %}
     </tbody>
 </table>
 </div>
 
-<div class="module" style="width: 350px; margin-right: 20px; float: left;">
+<div class="module" style="width: 250px; margin-right: 20px; float: left;">
 <table style="width: 100%">
-    <caption>Last exported</caption>
+    <caption>{% trans 'mtr.sync:New settings' %}</caption>
+    <thead>
+        <th>Name</th>
+        <th>Action</th>
+        <th>Run again</th>
+    </thead>
     <tbody>
-        <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>test</td>
-            <td>test</td>
+        {% for settings in new_settings %}
+        <tr>
+            <td>{{ settings.name }}</th>
+            <td>{{ settings.get_action_display }}</td>
+            <td>{{ settings.run_link }}</td>
         </tr>
-         <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>tes</td>
-            <td>2</td>
-        </tr>
-         <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>3</td>
-            <td>4</td>
-        </tr>
-    </tbody>
-</table>
-</div>
-
-<div class="module" style="width: 350px; margin-right: 20px; float: left;">
-<table style="width: 100%">
-    <caption>Settings</caption>
-    <tbody>
-        <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>test</td>
-            <td>test</td>
-        </tr>
-         <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>tes</td>
-            <td>2</td>
-        </tr>
-         <tr class="model-group">
-            <th scope="row">Test</th>
-            <td>3</td>
-            <td>4</td>
-        </tr>
+        {% endfor %}
     </tbody>
 </table>
 </div>
 
 <div style="clear:both;"></div>
-<div style="margin-top: 5px;">
-<a href="javascript:" style="float: none" class="button default">Import data</a>
-<a href="javascript:" style="float: none" class="button default">Export data</a>
-<a href="javascript:" style="float: none" class="button default">Create export shedule</a>
-</div>
+
 </div>
 {% endblock %}

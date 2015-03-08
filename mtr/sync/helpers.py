@@ -31,7 +31,9 @@ def render_to(template, *args, **kwargs):
                 if decorator_kwargs.pop('themed', True):
                     new_template = themed(template)
 
-                return render(request, new_template, **decorator_kwargs)
+                return render(
+                    request, new_template,
+                    response, **decorator_kwargs)
             else:
                 return response
         return wrapper

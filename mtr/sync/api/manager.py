@@ -116,25 +116,25 @@ class ModelManagerMixin(object):
                 attr = self.process_attribute(self, attr, attributes[1])
             else:
                 attr = getattr(attr, attributes[1], None)
-        elif '|_m_|' in attribute:
-            attributes = attribute.split('|_m_|')
-            attr = getattr(model, attributes[0], None)
+        # elif '|_m_|' in attribute:
+        #     attributes = attribute.split('|_m_|')
+        #     attr = getattr(model, attributes[0], None)
 
-            if '|_' in attributes[1]:
-                attr = self.process_attribute(self, attr, attributes[1])
-            else:
-                if attr:
-                    attr = attr.all()
-                    value = []
+        #     if '|_' in attributes[1]:
+        #         attr = self.process_attribute(self, attr, attributes[1])
+        #     else:
+        #         if attr:
+        #             attr = attr.all()
+        #             value = []
 
-                    for item in attr:
-                        value.append(getattr(item, attributes[1], None))
+        #             for item in attr:
+        #                 value.append(getattr(item, attributes[1], None))
 
-                    return value
-                else:
-                    return []
+        #             return value
+        #         else:
+        #             return []
 
-                attr = getattr(attr, attributes[1], None)
+        #         attr = getattr(attr, attributes[1], None)
         else:
             attr = getattr(model, attribute, None)
 
