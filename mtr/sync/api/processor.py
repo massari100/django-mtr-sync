@@ -128,12 +128,7 @@ class Processor(object):
             row_data = []
 
             for col in self.cells:
-                value = next(data)
-                value = value if value else ''
-                if isinstance(value, list) or isinstance(value, tuple):
-                    value = ','.join(map(lambda v: smart_text(v), value))
-
-                row_data.append(value)
+                row_data.append(next(data))
 
             self.write(row, row_data)
 
