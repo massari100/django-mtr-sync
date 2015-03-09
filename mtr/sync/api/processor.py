@@ -9,7 +9,7 @@ from django.db import models
 
 from .signals import export_started, export_completed, \
     import_started, import_completed
-from .helpers import column_value
+from .helpers import column_value, model_fields
 from ..settings import LIMIT_PREVIEW, FILE_PATH
 
 
@@ -190,12 +190,12 @@ class Processor(object):
                     main_model_attrs[key] = _model['attrs'][key]
 
             instance = model(**main_model_attrs)
-            model_fields = self.manager.get_model_fields(model)
+            fields = model_fields(model)
 
             # TODO: refactor many to many attrs
 
             for key in related_models.keys():
-                related_field = model_fields.get(key)
+                related_field = fields.get(key)
                 related_model = related_field.rel.to
 
                 if isinstance(related_field, models.ForeignKey):

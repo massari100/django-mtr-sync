@@ -5,6 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .settings import FILE_PATH
 from .api import manager
+from .api.helpers import model_attributes, model_choices
 from .api.signals import export_started, export_completed, \
     import_started, import_completed, error_raised, manager_registered, \
     receiver_for
@@ -76,7 +77,7 @@ class Settings(ActionsMixin):
 
     main_model = models.CharField(
         _('mtr.sync:main model'), max_length=255,
-        choices=manager.model_choices())
+        choices=model_choices())
     main_model_id = models.PositiveIntegerField(
         _('mtr.sync:main model object'), null=True, blank=True)
 
@@ -150,7 +151,7 @@ class Settings(ActionsMixin):
 
         if not exclude:
             exclude = []
-        for name, label in manager.model_attributes(self):
+        for name, label in model_attributes(self):
             if name not in exclude:
                 fields.append(self.fields.create(attribute=name))
         return fields

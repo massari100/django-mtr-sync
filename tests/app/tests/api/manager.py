@@ -2,7 +2,7 @@ from django.test import TestCase
 
 from mtr.sync.tests import ApiTestMixin
 from mtr.sync.api import Processor
-from mtr.sync.api.helpers import column_value
+from mtr.sync.api.helpers import model_attributes
 from mtr.sync.api.processors.xls import XlsProcessor
 from mtr.sync.api.exceptions import ItemAlreadyRegistered, \
     ItemDoesNotRegistered
@@ -101,7 +101,7 @@ class ManagerTest(ApiTestMixin, TestCase):
             data_counter += 1
 
     def test_model_attributes(self):
-        fields = self.manager.model_attributes(self.settings)
+        fields = model_attributes(self.settings)
         fields = list(map(lambda f: f[0], fields))
 
         self.assertEqual([
