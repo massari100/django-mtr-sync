@@ -45,7 +45,7 @@ def test(coverage=False):
 
     if coverage:
         coverage = "coverage run --omit=*.virtualenvs/*," \
-            "*migrations/*.py,./tests/*,*/admin.py"
+            "*migrations/*.py,*tests*,*/admin.py"
 
     manage(command, prefix=coverage, nocd=coverage)
 

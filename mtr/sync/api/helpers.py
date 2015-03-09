@@ -140,3 +140,51 @@ def model_choices():
             '{} | {}'.format(
                 model._meta.app_label.title(),
                 model._meta.verbose_name.title()))
+
+
+def _process_fk_attribute(model, attribute):
+    attributes = attribute.split('|_fk_|')
+    attr = getattr(model, attributes[0], None)
+
+    if '|_' in attributes[1]:
+        attr = process_attribute(attr, attributes[1])
+    else:
+        attr = getattr(attr, attributes[1], None)
+
+    return attr
+
+
+def _process_mtm_attribute(model, attribute):
+    attributes = attribute.split('|_m_|')
+    attr = getattr(model, attributes[0], None)
+
+    if '|_' in attributes[1]:
+        attr = process_attribute(attr, attributes[1])
+    else:
+        if attr:
+            attr = attr.all()
+            value = []
+
+            for item in attr:
+                value.append(getattr(item, attributes[1], None))
+
+            return value
+        else:
+            return []
+
+        attr = getattr(attr, attributes[1], None)
+
+    return attr
+
+
+def process_attribute(model, attribute):
+    """Process all atribute path to retrieve value"""
+
+    if '|_fk_|' in attribute:
+        attr = _process_fk_attribute(model, attribute)
+    elif '|_m_|' in attribute:
+        attr = _process_mtm_attribute(model, attribute)
+    else:
+        attr = getattr(model, attribute, None)
+
+    return attr

@@ -2,7 +2,6 @@ from django.test import TestCase
 
 from mtr.sync.tests import ApiTestMixin
 from mtr.sync.api import Processor
-from mtr.sync.api.helpers import model_attributes
 from mtr.sync.api.processors.xls import XlsProcessor
 from mtr.sync.api.exceptions import ItemAlreadyRegistered, \
     ItemDoesNotRegistered
@@ -99,28 +98,3 @@ class ManagerTest(ApiTestMixin, TestCase):
             if data_counter % 1:
                 self.assertEqual(before_item, after_item / 10)
             data_counter += 1
-
-    def test_model_attributes(self):
-        fields = model_attributes(self.settings)
-        fields = list(map(lambda f: f[0], fields))
-
-        self.assertEqual([
-            'id', 'name', 'surname', 'gender', 'security_level',
-            'office|_fk_|id', 'office|_fk_|office', 'office|_fk_|address',
-            # 'tags|_m_|id', 'tags|_m_|name',
-            'custom_method'], fields)
-
-    def test_process_attribute(self):
-        self.assertEqual(
-            self.manager.process_attribute(
-                self.instance, 'name'), self.instance.name)
-        self.assertEqual(
-            self.manager.process_attribute(
-                self.instance, 'office|_fk_|address'),
-            self.instance.office.address)
-        self.assertEqual(
-            self.manager.process_attribute(
-                self.instance, 'notexist'), None)
-        self.assertEqual(
-            self.manager.process_attribute(
-                self.instance, 'office|_fk_|notexist|_fk_|attr'), None)

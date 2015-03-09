@@ -115,7 +115,7 @@ class Processor(object):
         # write header
         if self.settings.include_header and data['fields']:
             header_data = list(map(
-                lambda f: f.name or f.attribute,
+                lambda f: f.name or f.get_attribute_display(),
                 data['fields']))
 
             self.write(self.start['row'], header_data)

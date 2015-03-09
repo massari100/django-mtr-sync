@@ -6,49 +6,12 @@ from django.utils.six.moves import filterfalse
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .signals import manager_registered
-from .helpers import column_value, make_model_class, model_settings
+from .helpers import column_value, make_model_class, model_settings, \
+    process_attribute
 from ..settings import IMPORT_PROCESSORS
 
 
 class ModelManagerMixin(object):
-    # TODO: refactor model fields managament
-
-    def process_attribute(self, model, attribute):
-        """Process all atribute path to retrieve value"""
-
-        # TODO: refactor attributes
-
-        if '|_fk_|' in attribute:
-            attributes = attribute.split('|_fk_|')
-            attr = getattr(model, attributes[0], None)
-
-            if '|_' in attributes[1]:
-                attr = self.process_attribute(self, attr, attributes[1])
-            else:
-                attr = getattr(attr, attributes[1], None)
-        # elif '|_m_|' in attribute:
-        #     attributes = attribute.split('|_m_|')
-        #     attr = getattr(model, attributes[0], None)
-
-        #     if '|_' in attributes[1]:
-        #         attr = self.process_attribute(self, attr, attributes[1])
-        #     else:
-        #         if attr:
-        #             attr = attr.all()
-        #             value = []
-
-        #             for item in attr:
-        #                 value.append(getattr(item, attributes[1], None))
-
-        #             return value
-        #         else:
-        #             return []
-
-        #         attr = getattr(attr, attributes[1], None)
-        else:
-            attr = getattr(model, attribute, None)
-
-        return attr
 
     def process_filter(self, field, field_filter, value, process_action):
         """Method for processing filter from
@@ -175,8 +138,8 @@ class ProcessorManagerMixin(object):
             'fields': fields,
             'items': (
                 self.process_value(
-                    field, self.process_attribute(
-                        item, field.attribute), export=True)
+                    field, process_attribute(item, field.attribute),
+                    export=True)
                 for item in queryset
                 for field in fields
             )

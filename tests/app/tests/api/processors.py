@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 from django.test import TestCase
 
 from mtr.sync.tests import ProcessorTestMixin
-from mtr.sync.api import manager
+from mtr.sync.api.helpers import process_attribute
 from mtr.sync.api.processors import xls, xlsx, csv, ods
 
 from ...models import Person, Office, Tag
@@ -23,10 +23,10 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
 
     def check_values(self, worksheet, instance, row, index_prepend=0):
         for index, field in enumerate(self.fields):
-            value = manager.process_attribute(instance, field.attribute)
+            value = process_attribute(instance, field.attribute)
             sheet_value = worksheet.cell_value(row, index+index_prepend)
 
-            self.assertEqual(value if value else '', sheet_value)
+            self.assertEqual('' if value is None else value, sheet_value)
 
 
 class XlsxProcessorTest(ProcessorTestMixin, TestCase):
@@ -51,10 +51,10 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
         row_values = self._get_row_values(row, worksheet.iter_rows())
 
         for index, field in enumerate(self.fields):
-            value = manager.process_attribute(instance, field.attribute)
+            value = process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend].value
 
-            self.assertEqual(value, sheet_value)
+            self.assertEqual('' if value is None else value, sheet_value)
 
 
 class CsvProcessorTest(ProcessorTestMixin, TestCase):
@@ -77,7 +77,7 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
         row_values = self._get_row_values(row, worksheet)
 
         for index, field in enumerate(self.fields):
-            value = manager.process_attribute(instance, field.attribute)
+            value = process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend]
             if sheet_value.isdigit():
                 sheet_value = int(sheet_value)
@@ -102,6 +102,6 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
         row_values = worksheet.row(row)
 
         for index, field in enumerate(self.fields):
-            value = manager.process_attribute(instance, field.attribute)
+            value = process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend].value
             self.assertEqual('' if value is None else value, sheet_value)
