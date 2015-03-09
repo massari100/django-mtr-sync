@@ -82,12 +82,27 @@ class ProcessorTestMixin(ApiTestMixin):
         return report
 
     def check_sheet_values_and_delete_report(self, report):
-        start_row = self.settings.start_row - 1
-        end_row = self.settings.end_row - 1
-        start_col = column_value(self.settings.start_col) - 1
+        if self.settings.start_row:
+            start_row = self.settings.start_row - 1
+        else:
+            start_row = 0
 
-        fields_limit = self.settings.end_col - \
-            column_value(self.settings.start_col) + 1
+        if self.settings.end_row:
+            end_row = self.settings.end_row - 1
+        else:
+            end_row = self.queryset.count() - 1
+
+        if self.settings.start_col:
+            start_col = column_value(self.settings.start_col) - 1
+        else:
+            start_col = 0
+
+        if self.settings.start_col and self.settings.end_col:
+            fields_limit = self.settings.end_col - \
+                column_value(self.settings.start_col) + 1
+        else:
+            fields_limit = len(self.fields)
+
         self.fields = self.fields[:fields_limit]
 
         if self.queryset.count() < end_row:
@@ -117,7 +132,7 @@ class ProcessorTestMixin(ApiTestMixin):
     def test_create_export_file_and_report_generation(self):
         self.check_report_success()
 
-    def test_export_dimension_settings(self):
+    def test_export_all_dimension_settings(self):
         self.settings.start_row = 25
         self.settings.start_col = 'J'
         self.settings.end_col = 20
@@ -127,11 +142,16 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.check_sheet_values_and_delete_report(report)
 
+    def test_export_no_dimension_settings(self):
+        report = self.check_report_success(delete=False)
+
+        self.check_sheet_values_and_delete_report(report)
+
     def test_import_data(self):
         # TODO: refactor code to works with values smaller then 3
         # e.g. start_row = 1
 
-        self.settings.start_row = 3
+        self.settings.start_row = 1
         self.settings.start_col = 10
         self.settings.end_col = 20
         self.settings.end_row = 250

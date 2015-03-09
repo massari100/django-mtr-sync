@@ -8,6 +8,7 @@ from django import forms
 
 from .models import Report, Settings, Field, FilterParams, Filter, Error
 from .api import manager
+from .api.helpers import model_attributes
 from .settings import REGISTER_AT_ADMIN
 
 
@@ -97,7 +98,7 @@ class FieldInline(admin.TabularInline):
         if db_field.name == 'attribute':
             field = forms.ChoiceField(
                 label=field.label,
-                choices=manager.model_attributes(settings))
+                choices=model_attributes(settings))
 
         return field
 

@@ -54,8 +54,12 @@ class Processor(object):
         if preview and limit < self.end['row']:
             self.end['row'] = limit + self.start['row'] - 1
 
-        if self.settings.include_header and import_data:
-            self.start['row'] += 1
+        if self.settings.include_header:
+            if import_data:
+                self.start['row'] += 1
+            else:
+                self.start['row'] += 1
+                self.end['row'] += 1
 
     def _set_cols_dimensions(self, import_data=False):
         if self.settings.start_col:
@@ -115,11 +119,6 @@ class Processor(object):
                 data['fields']))
 
             self.write(self.start['row'], header_data)
-
-            self.start['row'] += 1
-            self.end['row'] += 1
-
-            self.rows = range(self.start['row'], self.end['row'])
 
         # write data
         data = data['items']

@@ -44,7 +44,7 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
 
     def _get_row_values(self, row, rows):
         for index, value in enumerate(rows):
-            if index == row and row:
+            if index == row:
                 return value
 
     def check_values(self, worksheet, instance, row, index_prepend=0):
@@ -70,7 +70,7 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
 
     def _get_row_values(self, row, worksheet):
         for index, value in enumerate(worksheet):
-            if index == row and row:
+            if index == row:
                 return value
 
     def check_values(self, worksheet, instance, row, index_prepend=0):
@@ -81,7 +81,7 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
             sheet_value = row_values[index + index_prepend]
             if sheet_value.isdigit():
                 sheet_value = int(sheet_value)
-            self.assertEqual(value if value else '', sheet_value)
+            self.assertEqual('' if value is None else value, sheet_value)
 
         self._f.close()
 
@@ -104,4 +104,4 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
         for index, field in enumerate(self.fields):
             value = manager.process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend].value
-            self.assertEqual(value if value else '', sheet_value)
+            self.assertEqual('' if value is None else value, sheet_value)

@@ -17,7 +17,7 @@ def dashboard(request):
 
 @staff_member_required
 @render_to('export.html')
-def export_settings(request):
+def export(request):
     return {}
 
 

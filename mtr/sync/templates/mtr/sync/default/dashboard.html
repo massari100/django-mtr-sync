@@ -38,7 +38,12 @@
             <td>{{ report.get_action_display }}</td>
             <td>{{ report.completed_at }}</td>
             <td>{{ report.get_status_display }}</td>
-            <td><a href="{{ report.buffer_file.url }}">{{ report.buffer_file.name }}</a></td>
+            <td>{% if report.buffer_file %}
+                <a href="{{ report.buffer_file.url }}">{{ report.buffer_file.name }}</a>
+                {% else %}
+                No file
+                {% endif %}
+            </td>
         </tr>
         {% endfor %}
     </tbody>
