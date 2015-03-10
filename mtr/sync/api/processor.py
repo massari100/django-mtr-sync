@@ -145,8 +145,8 @@ class Processor(object):
 
         return self.report
 
-    def create_instances(self, _model, model):
-        """Create instances for given params"""
+    def process_instances(self, _model, model):
+        """Process instances (create, update, delete) for given params"""
 
         main_model_attrs = {}
         related_models = {}

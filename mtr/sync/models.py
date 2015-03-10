@@ -12,6 +12,14 @@ from .api.signals import export_started, export_completed, \
 from .api.exceptions import ErrorChoicesMixin
 
 
+class PositionMixin(models.Model):
+    position = models.PositiveIntegerField(
+        _('mtr.sync:position'), null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
 class ExportManager(models.Manager):
 
     """Shortcut for export queryset"""
@@ -104,16 +112,18 @@ class Settings(ActionsMixin):
     queryset = models.CharField(_('mtr.sync:queryset'), max_length=255,
         choices=manager.queryset_choices(), blank=True)
 
-    def fields_with_filters(self):
+    def fields_with_processors(self):
         """Return iterator of fields with filters"""
 
         fields = self.fields.prefetch_related(
-            'filter_params__filter_related').exclude(skip=True).all()
+            'processor_params__processor_related') \
+            .exclude(skip=True).all()
         for field in fields:
-            field.filters_queue = []
+            field.ordered_processors = []
 
-            for filter_param in field.filter_params.all():
-                field.filters_queue.append(filter_param.filter_related)
+            for processor_param in field.processor_params.all():
+                field.ordered_processors.append(
+                    processor_param.processor_related)
 
             yield field
 
@@ -177,18 +187,18 @@ class Settings(ActionsMixin):
 
 
 @python_2_unicode_compatible
-class Filter(models.Model):
+class ValueProcessor(models.Model):
 
-    """Filter data using internal template"""
+    """ValueProcessor data using internal template"""
 
     name = models.CharField(_('mtr.sync:name'), max_length=255)
-    label = models.CharField(_('mtr.sync:name'), max_length=255)
+    label = models.CharField(_('mtr.sync:label'), max_length=255)
     description = models.TextField(
         _('mtr.sync:description'), max_length=20000, null=True, blank=True)
 
     class Meta:
-        verbose_name = _('mtr.sync:filter')
-        verbose_name_plural = _('mtr.sync:filters')
+        verbose_name = _('mtr.sync:value processor')
+        verbose_name_plural = _('mtr.sync:value processors')
 
         ordering = ('-id',)
 
@@ -197,18 +207,16 @@ class Filter(models.Model):
 
 
 @python_2_unicode_compatible
-class Field(models.Model):
+class Field(PositionMixin):
 
     """Data mapping field for Settings"""
-
-    position = models.PositiveIntegerField(
-        _('mtr.sync:position'), null=True, blank=True)
 
     name = models.CharField(_('mtr.sync:name'), max_length=255, blank=True)
     attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
-    filters = models.ManyToManyField(Filter, through='FilterParams')
+    processors = models.ManyToManyField(
+        ValueProcessor, through='ValueProcessorParams')
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
@@ -231,9 +239,9 @@ class Field(models.Model):
 
 
 @receiver(manager_registered)
-@receiver_for('filter')
-def create_filter(sender, **kwargs):
-    Filter.objects.get_or_create(
+@receiver_for('valueprocessor')
+def create_valueprocessor(sender, **kwargs):
+    ValueProcessor.objects.get_or_create(
         name=kwargs['func_name'], defaults={
             'label': kwargs.get('label', None) or kwargs['func_name'],
             'description': kwargs.get('description', None)
@@ -241,29 +249,27 @@ def create_filter(sender, **kwargs):
 
 
 @python_2_unicode_compatible
-class FilterParams(models.Model):
-    position = models.PositiveIntegerField(
-        _('mtr.sync:position'), null=True, blank=True)
+class ValueProcessorParams(PositionMixin):
 
-    filter_related = models.ForeignKey(
-        Filter, verbose_name=_('mtr.sync:filter'))
-    field_related = models.ForeignKey(Field, related_name='filter_params')
+    processor_related = models.ForeignKey(
+        ValueProcessor, verbose_name=_('mtr.sync:filter'))
+    field_related = models.ForeignKey(Field, related_name='processor_params')
+
+    class Meta:
+        verbose_name = _('mtr.sync:value processor')
+        verbose_name_plural = _('mtr.sync:value processors')
+
+        ordering = ['position']
 
     def save(self, *args, **kwargs):
         if self.position is None:
             self.position = self.__class__.objects \
                 .filter(field_related=self.field_related).count() + 1
 
-        super(FilterParams, self).save(*args, **kwargs)
+        super(ValueProcessorParams, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.filter_related.name
-
-    class Meta:
-        verbose_name = _('mtr.sync:filter')
-        verbose_name_plural = _('mtr.sync:filters')
-
-        ordering = ['position']
+        return self.processor_related.attribute
 
 
 @python_2_unicode_compatible

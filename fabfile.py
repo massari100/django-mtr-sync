@@ -109,7 +109,13 @@ def migrate():
 def recreate():
     """Recreate new migrations from start and remove database"""
 
-    for app in APPS:
+    project_prefixed_apps = []
+    for app in PROJECT_APPS:
+        project_prefixed_apps.append('{}.{}'.format(PROJECT_DIR, app))
+
+    apps = APPS + project_prefixed_apps
+
+    for app in apps:
         with lcd(os.path.join(*app.split('.'))):
             local('rm -f ./migrations/*.py')
             local('touch ./migrations/__init__.py')

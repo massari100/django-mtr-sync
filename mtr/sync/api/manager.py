@@ -13,31 +13,20 @@ from ..settings import IMPORT_PROCESSORS
 
 class ModelManagerMixin(object):
 
-    def process_filter(self, field, field_filter, value, process_action):
-        """Method for processing filter from
-        field filters registered in manager"""
-
-        filter_func = self.filters.get(field_filter.name, None)
-        if filter_func:
-            value = filter_func(value, field, process_action)
-
-        if isinstance(value, tuple):
-            return value
-        else:
-            return None, value
-
     def process_value(self, field, value, export=False, action=None):
         """Process value with filters and actions"""
 
         process_action = 'export' if export else 'import'
-        for field_filter in field.filters_queue:
-            action, value = self.process_filter(
-                field, field_filter, value, process_action)
 
-        if export:
-            return value
+        for field_processor in field.ordered_processors:
+            process_func = self.valueprocessors.get(field_processor.name, None)
+            if process_func:
+                value = process_func(value, field, process_action)
+
+        if not export:
+            return value if isinstance(value, tuple) else None, value
         else:
-            return action, value
+            return value
 
     def queryset_choices(self):
         # TODO: return querysets
@@ -112,7 +101,7 @@ class ProcessorManagerMixin(object):
 
         exclude = msettings.get('exclude', [])
 
-        fields = settings.fields_with_filters()
+        fields = settings.fields_with_processors()
         fields = list(filterfalse(
             lambda f: f.attribute in exclude, fields))
 
@@ -159,7 +148,7 @@ class ProcessorManagerMixin(object):
         """Prepare data using filters from settings and return iterator"""
 
         settings = processor.settings
-        fields = list(settings.fields_with_filters())
+        fields = list(settings.fields_with_processors())
 
         if settings.end_col:
             cols = column_value(settings.end_col)

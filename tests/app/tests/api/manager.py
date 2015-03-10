@@ -5,7 +5,7 @@ from mtr.sync.api import Processor
 from mtr.sync.api.processors.xls import XlsProcessor
 from mtr.sync.api.exceptions import ItemAlreadyRegistered, \
     ItemDoesNotRegistered
-from mtr.sync.models import Filter, FilterParams
+from mtr.sync.models import ValueProcessor, ValueProcessorParams
 
 from ...models import Person, Office, Tag
 
@@ -77,18 +77,18 @@ class ManagerTest(ApiTestMixin, TestCase):
         before_data = list(self.manager.prepare_export_data(
             self.processor, self.queryset)['items'])
 
-        @self.manager.register('filter', label='multiply by 10')
+        @self.manager.register('valueprocessor', label='multiply by 10')
         def test_filter(value, field, action):
             return value * 10
 
-        filter_related = Filter.objects.get(name='test_filter')
+        processor_related = ValueProcessor.objects.get(name='test_filter')
         for field in self.fields:
             if field.attribute == 'id':
                 field_related = field
                 break
 
-        FilterParams.objects.create(
-            filter_related=filter_related, field_related=field_related)
+        ValueProcessorParams.objects.create(
+            processor_related=processor_related, field_related=field_related)
 
         after_data = self.manager.prepare_export_data(
             self.processor, self.queryset)['items']

@@ -2,23 +2,23 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # mtr group <inboxmtr@gmail.com>, 2015.
-#: admin.py:36
+#: admin.py:38
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: admin.py:108
+#: admin.py:110
 msgid "mtr.sync:Create settings for fields"
 msgstr "Create settings for fields"
 
-#: admin.py:112
+#: admin.py:114
 msgid "mtr.sync:Populate settings from file"
 msgstr "Populate settings from file"
 
-#: admin.py:170
+#: admin.py:172
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "Data synchronization started in background."
 
-#: admin.py:172
+#: admin.py:174
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
@@ -39,52 +39,38 @@ msgid "mtr.sync:open file"
 msgstr "open file"
 
 #: api/exceptions.py:23
-#, fuzzy
-#| msgid "mtr.sync:created at"
 msgid "mtr.sync:create file"
-msgstr "created at"
+msgstr "create file"
 
 #: api/exceptions.py:24
-#, fuzzy
-#| msgid "mtr.sync:include header"
 msgid "mtr.sync:write header"
-msgstr "include header"
+msgstr "write header"
 
 #: api/exceptions.py:25
-#, fuzzy
-#| msgid "mtr.sync:created at"
 msgid "mtr.sync:write data"
-msgstr "created at"
+msgstr "write data"
 
 #: api/exceptions.py:26
-#, fuzzy
-#| msgid "mtr.sync:file"
 msgid "mtr.sync:save file"
-msgstr "file"
+msgstr "save file"
 
 #: api/exceptions.py:27
-#, fuzzy
-#| msgid "mtr.sync:file"
 msgid "mtr.sync:read file"
-msgstr "file"
+msgstr "read file"
 
 #: api/exceptions.py:28
-#, fuzzy
-#| msgid "mtr.sync:report"
 msgid "mtr.sync:import data"
-msgstr "report"
+msgstr "import data"
 
 #: api/exceptions.py:29
-#, fuzzy
-#| msgid "mtr.sync:error"
 msgid "mtr.sync:unexpected error"
-msgstr "error"
+msgstr "unexpected error"
 
 #: api/processors/csv.py:14
 msgid "mtr.sync:CSV"
 msgstr "CSV"
 
-#: api/processors/ods.py:12
+#: api/processors/ods.py:14
 msgid "mtr.sync:ODF Spreadsheet"
 msgstr "ODF Spreadsheet"
 
@@ -101,161 +87,167 @@ msgstr "Microsoft Excel 2007/2010/2013 XML"
 msgid "mtr.sync:Data sync"
 msgstr "Data sync"
 
-#: models.py:49
-msgid "mtr.actions:Export"
-msgstr "Export"
-
-#: models.py:50
-msgid "mtr.actions:Import"
-msgstr "Import"
-
-#: models.py:54
-msgid "mtr.sync:action"
-msgstr "action"
-
-#: models.py:65 models.py:183 models.py:184 models.py:206
-msgid "mtr.sync:name"
-msgstr "name"
-
-#: models.py:68
-msgid "mtr.sync:start column"
-msgstr "start column"
-
-#: models.py:70
-msgid "mtr.sync:start row"
-msgstr "start row"
-
-#: models.py:73
-msgid "mtr.sync:end column"
-msgstr "end column"
-
-#: models.py:75
-msgid "mtr.sync:end row"
-msgstr "end row"
-
-#: models.py:78
-msgid "mtr.sync:main model"
-msgstr "main model"
-
-#: models.py:81
-msgid "mtr.sync:main model object"
-msgstr "main model object"
-
-#: models.py:84
-msgid "mtr.sync:created at"
-msgstr "created at"
-
-#: models.py:86 models.py:294
-msgid "mtr.sync:updated at"
-msgstr "updated at"
-
-#: models.py:89
-msgid "mtr.sync:format"
-msgstr "format"
-
-#: models.py:92
-msgid "mtr.sync:worksheet page"
-msgstr "worksheet page"
-
-#: models.py:95
-msgid "mtr.sync:include header"
-msgstr "include header"
-
-#: models.py:98
-msgid "mtr.sync:custom filename"
-msgstr "custom filename"
-
-#: models.py:101 models.py:285
-msgid "mtr.sync:file"
-msgstr "file"
-
-#: models.py:103
-#, fuzzy
-#| msgid "mtr.sync:report"
-msgid "mtr.sync:queryset"
-msgstr "report"
-
-#: models.py:169 models.py:170 models.py:213 models.py:297
-msgid "mtr.sync:settings"
-msgstr "settings"
-
-#: models.py:186
-msgid "mtr.sync:description"
-msgstr "description"
-
-#: models.py:189 models.py:248 models.py:262
-msgid "mtr.sync:filter"
-msgstr "filter"
-
-#: models.py:190 models.py:263
-msgid "mtr.sync:filters"
-msgstr "filters"
-
-#: models.py:204 models.py:245 models.py:360
+#: models.py:17 models.py:367
 msgid "mtr.sync:position"
 msgstr "position"
 
-#: models.py:207
+#: models.py:58
+msgid "mtr.actions:Export"
+msgstr "Export"
+
+#: models.py:59
+msgid "mtr.actions:Import"
+msgstr "Import"
+
+#: models.py:63
+msgid "mtr.sync:action"
+msgstr "action"
+
+#: models.py:74 models.py:194 models.py:214
+msgid "mtr.sync:name"
+msgstr "name"
+
+#: models.py:77
+msgid "mtr.sync:start column"
+msgstr "start column"
+
+#: models.py:79
+msgid "mtr.sync:start row"
+msgstr "start row"
+
+#: models.py:82
+msgid "mtr.sync:end column"
+msgstr "end column"
+
+#: models.py:84
+msgid "mtr.sync:end row"
+msgstr "end row"
+
+#: models.py:87
+msgid "mtr.sync:main model"
+msgstr "main model"
+
+#: models.py:90
+msgid "mtr.sync:main model object"
+msgstr "main model object"
+
+#: models.py:93
+msgid "mtr.sync:created at"
+msgstr "created at"
+
+#: models.py:95 models.py:301
+msgid "mtr.sync:updated at"
+msgstr "updated at"
+
+#: models.py:98
+msgid "mtr.sync:format"
+msgstr "format"
+
+#: models.py:101
+msgid "mtr.sync:worksheet page"
+msgstr "worksheet page"
+
+#: models.py:104
+msgid "mtr.sync:include header"
+msgstr "include header"
+
+#: models.py:107
+msgid "mtr.sync:custom filename"
+msgstr "custom filename"
+
+#: models.py:110 models.py:292
+msgid "mtr.sync:file"
+msgstr "file"
+
+#: models.py:112
+msgid "mtr.sync:queryset"
+msgstr "queryset"
+
+#: models.py:180 models.py:181 models.py:222 models.py:304
+msgid "mtr.sync:settings"
+msgstr "settings"
+
+#: models.py:195
+msgid "mtr.sync:label"
+msgstr "label"
+
+#: models.py:197
+msgid "mtr.sync:description"
+msgstr "description"
+
+#: models.py:200 models.py:259
+msgid "mtr.sync:value processor"
+msgstr "value processor"
+
+#: models.py:201 models.py:260
+msgid "mtr.sync:value processors"
+msgstr "value processors"
+
+#: models.py:215
 msgid "mtr.sync:model attribute"
 msgstr "model attribute"
 
-#: models.py:208
+#: models.py:216
 msgid "mtr.sync:skip"
 msgstr "skip"
 
-#: models.py:223
+#: models.py:232
 msgid "mtr.sync:field"
 msgstr "field"
 
-#: models.py:224
+#: models.py:233
 msgid "mtr.sync:fields"
 msgstr "fields"
 
-#: models.py:279
+#: models.py:255
+msgid "mtr.sync:filter"
+msgstr "filter"
+
+#: models.py:286
 msgid "mtr.sync:Error"
 msgstr "Error"
 
-#: models.py:280
+#: models.py:287
 msgid "mtr.sync:Running"
 msgstr "Running"
 
-#: models.py:281
+#: models.py:288
 msgid "mtr.sync:Success"
 msgstr "Success"
 
-#: models.py:287
+#: models.py:294
 msgid "mtr.sync:status"
 msgstr "status"
 
-#: models.py:290
+#: models.py:297
 msgid "mtr.sync:started at"
 msgstr "started at"
 
-#: models.py:292
+#: models.py:299
 msgid "mtr.sync:completed at"
 msgstr "completed at"
 
-#: models.py:307
+#: models.py:314
 msgid "mtr.sync:report"
 msgstr "report"
 
-#: models.py:308
+#: models.py:315
 msgid "mtr.sync:reports"
 msgstr "reports"
 
-#: models.py:361
+#: models.py:368
 msgid "mtr.sync:message"
 msgstr "message"
 
-#: models.py:363
+#: models.py:370
 msgid "mtr.sync:step"
 msgstr "step"
 
-#: models.py:367
+#: models.py:374
 msgid "mtr.sync:error"
 msgstr "error"
 
-#: models.py:368
+#: models.py:375
 msgid "mtr.sync:errors"
 msgstr "errors"
 
@@ -275,26 +267,14 @@ msgid "mtr.sync:Dashboard"
 msgstr "Dashboard"
 
 #: templates/mtr/sync/default/dashboard.html:26
-#, fuzzy
-#| msgid "mtr.sync:reports"
 msgid "mtr.sync:Last reports"
-msgstr "reports"
+msgstr "Last reports"
 
-#: templates/mtr/sync/default/dashboard.html:50
-#, fuzzy
-#| msgid "mtr.sync:settings"
+#: templates/mtr/sync/default/dashboard.html:55
 msgid "mtr.sync:New settings"
-msgstr "settings"
+msgstr "New settings"
 
 #: templates/mtr/sync/default/export.html:10
 #: templates/mtr/sync/default/export.html:15
-#, fuzzy
-#| msgid "mtr.sync:report"
 msgid "mtr.sync:Export"
-msgstr "report"
-
-#~ msgid "mtr.sync:template"
-#~ msgstr "template"
-
-#~ msgid "mtr.sync:file format"
-#~ msgstr "file format"
+msgstr "Export"

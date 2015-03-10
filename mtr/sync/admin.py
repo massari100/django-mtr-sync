@@ -6,7 +6,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 from django import forms
 
-from .models import Report, Settings, Field, FilterParams, Filter, Error
+from .models import Report, Settings, Field, ValueProcessorParams, \
+    ValueProcessor, Error
 from .api import manager
 from .api.helpers import model_attributes
 from .settings import REGISTER_AT_ADMIN
@@ -37,12 +38,12 @@ class ReportAdmin(admin.ModelAdmin):
         'mtr.sync:Link to file')
 
 
-class FilterInline(admin.TabularInline):
-    model = FilterParams
+class ValueProcessorParamsInline(admin.TabularInline):
+    model = ValueProcessorParams
     extra = 0
 
 
-class FilterAdmin(admin.ModelAdmin):
+class ValueProcessorAdmin(admin.ModelAdmin):
     list_display = ('name', 'description')
 
 
@@ -72,7 +73,7 @@ class FieldForm(forms.ModelForm):
 class FieldAdmin(admin.ModelAdmin):
     list_display = ('name', 'attribute', 'settings')
     list_filter = ('settings',)
-    inlines = (FilterInline,)
+    inlines = (ValueProcessorParamsInline,)
     form = FieldForm
 
 
@@ -176,4 +177,4 @@ if REGISTER_AT_ADMIN():
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Settings, SettingsAdmin)
     admin.site.register(Field, FieldAdmin)
-    admin.site.register(Filter, FilterAdmin)
+    admin.site.register(ValueProcessor, ValueProcessorAdmin)
