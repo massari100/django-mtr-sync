@@ -29,7 +29,9 @@ class XlsProcessor(Processor):
 
     def write(self, row, value):
         for index, cell in enumerate(self.cells):
-            self._worksheet.write(row, cell, value[index])
+            self._worksheet.write(
+                row, cell,
+                '' if value[index] is None else value[index])
 
     def read(self, row):
         data = []

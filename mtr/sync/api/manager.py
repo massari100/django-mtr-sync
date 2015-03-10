@@ -2,7 +2,7 @@ from __future__ import unicode_literals
 
 from collections import OrderedDict
 
-from django.utils.six.moves import filterfalse
+from django.utils.six.moves import filterfalse, zip
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .signals import manager_registered

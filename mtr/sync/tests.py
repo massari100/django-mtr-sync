@@ -148,9 +148,6 @@ class ProcessorTestMixin(ApiTestMixin):
         self.check_sheet_values_and_delete_report(report)
 
     def test_import_data(self):
-        # TODO: refactor code to works with values smaller then 3
-        # e.g. start_row = 1
-
         self.settings.start_row = 1
         self.settings.start_col = 10
         self.settings.end_col = 20

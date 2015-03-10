@@ -38,7 +38,8 @@ class OdsProcessor(Processor):
 
     def write(self, row, value):
         for index, cell in enumerate(self.cells):
-            self._worksheet[row, cell].set_value(value[index])
+            self._worksheet[row, cell].set_value(
+                '' if value[index] is None else value[index])
 
     def read(self, row):
         readed = []

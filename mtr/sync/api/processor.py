@@ -101,6 +101,14 @@ class Processor(object):
 
         return filename, os.path.join(path, filename)
 
+    def write_header(self, data):
+        if self.settings.include_header and data['fields']:
+            header_data = list(map(
+                lambda f: f.name or f.get_attribute_display(),
+                data['fields']))
+
+            self.write(self.start['row'], header_data)
+
     def export_data(self, data):
         """Export data from queryset to file and return path"""
 
@@ -113,12 +121,7 @@ class Processor(object):
         self.create(path)
 
         # write header
-        if self.settings.include_header and data['fields']:
-            header_data = list(map(
-                lambda f: f.name or f.get_attribute_display(),
-                data['fields']))
-
-            self.write(self.start['row'], header_data)
+        self.write_header(data)
 
         # write data
         data = data['items']
@@ -127,8 +130,7 @@ class Processor(object):
             row_data = []
 
             for col in self.cells:
-                value = next(data)
-                row_data.append(value if value is not None else None)
+                row_data.append(next(data))
 
             self.write(row, row_data)
 
@@ -221,6 +223,8 @@ class Processor(object):
         data = self.manager.prepare_import_data(self, rows)
 
         with transaction.atomic():
+            sid = transaction.savepoint()
+
             for row, _model in data:
                 sid = transaction.savepoint()
 
@@ -229,12 +233,17 @@ class Processor(object):
                         self.process_instances(_model, model)
                 except (Error, ValueError):
                     transaction.savepoint_rollback(sid)
+                    error_message = traceback.format_exc()
+                    if 'File' in error_message:
+                        error_message = 'File{}'.format(
+                            error_message.split('File')[-1])
 
                     error_raised.send(
-                        self, error=traceback.format_exc(),
+                        self, error=error_message,
                         position=row,
                         value=_model['attrs'],
                         step=ErrorChoicesMixin.IMPORT_DATA)
+
 
             transaction.savepoint_commit(sid)
 
