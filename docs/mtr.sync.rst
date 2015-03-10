@@ -28,6 +28,14 @@ mtr.sync.apps module
     :undoc-members:
     :show-inheritance:
 
+mtr.sync.forms module
+---------------------
+
+.. automodule:: mtr.sync.forms
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 mtr.sync.helpers module
 -----------------------
 

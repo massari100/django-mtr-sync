@@ -19,6 +19,14 @@ mtr.sync.api.exceptions module
     :undoc-members:
     :show-inheritance:
 
+mtr.sync.api.helpers module
+---------------------------
+
+.. automodule:: mtr.sync.api.helpers
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 mtr.sync.api.manager module
 ---------------------------
 

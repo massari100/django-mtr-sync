@@ -17,8 +17,6 @@ class Processor(object):
 
     """Base implementation of import and export operations"""
 
-    # TODO: add managing none fields
-
     position = 0
     file_format = None
     file_description = None
@@ -127,7 +125,8 @@ class Processor(object):
             row_data = []
 
             for col in self.cells:
-                row_data.append(next(data))
+                value = next(data)
+                row_data.append(value if value is not None else None)
 
             self.write(row, row_data)
 

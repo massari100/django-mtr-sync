@@ -11,7 +11,7 @@ from .helpers import column_value, make_model_class, model_settings, \
 from ..settings import IMPORT_PROCESSORS
 
 
-class ModelManagerMixin(object):
+class ProcessorManagerMixin(object):
 
     def process_value(self, field, value, export=False, action=None):
         """Process value with filters and actions"""
@@ -20,13 +20,9 @@ class ModelManagerMixin(object):
 
         for field_processor in field.ordered_processors:
             process_func = self.valueprocessors.get(field_processor.name, None)
-            if process_func:
-                value = process_func(value, field, process_action)
+            value = process_func(value, field, process_action)
 
-        if not export:
-            return value if isinstance(value, tuple) else None, value
-        else:
-            return value
+        return value
 
     def queryset_choices(self):
         # TODO: return querysets
@@ -34,9 +30,6 @@ class ModelManagerMixin(object):
         return (
             ('', ''),
         )
-
-
-class ProcessorManagerMixin(object):
 
     def processor_choices(self):
         """Return all registered processors"""
@@ -163,14 +156,16 @@ class ProcessorManagerMixin(object):
 
             for index, field in enumerate(fields):
                 col = column_value(field.name) if field.name else index
-                action, value = self.process_value(field, row[col])
+                value = self.process_value(field, row[col])
+                action, value = \
+                    value if isinstance(value, tuple) else None, value
                 model['attrs'][field.attribute] = value
                 model['action'] = action
 
             yield model
 
 
-class Manager(ProcessorManagerMixin, ModelManagerMixin):
+class Manager(ProcessorManagerMixin):
 
     """Manager for data processors"""
 

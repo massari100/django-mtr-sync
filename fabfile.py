@@ -142,6 +142,9 @@ def docs(action='make'):
     with lcd(DOCS_DIR):
         if action == 'make':
             local('make html')
+        elif action == 'update':
+            local('rm -f mtr*')
+            local('sphinx-apidoc -o . ../mtr/')
         else:
             print('Invalid action: {}, available actions: "make"'
                 ', "compile"'.format(action))
