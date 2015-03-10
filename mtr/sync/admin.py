@@ -16,6 +16,8 @@ from .settings import REGISTER_AT_ADMIN
 class ErrorInline(admin.TabularInline):
     model = Error
     extra = 0
+    readonly_fields = (
+        'position', 'message', 'step', 'input_position', 'input_value')
 
 
 class ReportAdmin(admin.ModelAdmin):

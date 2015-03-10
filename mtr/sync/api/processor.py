@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 import os
+import traceback
 
 from django.utils.six.moves import range
 from django.utils.encoding import smart_text
@@ -8,8 +9,9 @@ from django.utils import timezone
 from django.db import models, transaction, Error
 
 from .signals import export_started, export_completed, \
-    import_started, import_completed
+    import_started, import_completed, error_raised
 from .helpers import column_value, model_fields
+from .exceptions import ErrorChoicesMixin
 from ..settings import LIMIT_PREVIEW, FILE_PATH
 
 
@@ -88,26 +90,26 @@ class Processor(object):
         self.cells = range(self.start['col'], self.end['col'])
         self.rows = range(self.start['row'], self.end['row'])
 
+    def create_export_path(self):
+        # TODO: refactor filepath
+
+        filename = '{}{}'.format(
+            self.settings.filename or str(self.report.id), self.file_format)
+        path = FILE_PATH()(self.report, '', absolute=True)
+        if not os.path.exists(path):
+            os.makedirs(path)
+
+        return filename, os.path.join(path, filename)
+
     def export_data(self, data):
         """Export data from queryset to file and return path"""
 
         # send signal to create report
-        for response in export_started.send(self.__class__, processor=self):
+        for response in export_started.send(self):
             self.report = response[1]
 
         self.set_dimensions(0, 0, data['rows'], data['cols'])
-
-        # save external file and report
-        path = FILE_PATH()(self.report, '')
-        if not os.path.exists(path):
-            os.makedirs(path)
-
-        filename = '{}{}'.format(
-            self.settings.filename or str(self.report.id), self.file_format)
-
-        path = os.path.join(path, filename)
-
-        # create export file for write
+        filename, path = self.create_export_path()
         self.create(path)
 
         # write header
@@ -132,14 +134,10 @@ class Processor(object):
 
         self.save()
 
-        if self.settings.id:
-            self.report.settings = self.settings
-
         # send signal to save report
         for response in export_completed.send(
-                self.__class__, report=self.report,
-                date=timezone.now(),
-                path=FILE_PATH()(self.report, filename, relative=True)):
+                self, date=timezone.now(),
+                path=FILE_PATH()(self.report, filename)):
             self.report = response[1]
 
         return self.report
@@ -212,8 +210,7 @@ class Processor(object):
         path = path or self.settings.buffer_file.path
 
         # send signal to create report
-        for response in import_started.send(self.__class__, processor=self,
-                path=path):
+        for response in import_started.send(self, path=path):
             self.report = response[1]
 
         # open file and set dimensions
@@ -224,7 +221,7 @@ class Processor(object):
         data = self.manager.prepare_import_data(self, rows)
 
         with transaction.atomic():
-            for _model in data:
+            for row, _model in data:
                 sid = transaction.savepoint()
 
                 try:
@@ -233,15 +230,17 @@ class Processor(object):
                 except (Error, ValueError):
                     transaction.savepoint_rollback(sid)
 
-            transaction.savepoint_commit(sid)
+                    error_raised.send(
+                        self, error=traceback.format_exc(),
+                        position=row,
+                        value=_model['attrs'],
+                        step=ErrorChoicesMixin.IMPORT_DATA)
 
-        if self.settings.id:
-            self.report.settings = self.settings
+            transaction.savepoint_commit(sid)
 
         # send signal to save report
         for response in import_completed.send(
-                self.__class__, report=self.report,
-                date=timezone.now()):
+                self, date=timezone.now()):
             self.report = response[1]
 
         return self.report

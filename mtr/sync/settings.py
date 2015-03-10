@@ -12,15 +12,19 @@ def getattr_with_prefix(name, default):
     return lambda: getattr(settings, '{}_{}'.format(PREFIX, name), default)
 
 
-def get_buffer_file_path(instance, filename, relative=False):
+def strip_media_root(path):
+    return path.split(settings.MEDIA_ROOT)[1].lstrip('/')
+
+
+def get_buffer_file_path(instance, filename, absolute=False):
     """Generate file path for report"""
 
     path = os.path.join(settings.MEDIA_ROOT,
         'sync', instance.get_action_display().lower(),
         filename.lower())
 
-    if relative:
-        path = path.split(settings.MEDIA_ROOT)[1].lstrip('/')
+    if not absolute:
+        path = strip_media_root(path)
 
     return path
 

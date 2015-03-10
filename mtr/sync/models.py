@@ -3,7 +3,7 @@ from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
-from .settings import FILE_PATH
+from .settings import FILE_PATH, strip_media_root
 from .api import manager
 from .api.helpers import model_attributes, model_choices
 from .api.signals import export_started, export_completed, \
@@ -331,7 +331,11 @@ def create_export_report(sender, **kwargs):
 
 @receiver(export_completed)
 def save_export_report(sender, **kwargs):
-    report = kwargs['report']
+    report = sender.report
+
+    if sender.settings.id:
+        report.settings = sender.settings
+
     report.completed_at = kwargs['date']
     report.buffer_file = kwargs['path']
     report.status = report.SUCCESS
@@ -343,12 +347,17 @@ def save_export_report(sender, **kwargs):
 @receiver(import_started)
 def create_import_report(sender, **kwargs):
     return Report.import_objects.create(
-        buffer_file=kwargs['path'], action=Report.IMPORT)
+        buffer_file=strip_media_root(kwargs['path']),
+        action=Report.IMPORT)
 
 
 @receiver(import_completed)
 def save_import_report(sender, **kwargs):
-    report = kwargs['report']
+    report = sender.report
+
+    if sender.settings.id:
+        report.settings = sender.settings
+
     report.completed_at = kwargs['date']
     report.status = report.SUCCESS
     report.save()
@@ -357,18 +366,20 @@ def save_import_report(sender, **kwargs):
 
 
 @python_2_unicode_compatible
-class Error(models.Model, ErrorChoicesMixin):
+class Error(PositionMixin, ErrorChoicesMixin):
 
     """Report errors with info about step where raised"""
 
     report = models.ForeignKey(Report, related_name='errors')
 
-    position = models.PositiveSmallIntegerField(
-        _('mtr.sync:position'), null=True, blank=True)
     message = models.TextField(_('mtr.sync:message'), max_length=10000)
     step = models.PositiveSmallIntegerField(
         _('mtr.sync:step'), choices=ErrorChoicesMixin.STEP_CHOICES,
         default=ErrorChoicesMixin.UNDEFINED)
+    input_position = models.CharField(
+        _('mtr.sync:input position'), max_length=10, blank=True)
+    input_value = models.TextField(
+        _('mtr.sync:input value'), max_length=60000, null=True, blank=True)
 
     class Meta:
         verbose_name = _('mtr.sync:error')
@@ -376,3 +387,20 @@ class Error(models.Model, ErrorChoicesMixin):
 
     def __str__(self):
         return self.message
+
+    def save(self, *args, **kwargs):
+        if self.position is None:
+            self.position = self.__class__.objects \
+                .filter(report=self.report).count() + 1
+        super(Error, self).save(*args, **kwargs)
+
+
+@receiver(error_raised)
+def create_error(sender, **kwargs):
+    position = kwargs.get('position', '')
+    value = kwargs.get('value', None)
+
+    Error.objects.create(
+        report=sender.report, message=kwargs['error'],
+        step=kwargs['step'], input_position=position,
+        input_value=repr(value) if value else None)

@@ -151,7 +151,7 @@ class ProcessorManagerMixin(object):
 
             fields = fields[:cols]
 
-        for row in data:
+        for row_index, row in zip(processor.rows, data):
             model = {'attrs': {}, 'action': None}
 
             for index, field in enumerate(fields):
@@ -159,10 +159,11 @@ class ProcessorManagerMixin(object):
                 value = self.process_value(field, row[col])
                 action, value = \
                     value if isinstance(value, tuple) else None, value
+
                 model['attrs'][field.attribute] = value
                 model['action'] = action
 
-            yield model
+            yield row_index, model
 
 
 class Manager(ProcessorManagerMixin):
