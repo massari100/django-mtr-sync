@@ -1,3 +1,5 @@
+import os
+
 from django.utils.translation import gettext_lazy as _
 
 import ezodf
@@ -47,3 +49,8 @@ class OdsProcessor(Processor):
 
     def save(self):
         self._workbook.save()
+
+        try:
+            os.remove('{}.bak'.format(self._path))
+        except FileNotFoundError:
+            pass
