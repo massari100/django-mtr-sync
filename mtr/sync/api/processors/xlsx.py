@@ -53,7 +53,7 @@ class XlsxProcessor(Processor):
 
         self._worksheet.append(value[:self.end['col']])
 
-    def read(self, row):
+    def _get_row(self, row):
         value = None
         row += 1
 
@@ -68,9 +68,18 @@ class XlsxProcessor(Processor):
         except StopIteration:
             return [''] * self.end['col']
 
+        return list(map(lambda v: v.value, value))
+
+    def read(self, row, cells=None):
         readed = []
-        for item in value[self.start['col']:self.end['col']]:
-            readed.append(item.value)
+        value = self._get_row(row)
+        cells = cells or self.cells
+
+        for index in cells:
+            try:
+                readed.append(value[index])
+            except IndexError:
+                readed.append('')
 
         return readed
 

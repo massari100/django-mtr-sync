@@ -11,7 +11,19 @@ Thank you guys for funding this project at [kickstarter](https://www.kickstarter
 ## Documentation
 Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://django-mtr-sync.rtfd.org/)
 
-## Features:
+## How to use
+1. Install package:
+   `pip install git+https://github.com/mtrgroup/django-mtr-sync.git`
+2. Add `mtr.sync` to `INSTALLED_APPS` in your settings file
+3. Migrate models `./manage.py migrate`
+4. Configure `Celery`
+5. Create settings for import or export data at `/admin/mtrsync/settings/` and run action `Sync data` to start process.
+
+## Video demonstartion
+- Import action: [https://www.youtube.com/watch?v=JOgQCFB-leg](https://www.youtube.com/watch?v=JOgQCFB-leg)
+- Export action: [https://www.youtube.com/watch?v=L4ti1qERSLs](https://www.youtube.com/watch?v=L4ti1qERSLs)
+
+## Features
 - Import (only creating), export data
 - Processor API for supporting other formats
 - Uses Celery for background tasks and for processing large volumes of data
@@ -26,20 +38,6 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Saves import, export settings for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
 - Supports: Django 1.7 Python 2.7, 3.3+ (Django 1.6 will be added soon)
-
-## How to use
-
-1. Install package:
-   `pip install git+https://github.com/mtrgroup/django-mtr-sync.git`
-2. Add 'django-mtr-sync' to `INSTALLED_APPS` in your settings file
-3. Migrate models `./manage.py migrate`
-4. Configure `celery`
-5. Create settings for import or export data at `/admin/mtrsync/settings/` and run action `Sync data` to start process.
-
-## Video demonstartion of:
-
-- Import action: [https://www.youtube.com/watch?v=JOgQCFB-leg](https://www.youtube.com/watch?v=JOgQCFB-leg)
-- Export action: [https://www.youtube.com/watch?v=L4ti1qERSLs](https://www.youtube.com/watch?v=L4ti1qERSLs)
 
 ## Working on
 - Shortcuts at admin app

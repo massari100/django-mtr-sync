@@ -52,7 +52,7 @@ class CsvProcessor(Processor):
 
         self._writer.writerow(value[:self.end['col']])
 
-    def read(self, row):
+    def _get_row(self, row):
         value = None
         row += 1
 
@@ -67,13 +67,23 @@ class CsvProcessor(Processor):
         except StopIteration:
             return [''] * self.end['col']
 
+        return value
+
+    def read(self, row, cells=None):
         readed = []
-        for item in value[self.start['col']:self.end['col']]:
+        value = self._get_row(row)
+        cells = cells or self.cells
+
+        for index in cells:
             # TODO: value convert
 
-            if item.isdigit():
-                item = int(item)
-            readed.append(item)
+            try:
+                item = value[index]
+                if item.isdigit():
+                    item = int(item)
+                readed.append(item)
+            except IndexError:
+                readed.append('')
 
         return readed
 

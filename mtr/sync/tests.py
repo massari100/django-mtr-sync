@@ -179,3 +179,6 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.assertEqual(
             self.processor.end['col'], len(self.processor.read(10000)))
+
+        self.assertEqual(
+            ['', '', ''], self.processor.read(10000, [0, 23543, 434]))

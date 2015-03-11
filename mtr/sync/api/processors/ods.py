@@ -41,9 +41,11 @@ class OdsProcessor(Processor):
             self._worksheet[row, cell].set_value(
                 '' if value[index] is None else value[index])
 
-    def read(self, row):
+    def read(self, row, cells=None):
         readed = []
-        for index, cell in enumerate(self.cells):
+        cells = cells or self.cells
+
+        for index, cell in enumerate(cells):
             try:
                 readed.append(self._worksheet[row, cell].value)
             except IndexError:

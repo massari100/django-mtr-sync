@@ -33,9 +33,11 @@ class XlsProcessor(Processor):
                 row, cell,
                 '' if value[index] is None else value[index])
 
-    def read(self, row):
+    def read(self, row, cells=None):
         data = []
-        for cell in self.cells:
+        cells = cells or self.cells
+
+        for cell in cells:
             try:
                 data.append(self._worksheet.cell_value(row, cell))
             except IndexError:
