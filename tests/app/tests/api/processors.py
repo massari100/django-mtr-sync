@@ -24,7 +24,10 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
     def check_values(self, worksheet, instance, row, index_prepend=0):
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
-            sheet_value = worksheet.cell_value(row, index+index_prepend)
+            try:
+                sheet_value = worksheet.cell_value(row, index+index_prepend)
+            except IndexError:
+                sheet_value = ''
 
             self.assertEqual('' if value is None else value, sheet_value)
 
@@ -53,6 +56,7 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend].value
+            sheet_value = '' if sheet_value is None else sheet_value
 
             self.assertEqual('' if value is None else value, sheet_value)
 

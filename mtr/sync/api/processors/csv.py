@@ -56,13 +56,16 @@ class CsvProcessor(Processor):
         value = None
         row += 1
 
-        if not row:
-            value = next(self._reader)
-
-        if not value:
-            while self._rows_counter < row:
-                self._rows_counter += 1
+        try:
+            if not row:
                 value = next(self._reader)
+
+            if not value:
+                while self._rows_counter < row:
+                    self._rows_counter += 1
+                    value = next(self._reader)
+        except StopIteration:
+            return [''] * self.end['col']
 
         readed = []
         for item in value[self.start['col']:self.end['col']]:

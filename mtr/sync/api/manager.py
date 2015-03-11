@@ -114,7 +114,7 @@ class ProcessorManagerMixin(object):
 
             fields = fields[:cols]
 
-        data = {
+        return {
             'rows': queryset.count(),
             'cols': len(fields),
             'fields': fields,
@@ -127,8 +127,6 @@ class ProcessorManagerMixin(object):
             )
         }
 
-        return data
-
     def import_data(self, settings, path=None):
         """Import data to database"""
 
@@ -137,7 +135,23 @@ class ProcessorManagerMixin(object):
 
         return processor.import_data(model, path)
 
-    def prepare_import_data(self, processor, data):
+    def model_data(self, processor, fields):
+        for row_index in processor.rows:
+            model = {'attrs': {}, 'action': None}
+            row = processor.read(row_index)
+
+            for index, field in enumerate(fields):
+                col = column_value(field.name) if field.name else index
+                value = self.process_value(field, row[col])
+                action, value = \
+                    value if isinstance(value, tuple) else None, value
+
+                model['attrs'][field.attribute] = value
+                model['action'] = action
+
+            yield row_index, model
+
+    def prepare_import_data(self, processor):
         """Prepare data using filters from settings and return iterator"""
 
         settings = processor.settings
@@ -151,19 +165,10 @@ class ProcessorManagerMixin(object):
 
             fields = fields[:cols]
 
-        for row_index, row in zip(processor.rows, data):
-            model = {'attrs': {}, 'action': None}
-
-            for index, field in enumerate(fields):
-                col = column_value(field.name) if field.name else index
-                value = self.process_value(field, row[col])
-                action, value = \
-                    value if isinstance(value, tuple) else None, value
-
-                model['attrs'][field.attribute] = value
-                model['action'] = action
-
-            yield row_index, model
+        return {
+            'cols': len(fields),
+            'items': self.model_data(processor, fields),
+        }
 
 
 class Manager(ProcessorManagerMixin):

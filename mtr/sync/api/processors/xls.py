@@ -36,7 +36,10 @@ class XlsProcessor(Processor):
     def read(self, row):
         data = []
         for cell in self.cells:
-            data.append(self._worksheet.cell_value(row, cell))
+            try:
+                data.append(self._worksheet.cell_value(row, cell))
+            except IndexError:
+                data.append('')
 
         return data
 

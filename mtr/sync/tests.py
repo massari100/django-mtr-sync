@@ -169,3 +169,13 @@ class ProcessorTestMixin(ApiTestMixin):
         self.check_sheet_values_and_delete_report(report)
 
         self.assertEqual(before, self.queryset.count())
+
+    def test_reading_empty_values(self):
+        report = self.check_report_success(delete=False)
+
+        max_rows, max_cols = self.processor.open(report.buffer_file.path)
+        self.processor.set_dimensions(0, 0,
+            max_rows, max_cols, import_data=True)
+
+        self.assertEqual(
+            self.processor.end['col'], len(self.processor.read(10000)))

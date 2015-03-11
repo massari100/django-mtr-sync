@@ -38,7 +38,7 @@ class Processor(object):
 
         raise NotImplementedError
 
-    def _set_rows_dimensions(self, preview=False, import_data=False):
+    def _set_rows_dimensions(self, preview, import_data):
         if self.settings.start_row and \
                 self.settings.start_row > self.start['row']:
             self.start['row'] = self.settings.start_row - 1
@@ -61,7 +61,7 @@ class Processor(object):
                 self.start['row'] += 1
                 self.end['row'] += 1
 
-    def _set_cols_dimensions(self, import_data=False):
+    def _set_cols_dimensions(self, import_data, field_cols):
         if self.settings.start_col:
             start_col_index = column_value(self.settings.start_col)
             if start_col_index > self.start['col']:
@@ -69,6 +69,9 @@ class Processor(object):
 
                 if not import_data:
                     self.end['col'] += self.start['col']
+
+        if field_cols:
+            self.end['col'] = self.start['col'] + field_cols
 
         if self.settings.end_col:
             end_col_index = column_value(self.settings.end_col)
@@ -78,14 +81,14 @@ class Processor(object):
 
     def set_dimensions(
             self, start_row, start_col, end_row, end_col, preview=False,
-            import_data=False):
+            import_data=False, field_cols=None):
         """Return start, end table dimensions"""
 
         self.start = {'row': start_row, 'col': start_col}
         self.end = {'row': end_row, 'col': end_col}
 
         self._set_rows_dimensions(preview, import_data)
-        self._set_cols_dimensions(import_data)
+        self._set_cols_dimensions(import_data, field_cols)
 
         self.cells = range(self.start['col'], self.end['col'])
         self.rows = range(self.start['row'], self.end['row'])
@@ -215,17 +218,19 @@ class Processor(object):
         for response in import_started.send(self, path=path):
             self.report = response[1]
 
-        # open file and set dimensions
-        max_rows, max_cols = self.open(path)
-        self.set_dimensions(0, 0, max_rows, max_cols, import_data=True)
+        data = self.manager.prepare_import_data(self)
 
-        rows = (self.read(row) for row in self.rows)
-        data = self.manager.prepare_import_data(self, rows)
+        max_rows, max_cols = self.open(path)
+        self.set_dimensions(
+            0, 0, max_rows, max_cols,
+            import_data=True, field_cols=data['cols'])
+
+        items = data['items']
 
         with transaction.atomic():
             sid = transaction.savepoint()
 
-            for row, _model in data:
+            for row, _model in items:
                 sid = transaction.savepoint()
 
                 try:
@@ -243,7 +248,6 @@ class Processor(object):
                         position=row,
                         value=_model['attrs'],
                         step=ErrorChoicesMixin.IMPORT_DATA)
-
 
             transaction.savepoint_commit(sid)
 

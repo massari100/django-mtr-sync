@@ -31,7 +31,7 @@ class HelpersTest(ApiTestMixin, TestCase):
             'id', 'name', 'surname', 'gender', 'security_level',
             'office|_fk_|id', 'office|_fk_|office', 'office|_fk_|address',
             # 'tags|_m_|id', 'tags|_m_|name',
-            'custom_method'], fields)
+            'custom_method', 'none_param'], fields)
 
     def test_process_attribute(self):
         self.assertEqual(

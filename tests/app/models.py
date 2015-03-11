@@ -79,10 +79,18 @@ class Person(models.Model):
     def custom_method(self, value):
         self.name, self.surname = value.split('-')
 
+    @property
+    def none_param(self):
+        return None
+
+    @none_param.setter
+    def none_param(self, value):
+        pass
+
     def __str__(self):
         return self.name
 
     sync_settings = {
-        'custom_fields': ['custom_method'],
+        'custom_fields': ['custom_method', 'none_param'],
         'exclude': ['some_excluded_field']
     }

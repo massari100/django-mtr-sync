@@ -44,7 +44,10 @@ class OdsProcessor(Processor):
     def read(self, row):
         readed = []
         for index, cell in enumerate(self.cells):
-            readed.append(self._worksheet[row, cell].value)
+            try:
+                readed.append(self._worksheet[row, cell].value)
+            except IndexError:
+                readed.append('')
 
         return readed
 
