@@ -4,7 +4,6 @@ import os
 import traceback
 
 from django.utils.six.moves import range
-from django.utils.encoding import smart_text
 from django.utils import timezone
 from django.db import models, transaction, Error
 
@@ -28,13 +27,28 @@ class Processor(object):
         self.manager = manager
         self.report = None
 
-    def write(self, row, value, cells=None):
+    def write(self, row, cells=None):
         """Independend write to cell method"""
 
         raise NotImplementedError
 
-    def read(self, row, value, cells=None):
+    def read(self, row, cells=None):
         """Independend read from cell method"""
+
+        raise NotImplementedError
+
+    def create(self, path):
+        """Create file for given path"""
+
+        raise NotImplementedError
+
+    def open(self, path):
+        """Open file for given path"""
+
+        raise NotImplementedError
+
+    def save(self):
+        """Save result file"""
 
         raise NotImplementedError
 
