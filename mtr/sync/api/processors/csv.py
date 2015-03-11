@@ -57,13 +57,9 @@ class CsvProcessor(Processor):
         row += 1
 
         try:
-            if not row:
+            while self._rows_counter < row:
+                self._rows_counter += 1
                 value = next(self._reader)
-
-            if not value:
-                while self._rows_counter < row:
-                    self._rows_counter += 1
-                    value = next(self._reader)
         except StopIteration:
             return [''] * self.end['col']
 

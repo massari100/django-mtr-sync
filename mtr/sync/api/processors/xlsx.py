@@ -58,13 +58,9 @@ class XlsxProcessor(Processor):
         row += 1
 
         try:
-            if not row:
+            while self._rows_counter < row:
+                self._rows_counter += 1
                 value = next(self._rows)
-
-            if not value:
-                while self._rows_counter < row:
-                    self._rows_counter += 1
-                    value = next(self._rows)
         except StopIteration:
             return [''] * self.end['col']
 

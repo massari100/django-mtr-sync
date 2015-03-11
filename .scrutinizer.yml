@@ -19,5 +19,5 @@ checks:
 filter:
     excluded_paths:
         - '*tests*'
-        - './fabfile.py'
-        - './docs/*'
+        - 'fabfile.py'
+        - 'docs/*'
