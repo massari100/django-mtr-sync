@@ -109,8 +109,8 @@ class Settings(ActionsMixin):
     buffer_file = models.FileField(
         _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
 
-    queryset = models.CharField(_('mtr.sync:queryset'), max_length=255,
-        choices=manager.queryset_choices(), blank=True)
+    queryset = models.CharField(
+        _('mtr.sync:queryset'), max_length=255, blank=True)
 
     def fields_with_processors(self):
         """Return iterator of fields with filters"""

@@ -191,7 +191,7 @@ def process_attribute(model, attribute):
 
 
 def model_querysets(model):
-    """Return list of querysets"""
+    """Return list of querysets for given model"""
 
     settings = model_settings(model)
     return settings.get('querysets', None)
