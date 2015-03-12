@@ -132,7 +132,7 @@ def recreate():
 def subl():
     """Start Sublime editor"""
 
-    local('subl project.sublime-workspace')
+    local('subl project.sublime-project')
 
 
 @task

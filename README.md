@@ -19,7 +19,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 4. Configure `Celery`
 5. Create settings for import or export data at `/admin/mtrsync/settings/` and run action `Sync data` to start process.
 
-## Video demonstartion
+## Video demonstration
 - Import action: [https://www.youtube.com/watch?v=JOgQCFB-leg](https://www.youtube.com/watch?v=JOgQCFB-leg)
 - Export action: [https://www.youtube.com/watch?v=L4ti1qERSLs](https://www.youtube.com/watch?v=L4ti1qERSLs)
 

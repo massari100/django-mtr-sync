@@ -24,13 +24,6 @@ class ProcessorManagerMixin(object):
 
         return value
 
-    def queryset_choices(self):
-        # TODO: return querysets
-
-        return (
-            ('', ''),
-        )
-
     def processor_choices(self):
         """Return all registered processors"""
 
@@ -174,11 +167,6 @@ class ProcessorManagerMixin(object):
 class Manager(ProcessorManagerMixin):
 
     """Manager for data processors"""
-
-    def __init__(self):
-        # TODO: split functionality for mixins init here
-
-        pass
 
     def _make_key(self, key):
         return '{}s'.format(key)

@@ -188,3 +188,10 @@ def process_attribute(model, attribute):
         attr = getattr(model, attribute, None)
 
     return attr
+
+
+def model_querysets(model):
+    """Return list of querysets"""
+
+    settings = model_settings(model)
+    return settings.get('querysets', None)
