@@ -25,16 +25,17 @@ class ApiTestMixin(object):
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.manager.register('processor', self.PROCESSOR)
 
-        self.instance = self.model.objects.create(name='test instance',
-            surname='test surname', gender='M', security_level=10)
+        self.instance = self.model.objects.create(
+            name='test instance', surname='test surname',
+            gender='M', security_level=10)
         self.r_instance = self.relatedmodel.objects.create(
             office='test', address='addr')
-        # self.tags = [
-        #     self.RELATED_MANY(name='test'), self.RELATED_MANY(name='test1')]
+        self.tags = [
+            self.RELATED_MANY(name='test'), self.RELATED_MANY(name='test1')]
 
-        # for tag in self.tags:
-        #     tag.save()
-        #     self.instance.tags.add(tag)
+        for tag in self.tags:
+            tag.save()
+            self.instance.tags.add(tag)
 
         self.instance.office = self.r_instance
         self.instance.save()

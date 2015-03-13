@@ -5,12 +5,13 @@ from mtr.sync.api.helpers import column_name, column_index, column_value, \
 from mtr.sync.tests import ApiTestMixin
 from mtr.sync.api.processors import csv
 
-from ...models import Person, Office
+from ...models import Person, Office, Tag
 
 
 class HelpersTest(ApiTestMixin, TestCase):
     MODEL = Person
     RELATED_MODEL = Office
+    RELATED_MANY = Tag
     PROCESSOR = csv.CsvProcessor
 
     def test_column_index_value_transform(self):
@@ -30,7 +31,7 @@ class HelpersTest(ApiTestMixin, TestCase):
         self.assertEqual([
             'id', 'name', 'surname', 'gender', 'security_level',
             'office|_fk_|id', 'office|_fk_|office', 'office|_fk_|address',
-            # 'tags|_m_|id', 'tags|_m_|name',
+            'tags|_m_|id', 'tags|_m_|name',
             'custom_method', 'none_param'], fields)
 
     def test_process_attribute(self):

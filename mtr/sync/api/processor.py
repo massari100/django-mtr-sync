@@ -176,14 +176,14 @@ class Processor(object):
                 attrs = related_models.get(key_model, {})
                 attrs[key_attr] = _model['attrs'][key]
                 related_models[key_model] = attrs
-            # elif '|_m_|' in key:
-            #     key_model, key_attr = key.split('|_m_|')
+            elif '|_m_|' in key:
+                key_model, key_attr = key.split('|_m_|')
 
-            #     value = _model['attrs'][key]
+                value = _model['attrs'][key]
 
-            #     attrs = related_models.get(key_model, {})
-            #     attrs[key_attr] = value
-            #     related_models[key_model] = attrs
+                attrs = related_models.get(key_model, {})
+                attrs[key_attr] = value
+                related_models[key_model] = attrs
             else:
                 main_model_attrs[key] = _model['attrs'][key]
 
@@ -201,25 +201,25 @@ class Processor(object):
                 related_instance.save()
 
                 setattr(instance, key, related_instance)
-            # elif isinstance(related_field, models.ManyToManyField):
-            #     instance_attrs = []
-            #     rel_values = list(related_models[key].values())
-            #     indexes = len(rel_values[0].split(','))
+            elif isinstance(related_field, models.ManyToManyField):
+                instance_attrs = []
+                rel_values = list(related_models[key].values())
+                indexes = len(rel_values[0].split(','))
 
-            #     for index in range(indexes):
-            #         instance_values = {}
-            #         for k in related_models[key].keys():
-            #             value = related_models[key][k] \
-            #                 .split(',')[index]
-            #             if value.isdigit():
-            #                 value = int(value)
-            #             instance_values[k] = value
-            #     instance_attrs.append(instance_values)
+                for index in range(indexes):
+                    instance_values = {}
+                    for k in related_models[key].keys():
+                        value = related_models[key][k] \
+                            .split(',')[index]
+                        if value.isdigit():
+                            value = int(value)
+                        instance_values[k] = value
+                instance_attrs.append(instance_values)
 
-            #     for instance_attr in instance_attrs:
-            #         items = getattr(instance, key)
-            #         instance_attr.pop('id', None)
-            #         items.create(**instance_attr)
+                for instance_attr in instance_attrs:
+                    items = getattr(instance, key)
+                    instance_attr.pop('id', None)
+                    items.create(**instance_attr)
 
         instance.save()
 

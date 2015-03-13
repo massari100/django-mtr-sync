@@ -13,43 +13,49 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Office',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('office', models.CharField(verbose_name='office', max_length=255)),
-                ('address', models.CharField(verbose_name='address', max_length=255)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('office', models.CharField(max_length=255, verbose_name='office')),
+                ('address', models.CharField(max_length=255, verbose_name='address')),
             ],
             options={
-                'verbose_name': 'office',
                 'verbose_name_plural': 'offices',
+                'verbose_name': 'office',
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('name', models.CharField(verbose_name='name', max_length=255)),
-                ('surname', models.CharField(verbose_name='surname', max_length=255)),
-                ('gender', models.CharField(verbose_name='gender', max_length=255, choices=[('M', 'Male'), ('F', 'Female')])),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=255, verbose_name='name')),
+                ('surname', models.CharField(max_length=255, verbose_name='surname')),
+                ('gender', models.CharField(max_length=255, choices=[('M', 'Male'), ('F', 'Female')], verbose_name='gender')),
                 ('security_level', models.PositiveIntegerField(verbose_name='security level')),
-                ('some_excluded_field', models.DecimalField(verbose_name='some decimal', decimal_places=3, null=True, max_digits=10)),
-                ('office', models.ForeignKey(blank=True, null=True, to='app.Office')),
+                ('some_excluded_field', models.DecimalField(max_digits=10, null=True, decimal_places=3, verbose_name='some decimal')),
+                ('office', models.ForeignKey(blank=True, to='app.Office', null=True)),
             ],
             options={
-                'verbose_name': 'person',
                 'verbose_name_plural': 'persons',
+                'verbose_name': 'person',
             },
             bases=(models.Model,),
         ),
         migrations.CreateModel(
             name='Tag',
             fields=[
-                ('id', models.AutoField(verbose_name='ID', primary_key=True, serialize=False, auto_created=True)),
-                ('name', models.CharField(verbose_name='tag', max_length=255)),
+                ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True, serialize=False)),
+                ('name', models.CharField(max_length=255, verbose_name='tag')),
             ],
             options={
-                'verbose_name': 'tag',
                 'verbose_name_plural': 'tags',
+                'verbose_name': 'tag',
             },
             bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='person',
+            name='tags',
+            field=models.ManyToManyField(to='app.Tag'),
+            preserve_default=True,
         ),
     ]

@@ -64,7 +64,8 @@ def model_fields(model):
     """Return model field or custom method"""
 
     opts = model._meta
-    sortable_virtual_fields = [f for f in opts.virtual_fields
+    sortable_virtual_fields = [
+        f for f in opts.virtual_fields
         if isinstance(f, ModelField)]
     fields_arr = sorted(
         opts.concrete_fields + sortable_virtual_fields + opts.many_to_many)
