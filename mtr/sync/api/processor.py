@@ -14,6 +14,62 @@ from .exceptions import ErrorChoicesMixin
 from ..settings import LIMIT_PREVIEW, FILE_PATH
 
 
+class Dimension(object):
+    def __init__(
+            self, settings, end_row, end_col, preview=False,
+            import_data=False, field_cols=None):
+
+        self.start = {'row': 0, 'col': 0}
+        self.end = {'row': end_row, 'col': end_col}
+
+        self._set_rows_dimensions(preview, import_data)
+        self._set_cols_dimensions(import_data, field_cols)
+
+        self.cells = range(self.start['col'], self.end['col'])
+        self.rows = range(self.start['row'], self.end['row'])
+
+    def _set_rows_dimensions(self, preview, import_data):
+        if self.settings.start_row and \
+                self.settings.start_row > self.start['row']:
+            self.start['row'] = self.settings.start_row - 1
+
+            if not import_data:
+                self.end['row'] += self.start['row']
+
+        if self.settings.end_row and \
+                self.settings.end_row < self.end['row']:
+            self.end['row'] = self.settings.end_row
+
+        limit = LIMIT_PREVIEW()
+        if preview and limit < self.end['row']:
+            self.end['row'] = limit + self.start['row'] - 1
+
+        if self.settings.include_header:
+            if import_data:
+                self.start['row'] += 1
+            else:
+                self.start['row'] += 1
+                self.end['row'] += 1
+
+    def _set_cols_dimensions(self, import_data, field_cols):
+        if self.settings.start_col:
+            start_col_index = column_value(self.settings.start_col)
+            if start_col_index > self.start['col']:
+                self.start['col'] = start_col_index - 1
+
+                if not import_data:
+                    self.end['col'] += self.start['col']
+
+        if field_cols:
+            self.end['col'] = self.start['col'] + field_cols
+
+        if self.settings.end_col:
+            end_col_index = column_value(self.settings.end_col)
+
+            if end_col_index < self.end['col']:
+                self.end['col'] = end_col_index
+
+
 class Processor(object):
 
     """Base implementation of import and export operations"""

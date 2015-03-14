@@ -22,6 +22,9 @@ class ProcessorManagerMixin(object):
             process_func = self.valueprocessors.get(field_processor.name, None)
             value = process_func(value, field, process_action)
 
+        if isinstance(value, list):
+            value = ','.join(map(lambda v: str(v), value))
+
         return value
 
     def processor_choices(self):

@@ -215,6 +215,8 @@ class Field(PositionMixin):
     attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
+    filter_by = models.BooleanField(_('mtr.sync:filter'), default=False)
+
     processors = models.ManyToManyField(
         ValueProcessor, through='ValueProcessorParams')
 
