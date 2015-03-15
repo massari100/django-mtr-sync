@@ -305,21 +305,21 @@ class Processor(object):
             for row, _model in items:
                 sid = transaction.savepoint()
 
-                # try:
-                with transaction.atomic():
-                    self.process_instances(_model, model)
-                # except (Error, ValueError):
-                #     transaction.savepoint_rollback(sid)
-                #     error_message = traceback.format_exc()
-                #     if 'File' in error_message:
-                #         error_message = 'File{}'.format(
-                #             error_message.split('File')[-1])
+                try:
+                    with transaction.atomic():
+                        self.process_instances(_model, model)
+                except (Error, ValueError):
+                    transaction.savepoint_rollback(sid)
+                    error_message = traceback.format_exc()
+                    if 'File' in error_message:
+                        error_message = 'File{}'.format(
+                            error_message.split('File')[-1])
 
-                #     error_raised.send(
-                #         self, error=error_message,
-                #         position=row,
-                #         value=_model['attrs'],
-                #         step=ErrorChoicesMixin.IMPORT_DATA)
+                    error_raised.send(
+                        self, error=error_message,
+                        position=row,
+                        value=_model['attrs'],
+                        step=ErrorChoicesMixin.IMPORT_DATA)
 
             transaction.savepoint_commit(sid)
 
