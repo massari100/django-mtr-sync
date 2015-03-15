@@ -13,7 +13,7 @@ class ApiTestMixin(object):
     RELATED_MODEL = None
     RELATED_MANY = None
     PROCESSOR = None
-    MODEL_COUNT = 50
+    MODEL_COUNT = 10
     CREATE_PROCESSOR_AT_SETUP = True
 
     def setUp(self):
@@ -161,6 +161,8 @@ class ProcessorTestMixin(ApiTestMixin):
             before = self.queryset.count()
 
         self.queryset.delete()
+        for tag in self.tags:
+            tag.delete()
 
         self.settings.action = self.settings.IMPORT
         self.settings.buffer_file = report.buffer_file

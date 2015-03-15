@@ -245,8 +245,7 @@ class Processor(object):
 
         instance = model(**main_model_attrs)
         fields = model_fields(model)
-
-        # TODO: refactor many to many attrs
+        add_after = {}
 
         for key in related_models.keys():
             related_field = fields.get(key)
@@ -270,14 +269,17 @@ class Processor(object):
                         if value.isdigit():
                             value = int(value)
                         instance_values[k] = value
-                instance_attrs.append(instance_values)
+                    instance_attrs.append(instance_values)
 
                 for instance_attr in instance_attrs:
-                    items = getattr(instance, key)
-                    instance_attr.pop('id', None)
-                    items.create(**instance_attr)
+                    item = related_model(**instance_attr)
+                    item.save()
+                    add_after.setdefault(key, []).append(item)
 
         instance.save()
+
+        for key, values in add_after.items():
+            getattr(instance, key).add(*values)
 
     def import_data(self, model, path=None):
         """Import data to model and return errors if exists"""
@@ -303,21 +305,21 @@ class Processor(object):
             for row, _model in items:
                 sid = transaction.savepoint()
 
-                try:
-                    with transaction.atomic():
-                        self.process_instances(_model, model)
-                except (Error, ValueError):
-                    transaction.savepoint_rollback(sid)
-                    error_message = traceback.format_exc()
-                    if 'File' in error_message:
-                        error_message = 'File{}'.format(
-                            error_message.split('File')[-1])
+                # try:
+                with transaction.atomic():
+                    self.process_instances(_model, model)
+                # except (Error, ValueError):
+                #     transaction.savepoint_rollback(sid)
+                #     error_message = traceback.format_exc()
+                #     if 'File' in error_message:
+                #         error_message = 'File{}'.format(
+                #             error_message.split('File')[-1])
 
-                    error_raised.send(
-                        self, error=error_message,
-                        position=row,
-                        value=_model['attrs'],
-                        step=ErrorChoicesMixin.IMPORT_DATA)
+                #     error_raised.send(
+                #         self, error=error_message,
+                #         position=row,
+                #         value=_model['attrs'],
+                #         step=ErrorChoicesMixin.IMPORT_DATA)
 
             transaction.savepoint_commit(sid)
 

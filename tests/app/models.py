@@ -67,8 +67,8 @@ class Person(models.Model):
                 security_level=random.choice(range(100))
             )
             newobj.save()
-            # newobj.tags.add(*self.tags.all())
-            # newobj.save()
+            newobj.tags.add(*self.tags.all())
+            newobj.save()
         self.save()
 
     @property

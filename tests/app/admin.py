@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Person, Office
+from .models import Person, Office, Tag
 
 
 class PersonAdmin(admin.ModelAdmin):
@@ -19,5 +19,10 @@ class OfficeAdmin(admin.ModelAdmin):
     list_display = ('office', 'address')
 
 
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name',)
+
+
 admin.site.register(Person, PersonAdmin)
 admin.site.register(Office, OfficeAdmin)
+admin.site.register(Tag, TagAdmin)
