@@ -217,13 +217,9 @@ class Processor(object):
 
         return self.report
 
-    def process_instances(self, _model, model):
-        """Process instances (create, update, delete) for given params"""
-
+    def prepare_attrs(self, _model):
         main_model_attrs = {}
         related_models = {}
-        # TODO: sub-fields
-        # TODO: update if, create if, delete if
 
         for key in _model['attrs'].keys():
             if '|_fk_|' in key:
@@ -242,6 +238,13 @@ class Processor(object):
                 related_models[key_model] = attrs
             else:
                 main_model_attrs[key] = _model['attrs'][key]
+
+        return main_model_attrs, related_models
+
+    def process_instances(self, _model, model):
+        """Process instances (create, update, delete) for given params"""
+
+        main_model_attrs, related_models = self.prepare_attrs(_model)
 
         instance = model(**main_model_attrs)
         fields = model_fields(model)
