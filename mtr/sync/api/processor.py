@@ -15,6 +15,7 @@ from ..settings import LIMIT_PREVIEW, FILE_PATH
 
 
 class Dimension(object):
+
     def __init__(
             self, settings, end_row, end_col, preview=False,
             import_data=False, field_cols=None):
@@ -224,6 +225,9 @@ class Processor(object):
         for key in _model['attrs'].keys():
             if '|_fk_|' in key:
                 key_model, key_attr = key.split('|_fk_|')
+
+                if '|_' in key_attr:
+                    pass
 
                 attrs = related_models.get(key_model, {})
                 attrs[key_attr] = _model['attrs'][key]
