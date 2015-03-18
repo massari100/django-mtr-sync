@@ -1,6 +1,7 @@
 import random
 
 from django.utils.encoding import python_2_unicode_compatible
+from django.utils import six
 from django.utils.six.moves import range
 from django.db import models
 
@@ -73,7 +74,7 @@ class Person(models.Model):
 
     @property
     def custom_method(self):
-        return '{}-{}'.format(self.name, self.surname)
+        return six.text_type('{}-{}').format(self.name, self.surname)
 
     @custom_method.setter
     def custom_method(self, value):

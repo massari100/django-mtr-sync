@@ -17,7 +17,7 @@ setup(
     author_email='inboxmtr@gmail.com',
     url='https://github.com/mtrgroup/django-mtr-sync',
     description="",
-    long_description=README),
+    long_description=README,
     classifiers=[
         'Framework :: Django',
         'License :: OSI Approved :: MIT License',

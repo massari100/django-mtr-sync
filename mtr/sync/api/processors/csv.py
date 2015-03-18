@@ -1,8 +1,12 @@
 from __future__ import absolute_import
 
 from django.utils.translation import gettext_lazy as _
+from django.utils import six
 
-import csv
+if six.PY2:
+    import unicodecsv as csv
+else:
+    import csv
 
 from ..processor import Processor
 from ..manager import manager

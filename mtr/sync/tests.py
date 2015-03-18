@@ -1,7 +1,11 @@
+# coding: utf-8
+
 from __future__ import unicode_literals
 
 import os
 import datetime
+
+from django.utils import six
 
 from mtr.sync.api import Manager
 from mtr.sync.api.helpers import column_value
@@ -26,7 +30,8 @@ class ApiTestMixin(object):
             self.manager.register('processor', self.PROCESSOR)
 
         self.instance = self.model.objects.create(
-            name='test instance', surname='test surname',
+            name=six.text_type('test instance éprouver'),
+            surname='test surname',
             gender='M', security_level=10)
         self.r_instance = self.relatedmodel.objects.create(
             office='test', address='addr')

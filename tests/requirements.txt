@@ -8,8 +8,8 @@ xlwt-future
 xlrd
 ezodf
 lxml
-six
 virtualenvwrapper
 coverage
 sphinx
 sphinx_rtd_theme
+unicodecsv
