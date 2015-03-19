@@ -6,7 +6,7 @@ import os
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
-README = read('README.rst')
+README = read('README.md')
 
 setup(
     name='django-mtr-sync',

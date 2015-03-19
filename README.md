@@ -34,10 +34,10 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
   - maps model fields with data fields
   - adds and removes fields (ability to skip fields on import)
   - related models(fields, supports only ForeignKey) import-export by choosing main model
-- Supports: CSV(native python3), XLS (using: xlwt-future, xlrd), XLSX (using: openpyxl optimized writer, reader mode, for fast processing of large volumes of data)
+- Supports: CSV(native python3, unicodecsv python2), XLS (using: xlwt-future, xlrd), XLSX (using: openpyxl optimized writer, reader mode, for fast processing of large volumes of data) and ODS(odfpy)
 - Saves import, export settings for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
-- Supports: Django 1.7 Python 2.7, 3.3+ (Django 1.6 will be added soon)
+- Supports: Django 1.6-1.7 (1.8 not tested yet) Python 2.7, 3.3+
 
 ## Working on
 - Shortcuts at admin app
@@ -47,7 +47,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Inline support
 - Dashboard without admin
 - Custom filters (querysets)
-- Adding support of JSON, YAML, XML, ODS
+- Adding support of JSON, YAML, XML
 - Permission control for import settings using django auth, to minimize human errors. For example, this would allow only the manager to choose the settings template for import and to upload files without configuring
 - Export templates for (XLS, XLSX, ODS)
   - upload custom templates
