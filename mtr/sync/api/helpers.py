@@ -191,8 +191,14 @@ def process_attribute(model, attribute):
     return attr
 
 
-def model_querysets(model):
+def queryset_choices(settings):
     """Return list of querysets for given model"""
 
-    settings = model_settings(model)
-    return settings.get('querysets', None)
+    model = make_model_class(settings)
+    msettings = model_settings(model)
+
+    for queryset_name in msettings.get('querysets', []):
+        queryset = getattr(model, queryset_name)
+        yield (
+            queryset.__name__,
+            getattr(queryset, 'short_description', queryset.__name__))

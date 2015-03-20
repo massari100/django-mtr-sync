@@ -33,6 +33,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Field settings:
   - maps model fields with data fields
   - adds and removes fields (ability to skip fields on import)
+  - set start cell of exporting data
   - related models(fields, supports only ForeignKey) import-export by choosing main model
 - Supports: CSV(native python3, unicodecsv python2), XLS (using: xlwt-future, xlrd), XLSX (using: openpyxl optimized writer, reader mode, for fast processing of large volumes of data) and ODS(odfpy)
 - Saves import, export settings for the processing of data from various sources and for simplicity
@@ -51,7 +52,6 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Permission control for import settings using django auth, to minimize human errors. For example, this would allow only the manager to choose the settings template for import and to upload files without configuring
 - Export templates for (XLS, XLSX, ODS)
   - upload custom templates
-  - set start cell of exporting data
 - Value processors
   - API for writing own value converters and filters
   - Create processor from admin panel using embedded django template language, for example:

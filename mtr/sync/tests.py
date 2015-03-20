@@ -44,16 +44,17 @@ class ApiTestMixin(object):
 
         self.instance.office = self.r_instance
         self.instance.save()
-
         self.instance.populate(self.MODEL_COUNT)
-        self.queryset = self.model.objects.all()
 
         self.settings = Settings.objects.create(
             action=Settings.EXPORT,
             processor=self.PROCESSOR.__name__, worksheet='test',
             main_model='{}.{}'.format(
                 self.model.__module__, self.model.__name__),
-            include_header=False)
+            include_header=False,
+            queryset='some_queryset')
+
+        self.queryset = self.model.some_queryset(self.model, self.settings)
 
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.processor = self.manager.make_processor(self.settings)

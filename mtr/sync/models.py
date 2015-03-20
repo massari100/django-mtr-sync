@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .settings import FILE_PATH, strip_media_root
 from .api import manager
-from .api.helpers import model_attributes, model_choices
+from .api.helpers import model_attributes, model_choices, queryset_choices
 from .api.signals import export_started, export_completed, \
     import_started, import_completed, error_raised, manager_registered, \
     receiver_for

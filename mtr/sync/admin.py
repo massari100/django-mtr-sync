@@ -9,7 +9,7 @@ from django import forms
 from .models import Report, Settings, Field, ValueProcessorParams, \
     ValueProcessor, Error
 from .api import manager
-from .api.helpers import model_attributes
+from .api.helpers import model_attributes, queryset_choices
 from .settings import REGISTER_AT_ADMIN
 
 
@@ -137,6 +137,13 @@ class SettingsForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(SettingsForm, self).__init__(*args, **kwargs)
+
+        if self.instance.id:
+            print(list(queryset_choices(self.instance)))
+            self.fields['queryset'] = forms.ChoiceField(
+                label=self.fields['queryset'].label,
+                choices=queryset_choices(self.instance),
+                required=self.fields['queryset'].required)
 
     class Meta:
         exclude = []

@@ -91,7 +91,12 @@ class Person(models.Model):
     def __str__(self):
         return self.name
 
+    def some_queryset(model, settings):
+        return model.objects.filter(name__startswith='t')
+    some_queryset.short_description = 'some description'
+
     sync_settings = {
         'custom_fields': ['custom_method', 'none_param'],
-        'exclude': ['some_excluded_field']
+        'exclude': ['some_excluded_field'],
+        'querysets': ['some_queryset']
     }
