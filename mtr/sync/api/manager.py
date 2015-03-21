@@ -67,14 +67,10 @@ class ProcessorManagerMixin(object):
         return processor.export_data(data)
 
     def prepare_export_queryset(self, settings):
-        queryset = None
         current_model = make_model_class(settings)
+
         if settings.queryset:
             queryset = getattr(current_model, settings.queryset)
-
-        # TODO: automatic select_related, prefetch_related
-
-        if queryset:
             queryset = queryset(current_model, settings)
         else:
             queryset = current_model.objects.all()

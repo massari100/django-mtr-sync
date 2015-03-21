@@ -69,7 +69,7 @@ class ProcessorTestMixin(ApiTestMixin):
         pass
         # self.assertIsNone(os.remove(report.buffer_file.path))
 
-    def check_report_success(self, delete=True):
+    def check_report_success(self, delete=False):
         """Create report from settings and assert it's successful"""
 
         report = self.manager.export_data(self.settings)
@@ -137,7 +137,7 @@ class ProcessorTestMixin(ApiTestMixin):
         raise NotImplementedError
 
     def test_create_export_file_and_report_generation(self):
-        self.check_report_success()
+        self.check_report_success(delete=True)
 
     def test_export_all_dimension_settings(self):
         self.settings.start_row = 25
@@ -145,12 +145,12 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.end_col = 20
         self.settings.end_row = 250
 
-        report = self.check_report_success(delete=False)
+        report = self.check_report_success()
 
         self.check_sheet_values_and_delete_report(report)
 
     def test_export_no_dimension_settings(self):
-        report = self.check_report_success(delete=False)
+        report = self.check_report_success()
 
         self.check_sheet_values_and_delete_report(report)
 
@@ -160,7 +160,7 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.end_col = 20
         self.settings.end_row = 250
 
-        report = self.check_report_success(delete=False)
+        report = self.check_report_success()
 
         before = self.settings.end_row - self.settings.start_row + 1
         if before > self.queryset.count():
@@ -180,7 +180,7 @@ class ProcessorTestMixin(ApiTestMixin):
         self.assertEqual(before, self.queryset.count())
 
     def test_reading_empty_values(self):
-        report = self.check_report_success(delete=False)
+        report = self.check_report_success()
 
         max_rows, max_cols = self.processor.open(report.buffer_file.path)
         self.processor.set_dimensions(0, 0,

@@ -139,7 +139,6 @@ class SettingsForm(forms.ModelForm):
         super(SettingsForm, self).__init__(*args, **kwargs)
 
         if self.instance.id:
-            print(list(queryset_choices(self.instance)))
             self.fields['queryset'] = forms.ChoiceField(
                 label=self.fields['queryset'].label,
                 choices=queryset_choices(self.instance),

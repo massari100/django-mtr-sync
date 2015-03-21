@@ -92,7 +92,7 @@ class Person(models.Model):
         return self.name
 
     def some_queryset(model, settings):
-        return model.objects.filter(name__startswith='t')
+        return model.objects.filter(security_level__gte=30)
     some_queryset.short_description = 'some description'
 
     sync_settings = {
