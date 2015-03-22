@@ -218,32 +218,70 @@ class Processor(object):
 
         return self.report
 
+    def _prepare_fk_attrs(self, related_models, key, _model):
+        key_model, key_attr = key.split('|_fk_|')
+
+        attrs = related_models.get(key_model, {})
+        attrs[key_attr] = _model['attrs'][key]
+        related_models[key_model] = attrs
+
+        return related_models
+
+    def _prepare_mtm_attrs(self, related_models, key, _model):
+        key_model, key_attr = key.split('|_m_|')
+
+        value = _model['attrs'][key]
+
+        attrs = related_models.get(key_model, {})
+        attrs[key_attr] = value
+        related_models[key_model] = attrs
+
+        return related_models
+
     def prepare_attrs(self, _model):
         main_model_attrs = {}
         related_models = {}
 
         for key in _model['attrs'].keys():
             if '|_fk_|' in key:
-                key_model, key_attr = key.split('|_fk_|')
-
-                if '|_' in key_attr:
-                    pass
-
-                attrs = related_models.get(key_model, {})
-                attrs[key_attr] = _model['attrs'][key]
-                related_models[key_model] = attrs
+                related_models = self._prepare_fk_attrs(
+                    related_models, key, _model)
             elif '|_m_|' in key:
-                key_model, key_attr = key.split('|_m_|')
-
-                value = _model['attrs'][key]
-
-                attrs = related_models.get(key_model, {})
-                attrs[key_attr] = value
-                related_models[key_model] = attrs
+                related_models = self._prepare_mtm_attrs(
+                    related_models, key, _model)
             else:
                 main_model_attrs[key] = _model['attrs'][key]
 
         return main_model_attrs, related_models
+
+    def _create_related_instance(
+            self, instance, related_model, key, related_models):
+        related_instance = related_model(**related_models[key])
+        related_instance.save()
+        setattr(instance, key, related_instance)
+
+    def _create_mtm_instance(
+            self, add_after, instance, related_model, key, related_models):
+        instance_attrs = []
+        rel_values = list(related_models[key].values())
+        indexes = len(rel_values[0].split(','))
+
+        for index in range(indexes):
+            instance_values = {}
+            for k in related_models[key].keys():
+                value = related_models[key][k] \
+                    .split(',')[index]
+                if value.isdigit():
+                    value = int(value)
+                instance_values[k] = value
+            instance_attrs.append(instance_values)
+
+        for instance_attr in instance_attrs:
+            item = related_model(**instance_attr)
+            item.save()
+            add_after.setdefault(key, []).append(item)
+
+        return add_after
 
     def process_instances(self, _model, model):
         """Process instances (create, update, delete) for given params"""
@@ -259,29 +297,12 @@ class Processor(object):
             related_model = related_field.rel.to
 
             if isinstance(related_field, models.ForeignKey):
-                related_instance = related_model(**related_models[key])
-                related_instance.save()
+                self._create_related_instance(
+                    instance, related_model, key, related_models)
 
-                setattr(instance, key, related_instance)
             elif isinstance(related_field, models.ManyToManyField):
-                instance_attrs = []
-                rel_values = list(related_models[key].values())
-                indexes = len(rel_values[0].split(','))
-
-                for index in range(indexes):
-                    instance_values = {}
-                    for k in related_models[key].keys():
-                        value = related_models[key][k] \
-                            .split(',')[index]
-                        if value.isdigit():
-                            value = int(value)
-                        instance_values[k] = value
-                    instance_attrs.append(instance_values)
-
-                for instance_attr in instance_attrs:
-                    item = related_model(**instance_attr)
-                    item.save()
-                    add_after.setdefault(key, []).append(item)
+                self._create_mtm_instance(
+                    add_after, instance, related_model, key, related_models)
 
         instance.save()
 

@@ -121,8 +121,7 @@ class ProcessorTestMixin(ApiTestMixin):
 
         worksheet = self.open_report(report)
         self.check_values(
-            worksheet, self.queryset.get(pk=end_row - start_row + 1),
-            end_row, start_col)
+            worksheet, self.queryset.last(), end_row, start_col)
 
         self.check_file_existence_and_delete(report)
 
