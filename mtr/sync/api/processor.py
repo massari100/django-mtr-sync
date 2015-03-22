@@ -283,11 +283,7 @@ class Processor(object):
 
         return add_after
 
-    def process_instances(self, _model, model):
-        """Process instances (create, update, delete) for given params"""
-
-        main_model_attrs, related_models = self.prepare_attrs(_model)
-
+    def _create_instances(self, model, main_model_attrs, related_models):
         instance = model(**main_model_attrs)
         fields = model_fields(model)
         add_after = {}
@@ -308,6 +304,14 @@ class Processor(object):
 
         for key, values in add_after.items():
             getattr(instance, key).add(*values)
+
+    def process_instances(self, model_attrs, model):
+        """Process instances (create, update, delete) for given params"""
+
+        main_model_attrs, related_models = self.prepare_attrs(model_attrs)
+
+        # TODO: filter data and action
+        self._create_instances(model, main_model_attrs, related_models)
 
     def import_data(self, model, path=None):
         """Import data to model and return errors if exists"""

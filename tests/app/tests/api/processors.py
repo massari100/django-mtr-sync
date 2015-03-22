@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from mtr.sync.tests import ProcessorTestMixin
 from mtr.sync.api.helpers import process_attribute
+from mtr.sync.api.processor import Processor
 from mtr.sync.api.processors import xls, xlsx, csv, ods
 
 from ...models import Person, Office, Tag
@@ -118,3 +119,24 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
             self.assertEqual('' if value is None else value, sheet_value)
+
+
+class ProcessorTest(TestCase):
+
+    def setUp(self):
+        class SomeProcessor(Processor):
+            pass
+
+        self.processor = SomeProcessor(None, None)
+
+    def test_raises_not_implemented(self):
+        with self.assertRaises(NotImplementedError):
+            self.processor.write(0)
+        with self.assertRaises(NotImplementedError):
+            self.processor.read(0)
+        with self.assertRaises(NotImplementedError):
+            self.processor.create('')
+        with self.assertRaises(NotImplementedError):
+            self.processor.open('')
+        with self.assertRaises(NotImplementedError):
+            self.processor.save()

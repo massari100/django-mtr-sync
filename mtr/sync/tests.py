@@ -114,6 +114,9 @@ class ProcessorTestMixin(ApiTestMixin):
 
         if self.queryset.count() < end_row:
             end_row = self.queryset.count() + start_row - 1
+            last = self.queryset.last()
+        else:
+            last = self.queryset.all()[end_row - start_row]
 
         worksheet = self.open_report(report)
         self.check_values(
@@ -121,7 +124,7 @@ class ProcessorTestMixin(ApiTestMixin):
 
         worksheet = self.open_report(report)
         self.check_values(
-            worksheet, self.queryset.last(), end_row, start_col)
+            worksheet, last, end_row, start_col)
 
         self.check_file_existence_and_delete(report)
 
