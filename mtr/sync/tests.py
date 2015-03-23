@@ -66,8 +66,8 @@ class ProcessorTestMixin(ApiTestMixin):
 
     def check_file_existence_and_delete(self, report):
         """Delete report file"""
-        pass
-        # self.assertIsNone(os.remove(report.buffer_file.path))
+
+        self.assertIsNone(os.remove(report.buffer_file.path))
 
     def check_report_success(self, delete=False):
         """Create report from settings and assert it's successful"""
@@ -87,6 +87,27 @@ class ProcessorTestMixin(ApiTestMixin):
             self.check_file_existence_and_delete(report)
 
         return report
+
+    def test_report_empty_import_errors(self):
+        self.settings.start_row = 100
+        self.settings.start_col = 18
+        self.settings.end_col = 38
+        self.settings.end_row = 350
+
+        report = self.check_report_success()
+
+        self.settings.start_row = 1
+        self.settings.start_col = 1
+        self.settings.end_col = 15
+        self.settings.end_row = 99
+        self.settings.action = self.settings.IMPORT
+        self.settings.buffer_file = report.buffer_file
+
+        report = self.manager.import_data(self.settings)
+
+        self.assertEqual(report.errors.count(), self.settings.end_row)
+
+        self.check_file_existence_and_delete(report)
 
     def check_sheet_values_and_delete_report(self, report):
         if self.settings.start_row:
