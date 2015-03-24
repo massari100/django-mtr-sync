@@ -4,6 +4,7 @@ from functools import partial
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
+from django.core.urlresolvers import reverse
 from django import forms
 
 from .models import Report, Settings, Field, ValueProcessorParams, \
@@ -65,7 +66,7 @@ class FieldForm(forms.ModelForm):
 
             self.fields['attribute'] = forms.ChoiceField(
                 label=self.fields['attribute'].label,
-                choices=manager.model_attributes(settings))
+                choices=model_attributes(settings))
 
     class Meta:
         exclude = []
@@ -82,6 +83,9 @@ class FieldAdmin(admin.ModelAdmin):
 class FieldInline(admin.TabularInline):
     model = Field
     extra = 0
+    readonly_fields = ('processors_list',)
+    fields = (
+        'position', 'name', 'attribute', 'processors_list', 'skip')
 
     def get_formset(self, request, obj=None, **kwargs):
         """Pass parent object to inline form"""
@@ -104,6 +108,25 @@ class FieldInline(admin.TabularInline):
                 choices=model_attributes(settings))
 
         return field
+
+    def processors_list(self, obj):
+        processors = obj.processors.all()
+        result = []
+        if processors:
+            result = ["<ul>"]
+            for processor in processors:
+                result.append("<li>{}</li>".format(processor.label))
+        else:
+            # TODO: fix translation join
+            result.append("No value processors selected<br>")
+        result.append('<a href="{}">{}</a>'.format(
+            reverse('admin:mtrsync_field_change', args=[obj.id]),
+            'Add processors'))
+
+        return ''.join(result)
+
+    processors_list.short_description = _('mtr.sync:Processors')
+    processors_list.allow_tags = True
 
 
 class SettingsForm(forms.ModelForm):

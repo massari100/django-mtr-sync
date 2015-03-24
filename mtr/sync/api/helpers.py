@@ -104,9 +104,9 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
             field = field.fget
 
         label = getattr(
-            field, '__name__', getattr(
-                field, 'short_description', getattr(
-                    field, 'verbose_name', repr(field))))
+            field, 'short_description', getattr(
+                field, 'verbose_name', getattr(
+                    field, '__name__', repr(field))))
 
         if m_prefix:
             child_attrs = model_attributes(

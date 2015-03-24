@@ -163,7 +163,8 @@ class Settings(ActionsMixin):
             exclude = []
         for name, label in model_attributes(self):
             if name not in exclude:
-                fields.append(self.fields.create(attribute=name))
+                fields.append(self.fields.create(
+                    attribute=name, name=label))
         return fields
 
     def run(self):
@@ -214,8 +215,6 @@ class Field(PositionMixin):
     name = models.CharField(_('mtr.sync:name'), max_length=255, blank=True)
     attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
-
-    filter_by = models.BooleanField(_('mtr.sync:filter'), default=False)
 
     processors = models.ManyToManyField(
         ValueProcessor, through='ValueProcessorParams')
@@ -271,7 +270,7 @@ class ValueProcessorParams(PositionMixin):
         super(ValueProcessorParams, self).save(*args, **kwargs)
 
     def __str__(self):
-        return self.processor_related.attribute
+        return self.processor_related.label
 
 
 @python_2_unicode_compatible
