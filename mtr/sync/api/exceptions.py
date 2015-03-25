@@ -36,7 +36,3 @@ class ItemDoesNotRegistered(Exception):
 
 class ItemAlreadyRegistered(Exception):
     pass
-
-
-class NoIndexFound(Exception):
-    pass

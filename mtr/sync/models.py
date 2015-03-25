@@ -5,7 +5,7 @@ from django.utils.translation import gettext_lazy as _
 
 from .settings import FILE_PATH, strip_media_root
 from .api import manager
-from .api.helpers import model_attributes, model_choices, queryset_choices
+from .api.helpers import model_attributes, model_choices
 from .api.signals import export_started, export_completed, \
     import_started, import_completed, error_raised, manager_registered, \
     receiver_for
@@ -154,7 +154,7 @@ class Settings(ActionsMixin):
         self.start_col = start_col
         self.end_col = max_col
 
-    def create_default_fields(self, exclude=None):
+    def create_default_fields(self, exclude=None, add_label=True):
         """Create all fields for selected model"""
 
         fields = []
@@ -162,6 +162,7 @@ class Settings(ActionsMixin):
         if not exclude:
             exclude = []
         for name, label in model_attributes(self):
+            label = label if self.action != self.IMPORT and add_label else ''
             if name not in exclude:
                 fields.append(self.fields.create(
                     attribute=name, name=label))

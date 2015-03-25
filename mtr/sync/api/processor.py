@@ -286,7 +286,7 @@ class Processor(DataProcessor):
                 try:
                     with transaction.atomic():
                         self.process_instances(_model, model)
-                except (Error, ValueError, AttributeError):
+                except (Error, ValueError, AttributeError, IndexError):
                     transaction.savepoint_rollback(sid)
                     error_message = traceback.format_exc()
                     if 'File' in error_message:

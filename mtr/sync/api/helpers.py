@@ -4,7 +4,6 @@ from django.utils.six.moves import filterfalse
 from django.db import models
 from django.db.models.fields import Field as ModelField
 
-from .exceptions import NoIndexFound
 from ..settings import MODEL_SETTINGS_NAME
 
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -29,11 +28,10 @@ def column_index(value):
 
     for index in range(0, 18279):
         name = column_name(index)
-
         if name == value:
             return index
 
-    raise NoIndexFound
+    raise IndexError
 
 
 def column_value(value):

@@ -59,7 +59,7 @@ class ApiTestMixin(object):
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.processor = self.manager.make_processor(self.settings)
 
-            self.fields = self.settings.create_default_fields()
+            self.fields = self.settings.create_default_fields(add_label=False)
 
 
 class ProcessorTestMixin(ApiTestMixin):
