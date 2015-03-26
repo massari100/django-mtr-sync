@@ -9,9 +9,8 @@ from django import forms
 
 from .models import Report, Settings, Field, ValueProcessorParams, \
     ValueProcessor, Error
-from .api import manager
 from .api.helpers import model_attributes, queryset_choices
-from .settings import REGISTER_AT_ADMIN
+from .settings import REGISTER_IN_ADMIN
 
 
 class ErrorInline(admin.TabularInline):
@@ -64,9 +63,7 @@ class FieldForm(forms.ModelForm):
                     settings = av_settings
                     break
 
-            self.fields['attribute'] = forms.ChoiceField(
-                label=self.fields['attribute'].label,
-                choices=model_attributes(settings))
+            self.fields['attribute'].choices = model_attributes(settings)
 
     class Meta:
         exclude = []
@@ -103,9 +100,7 @@ class FieldInline(admin.TabularInline):
             FieldInline, self).formfield_for_dbfield(db_field, **kwargs)
 
         if db_field.name == 'attribute':
-            field = forms.ChoiceField(
-                label=field.label,
-                choices=model_attributes(settings))
+            field.choices = model_attributes(settings)
 
         return field
 
@@ -117,11 +112,10 @@ class FieldInline(admin.TabularInline):
             for processor in processors:
                 result.append("<li>{}</li>".format(processor.label))
         else:
-            # TODO: fix translation join
-            result.append("No value processors selected<br>")
+            result.append(_("No value processors selected<br>"))
         result.append('<a href="{}">{}</a>'.format(
             reverse('admin:mtrsync_field_change', args=[obj.id]),
-            'Add processors'))
+            _('Add processors')))
 
         return ''.join(result)
 
@@ -162,10 +156,7 @@ class SettingsForm(forms.ModelForm):
         super(SettingsForm, self).__init__(*args, **kwargs)
 
         if self.instance.id:
-            self.fields['queryset'] = forms.ChoiceField(
-                label=self.fields['queryset'].label,
-                choices=queryset_choices(self.instance),
-                required=self.fields['queryset'].required)
+            self.fields['queryset'].choices = queryset_choices(self.instance)
 
     class Meta:
         exclude = []
@@ -204,7 +195,7 @@ class SettingsAdmin(admin.ModelAdmin):
 
     run.short_description = _('mtr.sync:Sync data')
 
-if REGISTER_AT_ADMIN():
+if REGISTER_IN_ADMIN():
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Settings, SettingsAdmin)
     admin.site.register(Field, FieldAdmin)

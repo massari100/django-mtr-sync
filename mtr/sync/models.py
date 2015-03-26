@@ -164,8 +164,14 @@ class Settings(ActionsMixin):
         for name, label in model_attributes(self):
             label = label if self.action != self.IMPORT and add_label else ''
             if name not in exclude:
-                fields.append(self.fields.create(
-                    attribute=name, name=label))
+                field = self.fields.create(
+                    attribute=name, name=label)
+
+                # TODO: add default processors
+
+                # field.processors.get_or_create(name='auto')
+                fields.append(field)
+
         return fields
 
     def run(self):
@@ -208,13 +214,24 @@ class ValueProcessor(models.Model):
         return self.name
 
 
+@receiver(manager_registered)
+@receiver_for('valueprocessor')
+def create_valueprocessor(sender, **kwargs):
+    ValueProcessor.objects.get_or_create(
+        name=kwargs['func_name'], defaults={
+            'label': kwargs.get('label', None) or kwargs['func_name'],
+            'description': kwargs.get('description', None)
+        })
+
+
 @python_2_unicode_compatible
 class Field(PositionMixin):
 
     """Data mapping field for Settings"""
 
     name = models.CharField(_('mtr.sync:name'), max_length=255, blank=True)
-    attribute = models.CharField(_('mtr.sync:model attribute'), max_length=255)
+    attribute = models.CharField(
+        _('mtr.sync:model attribute'), max_length=255, choices=tuple())
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
     processors = models.ManyToManyField(
@@ -238,16 +255,6 @@ class Field(PositionMixin):
 
     def __str__(self):
         return self.name or self.attribute
-
-
-@receiver(manager_registered)
-@receiver_for('valueprocessor')
-def create_valueprocessor(sender, **kwargs):
-    ValueProcessor.objects.get_or_create(
-        name=kwargs['func_name'], defaults={
-            'label': kwargs.get('label', None) or kwargs['func_name'],
-            'description': kwargs.get('description', None)
-        })
 
 
 @python_2_unicode_compatible
