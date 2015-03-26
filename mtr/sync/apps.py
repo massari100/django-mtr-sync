@@ -8,8 +8,3 @@ class MtrSyncConfig(AppConfig):
     name = 'mtr.sync'
     label = 'mtrsync'
     verbose_name = _('mtr.sync:Data sync')
-
-    def ready(self):
-        # TODO: create fallback for django 1.6 or remove valueprocessors model
-
-        __import__('mtr.sync.api.valueprocessors')
