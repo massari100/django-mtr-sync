@@ -215,7 +215,6 @@ class Manager(ProcessorManagerMixin):
                     'func_name': new_name,
                     'func': func
                 })
-
                 manager_registered.send(self, **kwargs)
 
             return func

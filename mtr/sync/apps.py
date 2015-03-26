@@ -12,4 +12,4 @@ class MtrSyncConfig(AppConfig):
     def ready(self):
         # TODO: create fallback for django 1.6 or remove valueprocessors model
 
-        __import__('mtr.sync.api.processors.values')
+        __import__('mtr.sync.api.valueprocessors')
