@@ -1,7 +1,10 @@
+from django.utils.translation import gettext_lazy as _
+
 from .manager import manager
 
 
-@manager.register('valueprocessor', label='mtr.sync:Auto')
+@manager.register('valueprocessor', label=_('mtr.sync:Auto'))
 def auto(value, field, action):
-    print(field)
+    """Auto convert values to field types in models"""
+
     return action, value

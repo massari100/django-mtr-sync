@@ -1,7 +1,14 @@
+import django
+
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
+
+if django.get_version() >= '1.7':
+    from django.db.models.signals import post_syncdb as post_migrate
+else:
+    from django.db.models.signals import post_migrate
 
 from .settings import FILE_PATH, strip_media_root
 from .api import manager
@@ -413,3 +420,9 @@ def create_error(sender, **kwargs):
         report=sender.report, message=kwargs['error'],
         step=kwargs['step'], input_position=position,
         input_value=repr(value) if value else None)
+
+
+@receiver(post_migrate)
+def create_deault_value_processors(sender, **kwargs):
+    print('called!')
+    __import__('mtr.sync.api.valueprocessors')
