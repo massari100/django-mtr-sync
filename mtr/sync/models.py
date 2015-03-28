@@ -424,5 +424,6 @@ def create_error(sender, **kwargs):
 
 @receiver(post_migrate)
 def create_deault_value_processors(sender, **kwargs):
-    print('called!')
+    # TODO: why so many times called?
+
     __import__('mtr.sync.api.valueprocessors')
