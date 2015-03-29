@@ -54,7 +54,7 @@ class ApiTestMixin(object):
             include_header=False,
             queryset='some_queryset')
 
-        self.queryset = self.model.some_queryset(self.model, self.settings)
+        self.queryset = self.model.some_queryset(self.settings)
 
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.processor = self.manager.make_processor(self.settings)

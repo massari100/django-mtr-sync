@@ -58,5 +58,5 @@ class OdsProcessor(Processor):
 
         try:
             os.remove('{}.bak'.format(self._path))
-        except FileNotFoundError:
+        except OSError:
             pass

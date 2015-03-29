@@ -91,9 +91,12 @@ class Person(models.Model):
     def __str__(self):
         return self.name
 
+    @classmethod
     def some_queryset(model, settings):
         return model.objects.filter(security_level__gte=30)
-    some_queryset.short_description = 'some description'
+
+    # TODO: fix description
+    # some_queryset.short_description = 'some description'
 
     sync_settings = {
         'custom_fields': ['custom_method', 'none_param'],

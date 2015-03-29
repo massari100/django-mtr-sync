@@ -1,5 +1,7 @@
 import os
 
+import django
+
 from fabric.api import local, task, lcd
 
 APPS = ['mtr.sync']
@@ -101,7 +103,13 @@ def install():
 def migrate():
     """Make migrations and migrate"""
 
-    manage('makemigrations')
+    if django.get_version() >= '1.7':
+        manage('makemigrations')
+    else:
+        manage('schemamigration --initial sync')
+        manage('schemamigration --initial app')
+        manage('syncdb --noinput')
+
     manage('migrate')
 
 
@@ -119,6 +127,8 @@ def recreate():
         with lcd(os.path.join(*app.split('.'))):
             local('rm -f ./migrations/*.py')
             local('touch ./migrations/__init__.py')
+            local('rm -f ./south_migrations/*.py')
+            local('touch ./south_migrations/__init__.py')
     with lcd(PROJECT_DIR):
         local('rm -f *.sqlite3')
 

@@ -71,7 +71,7 @@ class ProcessorManagerMixin(object):
 
         if settings.queryset:
             queryset = getattr(current_model, settings.queryset)
-            queryset = queryset(current_model, settings)
+            queryset = queryset(settings)
         else:
             queryset = current_model.objects.all()
 
