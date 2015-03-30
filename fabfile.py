@@ -125,10 +125,12 @@ def recreate():
 
     for app in apps:
         with lcd(os.path.join(*app.split('.'))):
-            local('rm -f ./migrations/*.py')
-            local('touch ./migrations/__init__.py')
-            local('rm -f ./south_migrations/*.py')
-            local('touch ./south_migrations/__init__.py')
+            if django.get_version() >= '1.7':
+                local('rm -f ./migrations/*.py')
+                local('touch ./migrations/__init__.py')
+            else:
+                local('rm -f ./south_migrations/*.py')
+                local('touch ./south_migrations/__init__.py')
     with lcd(PROJECT_DIR):
         local('rm -f *.sqlite3')
 

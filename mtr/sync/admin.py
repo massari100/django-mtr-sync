@@ -7,8 +7,7 @@ from django.contrib import admin
 from django.core.urlresolvers import reverse
 from django import forms
 
-from .models import Report, Settings, Field, ValueProcessorParams, \
-    ValueProcessor, Error
+from .models import Report, Settings, Field, Error
 from .api.helpers import model_attributes, queryset_choices
 from .settings import REGISTER_IN_ADMIN
 
@@ -40,15 +39,6 @@ class ReportAdmin(admin.ModelAdmin):
         'mtr.sync:Link to file')
 
 
-class ValueProcessorParamsInline(admin.TabularInline):
-    model = ValueProcessorParams
-    extra = 0
-
-
-class ValueProcessorAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description')
-
-
 class FieldForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
@@ -71,18 +61,15 @@ class FieldForm(forms.ModelForm):
 
 
 class FieldAdmin(admin.ModelAdmin):
-    list_display = ('name', 'attribute', 'settings')
+    list_display = ('name', 'attribute', 'processors', 'settings')
     list_filter = ('settings',)
-    inlines = (ValueProcessorParamsInline,)
     form = FieldForm
 
 
 class FieldInline(admin.TabularInline):
     model = Field
     extra = 0
-    readonly_fields = ('processors_list',)
-    fields = (
-        'position', 'name', 'attribute', 'processors_list', 'skip')
+    fields = ('position', 'name', 'attribute', 'processors', 'skip')
 
     def get_formset(self, request, obj=None, **kwargs):
         """Pass parent object to inline form"""
@@ -103,24 +90,6 @@ class FieldInline(admin.TabularInline):
             field.choices = model_attributes(settings)
 
         return field
-
-    def processors_list(self, obj):
-        processors = obj.processors.all()
-        result = []
-        if processors:
-            result = ["<ul>"]
-            for processor in processors:
-                result.append("<li>{}</li>".format(processor.label))
-        else:
-            result.append(_("No value processors selected<br>"))
-        result.append('<a href="{}">{}</a>'.format(
-            reverse('admin:mtrsync_field_change', args=[obj.id]),
-            _('Add processors')))
-
-        return ''.join(result)
-
-    processors_list.short_description = _('mtr.sync:Processors')
-    processors_list.allow_tags = True
 
 
 class SettingsForm(forms.ModelForm):
@@ -199,4 +168,3 @@ if REGISTER_IN_ADMIN():
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Settings, SettingsAdmin)
     admin.site.register(Field, FieldAdmin)
-    admin.site.register(ValueProcessor, ValueProcessorAdmin)

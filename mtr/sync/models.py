@@ -122,15 +122,15 @@ class Settings(ActionsMixin):
     def fields_with_processors(self):
         """Return iterator of fields with filters"""
 
-        fields = self.fields.prefetch_related(
-            'processor_params__processor_related') \
-            .exclude(skip=True).all()
+        fields = self.fields.exclude(skip=True)
         for field in fields:
             field.ordered_processors = []
+            if field.processors:
+                # TODO: make field with widget
 
-            for processor_param in field.processor_params.all():
-                field.ordered_processors.append(
-                    processor_param.processor_related)
+                for processor in field.processors.split(','):
+                    field.ordered_processors.append(
+                        manager.get_or_raise('valueprocessors', processor))
 
             yield field
 
@@ -202,36 +202,6 @@ class Settings(ActionsMixin):
 
 
 @python_2_unicode_compatible
-class ValueProcessor(models.Model):
-
-    """ValueProcessor data using internal template"""
-
-    name = models.CharField(_('mtr.sync:name'), max_length=255)
-    label = models.CharField(_('mtr.sync:label'), max_length=255)
-    description = models.TextField(
-        _('mtr.sync:description'), max_length=20000, null=True, blank=True)
-
-    class Meta:
-        verbose_name = _('mtr.sync:value processor')
-        verbose_name_plural = _('mtr.sync:value processors')
-
-        ordering = ('-id',)
-
-    def __str__(self):
-        return self.name
-
-
-@receiver(manager_registered)
-@receiver_for('valueprocessor')
-def create_valueprocessor(sender, **kwargs):
-    ValueProcessor.objects.get_or_create(
-        name=kwargs['func_name'], defaults={
-            'label': kwargs.get('label', None) or kwargs['func_name'],
-            'description': kwargs.get('description', None)
-        })
-
-
-@python_2_unicode_compatible
 class Field(PositionMixin):
 
     """Data mapping field for Settings"""
@@ -241,8 +211,7 @@ class Field(PositionMixin):
         _('mtr.sync:model attribute'), max_length=255, choices=tuple())
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
-    processors = models.ManyToManyField(
-        ValueProcessor, through='ValueProcessorParams')
+    processors = models.CharField(_('mtr.sync:processors'), max_length=255)
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
@@ -262,30 +231,6 @@ class Field(PositionMixin):
 
     def __str__(self):
         return self.name or self.attribute
-
-
-@python_2_unicode_compatible
-class ValueProcessorParams(PositionMixin):
-
-    processor_related = models.ForeignKey(
-        ValueProcessor, verbose_name=_('mtr.sync:filter'))
-    field_related = models.ForeignKey(Field, related_name='processor_params')
-
-    class Meta:
-        verbose_name = _('mtr.sync:value processor')
-        verbose_name_plural = _('mtr.sync:value processors')
-
-        ordering = ['position']
-
-    def save(self, *args, **kwargs):
-        if self.position is None:
-            self.position = self.__class__.objects \
-                .filter(field_related=self.field_related).count() + 1
-
-        super(ValueProcessorParams, self).save(*args, **kwargs)
-
-    def __str__(self):
-        return self.processor_related.label
 
 
 @python_2_unicode_compatible
@@ -420,12 +365,3 @@ def create_error(sender, **kwargs):
         report=sender.report, message=kwargs['error'],
         step=kwargs['step'], input_position=position,
         input_value=repr(value) if value else None)
-
-
-@receiver(post_migrate)
-def create_deault_value_processors(sender, **kwargs):
-    # TODO: why many times called?
-
-    # print('Imported!')
-
-    __import__('mtr.sync.api.valueprocessors')
