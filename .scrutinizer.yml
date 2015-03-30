@@ -21,3 +21,5 @@ filter:
         - '*tests*'
         - 'fabfile.py'
         - 'docs/*'
+        - 'migrations/*'
+        - 'south_migrations/*'

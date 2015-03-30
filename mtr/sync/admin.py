@@ -4,7 +4,6 @@ from functools import partial
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
-from django.core.urlresolvers import reverse
 from django import forms
 
 from .models import Report, Settings, Field, Error

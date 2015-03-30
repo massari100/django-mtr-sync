@@ -5,7 +5,6 @@ from collections import OrderedDict
 from django.utils.six.moves import filterfalse
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
-from .signals import manager_registered
 from .helpers import column_value, make_model_class, model_settings, \
     process_attribute
 from ..settings import IMPORT_PROCESSORS
@@ -209,13 +208,6 @@ class Manager(ProcessorManagerMixin):
                             values.items(),
                             key=lambda p: getattr(p[1], 'position', 0)))
                 setattr(self, key, values)
-
-                kwargs.update({
-                    'type_name': type_name,
-                    'func_name': new_name,
-                    'func': func
-                })
-                manager_registered.send(self, **kwargs)
 
             return func
 

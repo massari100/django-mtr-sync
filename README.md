@@ -54,7 +54,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
   - upload custom templates
 - Value processors
   - API for writing own value converters and filters
-  - Create processor from admin panel using embedded django template language, for example:
+  - (not usable, moved to code) Create processor from admin panel using embedded django template language, for example:
   - `{% if field|is_number %}{{ field/2 }}{% endif %}` (pseudo code)
   - Standard value processors for various types and actions
     - If object exists in database and does not exist in import data, then delete it
