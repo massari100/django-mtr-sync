@@ -116,13 +116,13 @@ class Settings(ActionsMixin):
 
         fields = self.fields.exclude(skip=True)
         for field in fields:
-            field.ordered_processors = []
-            if field.processors:
+            field.ordered_converters = []
+            if field.converters:
                 # TODO: make field with widget
 
-                for processor in field.processors.split(','):
-                    field.ordered_processors.append(
-                        manager.get_or_raise('valueprocessors', processor))
+                for converter in field.converters.split(','):
+                    field.ordered_converters.append(
+                        manager.get_or_raise('converter', converter))
 
             yield field
 
@@ -164,11 +164,7 @@ class Settings(ActionsMixin):
             label = label if self.action != self.IMPORT and add_label else ''
             if name not in exclude:
                 field = self.fields.create(
-                    attribute=name, name=label)
-
-                # TODO: add default processors
-
-                # field.processors.get_or_create(name='auto')
+                    attribute=name, name=label, converters='auto')
                 fields.append(field)
 
         return fields
@@ -203,7 +199,7 @@ class Field(PositionMixin):
         _('mtr.sync:model attribute'), max_length=255, choices=tuple())
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
-    processors = models.CharField(_('mtr.sync:processors'), max_length=255)
+    converters = models.CharField(_('mtr.sync:converters'), max_length=255)
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')

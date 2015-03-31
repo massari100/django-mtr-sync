@@ -12,17 +12,13 @@ from ..settings import IMPORT_PROCESSORS
 
 class ProcessorManagerMixin(object):
 
-    def process_value(self, field, value, export=False, action=None):
+    def convert_value(self, field, value, export=False, action=None):
         """Process value with filters and actions"""
 
-        process_action = 'export' if export else 'import'
+        convert_action = 'export' if export else 'import'
 
-        for field_processor in field.ordered_processors:
-            process_func = self.valueprocessors.get(field_processor.name, None)
-            value = process_func(value, field, process_action)
-
-        if isinstance(value, list):
-            value = ','.join(map(lambda v: str(v), value))
+        for convert_func in field.ordered_converters:
+            value = convert_func(value, field, convert_action)
 
         return value
 
@@ -111,7 +107,7 @@ class ProcessorManagerMixin(object):
             'cols': len(fields),
             'fields': fields,
             'items': (
-                self.process_value(
+                self.convert_value(
                     field, process_attribute(item, field.attribute),
                     export=True)
                 for item in queryset
@@ -234,6 +230,8 @@ class Manager(ProcessorManagerMixin):
 
         for module in IMPORT_PROCESSORS():
             __import__(module)
+
+        __import__('mtr.sync.api.converters')
 
 manager = Manager()
 manager.import_processors_modules()

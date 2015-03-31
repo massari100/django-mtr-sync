@@ -60,7 +60,7 @@ class FieldForm(forms.ModelForm):
 
 
 class FieldAdmin(admin.ModelAdmin):
-    list_display = ('name', 'attribute', 'processors', 'settings')
+    list_display = ('name', 'attribute', 'converters', 'settings')
     list_filter = ('settings',)
     form = FieldForm
 
@@ -68,7 +68,7 @@ class FieldAdmin(admin.ModelAdmin):
 class FieldInline(admin.TabularInline):
     model = Field
     extra = 0
-    fields = ('position', 'name', 'attribute', 'processors', 'skip')
+    fields = ('position', 'name', 'attribute', 'converters', 'skip')
 
     def get_formset(self, request, obj=None, **kwargs):
         """Pass parent object to inline form"""

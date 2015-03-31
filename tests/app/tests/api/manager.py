@@ -55,7 +55,7 @@ class ManagerTest(ApiTestMixin, TestCase):
             list(self.manager.processors.values()), ordered_processors)
 
     def test_registering_dict_instance_attributes(self):
-        @self.manager.register('filter', name='test')
+        @self.manager.register('converter', name='test')
         def some_filter():
             return None
 
@@ -65,7 +65,7 @@ class ManagerTest(ApiTestMixin, TestCase):
             list(self.manager.filters.values())[0], some_filter)
 
         self.assertEqual(
-            self.manager.unregister('filter', 'test'), 'test')
+            self.manager.unregister('converter', 'test'), 'test')
         self.assertEqual(self.manager.filters, {})
 
     def test_value_manipulation_filters(self):
@@ -76,7 +76,7 @@ class ManagerTest(ApiTestMixin, TestCase):
         before_data = list(self.manager.prepare_export_data(
             self.processor, self.queryset)['items'])
 
-        @self.manager.register('valueprocessor', label='multiply by 10')
+        @self.manager.register('converter', label='multiply by 10')
         def test_filter(value, field, action):
             return value * 10
 
