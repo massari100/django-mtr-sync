@@ -12,13 +12,13 @@ from ..settings import IMPORT_PROCESSORS
 
 class ProcessorManagerMixin(object):
 
-    def convert_value(self, field, value, export=False, action=None):
+    def convert_value(self, value, model, field, export=False, action=None):
         """Process value with filters and actions"""
 
         convert_action = 'export' if export else 'import'
 
         for convert_func in field.ordered_converters:
-            value = convert_func(value, field, convert_action)
+            value = convert_func(value, model, field, convert_action)
 
         return value
 
@@ -108,8 +108,8 @@ class ProcessorManagerMixin(object):
             'fields': fields,
             'items': (
                 self.convert_value(
-                    field, process_attribute(item, field.attribute),
-                    export=True)
+                    process_attribute(item, field.attribute),
+                    model, field, export=True)
                 for item in queryset
                 for field in fields
             )
@@ -123,23 +123,19 @@ class ProcessorManagerMixin(object):
 
         return processor.import_data(model, path)
 
-    def model_data(self, processor, fields):
+    def model_data(self, processor, model, fields):
         for row_index in processor.rows:
-            model = {'attrs': {}, 'action': None}
+            _model = {}
             row = processor.read(row_index)
 
             for index, field in enumerate(fields):
                 col = column_value(field.name) if field.name else index
-                value = self.process_value(field, row[col])
-                action, value = \
-                    value if isinstance(value, tuple) else None, value
+                value = self.convert_value(row[col], model, field)
+                _model[field.attribute] = value
 
-                model['attrs'][field.attribute] = value
-                model['action'] = action
+            yield row_index, _model
 
-            yield row_index, model
-
-    def prepare_import_data(self, processor):
+    def prepare_import_data(self, processor, model):
         """Prepare data using filters from settings and return iterator"""
 
         settings = processor.settings
@@ -155,7 +151,7 @@ class ProcessorManagerMixin(object):
 
         return {
             'cols': len(fields),
-            'items': self.model_data(processor, fields),
+            'items': self.model_data(processor, model, fields),
         }
 
 

@@ -60,13 +60,13 @@ class ManagerTest(ApiTestMixin, TestCase):
             return None
 
         self.assertEqual(
-            list(self.manager.filters.keys())[0], 'test')
+            list(self.manager.converters.keys())[0], 'test')
         self.assertEqual(
-            list(self.manager.filters.values())[0], some_filter)
+            list(self.manager.converters.values())[0], some_filter)
 
         self.assertEqual(
             self.manager.unregister('converter', 'test'), 'test')
-        self.assertEqual(self.manager.filters, {})
+        self.assertEqual(self.manager.converters, {})
 
     def test_value_manipulation_filters(self):
         self.manager.register('processor', self.PROCESSOR)

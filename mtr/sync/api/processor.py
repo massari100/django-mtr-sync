@@ -168,7 +168,7 @@ class Processor(DataProcessor):
         key_model, key_attr = key.split('|_fk_|')
 
         attrs = related_models.get(key_model, {})
-        attrs[key_attr] = _model['attrs'][key]
+        attrs[key_attr] = _model[key]
         related_models[key_model] = attrs
 
         return related_models
@@ -176,7 +176,7 @@ class Processor(DataProcessor):
     def _prepare_mtm_attrs(self, related_models, key, _model):
         key_model, key_attr = key.split('|_m_|')
 
-        value = _model['attrs'][key]
+        value = _model[key]
 
         attrs = related_models.get(key_model, {})
         attrs[key_attr] = value
@@ -188,7 +188,7 @@ class Processor(DataProcessor):
         main_model_attrs = {}
         related_models = {}
 
-        for key in _model['attrs'].keys():
+        for key in _model.keys():
             if '|_fk_|' in key:
                 related_models = self._prepare_fk_attrs(
                     related_models, key, _model)
@@ -196,7 +196,7 @@ class Processor(DataProcessor):
                 related_models = self._prepare_mtm_attrs(
                     related_models, key, _model)
             else:
-                main_model_attrs[key] = _model['attrs'][key]
+                main_model_attrs[key] = _model[key]
 
         return main_model_attrs, related_models
 
@@ -210,15 +210,12 @@ class Processor(DataProcessor):
             self, add_after, instance, related_model, key, related_models):
         instance_attrs = []
         rel_values = list(related_models[key].values())
-        indexes = len(rel_values[0].split(','))
+        indexes = len(rel_values[0])
 
         for index in range(indexes):
             instance_values = {}
             for k in related_models[key].keys():
-                value = related_models[key][k] \
-                    .split(',')[index]
-                if value.isdigit():
-                    value = int(value)
+                value = related_models[key][k][index]
                 instance_values[k] = value
             instance_attrs.append(instance_values)
 
@@ -268,7 +265,7 @@ class Processor(DataProcessor):
         for response in import_started.send(self, path=path):
             self.report = response[1]
 
-        data = self.manager.prepare_import_data(self)
+        data = self.manager.prepare_import_data(self, model)
 
         max_rows, max_cols = self.open(path)
         self.set_dimensions(
@@ -286,7 +283,9 @@ class Processor(DataProcessor):
                 try:
                     with transaction.atomic():
                         self.process_instances(_model, model)
-                except (Error, ValueError, AttributeError, IndexError):
+                except (Error, ValueError,
+                        AttributeError, TypeError, IndexError):
+
                     transaction.savepoint_rollback(sid)
                     error_message = traceback.format_exc()
                     if 'File' in error_message:
@@ -296,7 +295,7 @@ class Processor(DataProcessor):
                     error_raised.send(
                         self, error=error_message,
                         position=row,
-                        value=_model['attrs'],
+                        value=_model,
                         step=ErrorChoicesMixin.IMPORT_DATA)
 
             transaction.savepoint_commit(sid)

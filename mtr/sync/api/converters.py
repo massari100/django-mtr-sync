@@ -5,13 +5,14 @@ from .manager import manager
 
 
 @manager.register('converter', label=_('mtr.sync:Auto'))
-def auto(value, field, action):
+def auto(value, model, field, action):
     """Auto convert values to field types in models"""
 
-    if isinstance(field, models.ManyToManyField):
+    if action == 'export':
         if isinstance(value, list):
-            return ','.join(value)
-        else:
+            return ','.join(map(lambda v: str(v), value))
+    else:
+        if isinstance(value, str) and ',' in value:
             return value.split(',')
 
     return value
