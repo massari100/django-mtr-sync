@@ -66,7 +66,8 @@ def model_fields(model):
         f for f in opts.virtual_fields
         if isinstance(f, ModelField)]
     fields_arr = sorted(
-        opts.concrete_fields + sortable_virtual_fields + opts.many_to_many)
+        list(opts.concrete_fields) +
+        list(sortable_virtual_fields) + list(opts.many_to_many))
 
     msettings = model_settings(model)
     exclude = msettings.get('exclude', [])

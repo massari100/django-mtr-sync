@@ -39,7 +39,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Saves import, export settings for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
 - Custom filters (querysets)
-- Supports: Django 1.6-1.7 (1.8 not tested yet) Python 2.7, 3.3+
+- Supports: Django 1.6-1.8 Python 2.7, 3.3+
 
 ## Working on
 - Shortcuts at admin app

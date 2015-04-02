@@ -37,7 +37,7 @@ class Migration(SchemaMigration):
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('attribute', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('skip', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('processors', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('converters', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('settings', self.gf('django.db.models.fields.related.ForeignKey')(related_name='fields', to=orm['sync.Settings'])),
         ))
         db.send_create_signal(u'sync', ['Field'])
@@ -96,10 +96,10 @@ class Migration(SchemaMigration):
         u'sync.field': {
             'Meta': {'ordering': "['position']", 'object_name': 'Field'},
             'attribute': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'converters': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'position': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'processors': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'settings': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'fields'", 'to': u"orm['sync.Settings']"}),
             'skip': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
