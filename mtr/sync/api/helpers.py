@@ -51,6 +51,8 @@ def model_settings(model):
 
 
 def models_list():
+    # TODO: get models deprecation
+
     mlist = filterfalse(
         lambda m: model_settings(m).get('ignore', False),
         models.get_models())

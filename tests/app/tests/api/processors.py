@@ -25,10 +25,11 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
     def check_values(self, worksheet, instance, row, index_prepend=0):
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
-            try:
-                sheet_value = worksheet.cell_value(row, index+index_prepend)
-            except IndexError:
-                sheet_value = ''
+            # try:
+            print(index, index_prepend)
+            sheet_value = worksheet.cell_value(row, index+index_prepend)
+            # except IndexError:
+                # sheet_value = ''
 
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
