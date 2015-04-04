@@ -198,8 +198,6 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.manager.import_data(self.settings)
 
-        # TODO: python2 empty values on import
-
         self.check_sheet_values_and_delete_report(report)
 
         self.assertEqual(before, self.queryset.count())

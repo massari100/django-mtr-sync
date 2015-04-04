@@ -1,5 +1,6 @@
 from django.utils.translation import gettext_lazy as _
 from django.db import models
+from django.utils.six import text_type
 
 from .manager import manager
 
@@ -12,7 +13,7 @@ def auto(value, model, field, action):
         if isinstance(value, list):
             return ','.join(map(lambda v: str(v), value))
     else:
-        if isinstance(value, str) and ',' in value:
+        if isinstance(value, text_type) and ',' in value:
             return value.split(',')
 
     return value

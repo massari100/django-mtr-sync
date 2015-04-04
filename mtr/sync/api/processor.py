@@ -280,6 +280,8 @@ class Processor(DataProcessor):
             for row, _model in items:
                 sid = transaction.savepoint()
 
+                # TODO: catched to many exceptions
+
                 try:
                     with transaction.atomic():
                         self.process_instances(_model, model)
