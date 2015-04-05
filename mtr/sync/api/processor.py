@@ -248,13 +248,12 @@ class Processor(DataProcessor):
         for key, values in add_after.items():
             getattr(instance, key).add(*values)
 
-    def process_instances(self, model_attrs, model):
-        """Process instances (create, update, delete) for given params"""
-
-        main_model_attrs, related_models = self.prepare_attrs(model_attrs)
-
-        # TODO: filter data and action
-        self._create_instances(model, main_model_attrs, related_models)
+    def process_actions(self, row, model_attrs, related_models):
+        result = model_attrs, related_models
+        for action in []:
+            # self.manager.actions.values():
+            result = action(model_attrs, related_models)
+        return result
 
     def import_data(self, model, path=None):
         """Import data to model and return errors if exists"""
@@ -274,33 +273,40 @@ class Processor(DataProcessor):
 
         items = data['items']
 
-        with transaction.atomic():
+        for row, _model in items:
+            main_model_attrs, related_models = self.prepare_attrs(_model)
+            result = self.process_actions(
+                row, main_model_attrs, related_models)
+
+            if issubclass(result.__class__, models.Model) or result is None:
+                continue
+            else:
+                main_model_attrs, related_models = result
+
             sid = transaction.savepoint()
 
-            for row, _model in items:
-                sid = transaction.savepoint()
+            # TODO: catched to many exceptions
 
-                # TODO: catched to many exceptions
+            try:
+                with transaction.atomic():
+                    self._create_instances(
+                        model, main_model_attrs, related_models)
+            except (Error, ValueError,
+                    AttributeError, TypeError, IndexError):
 
-                try:
-                    with transaction.atomic():
-                        self.process_instances(_model, model)
-                except (Error, ValueError,
-                        AttributeError, TypeError, IndexError):
+                transaction.savepoint_rollback(sid)
+                error_message = traceback.format_exc()
+                if 'File' in error_message:
+                    error_message = 'File{}'.format(
+                        error_message.split('File')[-1])
 
-                    transaction.savepoint_rollback(sid)
-                    error_message = traceback.format_exc()
-                    if 'File' in error_message:
-                        error_message = 'File{}'.format(
-                            error_message.split('File')[-1])
+                error_raised.send(
+                    self, error=error_message,
+                    position=row,
+                    value=_model,
+                    step=ErrorChoicesMixin.IMPORT_DATA)
 
-                    error_raised.send(
-                        self, error=error_message,
-                        position=row,
-                        value=_model,
-                        step=ErrorChoicesMixin.IMPORT_DATA)
-
-            transaction.savepoint_commit(sid)
+        transaction.savepoint_commit(sid)
 
         # send signal to save report
         for response in import_completed.send(
