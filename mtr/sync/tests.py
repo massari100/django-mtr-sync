@@ -67,7 +67,7 @@ class ProcessorTestMixin(ApiTestMixin):
     def check_file_existence_and_delete(self, report):
         """Delete report file"""
 
-        # self.assertIsNone(os.remove(report.buffer_file.path))
+        self.assertIsNone(os.remove(report.buffer_file.path))
 
     def check_report_success(self, delete=False):
         """Create report from settings and assert it's successful"""

@@ -25,12 +25,18 @@ class ProcessorManagerMixin(object):
     def processor_choices(self):
         """Return all registered processors"""
 
-        for processor in self.processors.values():
+        for name, processor in self.processors.items():
             yield (
-                processor.__name__,
+                name,
                 '{} | {}'.format(
                     processor.file_format,
                     processor.file_description))
+
+    def action_choices(self):
+        """Return all registered actions"""
+
+        for action in self.actions.values():
+            yield(action.__name__, getattr(action, 'label', action.__name__))
 
     def make_processor(self, settings, from_extension=False):
         """Create new processor instance if exists"""
@@ -159,6 +165,11 @@ class Manager(ProcessorManagerMixin):
 
     """Manager for data processors"""
 
+    def __init__(self):
+        self.processors = OrderedDict()
+        self.actions = OrderedDict()
+        self.converters = OrderedDict()
+
     def _make_key(self, key):
         return '{}s'.format(key)
 
@@ -228,6 +239,7 @@ class Manager(ProcessorManagerMixin):
             __import__(module)
 
         __import__('mtr.sync.api.converters')
+        __import__('mtr.sync.api.actions')
 
 manager = Manager()
 manager.import_processors_modules()

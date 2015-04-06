@@ -111,6 +111,9 @@ class Settings(ActionsMixin):
     queryset = models.CharField(
         _('mtr.sync:queryset'), max_length=255, blank=True)
 
+    data_action = models.CharField(
+        _('mtr.sync:action'), max_length=255, choices=manager.action_choices())
+
     def fields_with_processors(self):
         """Return iterator of fields with filters"""
 

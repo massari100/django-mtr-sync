@@ -1,16 +1,15 @@
 from __future__ import unicode_literals
 
 import os
-import traceback
+
 
 from django.utils.six.moves import range
 from django.utils import timezone
-from django.db import models, transaction, Error
 
 from .signals import export_started, export_completed, \
-    import_started, import_completed, error_raised
-from .helpers import column_value, model_fields
-from .exceptions import ErrorChoicesMixin
+    import_started, import_completed
+from .helpers import column_value
+
 from ..settings import LIMIT_PREVIEW, FILE_PATH
 
 
@@ -200,60 +199,13 @@ class Processor(DataProcessor):
 
         return main_model_attrs, related_models
 
-    def _create_related_instance(
-            self, instance, related_model, key, related_models):
-        related_instance = related_model(**related_models[key])
-        related_instance.save()
-        setattr(instance, key, related_instance)
+    def process_action(self, row, model, model_attrs, related_models):
+        # TODO: default actions in settings creation
 
-    def _create_mtm_instance(
-            self, add_after, instance, related_model, key, related_models):
-        instance_attrs = []
-        rel_values = list(related_models[key].values())
-        indexes = len(rel_values[0])
+        action = self.manager.get_or_raise(
+            'action', self.settings.data_action or 'create')
 
-        for index in range(indexes):
-            instance_values = {}
-            for k in related_models[key].keys():
-                value = related_models[key][k][index]
-                instance_values[k] = value
-            instance_attrs.append(instance_values)
-
-        for instance_attr in instance_attrs:
-            item = related_model(**instance_attr)
-            item.save()
-            add_after.setdefault(key, []).append(item)
-
-        return add_after
-
-    def _create_instances(self, model, main_model_attrs, related_models):
-        instance = model(**main_model_attrs)
-        fields = model_fields(model)
-        add_after = {}
-
-        for key in related_models.keys():
-            related_field = fields.get(key)
-            related_model = related_field.rel.to
-
-            if isinstance(related_field, models.ForeignKey):
-                self._create_related_instance(
-                    instance, related_model, key, related_models)
-
-            elif isinstance(related_field, models.ManyToManyField):
-                self._create_mtm_instance(
-                    add_after, instance, related_model, key, related_models)
-
-        instance.save()
-
-        for key, values in add_after.items():
-            getattr(instance, key).add(*values)
-
-    def process_actions(self, row, model_attrs, related_models):
-        result = model_attrs, related_models
-        for action in []:
-            # self.manager.actions.values():
-            result = action(model_attrs, related_models)
-        return result
+        return action(row, model, model_attrs, related_models)
 
     def import_data(self, model, path=None):
         """Import data to model and return errors if exists"""
@@ -275,38 +227,7 @@ class Processor(DataProcessor):
 
         for row, _model in items:
             main_model_attrs, related_models = self.prepare_attrs(_model)
-            result = self.process_actions(
-                row, main_model_attrs, related_models)
-
-            if issubclass(result.__class__, models.Model) or result is None:
-                continue
-            else:
-                main_model_attrs, related_models = result
-
-            sid = transaction.savepoint()
-
-            # TODO: catched to many exceptions
-
-            try:
-                with transaction.atomic():
-                    self._create_instances(
-                        model, main_model_attrs, related_models)
-            except (Error, ValueError,
-                    AttributeError, TypeError, IndexError):
-
-                transaction.savepoint_rollback(sid)
-                error_message = traceback.format_exc()
-                if 'File' in error_message:
-                    error_message = 'File{}'.format(
-                        error_message.split('File')[-1])
-
-                error_raised.send(
-                    self, error=error_message,
-                    position=row,
-                    value=_model,
-                    step=ErrorChoicesMixin.IMPORT_DATA)
-
-        transaction.savepoint_commit(sid)
+            self.process_action(row, model, main_model_attrs, related_models)
 
         # send signal to save report
         for response in import_completed.send(
