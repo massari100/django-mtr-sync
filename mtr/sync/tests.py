@@ -5,9 +5,11 @@ from __future__ import unicode_literals
 import os
 import datetime
 
+from collections import OrderedDict
+
 from django.utils import six
 
-from mtr.sync.api import Manager
+from mtr.sync.api import manager
 from mtr.sync.api.helpers import column_value
 from mtr.sync.models import Settings
 
@@ -23,8 +25,8 @@ class ApiTestMixin(object):
     def setUp(self):
         self.model = self.MODEL
         self.relatedmodel = self.RELATED_MODEL
-
-        self.manager = Manager()
+        self.manager = manager
+        self.manager.processors = OrderedDict()
 
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.manager.register('processor', self.PROCESSOR)

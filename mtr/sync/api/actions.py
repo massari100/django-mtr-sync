@@ -1,8 +1,7 @@
 import traceback
 
 from django.utils.translation import gettext_lazy as _
-from django.db import transaction, Error
-from django.db import models
+from django.db import transaction, Error, models
 
 from .manager import manager
 from .exceptions import ErrorChoicesMixin
@@ -62,26 +61,28 @@ def _create_instances(model, main_model_attrs, related_models):
 
 @manager.register(
     'action', label=_('mtr.sync:create instances without filter'))
-def create(row, model, main_model_attrs, related_models):
+def create(row, model, model_attrs, related_attrs, processor):
     sid = transaction.savepoint()
 
-    # try:
-    with transaction.atomic():
-        _create_instances(
-            model, main_model_attrs, related_models)
-    # except (Error, ValueError,
-    #         AttributeError, TypeError, IndexError):
+    try:
+        with transaction.atomic():
+            _create_instances(model, model_attrs, related_attrs)
+    except (Error, ValueError,
+            AttributeError, TypeError, IndexError):
 
-    #     transaction.savepoint_rollback(sid)
-    #     error_message = traceback.format_exc()
-    #     if 'File' in error_message:
-    #         error_message = 'File{}'.format(
-    #             error_message.split('File')[-1])
+        transaction.savepoint_rollback(sid)
+        error_message = traceback.format_exc()
+        if 'File' in error_message:
+            error_message = 'File{}'.format(
+                error_message.split('File')[-1])
 
-        # TODO: error value
+        value = {
+            'model_attrs': model_attrs,
+            'related_attrs': related_attrs
+        }
 
-        # error_raised.send(
-        #     self, error=error_message,
-        #     position=row,
-        #     value='',
-        #     step=ErrorChoicesMixin.IMPORT_DATA)
+        error_raised.send(processor,
+            error=error_message,
+            position=row,
+            value=value,
+            step=ErrorChoicesMixin.IMPORT_DATA)

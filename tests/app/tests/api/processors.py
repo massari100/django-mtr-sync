@@ -61,6 +61,7 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
             value = process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend].value
             sheet_value = '' if sheet_value is None else sheet_value
+
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
 
@@ -89,10 +90,12 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend]
+
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
             if sheet_value.isdigit():
                 sheet_value = int(sheet_value)
+
             self.assertEqual('' if value is None else value, sheet_value)
 
         self._f.close()
@@ -116,8 +119,10 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
             sheet_value = row_values[index + index_prepend].value
+
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
+
             self.assertEqual('' if value is None else value, sheet_value)
 
 

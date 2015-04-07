@@ -55,18 +55,18 @@ class ManagerTest(ApiTestMixin, TestCase):
             list(self.manager.processors.values()), ordered_processors)
 
     def test_registering_dict_instance_attributes(self):
+        old_converters = self.manager.converters.copy()
+
         @self.manager.register('converter', name='test')
         def some_filter():
             return None
 
-        self.assertEqual(
-            list(self.manager.converters.keys())[0], 'test')
-        self.assertEqual(
-            list(self.manager.converters.values())[0], some_filter)
+        self.assertIn('test', self.manager.converters.keys())
+        self.assertIn(some_filter, self.manager.converters.values())
 
+        self.assertEqual(self.manager.unregister('converter', 'test'), 'test')
         self.assertEqual(
-            self.manager.unregister('converter', 'test'), 'test')
-        self.assertEqual(self.manager.converters, {})
+            list(self.manager.converters.keys()), list(old_converters.keys()))
 
     def test_value_manipulation_filters(self):
         self.manager.register('processor', self.PROCESSOR)

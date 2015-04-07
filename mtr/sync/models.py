@@ -121,8 +121,6 @@ class Settings(ActionsMixin):
         for field in fields:
             field.ordered_converters = []
             if field.converters:
-                # TODO: make field with widget
-
                 for converter in field.converters.split(','):
                     field.ordered_converters.append(
                         manager.get_or_raise('converter', converter))

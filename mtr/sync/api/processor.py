@@ -163,49 +163,49 @@ class Processor(DataProcessor):
 
         return self.report
 
-    def _prepare_fk_attrs(self, related_models, key, _model):
+    def _prepare_fk_attrs(self, related_attrs, key, _model):
         key_model, key_attr = key.split('|_fk_|')
 
-        attrs = related_models.get(key_model, {})
+        attrs = related_attrs.get(key_model, {})
         attrs[key_attr] = _model[key]
-        related_models[key_model] = attrs
+        related_attrs[key_model] = attrs
 
-        return related_models
+        return related_attrs
 
-    def _prepare_mtm_attrs(self, related_models, key, _model):
+    def _prepare_mtm_attrs(self, related_attrs, key, _model):
         key_model, key_attr = key.split('|_m_|')
 
         value = _model[key]
 
-        attrs = related_models.get(key_model, {})
+        attrs = related_attrs.get(key_model, {})
         attrs[key_attr] = value
-        related_models[key_model] = attrs
+        related_attrs[key_model] = attrs
 
-        return related_models
+        return related_attrs
 
     def prepare_attrs(self, _model):
-        main_model_attrs = {}
-        related_models = {}
+        model_attrs = {}
+        related_attrs = {}
 
         for key in _model.keys():
             if '|_fk_|' in key:
-                related_models = self._prepare_fk_attrs(
-                    related_models, key, _model)
+                related_attrs = self._prepare_fk_attrs(
+                    related_attrs, key, _model)
             elif '|_m_|' in key:
-                related_models = self._prepare_mtm_attrs(
-                    related_models, key, _model)
+                related_attrs = self._prepare_mtm_attrs(
+                    related_attrs, key, _model)
             else:
-                main_model_attrs[key] = _model[key]
+                model_attrs[key] = _model[key]
 
-        return main_model_attrs, related_models
+        return model_attrs, related_attrs
 
-    def process_action(self, row, model, model_attrs, related_models):
+    def process_action(self, row, model, model_attrs, related_attrs):
         # TODO: default actions in settings creation
 
         action = self.manager.get_or_raise(
             'action', self.settings.data_action or 'create')
 
-        return action(row, model, model_attrs, related_models)
+        return action(row, model, model_attrs, related_attrs, self)
 
     def import_data(self, model, path=None):
         """Import data to model and return errors if exists"""
@@ -226,8 +226,8 @@ class Processor(DataProcessor):
         items = data['items']
 
         for row, _model in items:
-            main_model_attrs, related_models = self.prepare_attrs(_model)
-            self.process_action(row, model, main_model_attrs, related_models)
+            model_attrs, related_attrs = self.prepare_attrs(_model)
+            self.process_action(row, model, model_attrs, related_attrs)
 
         # send signal to save report
         for response in import_completed.send(
