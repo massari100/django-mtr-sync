@@ -12,6 +12,7 @@ from .helpers import model_fields
 def _create_related_instance(instance, related_model, key, related_models):
     related_instance = related_model(**related_models[key])
     related_instance.save()
+
     setattr(instance, key, related_instance)
 
 

@@ -27,6 +27,7 @@ class Migration(SchemaMigration):
             ('filename', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('buffer_file', self.gf('django.db.models.fields.files.FileField')(db_index=True, max_length=100, blank=True)),
             ('queryset', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('data_action', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
         db.send_create_signal(u'sync', ['Settings'])
 
@@ -119,6 +120,7 @@ class Migration(SchemaMigration):
             'action': ('django.db.models.fields.PositiveSmallIntegerField', [], {'db_index': 'True'}),
             'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
+            'data_action': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'end_col': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
             'end_row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'filename': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
