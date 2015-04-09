@@ -52,7 +52,12 @@ class FieldForm(forms.ModelForm):
                     settings = av_settings
                     break
 
-            self.fields['attribute'].choices = model_attributes(settings)
+            # TODO: modify for raw data processing
+
+            choices = ('', _('mtr.sync:No attribute attached'))
+            choices += model_attributes(settings)
+
+            self.fields['attribute'].choices = choices
 
     class Meta:
         exclude = []
