@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 from django.utils.six.moves import filterfalse
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 from django.db.models.fields import Field as ModelField
 
 from ..settings import MODEL_SETTINGS_NAME
@@ -135,6 +136,8 @@ def make_model_class(settings):
 
 def model_choices():
     """Return all registered django models as choices"""
+
+    yield ('', _('mtr.sync:No model used'))
 
     for model in models_list():
         yield (

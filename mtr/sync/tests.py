@@ -216,3 +216,11 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.assertEqual(
             ['', '', ''], self.processor.read(10000, [0, 23543, 434]))
+
+    def test_import_data_without_model_and_fields(self):
+        report = self.check_report_success()
+
+        # self.settings.main_model = ''
+        # self.settings.create_default_fields()
+
+        # self.manager.import_data(self.settings)
