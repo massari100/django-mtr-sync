@@ -144,6 +144,20 @@ class SettingsAdmin(admin.ModelAdmin):
     date_hierarchy = 'created_at'
     inlines = (FieldInline,)
     actions = ['run']
+    fieldsets = (
+        (None, {
+            'fields': (
+                'action',
+                ('start_col', 'end_col'), ('start_row', 'end_row'),
+                ('main_model', 'main_model_id'),
+                ('processor', 'worksheet', 'include_header'),
+                ('filename', 'queryset', 'data_action')
+            )
+        }),
+        (_('mtr.sync:Options'), {
+            'fields': (('create_fields', 'populate'),)
+        })
+    )
     form = SettingsForm
 
     def get_inline_instances(self, request, obj=None):

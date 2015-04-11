@@ -220,7 +220,23 @@ class ProcessorTestMixin(ApiTestMixin):
     def test_import_data_without_model_and_fields(self):
         report = self.check_report_success()
 
-        # self.settings.main_model = ''
-        # self.settings.create_default_fields()
+        attrs = []
 
-        # self.manager.import_data(self.settings)
+        if 'test_import' not in self.manager.actions.keys():
+            @self.manager.register('action')
+            def test_import(row, model, model_attrs, related_attrs, processor):
+                attrs.append(model_attrs)
+
+        self.settings.main_model = ''
+        self.settings.action = self.manager.get_or_raise(
+            'action', 'test_import')
+        self.settings.action = self.settings.IMPORT
+        self.settings.buffer_file = report.buffer_file
+        self.settings.populate_from_buffer_file()
+        self.settings.create_default_fields()
+
+        self.settings.fields.create(attribute='test', position='1')
+
+        self.manager.import_data(self.settings)
+
+        self.assertNotEqual(attrs, [])

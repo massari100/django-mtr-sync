@@ -84,7 +84,7 @@ class Settings(ActionsMixin):
 
     main_model = models.CharField(
         _('mtr.sync:main model'), max_length=255,
-        choices=model_choices())
+        choices=model_choices(), blank=True)
     main_model_id = models.PositiveIntegerField(
         _('mtr.sync:main model object'), null=True, blank=True)
 
@@ -112,7 +112,8 @@ class Settings(ActionsMixin):
         _('mtr.sync:queryset'), max_length=255, blank=True)
 
     data_action = models.CharField(
-        _('mtr.sync:action'), max_length=255, choices=manager.action_choices())
+        _('mtr.sync:action'), blank=True,
+        max_length=255, choices=manager.action_choices())
 
     def fields_with_processors(self):
         """Return iterator of fields with filters"""
@@ -161,6 +162,10 @@ class Settings(ActionsMixin):
 
         if not exclude:
             exclude = []
+
+        if not self.main_model:
+            return []
+
         for name, label in model_attributes(self):
             label = label if self.action != self.IMPORT and add_label else ''
             if name not in exclude:
