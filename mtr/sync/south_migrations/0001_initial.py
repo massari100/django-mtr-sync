@@ -17,7 +17,7 @@ class Migration(SchemaMigration):
             ('start_row', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('end_col', self.gf('django.db.models.fields.CharField')(max_length=10, blank=True)),
             ('end_row', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('main_model', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('main_model', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('main_model_id', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
@@ -27,7 +27,7 @@ class Migration(SchemaMigration):
             ('filename', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('buffer_file', self.gf('django.db.models.fields.files.FileField')(db_index=True, max_length=100, blank=True)),
             ('queryset', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('data_action', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('data_action', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
         db.send_create_signal(u'sync', ['Settings'])
 
@@ -120,13 +120,13 @@ class Migration(SchemaMigration):
             'action': ('django.db.models.fields.PositiveSmallIntegerField', [], {'db_index': 'True'}),
             'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
-            'data_action': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'data_action': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'end_col': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
             'end_row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'filename': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'include_header': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
-            'main_model': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'main_model': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'main_model_id': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'processor': ('django.db.models.fields.CharField', [], {'max_length': '255'}),

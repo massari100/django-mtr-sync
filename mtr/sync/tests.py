@@ -220,16 +220,19 @@ class ProcessorTestMixin(ApiTestMixin):
     def test_import_data_without_model_and_fields(self):
         report = self.check_report_success()
 
+        for field in self.settings.fields.all():
+            field.delete()
+
         attrs = []
 
-        if 'test_import' not in self.manager.actions.keys():
-            @self.manager.register('action')
-            def test_import(row, model, model_attrs, related_attrs, processor):
-                attrs.append(model_attrs)
+        self.manager.unregister('action', 'test_import')
+
+        @self.manager.register('action')
+        def test_import(row, model, model_attrs, related_attrs, processor):
+            attrs.append(model_attrs)
 
         self.settings.main_model = ''
-        self.settings.action = self.manager.get_or_raise(
-            'action', 'test_import')
+        self.settings.data_action = 'test_import'
         self.settings.action = self.settings.IMPORT
         self.settings.buffer_file = report.buffer_file
         self.settings.populate_from_buffer_file()
