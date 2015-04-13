@@ -11,6 +11,22 @@ Subpackages
 Submodules
 ----------
 
+mtr.sync.api.actions module
+---------------------------
+
+.. automodule:: mtr.sync.api.actions
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+mtr.sync.api.converters module
+------------------------------
+
+.. automodule:: mtr.sync.api.converters
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 mtr.sync.api.exceptions module
 ------------------------------
 

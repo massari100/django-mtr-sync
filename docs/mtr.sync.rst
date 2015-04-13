@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
     mtr.sync.api
-    mtr.sync.migrations
 
 Submodules
 ----------

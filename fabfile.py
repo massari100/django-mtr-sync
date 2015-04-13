@@ -159,4 +159,4 @@ def docs(action='make'):
             local('sphinx-apidoc -o . ../mtr/')
         else:
             print('Invalid action: {}, available actions: "make"'
-                ', "compile"'.format(action))
+                ', "update"'.format(action))
