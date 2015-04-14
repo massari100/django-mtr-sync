@@ -6,27 +6,23 @@
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: admin.py:57
-msgid "mtr.sync:No attribute attached"
-msgstr "No attribute attached"
-
-#: admin.py:102
+#: admin.py:103
 msgid "mtr.sync:Create settings for fields"
 msgstr "Create settings for fields"
 
-#: admin.py:106
+#: admin.py:107
 msgid "mtr.sync:Populate settings from file"
 msgstr "Populate settings from file"
 
-#: admin.py:157
+#: admin.py:158
 msgid "mtr.sync:Options"
 msgstr "Options"
 
-#: admin.py:181
+#: admin.py:182
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "Data synchronization started in background."
 
-#: admin.py:183
+#: admin.py:184
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
@@ -119,7 +115,7 @@ msgstr "Export"
 msgid "mtr.actions:Import"
 msgstr "Import"
 
-#: models.py:62 models.py:115
+#: models.py:62
 msgid "mtr.sync:action"
 msgstr "action"
 
@@ -182,6 +178,10 @@ msgstr "file"
 #: models.py:112
 msgid "mtr.sync:queryset"
 msgstr "queryset"
+
+#: models.py:115
+msgid "mtr.sync:data action"
+msgstr "data action"
 
 #: models.py:189 models.py:190 models.py:211 models.py:259
 msgid "mtr.sync:settings"
@@ -290,3 +290,6 @@ msgstr "New settings"
 #: templates/mtr/sync/default/export.html:15
 msgid "mtr.sync:Export"
 msgstr "Export"
+
+#~ msgid "mtr.sync:No attribute attached"
+#~ msgstr "No attribute attached"

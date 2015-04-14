@@ -79,9 +79,12 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'olddb.sqlite3'),
     }
 }
+
+if django.get_version() >= '1.7':
+    DATABASES['default']['NAME'] = os.path.join(BASE_DIR, 'db.sqlite3')
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/

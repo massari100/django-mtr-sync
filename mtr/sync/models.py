@@ -112,7 +112,7 @@ class Settings(ActionsMixin):
         _('mtr.sync:queryset'), max_length=255, blank=True)
 
     data_action = models.CharField(
-        _('mtr.sync:action'), blank=True,
+        _('mtr.sync:data action'), blank=True,
         max_length=255, choices=manager.action_choices())
 
     def fields_with_processors(self):
@@ -202,7 +202,7 @@ class Field(PositionMixin):
 
     name = models.CharField(_('mtr.sync:name'), max_length=255, blank=True)
     attribute = models.CharField(
-        _('mtr.sync:model attribute'), max_length=255, choices=tuple())
+        _('mtr.sync:model attribute'), max_length=255)
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
     converters = models.CharField(_('mtr.sync:converters'), max_length=255)

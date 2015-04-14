@@ -40,26 +40,27 @@ class ReportAdmin(admin.ModelAdmin):
 
 class FieldForm(forms.ModelForm):
 
-    def __init__(self, *args, **kwargs):
-        """Replace default attribute field to selectbox with choices"""
+    # def __init__(self, *args, **kwargs):
+    #     """Replace default attribute field to selectbox with choices"""
 
-        super(FieldForm, self).__init__(*args, **kwargs)
+    #     super(FieldForm, self).__init__(*args, **kwargs)
 
-        settings = self.initial.get('settings', None)
-        if settings:
-            for av_settings in self.fields['settings']._queryset:
-                if av_settings.id == settings:
-                    settings = av_settings
-                    break
+    #     settings = self.initial.get('settings', None)
+    #     if settings:
+    #         for av_settings in self.fields['settings']._queryset:
+    #             if av_settings.id == settings:
+    #                 settings = av_settings
+    #                 break
 
-            # TODO: modify for raw data processing
+    #         # TODO: modify for raw data processing
 
-            choices = ('', _('mtr.sync:No attribute attached'))
-            choices += model_attributes(settings)
+    #         choices = ('', _('mtr.sync:No attribute attached'))
+    #         choices += model_attributes(settings)
 
-            self.fields['attribute'].choices = choices
+    #         self.fields['attribute'].choices = choices
 
     class Meta:
+        fields = ['skip', 'name', 'attribute', 'converters']
         exclude = []
         model = Field
 
@@ -73,27 +74,27 @@ class FieldAdmin(admin.ModelAdmin):
 class FieldInline(admin.TabularInline):
     model = Field
     extra = 0
-    fields = ('position', 'name', 'attribute', 'converters', 'skip')
+    fields = ('skip', 'position', 'name', 'attribute', 'converters')
 
-    def get_formset(self, request, obj=None, **kwargs):
-        """Pass parent object to inline form"""
+    # def get_formset(self, request, obj=None, **kwargs):
+    #     """Pass parent object to inline form"""
 
-        kwargs['formfield_callback'] = partial(
-            self.formfield_for_dbfield, request=request, obj=obj)
-        return super(FieldInline, self).get_formset(request, obj, **kwargs)
+    #     kwargs['formfield_callback'] = partial(
+    #         self.formfield_for_dbfield, request=request, obj=obj)
+    #     return super(FieldInline, self).get_formset(request, obj, **kwargs)
 
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """Replace inline attribute field to selectbox with choices"""
+    # def formfield_for_dbfield(self, db_field, **kwargs):
+    #     """Replace inline attribute field to selectbox with choices"""
 
-        settings = kwargs.pop('obj')
+    #     settings = kwargs.pop('obj')
 
-        field = super(
-            FieldInline, self).formfield_for_dbfield(db_field, **kwargs)
+    #     field = super(
+    #         FieldInline, self).formfield_for_dbfield(db_field, **kwargs)
 
-        if db_field.name == 'attribute':
-            field.choices = model_attributes(settings)
+    #     if db_field.name == 'attribute':
+    #         field.choices = model_attributes(settings)
 
-        return field
+    #     return field
 
 
 class SettingsForm(forms.ModelForm):
