@@ -4,6 +4,8 @@ from .api import manager
 from .models import Settings
 from .helpers import make_from_params
 
+# TODO: make tasks run from seperate process
+
 
 @shared_task
 def export_data(params, data=None):

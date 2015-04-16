@@ -154,8 +154,8 @@ class SettingsAdmin(admin.ModelAdmin):
             'fields': (
                 ('name', 'action'),
                 ('start_col', 'end_col'), ('start_row', 'end_row'),
-                ('main_model', 'main_model_id'),
-                ('processor', 'worksheet', 'include_header'),
+                ('main_model', 'processor'),
+                ('worksheet', 'include_header'),
                 ('filename', 'queryset', 'data_action')
             )
         }),
