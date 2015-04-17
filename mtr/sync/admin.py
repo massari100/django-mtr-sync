@@ -117,16 +117,17 @@ class SettingsForm(forms.ModelForm):
 
         settings = super(SettingsForm, self).save(commit=commit)
 
-        settings.save()
+        if commit:
+            settings.save()
 
-        if create_fields:
-            settings.create_default_fields()
+            if create_fields:
+                settings.create_default_fields()
 
-        if settings.action == settings.IMPORT \
-                and settings.buffer_file and populate:
-            settings.populate_from_buffer_file()
+            if settings.action == settings.IMPORT \
+                    and settings.buffer_file and populate:
+                settings.populate_from_buffer_file()
 
-        settings.save()
+            settings.save()
 
         return settings
 

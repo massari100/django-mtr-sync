@@ -38,14 +38,16 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Supports: CSV(native python3, unicodecsv python2), XLS (using: xlwt-future, xlrd), XLSX (using: openpyxl optimized writer, reader mode, for fast processing of large volumes of data) and ODS(odfpy)
 - Saves import, export settings for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
-- Custom filters (querysets)
+- Custom filters (querysets, data-sets)
+- Action handler for more flexebility (for example not create model but generate source code for it, prepare data for model)
 - Supports: Django 1.6-1.8 Python 2.7, 3.3+
 
 ## Working on
 - Shortcuts at admin app
+- Modeltransation
 - Multilingual (i18n) will be added to transifex for translating
 - Documentation
-- Action handler for more flexebility (for example not create model but generate source code for it, prepare data for model)
+- Different source input (url)
 - Inline support
 - Dashboard without admin
 - Adding support of JSON, YAML, XML

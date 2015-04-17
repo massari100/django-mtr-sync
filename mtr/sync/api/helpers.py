@@ -196,13 +196,18 @@ def process_attribute(model, attribute):
 
 
 def queryset_choices(settings):
-    """Return list of querysets for given model"""
+    """Return list of datasets for given model"""
 
-    model = make_model_class(settings)
-    msettings = model_settings(model)
+    # TODO: move to dataset
 
-    for queryset_name in msettings.get('querysets', []):
-        queryset = getattr(model, queryset_name)
-        yield (
-            queryset.__name__,
-            getattr(queryset, 'short_description', queryset.__name__))
+    if not settings.main_model:
+        model = make_model_class(settings)
+        msettings = model_settings(model)
+
+        for queryset_name in msettings.get('querysets', []):
+            queryset = getattr(model, queryset_name)
+            yield (
+                queryset.__name__,
+                getattr(queryset, 'short_description', queryset.__name__))
+    else:
+        return []
