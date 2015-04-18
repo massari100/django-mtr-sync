@@ -7,7 +7,7 @@ from django.contrib import admin
 from django import forms
 
 from .models import Report, Settings, Field, Error
-from .api.helpers import model_attributes, queryset_choices
+from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
 
@@ -131,12 +131,6 @@ class SettingsForm(forms.ModelForm):
 
         return settings
 
-    def __init__(self, *args, **kwargs):
-        super(SettingsForm, self).__init__(*args, **kwargs)
-
-        if self.instance.id:
-            self.fields['queryset'].choices = queryset_choices(self.instance)
-
     class Meta:
         exclude = []
         model = Settings
@@ -157,7 +151,7 @@ class SettingsAdmin(admin.ModelAdmin):
                 ('start_col', 'end_col'), ('start_row', 'end_row'),
                 ('main_model', 'processor'),
                 ('worksheet', 'include_header'),
-                ('filename', 'queryset', 'data_action')
+                ('filename', 'dataset', 'data_action')
             )
         }),
         (_('mtr.sync:Options'), {

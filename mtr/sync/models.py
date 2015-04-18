@@ -106,8 +106,9 @@ class Settings(ActionsMixin):
     buffer_file = models.FileField(
         _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
 
-    queryset = models.CharField(
-        _('mtr.sync:queryset'), max_length=255, blank=True)
+    dataset = models.CharField(
+        _('mtr.sync:dataset'), max_length=255, blank=True,
+        choices=manager.dataset_choices())
 
     data_action = models.CharField(
         _('mtr.sync:data action'), blank=True,

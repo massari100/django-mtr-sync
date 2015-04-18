@@ -68,7 +68,7 @@ class ManagerTest(ApiTestMixin, TestCase):
         self.assertEqual(
             list(self.manager.converters.keys()), list(old_converters.keys()))
 
-    def test_value_manipulation_filters(self):
+    def test_value_manipulation_converters(self):
         self.manager.register('processor', self.PROCESSOR)
         self.processor = self.manager.make_processor(self.settings)
         self.fields = self.settings.create_default_fields()

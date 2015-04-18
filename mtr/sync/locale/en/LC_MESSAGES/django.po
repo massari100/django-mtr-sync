@@ -176,8 +176,8 @@ msgid "mtr.sync:file"
 msgstr "file"
 
 #: models.py:112
-msgid "mtr.sync:queryset"
-msgstr "queryset"
+msgid "mtr.sync:dataset"
+msgstr "dataset"
 
 #: models.py:115
 msgid "mtr.sync:data action"

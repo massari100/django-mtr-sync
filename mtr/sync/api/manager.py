@@ -32,6 +32,14 @@ class ProcessorManagerMixin(object):
                     processor.file_format,
                     processor.file_description))
 
+    def dataset_choices(self):
+        """Return all registered data sources"""
+
+        # TODO: fix label
+
+        for name, dataset in self.datasets.items():
+            yield(name, getattr(dataset, 'label', dataset.__name__))
+
     def action_choices(self):
         """Return all registered actions"""
 
@@ -70,13 +78,13 @@ class ProcessorManagerMixin(object):
     def prepare_export_queryset(self, settings):
         current_model = make_model_class(settings)
 
-        if settings.queryset:
-            queryset = getattr(current_model, settings.queryset)
-            queryset = queryset(settings)
+        if settings.dataset:
+            dataset = self.get_or_raise('dataset', settings.dataset)
+            dataset = dataset(current_model, settings)
         else:
-            queryset = current_model.objects.all()
+            dataset = current_model.objects.all()
 
-        return queryset
+        return dataset
 
     def prepare_export_data(self, processor, queryset):
         """Prepare data using filters from settings
@@ -160,6 +168,15 @@ class ProcessorManagerMixin(object):
             'items': self.model_data(processor, model, fields),
         }
 
+    def import_processors_modules(self):
+        """Import modules within IMPORT_PROCESSORS paths"""
+
+        for module in IMPORT_PROCESSORS():
+            __import__(module)
+
+        __import__('mtr.sync.api.converters')
+        __import__('mtr.sync.api.actions')
+
 
 class Manager(ProcessorManagerMixin):
 
@@ -169,6 +186,7 @@ class Manager(ProcessorManagerMixin):
         self.processors = OrderedDict()
         self.actions = OrderedDict()
         self.converters = OrderedDict()
+        self.datasets = OrderedDict()
 
     def _make_key(self, key):
         return '{}s'.format(key)
@@ -231,15 +249,6 @@ class Manager(ProcessorManagerMixin):
             items.pop(getattr(item, '__name__', item), None)
 
         return item
-
-    def import_processors_modules(self):
-        """Import modules within IMPORT_PROCESSORS paths"""
-
-        for module in IMPORT_PROCESSORS():
-            __import__(module)
-
-        __import__('mtr.sync.api.converters')
-        __import__('mtr.sync.api.actions')
 
 manager = Manager()
 manager.import_processors_modules()

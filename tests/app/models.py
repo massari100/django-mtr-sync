@@ -5,6 +5,8 @@ from django.utils import six
 from django.utils.six.moves import range
 from django.db import models
 
+from mtr.sync.api import manager
+
 
 @python_2_unicode_compatible
 class Office(models.Model):
@@ -91,15 +93,12 @@ class Person(models.Model):
     def __str__(self):
         return self.name
 
-    @classmethod
-    def some_queryset(model, settings):
-        return model.objects.filter(security_level__gte=30)
-
-    # TODO: fix description
-    # some_queryset.short_description = 'some description'
-
     sync_settings = {
         'custom_fields': ['custom_method', 'none_param'],
-        'exclude': ['some_excluded_field'],
-        'querysets': ['some_queryset']
+        'exclude': ['some_excluded_field']
     }
+
+
+@manager.register('dataset', label='some description')
+def some_dataset(model, settings):
+    return model.objects.filter(security_level__gte=30)

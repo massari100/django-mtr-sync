@@ -25,7 +25,7 @@ class Migration(SchemaMigration):
             ('include_header', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('filename', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('buffer_file', self.gf('django.db.models.fields.files.FileField')(db_index=True, max_length=100, blank=True)),
-            ('queryset', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('dataset', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('data_action', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
         db.send_create_signal(u'sync', ['Settings'])
@@ -120,6 +120,7 @@ class Migration(SchemaMigration):
             'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'data_action': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'dataset': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'end_col': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
             'end_row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'filename': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -128,7 +129,6 @@ class Migration(SchemaMigration):
             'main_model': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'processor': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'queryset': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'start_col': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
             'start_row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),

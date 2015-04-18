@@ -54,9 +54,10 @@ class ApiTestMixin(object):
             main_model='{}.{}'.format(
                 self.model.__module__, self.model.__name__),
             include_header=False,
-            queryset='some_queryset')
+            dataset='some_dataset')
 
-        self.queryset = self.model.some_queryset(self.settings)
+        self.queryset = self.manager.get_or_raise('dataset', 'some_dataset')
+        self.queryset = self.queryset(self.MODEL, self.settings)
 
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.processor = self.manager.make_processor(self.settings)
