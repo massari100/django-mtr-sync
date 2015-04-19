@@ -147,11 +147,10 @@ class SettingsAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                ('name', 'action'),
+                ('name', 'action', 'processor'),
                 ('start_col', 'end_col'), ('start_row', 'end_row'),
-                ('main_model', 'processor'),
-                ('worksheet', 'include_header'),
-                ('filename', 'dataset', 'data_action')
+                ('main_model', 'dataset', 'data_action'),
+                ('filename', 'worksheet', 'include_header'),
             )
         }),
         (_('mtr.sync:Options'), {

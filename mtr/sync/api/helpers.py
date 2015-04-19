@@ -137,7 +137,7 @@ def make_model_class(settings):
 def model_choices():
     """Return all registered django models as choices"""
 
-    yield ('', _('mtr.sync:No model used'))
+    yield ('', '-' * 9)
 
     for model in models_list():
         yield (
