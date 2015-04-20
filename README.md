@@ -39,6 +39,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Saves import, export settings for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
 - Custom filters (querysets, data-sets)
+- Value processors (convert values before import or export)
 - Action handler for more flexebility (for example not create model but generate source code for it, prepare data for model)
 - Supports: Django 1.6-1.8 Python 2.7, 3.3+
 
@@ -54,15 +55,6 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Permission control for import settings using django auth, to minimize human errors. For example, this would allow only the manager to choose the settings template for import and to upload files without configuring
 - Export templates for (XLS, XLSX, ODS)
   - upload custom templates
-- Value processors
-  - API for writing own value converters and filters
-  - (not usable, moved to code) Create processor from admin panel using embedded django template language, for example:
-  - `{% if field|is_number %}{{ field/2 }}{% endif %}` (pseudo code)
-  - Standard value processors for various types and actions
-    - If object exists in database and does not exist in import data, then delete it
-    - If object exists in database and does not exist in import data, then set object parameter to whatever you want
-    - Create object if it doesn't exist in database with current parameters from import
-    - Assign object to main model field (ForeignKey, ManyToManyField), for example, category or tags separated by coma
 - Template integration with django-grapelli, django-suit
 - Periodic import, export for automatic updates
 - Video tutorial how to set up package and use it

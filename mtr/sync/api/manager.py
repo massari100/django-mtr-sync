@@ -35,16 +35,14 @@ class ProcessorManagerMixin(object):
     def dataset_choices(self):
         """Return all registered data sources"""
 
-        # TODO: fix label
-
         for name, dataset in self.datasets.items():
             yield(name, getattr(dataset, 'label', dataset.__name__))
 
     def action_choices(self):
         """Return all registered actions"""
 
-        for action in self.actions.values():
-            yield(action.__name__, getattr(action, 'label', action.__name__))
+        for name, action in self.actions.items():
+            yield(name, getattr(action, 'label', action.__name__))
 
     def make_processor(self, settings, from_extension=False):
         """Create new processor instance if exists"""
@@ -207,7 +205,7 @@ class Manager(ProcessorManagerMixin):
                 return True
         return False
 
-    def _register_dict(self, type_name, func_name, **kwargs):
+    def _register_dict(self, type_name, func_name, label, **kwargs):
         """Return decorator for adding functions as key, value to dict
         and send manager_registered signal to handle new params"""
 
@@ -216,6 +214,8 @@ class Manager(ProcessorManagerMixin):
             values = getattr(self, key, OrderedDict())
             position = getattr(func, 'position', 0)
             new_name = func_name or func.__name__
+            if label:
+                func.label = label
 
             if values is not None:
                 if values.get(new_name, None) is not None:
@@ -234,10 +234,10 @@ class Manager(ProcessorManagerMixin):
 
         return decorator
 
-    def register(self, type_name, item=None, name=None, **kwargs):
+    def register(self, type_name, item=None, name=None, label=None, **kwargs):
         """Decorator and function to config new processors, handlers"""
 
-        func = self._register_dict(type_name, name, **kwargs)
+        func = self._register_dict(type_name, name, label, **kwargs)
 
         return func(item) if item else func
 
