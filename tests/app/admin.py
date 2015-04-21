@@ -1,9 +1,11 @@
 from django.contrib import admin
 
+from mtr.sync.admin import SyncObjectToolsTemplate
+
 from .models import Person, Office, Tag
 
 
-class PersonAdmin(admin.ModelAdmin):
+class PersonAdmin(SyncObjectToolsTemplate, admin.ModelAdmin):
     list_display = (
         'name', 'surname', 'security_level', 'gender')
 

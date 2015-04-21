@@ -6,9 +6,14 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib import admin
 from django import forms
 
+from .helpers import themed
 from .models import Report, Settings, Field, Error
 from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
+
+
+class SyncObjectToolsTemplate(object):
+    change_list_template = themed('admin/change_list.html')
 
 
 class ErrorInline(admin.TabularInline):
