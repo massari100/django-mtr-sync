@@ -164,6 +164,25 @@ class SettingsAdmin(admin.ModelAdmin):
     )
     form = SettingsForm
 
+    def get_form(self, request, obj=None, **kwargs):
+        form = super(SettingsAdmin, self).get_form(request, obj, **kwargs)
+        action = request.GET.get('action', '')
+        app = request.GET.get('app', '')
+        model = request.GET.get('model', '')
+
+        # TODO: modify fields
+
+        if action == 'export':
+            # self.form.fields['action'].initial = 0
+            pass
+        elif action == 'import':
+            # self.form.fields['action'].initial = 1
+            pass
+
+        # print(action, app, model)
+
+        return form
+
     def get_inline_instances(self, request, obj=None):
         """Show inlines only in saved models"""
 
