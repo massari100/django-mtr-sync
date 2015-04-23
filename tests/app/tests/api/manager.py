@@ -92,11 +92,3 @@ class ManagerTest(ApiTestMixin, TestCase):
             if data_counter % 1:
                 self.assertEqual(before_item, after_item / 10)
             data_counter += 1
-
-    def test_show_buttons_in_mixin_template(self):
-        # TODO: add client with fetching page
-
-        content = ''
-
-        self.assertContains('Export', content)
-        self.assertContains('Import', content)

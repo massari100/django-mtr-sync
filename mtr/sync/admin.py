@@ -12,7 +12,7 @@ from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
 
-class SyncObjectToolsTemplate(object):
+class ImportExportAdminMixin(object):
     change_list_template = themed('admin/change_list.html')
 
 
