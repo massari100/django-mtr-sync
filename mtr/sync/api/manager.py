@@ -80,7 +80,7 @@ class ProcessorManagerMixin(object):
             dataset = self.get_or_raise('dataset', settings.dataset)
             dataset = dataset(current_model, settings)
         else:
-            dataset = current_model.objects.all()
+            dataset = current_model._default_manager.all()
 
         return dataset
 
@@ -190,6 +190,8 @@ class Manager(ProcessorManagerMixin):
         return '{}s'.format(key)
 
     def get_or_raise(self, name, key):
+        # TODO: remove method
+
         value = getattr(self, self._make_key(name), {})
         value = value.get(key, None)
 

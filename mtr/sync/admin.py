@@ -170,17 +170,13 @@ class SettingsAdmin(admin.ModelAdmin):
         app = request.GET.get('app', '')
         model = request.GET.get('model', '')
 
-        # TODO: modify fields
-
         if action == 'export':
-            # self.form.fields['action'].initial = 0
-            pass
+            form.base_fields['action'].initial = 0
         elif action == 'import':
-            # self.form.fields['action'].initial = 1
-            pass
+            form.base_fields['action'].initial = 1
 
         # print(action, app, model)
-
+        # print(form.base_fields['action'].initial)
         return form
 
     def get_inline_instances(self, request, obj=None):
