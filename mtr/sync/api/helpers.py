@@ -2,7 +2,6 @@ from collections import OrderedDict
 
 from django.utils.six.moves import filterfalse
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 from django.db.models.fields import Field as ModelField
 
 from ..settings import MODEL_SETTINGS_NAME
@@ -126,11 +125,11 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
 
 
 def make_model_class(settings):
-    """Return class for name in main_model"""
+    """Return class for name in model"""
 
     for mmodel in models_list():
-        if settings.main_model == '{}.{}'.format(
-                mmodel.__module__, mmodel.__name__):
+        if settings.model == '{}.{}'.format(
+                mmodel._meta.app_label, mmodel.__name__):
             return mmodel
 
 
@@ -141,7 +140,9 @@ def model_choices():
 
     for model in models_list():
         yield (
-            '{}.{}'.format(model.__module__, model.__name__),
+            '{}.{}'.format(
+                model._meta.app_label.lower(),
+                model.__name__.lower()),
             '{} | {}'.format(
                 model._meta.app_label.title(),
                 model._meta.verbose_name.title()))

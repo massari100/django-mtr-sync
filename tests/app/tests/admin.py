@@ -20,13 +20,21 @@ class AdminMixinTest(TestCase):
         self.assertContains(content, 'Export')
         self.assertContains(content, 'Import')
 
-    def test_settings_modified_by_link(self):
+    def test_settings_export_import_modified_by_link(self):
         content = self.client.get(
-            '{}?action=export&model=person&app=app'.format(
+            '{}?action=export&model=app.person'.format(
                 reverse('admin:mtrsync_settings_add')))
-
-        # TODO: more checks
-
         form = content.context['adminform'].form
 
-        self.assertEqual(form.fields['action'].initial, 0)
+        self.assertEqual(form.initial['action'], 0)
+        self.assertEqual(form.initial['model'], 'app.person')
+        self.assertEqual(form.initial['create_fields'], True)
+
+        content = self.client.get(
+            '{}?action=import&model=app.person'.format(
+                reverse('admin:mtrsync_settings_add')))
+        form = content.context['adminform'].form
+
+        self.assertEqual(form.initial['action'], 1)
+        self.assertEqual(form.initial['model'], 'app.person')
+        self.assertEqual(form.initial['populate_from_file'], True)

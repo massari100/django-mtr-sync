@@ -58,7 +58,7 @@ class FieldForm(forms.ModelForm):
                     break
 
             if settings.action != settings.IMPORT and \
-                    settings.main_model:
+                    settings.model:
 
                 field = self.fields['attribute']
                 self.fields['attribute'] = forms.ChoiceField(
@@ -98,7 +98,7 @@ class FieldInline(admin.TabularInline):
             FieldInline, self).formfield_for_dbfield(db_field, **kwargs)
 
         if db_field.name == 'attribute':
-            if settings.action != settings.IMPORT and settings.main_model:
+            if settings.action != settings.IMPORT and settings.model:
                 field = forms.ChoiceField(
                     label=field.label, required=field.required,
                     choices=model_attributes(settings))
@@ -107,18 +107,24 @@ class FieldInline(admin.TabularInline):
 
 
 class SettingsForm(forms.ModelForm):
+    INITIAL = {}
 
     create_fields = forms.BooleanField(
         label=_('mtr.sync:Create settings for fields'),
         initial=False, required=False)
 
-    populate = forms.BooleanField(
+    populate_from_file = forms.BooleanField(
         label=_('mtr.sync:Populate settings from file'),
         initial=False, required=False)
 
+    def __init__(self, *args, **kwargs):
+        kwargs['initial'].update(self.INITIAL)
+
+        super(SettingsForm, self).__init__(*args, **kwargs)
+
     def save(self, commit=True):
         create_fields = self.cleaned_data.get('create_fields', False)
-        populate = self.cleaned_data.get('populate', False)
+        populate_from_file = self.cleaned_data.get('populate_from_file', False)
 
         settings = super(SettingsForm, self).save(commit=commit)
 
@@ -129,7 +135,7 @@ class SettingsForm(forms.ModelForm):
                 settings.create_default_fields()
 
             if settings.action == settings.IMPORT \
-                    and settings.buffer_file and populate:
+                    and settings.buffer_file and populate_from_file:
                 settings.populate_from_buffer_file()
 
             settings.save()
@@ -143,9 +149,10 @@ class SettingsForm(forms.ModelForm):
 
 class SettingsAdmin(admin.ModelAdmin):
     list_display = (
-        'name', 'action', 'main_model',
+        'id', 'name', 'action', 'model',
         'processor', 'created_at', 'updated_at'
     )
+    list_display_links = ('id', 'name', 'model')
     date_hierarchy = 'created_at'
     inlines = (FieldInline,)
     actions = ['run']
@@ -154,12 +161,12 @@ class SettingsAdmin(admin.ModelAdmin):
             'fields': (
                 ('name', 'action', 'processor'),
                 ('start_col', 'end_col'), ('start_row', 'end_row'),
-                ('main_model', 'dataset', 'data_action'),
+                ('model', 'dataset', 'data_action'),
                 ('filename', 'worksheet', 'include_header'),
             )
         }),
         (_('mtr.sync:Options'), {
-            'fields': (('create_fields', 'populate'),)
+            'fields': (('create_fields', 'populate_from_file'),)
         })
     )
     form = SettingsForm
@@ -167,16 +174,17 @@ class SettingsAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         form = super(SettingsAdmin, self).get_form(request, obj, **kwargs)
         action = request.GET.get('action', '')
-        app = request.GET.get('app', '')
         model = request.GET.get('model', '')
 
         if action == 'export':
-            form.base_fields['action'].initial = 0
+            form.INITIAL['action'] = 0
+            form.INITIAL['create_fields'] = True
         elif action == 'import':
-            form.base_fields['action'].initial = 1
+            form.INITIAL['action'] = 1
+            form.INITIAL['populate_from_file'] = True
 
-        # print(action, app, model)
-        # print(form.base_fields['action'].initial)
+        form.INITIAL['model'] = model
+
         return form
 
     def get_inline_instances(self, request, obj=None):

@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Office',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('office', models.CharField(verbose_name='office', max_length=255)),
                 ('address', models.CharField(verbose_name='address', max_length=255)),
             ],
@@ -26,13 +26,13 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(verbose_name='name', max_length=255)),
                 ('surname', models.CharField(verbose_name='surname', max_length=255)),
                 ('gender', models.CharField(verbose_name='gender', max_length=255, choices=[('M', 'Male'), ('F', 'Female')])),
                 ('security_level', models.PositiveIntegerField(verbose_name='security level')),
-                ('some_excluded_field', models.DecimalField(verbose_name='some decimal', max_digits=10, null=True, decimal_places=3)),
-                ('office', models.ForeignKey(blank=True, to='app.Office', null=True)),
+                ('some_excluded_field', models.DecimalField(verbose_name='some decimal', null=True, max_digits=10, decimal_places=3)),
+                ('office', models.ForeignKey(to='app.Office', blank=True, null=True)),
             ],
             options={
                 'verbose_name': 'person',
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Tag',
             fields=[
-                ('id', models.AutoField(auto_created=True, verbose_name='ID', primary_key=True, serialize=False)),
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(verbose_name='tag', max_length=255)),
             ],
             options={

@@ -51,8 +51,8 @@ class ApiTestMixin(object):
         self.settings = Settings.objects.create(
             action=Settings.EXPORT,
             processor=self.PROCESSOR.__name__, worksheet='test',
-            main_model='{}.{}'.format(
-                self.model.__module__, self.model.__name__),
+            model='{}.{}'.format(
+                self.model._meta.app_label, self.model.__name__),
             include_header=False,
             dataset='some_dataset')
 
@@ -232,7 +232,7 @@ class ProcessorTestMixin(ApiTestMixin):
         def test_import(row, model, model_attrs, related_attrs, processor):
             attrs.append(model_attrs)
 
-        self.settings.main_model = ''
+        self.settings.model = ''
         self.settings.data_action = 'test_import'
         self.settings.action = self.settings.IMPORT
         self.settings.buffer_file = report.buffer_file

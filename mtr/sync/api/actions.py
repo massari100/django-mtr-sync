@@ -37,8 +37,8 @@ def _create_mtm_instance(
     return add_after
 
 
-def _create_instances(model, main_model_attrs, related_models):
-    instance = model(**main_model_attrs)
+def _create_instances(model, model_attrs, related_models):
+    instance = model(**model_attrs)
     fields = model_fields(model)
     add_after = {}
 

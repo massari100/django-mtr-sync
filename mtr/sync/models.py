@@ -70,7 +70,7 @@ class Settings(ActionsMixin):
 
     """Settings for imported and exported files"""
 
-    name = models.CharField(_('mtr.sync:name'), max_length=100)
+    name = models.CharField(_('mtr.sync:name'), blank=True, max_length=100)
 
     start_col = models.CharField(
         _('mtr.sync:start column'), max_length=10, blank=True)
@@ -82,7 +82,7 @@ class Settings(ActionsMixin):
     end_row = models.PositiveIntegerField(
         _('mtr.sync:end row'), null=True, blank=True)
 
-    main_model = models.CharField(
+    model = models.CharField(
         _('mtr.sync:main model'), max_length=255,
         choices=model_choices(), blank=True)
 
@@ -162,7 +162,7 @@ class Settings(ActionsMixin):
         if not exclude:
             exclude = []
 
-        if not self.main_model:
+        if not self.model:
             return []
 
         for name, label in model_attributes(self):
