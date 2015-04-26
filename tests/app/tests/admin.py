@@ -37,4 +37,5 @@ class AdminMixinTest(TestCase):
 
         self.assertEqual(form.initial['action'], 1)
         self.assertEqual(form.initial['model'], 'app.person')
+        self.assertEqual(form.initial['create_fields'], False)
         self.assertEqual(form.initial['populate_from_file'], True)

@@ -14,6 +14,7 @@ from .settings import REGISTER_IN_ADMIN
 
 class ImportExportAdminMixin(object):
     change_list_template = themed('admin/change_list.html')
+    change_form_template = themed('admin/change_form.html')
 
 
 class ErrorInline(admin.TabularInline):
@@ -182,6 +183,7 @@ class SettingsAdmin(admin.ModelAdmin):
         elif action == 'import':
             form.INITIAL['action'] = 1
             form.INITIAL['populate_from_file'] = True
+            form.INITIAL['create_fields'] = False
 
         form.INITIAL['model'] = model
 
