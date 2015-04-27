@@ -14,7 +14,6 @@ from .settings import REGISTER_IN_ADMIN
 
 class ImportExportAdminMixin(object):
     change_list_template = themed('admin/change_list.html')
-    change_form_template = themed('admin/change_form.html')
 
 
 class ErrorInline(admin.TabularInline):

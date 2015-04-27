@@ -227,6 +227,26 @@ class Field(PositionMixin):
 
 
 @python_2_unicode_compatible
+class Filter(PositionMixin):
+
+    """Queryset data filter for data, inlines etc"""
+
+    attribute = models.CharField(
+        _('mtr.sync:model attribute'), max_length=255)
+    filter_type = models.CharField(
+        _('mtr.sync:filter type'), max_length=255)
+    value = models.CharField(
+        _('mtr.sync:value'), max_length=255)
+
+    class Meta:
+        verbose_name = _('mtr.sync:filter')
+        verbose_name_plural = _('mtr.sync:filters')
+
+    def __str__(self):
+        return self.attribute
+
+
+@python_2_unicode_compatible
 class Report(ActionsMixin):
 
     """Reports about imported and exported operations and link to files
