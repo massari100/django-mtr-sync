@@ -1,6 +1,6 @@
 # django-mtr-sync
 
-# WARNING: it's under development and has major changes around commits. After release in PIP it will have stable API
+## WARNING: it's under development and has major changes around commits (no migrations before release, `tasks.py recreate command`). After release in PIP it will have stable API
 
 ## Full-feature package for easy importing and exporting of data
 

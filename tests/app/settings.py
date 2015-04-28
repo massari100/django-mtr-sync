@@ -39,9 +39,17 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'mtr.sync',
     'app'
 )
+
+if django.get_version() >= '1.7':
+    INSTALLED_APPS += (
+        'mtr.sync',
+    )
+else:
+    INSTALLED_APPS += (
+        'mtr_sync',
+    )
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

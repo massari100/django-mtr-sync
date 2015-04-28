@@ -23,7 +23,7 @@ class AdminMixinTest(TestCase):
     def test_settings_export_import_modified_by_link(self):
         content = self.client.get(
             '{}?action=export&model=app.person'.format(
-                reverse('admin:mtrsync_settings_add')))
+                reverse('admin:mtr_sync_settings_add')))
         form = content.context['adminform'].form
 
         self.assertEqual(form.initial['action'], 0)
@@ -32,7 +32,7 @@ class AdminMixinTest(TestCase):
 
         content = self.client.get(
             '{}?action=import&model=app.person'.format(
-                reverse('admin:mtrsync_settings_add')))
+                reverse('admin:mtr_sync_settings_add')))
         form = content.context['adminform'].form
 
         self.assertEqual(form.initial['action'], 1)
