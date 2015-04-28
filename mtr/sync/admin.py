@@ -7,7 +7,7 @@ from django.contrib import admin
 from django import forms
 
 from .helpers import themed
-from .models import Report, Settings, Field, Error
+from .models import Report, Settings, Field, Error, Filter
 from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
@@ -77,17 +77,18 @@ class FieldAdmin(admin.ModelAdmin):
     form = FieldForm
 
 
-class FieldInline(admin.TabularInline):
-    model = Field
-    extra = 0
-    fields = ('skip', 'position', 'name', 'attribute', 'converters')
+class ObjectInlineMixin(object):
 
     def get_formset(self, request, obj=None, **kwargs):
         """Pass parent object to inline form"""
 
         kwargs['formfield_callback'] = partial(
             self.formfield_for_dbfield, request=request, obj=obj)
-        return super(FieldInline, self).get_formset(request, obj, **kwargs)
+        return super(ObjectInlineMixin, self) \
+            .get_formset(request, obj, **kwargs)
+
+
+class AttributeChoicesInlineMixin(object):
 
     def formfield_for_dbfield(self, db_field, **kwargs):
         """Replace inline attribute field to selectbox with choices"""
@@ -95,7 +96,8 @@ class FieldInline(admin.TabularInline):
         settings = kwargs.pop('obj')
 
         field = super(
-            FieldInline, self).formfield_for_dbfield(db_field, **kwargs)
+            AttributeChoicesInlineMixin, self
+            ).formfield_for_dbfield(db_field, **kwargs)
 
         if db_field.name == 'attribute':
             if settings.action != settings.IMPORT and settings.model:
@@ -104,6 +106,20 @@ class FieldInline(admin.TabularInline):
                     choices=model_attributes(settings))
 
         return field
+
+
+class FieldInline(
+        ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
+    model = Field
+    extra = 0
+    fields = ('skip', 'position', 'name', 'attribute', 'converters')
+
+
+class FilterInline(
+        admin.TabularInline, ObjectInlineMixin, AttributeChoicesInlineMixin):
+    model = Filter
+    extra = 0
+    fields = ('position', 'attribute', 'filter_type', 'value')
 
 
 class SettingsForm(forms.ModelForm):
@@ -118,26 +134,24 @@ class SettingsForm(forms.ModelForm):
         initial=False, required=False)
 
     def __init__(self, *args, **kwargs):
-        kwargs['initial'].update(self.INITIAL)
+        if kwargs.get('initial', None):
+            kwargs['initial'].update(self.INITIAL)
 
         super(SettingsForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
         create_fields = self.cleaned_data.get('create_fields', False)
         populate_from_file = self.cleaned_data.get('populate_from_file', False)
-
         settings = super(SettingsForm, self).save(commit=commit)
 
+        if create_fields:
+            settings.create_default_fields()
+
+        if settings.action == settings.IMPORT \
+                and settings.buffer_file and populate_from_file:
+            settings.populate_from_buffer_file()
+
         if commit:
-            settings.save()
-
-            if create_fields:
-                settings.create_default_fields()
-
-            if settings.action == settings.IMPORT \
-                    and settings.buffer_file and populate_from_file:
-                settings.populate_from_buffer_file()
-
             settings.save()
 
         return settings
@@ -154,7 +168,7 @@ class SettingsAdmin(admin.ModelAdmin):
     )
     list_display_links = ('id', 'name', 'model')
     date_hierarchy = 'created_at'
-    inlines = (FieldInline,)
+    inlines = (FieldInline, FilterInline)
     actions = ['run']
     fieldsets = (
         (None, {
@@ -166,7 +180,8 @@ class SettingsAdmin(admin.ModelAdmin):
             )
         }),
         (_('mtr.sync:Options'), {
-            'fields': (('create_fields', 'populate_from_file'),)
+            'fields': ((
+                'create_fields', 'populate_from_file', 'filter_dataset'),)
         })
     )
     form = SettingsForm
@@ -175,6 +190,9 @@ class SettingsAdmin(admin.ModelAdmin):
         form = super(SettingsAdmin, self).get_form(request, obj, **kwargs)
         action = request.GET.get('action', '')
         model = request.GET.get('model', '')
+
+        # TODO: create initial fields automaticaly
+        # TODO: modify attributes by simple custom widget
 
         if action == 'export':
             form.INITIAL['action'] = 0

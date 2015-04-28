@@ -1,4 +1,6 @@
-# django-mtr-sync (beta testing)
+# django-mtr-sync
+
+# WARNING: it's under development and has major changes around commits. After release in PIP it will have stable API
 
 ## Full-feature package for easy importing and exporting of data
 

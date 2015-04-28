@@ -110,6 +110,9 @@ class Settings(ActionsMixin):
         _('mtr.sync:dataset'), max_length=255, blank=True,
         choices=manager.dataset_choices())
 
+    filter_dataset = models.BooleanField(
+        _('mtr.sync:filter custom dataset'), default=True)
+
     data_action = models.CharField(
         _('mtr.sync:data action'), blank=True,
         max_length=255, choices=manager.action_choices())
@@ -220,7 +223,7 @@ class Field(PositionMixin):
         verbose_name = _('mtr.sync:field')
         verbose_name_plural = _('mtr.sync:fields')
 
-        ordering = ['position']
+        ordering = ('position',)
 
     def __str__(self):
         return self.name or self.attribute
@@ -233,14 +236,27 @@ class Filter(PositionMixin):
 
     attribute = models.CharField(
         _('mtr.sync:model attribute'), max_length=255)
+
     filter_type = models.CharField(
         _('mtr.sync:filter type'), max_length=255)
     value = models.CharField(
         _('mtr.sync:value'), max_length=255)
 
+    settings = models.ForeignKey(
+        Settings, verbose_name=_('mtr.sync:settings'), related_name='filters')
+
+    def save(self, *args, **kwargs):
+        if self.position is None:
+            self.position = self.__class__.objects \
+                .filter(settings=self.settings).count() + 1
+
+        super(Field, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = _('mtr.sync:filter')
         verbose_name_plural = _('mtr.sync:filters')
+
+        ordering = ('position',)
 
     def __str__(self):
         return self.attribute

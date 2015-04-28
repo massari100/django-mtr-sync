@@ -52,7 +52,7 @@ class ApiTestMixin(object):
             action=Settings.EXPORT,
             processor=self.PROCESSOR.__name__, worksheet='test',
             model='{}.{}'.format(
-                self.model._meta.app_label, self.model.__name__),
+                self.model._meta.app_label, self.model.__name__).lower(),
             include_header=False,
             dataset='some_dataset')
 

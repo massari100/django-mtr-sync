@@ -129,7 +129,7 @@ def make_model_class(settings):
 
     for mmodel in models_list():
         if settings.model == '{}.{}'.format(
-                mmodel._meta.app_label, mmodel.__name__):
+                mmodel._meta.app_label, mmodel.__name__).lower():
             return mmodel
 
 
