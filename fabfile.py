@@ -4,7 +4,7 @@ import django
 
 from fabric.api import local, task, lcd
 
-APPS = ['mtr.sync']
+APPS = ['mtr.sync' if django.get_version() >= '1.7' else 'mtr_sync']
 PROJECT_APPS = ['app']
 PROJECT_DIR = 'tests'
 DOCS_DIR = 'docs'
@@ -106,8 +106,8 @@ def migrate():
     if django.get_version() >= '1.7':
         manage('makemigrations')
     else:
-        manage('schemamigration --initial sync')
-        manage('schemamigration --initial app')
+        for app in APPS + PROJECT_APPS:
+            manage('schemamigration --initial {}'.format(app.split('.')[-1]))
         manage('syncdb --noinput')
 
     manage('migrate')

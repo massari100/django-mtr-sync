@@ -1,8 +1,8 @@
 # django-mtr-sync
 
-## WARNING: it's under development and has major changes around commits (no migrations before release, `tasks.py recreate command`). After release in PIP it will have stable API
-
 ## Full-feature package for easy importing and exporting of data
+
+### WARNING: it's under development and has major changes around commits (no migrations before release, `tasks.py recreate command`). After release in PIP it will have stable API
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/?branch=master) [![Build Status](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/build.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/build-status/master) [![Documentation Status](https://readthedocs.org/projects/django-mtr-sync/badge/?version=latest)](https://readthedocs.org/projects/django-mtr-sync/?badge=latest)
 

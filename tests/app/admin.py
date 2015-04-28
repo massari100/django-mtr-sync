@@ -1,6 +1,11 @@
+import django
+
 from django.contrib import admin
 
-from mtr.sync.admin import ImportExportAdminMixin
+if django.get_version() >= '1.7':
+    from mtr.sync.admin import ImportExportAdminMixin
+else:
+    from mtr_sync.admin import ImportExportAdminMixin
 
 from .models import Person, Office, Tag
 

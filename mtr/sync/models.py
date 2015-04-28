@@ -193,6 +193,8 @@ class Settings(ActionsMixin):
 
         ordering = ('-id',)
 
+        app_label = 'mtr_sync'
+
     def __str__(self):
         return self.name
 
@@ -224,6 +226,8 @@ class Field(PositionMixin):
         verbose_name_plural = _('mtr.sync:fields')
 
         ordering = ('position',)
+
+        app_label = 'mtr_sync'
 
     def __str__(self):
         return self.name or self.attribute
@@ -257,6 +261,8 @@ class Filter(PositionMixin):
         verbose_name_plural = _('mtr.sync:filters')
 
         ordering = ('position',)
+
+        app_label = 'mtr_sync'
 
     def __str__(self):
         return self.attribute
@@ -305,6 +311,8 @@ class Report(ActionsMixin):
         verbose_name_plural = _('mtr.sync:reports')
 
         ordering = ('-id',)
+
+        app_label = 'mtr_sync'
 
     def __str__(self):
         return '{} - {}'.format(self.started_at, self.get_status_display())
@@ -374,6 +382,10 @@ class Error(PositionMixin, ErrorChoicesMixin):
     class Meta:
         verbose_name = _('mtr.sync:error')
         verbose_name_plural = _('mtr.sync:errors')
+
+        ordering = ('position', )
+
+        app_label = 'mtr_sync'
 
     def __str__(self):
         return self.message
