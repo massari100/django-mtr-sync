@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from collections import OrderedDict
 
 from django.utils.six.moves import filterfalse
+from django.utils.translation import activate
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import column_value, make_model_class, model_settings, \
@@ -64,6 +65,9 @@ class ProcessorManagerMixin(object):
     def export_data(self, settings, data=None):
         """Export data to file if no data passed,
         create queryset it from settings"""
+
+        if settings.language:
+            activate(settings.language)
 
         processor = self.make_processor(settings)
 
@@ -129,6 +133,9 @@ class ProcessorManagerMixin(object):
 
     def import_data(self, settings, path=None):
         """Import data to database"""
+
+        if settings.language:
+            activate(settings.language)
 
         processor = self.make_processor(settings)
         model = make_model_class(settings)

@@ -28,6 +28,7 @@ class Migration(SchemaMigration):
             ('dataset', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('filter_dataset', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('data_action', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('language', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
         db.send_create_signal('mtr_sync', ['Settings'])
 
@@ -151,6 +152,7 @@ class Migration(SchemaMigration):
             'filter_dataset': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'include_header': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'language': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'processor': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
