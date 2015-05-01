@@ -10,6 +10,10 @@ https://docs.djangoproject.com/en/1.7/ref/settings/
 
 import django
 
+
+# placeholder for gettext
+def _(s): return s
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -38,6 +42,8 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    'modeltranslation',
 
     'app'
 )
@@ -98,6 +104,11 @@ if django.get_version() >= '1.7':
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
+
+LANGUAGES = (
+    ('de', _('German')),
+    ('en', _('English')),
+)
 
 TIME_ZONE = 'UTC'
 

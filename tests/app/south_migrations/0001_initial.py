@@ -27,7 +27,11 @@ class Migration(SchemaMigration):
         db.create_table(u'app_person', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('name_de', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('name_en', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('surname', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('surname_de', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('surname_en', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
             ('gender', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('security_level', self.gf('django.db.models.fields.PositiveIntegerField')()),
             ('some_excluded_field', self.gf('django.db.models.fields.DecimalField')(null=True, max_digits=10, decimal_places=3)),
@@ -71,10 +75,14 @@ class Migration(SchemaMigration):
             'gender': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'name_de': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'name_en': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'office': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['app.Office']", 'null': 'True', 'blank': 'True'}),
             'security_level': ('django.db.models.fields.PositiveIntegerField', [], {}),
             'some_excluded_field': ('django.db.models.fields.DecimalField', [], {'null': 'True', 'max_digits': '10', 'decimal_places': '3'}),
             'surname': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'surname_de': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'surname_en': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'tags': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['app.Tag']", 'symmetrical': 'False'})
         },
         u'app.tag': {

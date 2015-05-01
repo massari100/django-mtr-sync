@@ -92,3 +92,7 @@ class ManagerTest(ApiTestMixin, TestCase):
             if data_counter % 1:
                 self.assertEqual(before_item, after_item / 10)
             data_counter += 1
+
+    # def test_modeltranslation_language_detection(self):
+    #     self.manager.register('processor', self.PROCESSOR)
+    #     self.manager.prepare_export_data(self.processor, self.queryset)

@@ -55,7 +55,7 @@ class ApiTestMixin(object):
                 self.model._meta.app_label, self.model.__name__).lower(),
             include_header=False,
             dataset='some_dataset',
-            language='en')
+            language='de')
 
         self.queryset = self.manager.get_or_raise('dataset', 'some_dataset')
         self.queryset = self.queryset(self.MODEL, self.settings)
