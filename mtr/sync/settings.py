@@ -52,4 +52,5 @@ LIMIT_PREVIEW = getattr_with_prefix('LIMIT_PREVIEW', 20)
 # register models at admin for debugging
 REGISTER_IN_ADMIN = getattr_with_prefix('REGISTER_IN_ADMIN', True)
 
-# TODO: add filter translations fields
+# hide translation fields ends with _lang
+HIDE_TRANSLATION_FIELDS = True

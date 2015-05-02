@@ -2,9 +2,10 @@ from collections import OrderedDict
 
 from django.utils.six.moves import filterfalse
 from django.db import models
+from django.conf import settings as django_settings
 from django.db.models.fields import Field as ModelField
 
-from ..settings import MODEL_SETTINGS_NAME
+from ..settings import MODEL_SETTINGS_NAME, HIDE_TRANSLATION_FIELDS
 
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -78,7 +79,13 @@ def model_fields(model):
 
     for field in fields_arr:
         if field.name not in exclude:
-            ordered_fields.append((field.name, field))
+            add_it = True
+            if HIDE_TRANSLATION_FIELDS:
+                for lang, name in django_settings.LANGUAGES:
+                    if field.name.endswith('_{}'.format(lang)):
+                        add_it = False
+            if add_it:
+                ordered_fields.append((field.name, field))
 
     for field in custom_fields:
         if field not in exclude:

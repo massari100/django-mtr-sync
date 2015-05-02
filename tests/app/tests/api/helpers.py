@@ -29,8 +29,7 @@ class HelpersTest(ApiTestMixin, TestCase):
         fields = list(map(lambda f: f[0], fields))
 
         self.assertEqual([
-            'id', 'name', 'name_de', 'name_en',
-            'surname', 'surname_de', 'surname_en', 'gender', 'security_level',
+            'id', 'name', 'surname', 'gender', 'security_level',
             'office|_fk_|id', 'office|_fk_|office', 'office|_fk_|address',
             'tags|_m_|id', 'tags|_m_|name',
             'custom_method', 'none_param'], fields)
