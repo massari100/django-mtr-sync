@@ -116,7 +116,7 @@ class FieldInline(
 
 
 class FilterInline(
-        admin.TabularInline, ObjectInlineMixin, AttributeChoicesInlineMixin):
+        ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
     model = Filter
     extra = 0
     fields = ('position', 'attribute', 'filter_type', 'value')
@@ -133,6 +133,10 @@ class SettingsForm(forms.ModelForm):
         label=_('mtr.sync:Populate settings from file'),
         initial=False, required=False)
 
+    translation_attributes = forms.BooleanField(
+        label=_('mtr.sync:Hide translation prefixed fields'),
+        initial=True, required=False)    
+
     def __init__(self, *args, **kwargs):
         if kwargs.get('initial', None):
             kwargs['initial'].update(self.INITIAL)
@@ -142,7 +146,14 @@ class SettingsForm(forms.ModelForm):
     def save(self, commit=True):
         create_fields = self.cleaned_data.get('create_fields', False)
         populate_from_file = self.cleaned_data.get('populate_from_file', False)
+        translation_attributes = self.cleaned_data.get(
+            'translation_attributes', False)
+
         settings = super(SettingsForm, self).save(commit=commit)
+
+        # BUG: why always commit=False
+
+        settings.save()
 
         if create_fields:
             settings.create_default_fields()
@@ -150,9 +161,6 @@ class SettingsForm(forms.ModelForm):
         if settings.action == settings.IMPORT \
                 and settings.buffer_file and populate_from_file:
             settings.populate_from_buffer_file()
-
-        if commit:
-            settings.save()
 
         return settings
 
@@ -180,9 +188,9 @@ class SettingsAdmin(admin.ModelAdmin):
                 ('filename', 'worksheet', 'include_header'),
             )
         }),
-        (_('mtr.sync:Options'),     {
-            'fields': ((
-                'create_fields', 'populate_from_file', 'filter_dataset'),)
+        (_('mtr.sync:Additional options'),     {
+            'fields': (('create_fields', 'populate_from_file'), 
+                ('translation_attributes', 'filter_dataset'),)
         })
     )
     form = SettingsForm

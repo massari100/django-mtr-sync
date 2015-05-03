@@ -84,7 +84,7 @@ class Settings(ActionsMixin):
         _('mtr.sync:end row'), null=True, blank=True)
 
     model = models.CharField(
-        _('mtr.sync:main model'), max_length=255,
+        _('mtr.sync:model'), max_length=255,
         choices=model_choices(), blank=True)
 
     created_at = models.DateTimeField(

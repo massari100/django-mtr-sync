@@ -100,17 +100,23 @@ def install():
 
 
 @task
-def migrate():
-    """Make migrations and migrate"""
+def migrate(recreate_flag=False, create_user=False):
+    """Simple data migration management"""
 
-    if django.get_version() >= '1.7':
+    if django.get_version() >= '1.7' and recreate_flag:
+        recreate()
         manage('makemigrations')
-    else:
+    elif recreate_flag:
+        recreate()
         for app in APPS + PROJECT_APPS:
             manage('schemamigration --initial {}'.format(app.split('.')[-1]))
         manage('syncdb --noinput')
 
     manage('migrate')
+
+    if create_user:
+        manage('createsuperuser --username app --email app@app.com --noinput')
+        manage('changepassword app')
 
 
 @task
@@ -136,11 +142,6 @@ def recreate():
             local('rm -f db.sqlite3')
         else:
             local('rm -rf olddb.sqlite3')
-
-    migrate()
-
-    manage('createsuperuser --username app --email app@app.com --noinput')
-    manage('changepassword app')
 
 
 @task
