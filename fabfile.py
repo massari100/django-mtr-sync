@@ -100,13 +100,13 @@ def install():
 
 
 @task
-def migrate(recreate_flag=False, create_user=False):
+def migrate(recreate_flag=False, create_user_flag=False):
     """Simple data migration management"""
 
-    if django.get_version() >= '1.7' and recreate_flag:
+    if django.get_version() >= '1.7' and recreate_flag == 'true':
         recreate()
         manage('makemigrations')
-    elif recreate_flag:
+    elif recreate_flag == 'true':
         recreate()
         for app in APPS + PROJECT_APPS:
             manage('schemamigration --initial {}'.format(app.split('.')[-1]))
@@ -114,7 +114,7 @@ def migrate(recreate_flag=False, create_user=False):
 
     manage('migrate')
 
-    if create_user:
+    if create_user_flag == 'true':
         manage('createsuperuser --username app --email app@app.com --noinput')
         manage('changepassword app')
 

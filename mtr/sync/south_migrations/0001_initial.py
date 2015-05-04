@@ -29,6 +29,9 @@ class Migration(SchemaMigration):
             ('filter_dataset', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('data_action', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('language', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('language_attributes', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('create_fields', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('populate_from_file', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal('mtr_sync', ['Settings'])
 
@@ -143,6 +146,7 @@ class Migration(SchemaMigration):
             'Meta': {'ordering': "('-id',)", 'object_name': 'Settings'},
             'action': ('django.db.models.fields.PositiveSmallIntegerField', [], {'db_index': 'True'}),
             'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
+            'create_fields': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'created_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'data_action': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'dataset': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -153,8 +157,10 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'include_header': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'language_attributes': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
+            'populate_from_file': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'processor': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'start_col': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
             'start_row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),

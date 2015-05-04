@@ -97,23 +97,19 @@ class Settings(ActionsMixin):
         choices=manager.processor_choices())
     worksheet = models.CharField(
         _('mtr.sync:worksheet page'), max_length=255, blank=True)
-
     include_header = models.BooleanField(
         _('mtr.sync:include header'), default=True)
 
     filename = models.CharField(
         _('mtr.sync:custom filename'), max_length=255, blank=True)
-
     buffer_file = models.FileField(
         _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
 
     dataset = models.CharField(
         _('mtr.sync:dataset'), max_length=255, blank=True,
         choices=manager.dataset_choices())
-
     filter_dataset = models.BooleanField(
         _('mtr.sync:filter custom dataset'), default=True)
-
     data_action = models.CharField(
         _('mtr.sync:data action'), blank=True,
         max_length=255, choices=manager.action_choices())
@@ -121,6 +117,16 @@ class Settings(ActionsMixin):
     language = models.CharField(
         _('mtr.sync:language'), blank=True,
         max_length=255, choices=django_settings.LANGUAGES)
+    language_attributes = models.BooleanField(
+        _('mtr.sync:Hide translation prefixed fields'),
+        default=True)  
+
+    create_fields = models.BooleanField(
+        _('mtr.sync:Create settings for fields'), default=True)
+    populate_from_file = models.BooleanField(
+        _('mtr.sync:Populate settings from file'), default=False)
+
+    
 
     def fields_with_processors(self):
         """Return iterator of fields with filters"""
@@ -201,7 +207,7 @@ class Settings(ActionsMixin):
         app_label = 'mtr_sync'
 
     def __str__(self):
-        return self.name
+        return self.name or str(self.id)
 
 
 @python_2_unicode_compatible
