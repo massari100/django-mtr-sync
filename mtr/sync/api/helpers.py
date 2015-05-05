@@ -131,6 +131,12 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
             yield (name, label.capitalize())
 
 
+def filter_types(field):
+    # Return all filter types for field
+    
+    return []
+
+
 def make_model_class(settings):
     """Return class for name in model"""
 

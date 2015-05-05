@@ -220,6 +220,9 @@ class Field(PositionMixin):
         _('mtr.sync:model attribute'), max_length=255)
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
+    # update = models.BooleanField(_('mtr.sync:update'), default=True)
+    # find_by = 
+
     converters = models.CharField(_('mtr.sync:converters'), max_length=255)
 
     settings = models.ForeignKey(

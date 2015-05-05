@@ -8,7 +8,7 @@ from django import forms
 
 from .helpers import themed
 from .models import Report, Settings, Field, Error, Filter
-from .api.helpers import model_attributes
+from .api.helpers import model_attributes, filter_types
 from .settings import REGISTER_IN_ADMIN
 
 
@@ -108,6 +108,34 @@ class AttributeChoicesInlineMixin(object):
         return field
 
 
+class FilterTypeChoicesInlineMixin(object):
+
+    def formfield_for_dbfield(self, db_field, **kwargs):
+        """Replace filter type field to selectbox with choices"""
+
+        settings = kwargs.pop('obj')
+
+        field = super(
+            FilterTypeChoicesInlineMixin, self
+            ).formfield_for_dbfield(db_field, **kwargs)
+
+        # TODO: related to selected field
+
+        if db_field.name == 'filter_type':
+            if settings.model:
+                field = forms.ChoiceField(
+                    label=field.label, required=field.required,
+                    choices=filter_types(db_field))
+        elif db_field.name == 'attribute':
+            if settings.action != settings.IMPORT and settings.model:
+                field = forms.ChoiceField(
+                    label=field.label, required=field.required,
+                    choices=model_attributes(settings))
+
+        return field
+
+
+
 class FieldInline(
         ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
     model = Field
@@ -116,7 +144,7 @@ class FieldInline(
 
 
 class FilterInline(
-        ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
+        ObjectInlineMixin, FilterTypeChoicesInlineMixin, admin.TabularInline):
     model = Filter
     extra = 0
     fields = ('position', 'attribute', 'filter_type', 'value')
