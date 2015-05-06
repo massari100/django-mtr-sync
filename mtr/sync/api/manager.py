@@ -87,17 +87,15 @@ class ProcessorManagerMixin(object):
         else:
             dataset = current_model._default_manager.all()
 
-        if settings.filter_dataset:
-            if settings.related_field and settings.related_id:
-                dataset = dataset.filter(**{
-                    '{}_id'.format(settings.related_field): settings.related_id
-                    }
-                )
+        if settings.filter_dataset and settings.filter_querystring:
+            params = QueryDict(settings.filter_querystring).dict()
+            order = params.pop('o', '').split('.')
+            fields = params.pop('fields', '').split(',')
 
-            if settings.filter_querystring:
-                params = QueryDict(settings.filter_querystring).dict()
-                params.pop('o', None)
-                dataset = dataset.filter(**params)
+            if order and fields:
+                dataset = dataset.order_by()
+
+            dataset = dataset.filter(**params)
 
         return dataset
 

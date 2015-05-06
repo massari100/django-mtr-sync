@@ -12,8 +12,16 @@ from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
 
-class ImportExportAdminMixin(object):
+class SyncAdminMixin(object):
     change_list_template = themed('admin/change_list.html')
+
+
+class SyncTabularInlineMixin(object):
+    template = themed('admin/edit_inline/tabular.html')
+
+
+class SyncStackedInlineMixin(object):
+    template = themed('admin/edit_inline/stacked.html')
 
 
 class ErrorInline(admin.TabularInline):
@@ -109,7 +117,7 @@ class AttributeChoicesInlineMixin(object):
 
 
 class FieldInline(
-        ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
+        SyncTabularInlineMixin, ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
     model = Field
     extra = 0
     fields = ('skip', 'position', 'name', 'attribute', 'converters')
@@ -166,7 +174,7 @@ class SettingsAdmin(admin.ModelAdmin):
                 ('start_col', 'end_col'), ('start_row', 'end_row'),
                 ('model', 'dataset', 'data_action'),
                 ('filename', 'worksheet', 'include_header'),
-                ('related_field', 'related_id', 'filter_querystring')
+                ('filter_querystring',)
             )
         }),
         (_('mtr.sync:Additional options'),     {
@@ -192,7 +200,6 @@ class SettingsAdmin(admin.ModelAdmin):
         elif action == 'import':
             form.INITIAL['action'] = 1
             form.INITIAL['populate_from_file'] = True
-            form.INITIAL['create_fields'] = False
 
         form.INITIAL['model'] = model
         form.INITIAL['filter_querystring'] = filter_querystring

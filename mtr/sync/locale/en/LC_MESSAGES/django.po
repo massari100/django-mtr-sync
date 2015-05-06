@@ -6,27 +6,15 @@
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: admin.py:129
-msgid "mtr.sync:Create settings for fields"
-msgstr "Create settings for fields"
-
-#: admin.py:133
-msgid "mtr.sync:Populate settings from file"
-msgstr "Populate settings from file"
-
-#: admin.py:137
-msgid "mtr.sync:Hide translation prefixed fields"
-msgstr "Hide translation prefixed fields"
-
-#: admin.py:191
+#: admin.py:172
 msgid "mtr.sync:Additional options"
 msgstr "Additional options"
 
-#: admin.py:236
+#: admin.py:226
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "Data synchronization started in background."
 
-#: admin.py:238
+#: admin.py:228
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
@@ -119,7 +107,7 @@ msgstr "Import"
 msgid "mtr.sync:action"
 msgstr "action"
 
-#: models.py:74 models.py:212
+#: models.py:74 models.py:218
 msgid "mtr.sync:name"
 msgstr "name"
 
@@ -147,7 +135,7 @@ msgstr "model"
 msgid "mtr.sync:created at"
 msgstr "created at"
 
-#: models.py:93 models.py:302
+#: models.py:93 models.py:276
 msgid "mtr.sync:updated at"
 msgstr "updated at"
 
@@ -159,127 +147,127 @@ msgstr "format"
 msgid "mtr.sync:worksheet page"
 msgstr "worksheet page"
 
-#: models.py:102
+#: models.py:101
 msgid "mtr.sync:include header"
 msgstr "include header"
 
-#: models.py:105
+#: models.py:104
 msgid "mtr.sync:custom filename"
 msgstr "custom filename"
 
-#: models.py:108 models.py:293
+#: models.py:106 models.py:267
 msgid "mtr.sync:file"
 msgstr "file"
 
-#: models.py:111
+#: models.py:109
 msgid "mtr.sync:dataset"
 msgstr "dataset"
+
+#: models.py:112
+msgid "mtr.sync:data action"
+msgstr "data action"
 
 #: models.py:115
 msgid "mtr.sync:filter custom dataset"
 msgstr "filter custom dataset"
 
-#: models.py:118
-msgid "mtr.sync:data action"
-msgstr "data action"
+#: models.py:117
+msgid "mtr.sync:querystring"
+msgstr "querystring"
 
-#: models.py:122
+#: models.py:120
 msgid "mtr.sync:language"
 msgstr "language"
 
-#: models.py:196 models.py:197 models.py:220 models.py:255 models.py:305
+#: models.py:123
+msgid "mtr.sync:Hide translation prefixed fields"
+msgstr "Hide translation prefixed fields"
+
+#: models.py:127
+msgid "mtr.sync:Create settings for fields"
+msgstr "Create settings for fields"
+
+#: models.py:129
+msgid "mtr.sync:Populate settings from file"
+msgstr "Populate settings from file"
+
+#: models.py:202 models.py:203 models.py:229 models.py:279
 msgid "mtr.sync:settings"
 msgstr "settings"
 
-#: models.py:214 models.py:247
+#: models.py:220
 msgid "mtr.sync:model attribute"
 msgstr "model attribute"
 
-#: models.py:215
+#: models.py:221
 msgid "mtr.sync:skip"
 msgstr "skip"
 
-#: models.py:217
+#: models.py:226
 msgid "mtr.sync:converters"
 msgstr "converters"
 
-#: models.py:230
+#: models.py:239
 msgid "mtr.sync:field"
 msgstr "field"
 
-#: models.py:231
+#: models.py:240
 msgid "mtr.sync:fields"
 msgstr "fields"
 
-#: models.py:250
-msgid "mtr.sync:filter type"
-msgstr "filter type"
-
-#: models.py:252
-msgid "mtr.sync:value"
-msgstr "value"
-
-#: models.py:265
-msgid "mtr.sync:filter"
-msgstr "filter"
-
-#: models.py:266
-msgid "mtr.sync:filters"
-msgstr "filters"
-
-#: models.py:287
+#: models.py:261
 msgid "mtr.sync:Error"
 msgstr "Error"
 
-#: models.py:288
+#: models.py:262
 msgid "mtr.sync:Running"
 msgstr "Running"
 
-#: models.py:289
+#: models.py:263
 msgid "mtr.sync:Success"
 msgstr "Success"
 
-#: models.py:295
+#: models.py:269
 msgid "mtr.sync:status"
 msgstr "status"
 
-#: models.py:298
+#: models.py:272
 msgid "mtr.sync:started at"
 msgstr "started at"
 
-#: models.py:300
+#: models.py:274
 msgid "mtr.sync:completed at"
 msgstr "completed at"
 
-#: models.py:315
+#: models.py:289
 msgid "mtr.sync:report"
 msgstr "report"
 
-#: models.py:316
+#: models.py:290
 msgid "mtr.sync:reports"
 msgstr "reports"
 
-#: models.py:378
+#: models.py:352
 msgid "mtr.sync:message"
 msgstr "message"
 
-#: models.py:380
+#: models.py:354
 msgid "mtr.sync:step"
 msgstr "step"
 
-#: models.py:383
+#: models.py:357
 msgid "mtr.sync:input position"
 msgstr "input position"
 
-#: models.py:385
+#: models.py:359
 msgid "mtr.sync:input value"
 msgstr "input value"
 
-#: models.py:388
+#: models.py:362
 msgid "mtr.sync:error"
 msgstr "error"
 
-#: models.py:389
+#: models.py:363
 msgid "mtr.sync:errors"
 msgstr "errors"
 
@@ -315,6 +303,3 @@ msgstr "Last reports"
 #: templates/mtr/sync/default/dashboard.html:55
 msgid "mtr.sync:New settings"
 msgstr "New settings"
-
-#~ msgid "mtr.sync:Options"
-#~ msgstr "Options"

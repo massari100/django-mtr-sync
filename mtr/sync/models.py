@@ -128,11 +128,6 @@ class Settings(ActionsMixin):
     populate_from_file = models.BooleanField(
         _('mtr.sync:Populate settings from file'), default=False)
 
-    related_field = models.CharField(
-        _('mtr.sync:related field'), max_length=255, blank=True)
-    related_id = models.PositiveIntegerField(
-        _('mtr.sync:related id'), null=True, blank=True)
-
     def fields_with_processors(self):
         """Return iterator of fields with filters"""
 
