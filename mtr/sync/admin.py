@@ -117,7 +117,7 @@ class AttributeChoicesInlineMixin(object):
 
 
 class FieldInline(
-        SyncTabularInlineMixin, ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
+        ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
     model = Field
     extra = 0
     fields = ('skip', 'position', 'name', 'attribute', 'converters')

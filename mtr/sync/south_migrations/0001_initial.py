@@ -26,8 +26,9 @@ class Migration(SchemaMigration):
             ('filename', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('buffer_file', self.gf('django.db.models.fields.files.FileField')(db_index=True, max_length=100, blank=True)),
             ('dataset', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('filter_dataset', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('data_action', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('filter_dataset', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('filter_querystring', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('language', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('language_attributes', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('create_fields', self.gf('django.db.models.fields.BooleanField')(default=True)),
@@ -46,17 +47,6 @@ class Migration(SchemaMigration):
             ('settings', self.gf('django.db.models.fields.related.ForeignKey')(related_name='fields', to=orm['mtr_sync.Settings'])),
         ))
         db.send_create_signal('mtr_sync', ['Field'])
-
-        # Adding model 'Filter'
-        db.create_table(u'mtr_sync_filter', (
-            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('position', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
-            ('attribute', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('filter_type', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('value', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('settings', self.gf('django.db.models.fields.related.ForeignKey')(related_name='filters', to=orm['mtr_sync.Settings'])),
-        ))
-        db.send_create_signal('mtr_sync', ['Filter'])
 
         # Adding model 'Report'
         db.create_table(u'mtr_sync_report', (
@@ -91,9 +81,6 @@ class Migration(SchemaMigration):
         # Deleting model 'Field'
         db.delete_table(u'mtr_sync_field')
 
-        # Deleting model 'Filter'
-        db.delete_table(u'mtr_sync_filter')
-
         # Deleting model 'Report'
         db.delete_table(u'mtr_sync_report')
 
@@ -122,15 +109,6 @@ class Migration(SchemaMigration):
             'settings': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'fields'", 'to': "orm['mtr_sync.Settings']"}),
             'skip': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
-        'mtr_sync.filter': {
-            'Meta': {'ordering': "('position',)", 'object_name': 'Filter'},
-            'attribute': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'filter_type': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'position': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'settings': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'filters'", 'to': "orm['mtr_sync.Settings']"}),
-            'value': ('django.db.models.fields.CharField', [], {'max_length': '255'})
-        },
         'mtr_sync.report': {
             'Meta': {'ordering': "('-id',)", 'object_name': 'Report'},
             'action': ('django.db.models.fields.PositiveSmallIntegerField', [], {'db_index': 'True'}),
@@ -154,6 +132,7 @@ class Migration(SchemaMigration):
             'end_row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'filename': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'filter_dataset': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'filter_querystring': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'include_header': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'language': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
