@@ -31,6 +31,8 @@ class ApiTestMixin(object):
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.manager.register('processor', self.PROCESSOR)
 
+        # TODO: refactor instance creation
+
         self.instance = self.model.objects.create(
             name=six.text_type('test instance éprouver'),
             surname='test surname',
@@ -210,8 +212,8 @@ class ProcessorTestMixin(ApiTestMixin):
         report = self.check_report_success()
 
         max_rows, max_cols = self.processor.open(report.buffer_file.path)
-        self.processor.set_dimensions(0, 0,
-            max_rows, max_cols, import_data=True)
+        self.processor.set_dimensions(
+            0, 0, max_rows, max_cols, import_data=True)
 
         self.assertEqual(
             self.processor.end['col'], len(self.processor.read(10000)))

@@ -4,6 +4,7 @@ from collections import OrderedDict
 
 from django.utils.six.moves import filterfalse
 from django.utils.translation import activate
+from django.http import QueryDict
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import column_value, make_model_class, model_settings, \
@@ -72,12 +73,12 @@ class ProcessorManagerMixin(object):
         processor = self.make_processor(settings)
 
         if data is None:
-            queryset = self.prepare_export_queryset(settings)
+            queryset = self.prepare_export_dataset(settings)
             data = self.prepare_export_data(processor, queryset)
 
         return processor.export_data(data)
 
-    def prepare_export_queryset(self, settings):
+    def prepare_export_dataset(self, settings):
         current_model = make_model_class(settings)
 
         if settings.dataset:
@@ -85,6 +86,18 @@ class ProcessorManagerMixin(object):
             dataset = dataset(current_model, settings)
         else:
             dataset = current_model._default_manager.all()
+
+        if settings.filter_dataset:
+            if settings.related_field and settings.related_id:
+                dataset = dataset.filter(**{
+                    '{}_id'.format(settings.related_field): settings.related_id
+                    }
+                )
+
+            if settings.filter_querystring:
+                params = QueryDict(settings.filter_querystring).dict()
+                params.pop('o', None)
+                dataset = dataset.filter(**params)
 
         return dataset
 

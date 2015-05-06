@@ -1,18 +1,21 @@
 import django
 
+from .models import Person, Office, Tag
+
 from django.contrib import admin
+
+from modeltranslation.admin import TabbedTranslationAdmin
 
 if django.get_version() >= '1.7':
     from mtr.sync.admin import ImportExportAdminMixin
 else:
     from mtr_sync.admin import ImportExportAdminMixin
 
-from .models import Person, Office, Tag
 
+class PersonAdmin(ImportExportAdminMixin, TabbedTranslationAdmin):
 
-class PersonAdmin(ImportExportAdminMixin, admin.ModelAdmin):
-    list_display = (
-        'name', 'surname', 'security_level', 'gender')
+    list_display = ('name', 'surname', 'security_level', 'gender')
+    list_filter = ('security_level', 'tags', 'office', 'name', 'gender')
 
     actions = ['copy_100']
 

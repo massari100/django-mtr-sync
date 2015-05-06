@@ -166,6 +166,7 @@ class SettingsAdmin(admin.ModelAdmin):
                 ('start_col', 'end_col'), ('start_row', 'end_row'),
                 ('model', 'dataset', 'data_action'),
                 ('filename', 'worksheet', 'include_header'),
+                ('related_field', 'related_id', 'filter_querystring')
             )
         }),
         (_('mtr.sync:Additional options'),     {
@@ -180,6 +181,7 @@ class SettingsAdmin(admin.ModelAdmin):
         form = super(SettingsAdmin, self).get_form(request, obj, **kwargs)
         action = request.GET.get('action', '')
         model = request.GET.get('model', '')
+        filter_querystring = request.GET.get('filter', '')
 
         # TODO: create initial fields automaticaly
         # TODO: modify attributes by simple custom widget
@@ -193,6 +195,13 @@ class SettingsAdmin(admin.ModelAdmin):
             form.INITIAL['create_fields'] = False
 
         form.INITIAL['model'] = model
+        form.INITIAL['filter_querystring'] = filter_querystring
+
+        # form.INITIAL['fields'] = [
+        #     {'order': 0},
+        # ]
+
+        # print(self.inlines)
 
         return form
 

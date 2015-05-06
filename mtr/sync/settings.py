@@ -19,7 +19,8 @@ def strip_media_root(path):
 def get_buffer_file_path(instance, filename, absolute=False):
     """Generate file path for report"""
 
-    path = os.path.join(settings.MEDIA_ROOT,
+    path = os.path.join(
+        settings.MEDIA_ROOT,
         'sync', instance.get_action_display().lower(),
         filename.lower())
 

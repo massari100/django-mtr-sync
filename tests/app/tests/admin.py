@@ -14,7 +14,8 @@ class AdminMixinTest(TestCase):
     def test_mixin_has_buttons_in_change_view(self):
         content = self.client.get(reverse('admin:app_person_changelist'))
 
-        self.assertIn('mtr/sync/default/admin/change_list.html',
+        self.assertIn(
+            'mtr/sync/default/admin/change_list.html',
             map(lambda t: t.name, content.templates))
 
         self.assertContains(content, 'Export')
@@ -39,3 +40,6 @@ class AdminMixinTest(TestCase):
         self.assertEqual(form.initial['model'], 'app.person')
         self.assertEqual(form.initial['create_fields'], False)
         self.assertEqual(form.initial['populate_from_file'], True)
+
+    # def test_export_with_admin_filters_enabled(self):
+    #     pass
