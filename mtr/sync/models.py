@@ -108,25 +108,30 @@ class Settings(ActionsMixin):
     dataset = models.CharField(
         _('mtr.sync:dataset'), max_length=255, blank=True,
         choices=manager.dataset_choices())
-    filter_dataset = models.BooleanField(
-        _('mtr.sync:filter custom dataset'), default=True)
     data_action = models.CharField(
         _('mtr.sync:data action'), blank=True,
         max_length=255, choices=manager.action_choices())
+    filter_dataset = models.BooleanField(
+        _('mtr.sync:filter custom dataset'), default=True)
+    filter_querystring = models.CharField(
+        _('mtr.sync:querystring'), max_length=255, blank=True)
 
     language = models.CharField(
         _('mtr.sync:language'), blank=True,
         max_length=255, choices=django_settings.LANGUAGES)
     language_attributes = models.BooleanField(
         _('mtr.sync:Hide translation prefixed fields'),
-        default=True)  
+        default=True)
 
     create_fields = models.BooleanField(
         _('mtr.sync:Create settings for fields'), default=True)
     populate_from_file = models.BooleanField(
         _('mtr.sync:Populate settings from file'), default=False)
 
-    
+    related_field = models.CharField(
+        _('mtr.sync:related field'), max_length=255, blank=True)
+    related_id = models.PositiveIntegerField(
+        _('mtr.sync:related id'), null=True, blank=True)
 
     def fields_with_processors(self):
         """Return iterator of fields with filters"""
@@ -221,7 +226,7 @@ class Field(PositionMixin):
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
     # update = models.BooleanField(_('mtr.sync:update'), default=True)
-    # find_by = 
+    # find_by =
 
     converters = models.CharField(_('mtr.sync:converters'), max_length=255)
 
@@ -248,44 +253,9 @@ class Field(PositionMixin):
 
 
 @python_2_unicode_compatible
-class Filter(PositionMixin):
-
-    """Queryset data filter for data, inlines etc"""
-
-    attribute = models.CharField(
-        _('mtr.sync:model attribute'), max_length=255)
-
-    filter_type = models.CharField(
-        _('mtr.sync:filter type'), max_length=255)
-    value = models.CharField(
-        _('mtr.sync:value'), max_length=255)
-
-    settings = models.ForeignKey(
-        Settings, verbose_name=_('mtr.sync:settings'), related_name='filters')
-
-    def save(self, *args, **kwargs):
-        if self.position is None:
-            self.position = self.__class__.objects \
-                .filter(settings=self.settings).count() + 1
-
-        super(Field, self).save(*args, **kwargs)
-
-    class Meta:
-        verbose_name = _('mtr.sync:filter')
-        verbose_name_plural = _('mtr.sync:filters')
-
-        ordering = ('position',)
-
-        app_label = 'mtr_sync'
-
-    def __str__(self):
-        return self.attribute
-
-
-@python_2_unicode_compatible
 class Report(ActionsMixin):
 
-    """Reports about imported and exported operations and link to files
+    """Reports for imported and exported operations and link to files
     """
 
     ERROR = 0

@@ -7,8 +7,8 @@ from django.contrib import admin
 from django import forms
 
 from .helpers import themed
-from .models import Report, Settings, Field, Error, Filter
-from .api.helpers import model_attributes, filter_types
+from .models import Report, Settings, Field, Error
+from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
 
@@ -108,34 +108,6 @@ class AttributeChoicesInlineMixin(object):
         return field
 
 
-class FilterTypeChoicesInlineMixin(object):
-
-    def formfield_for_dbfield(self, db_field, **kwargs):
-        """Replace filter type field to selectbox with choices"""
-
-        settings = kwargs.pop('obj')
-
-        field = super(
-            FilterTypeChoicesInlineMixin, self
-            ).formfield_for_dbfield(db_field, **kwargs)
-
-        # TODO: related to selected field
-
-        if db_field.name == 'filter_type':
-            if settings.model:
-                field = forms.ChoiceField(
-                    label=field.label, required=field.required,
-                    choices=filter_types(db_field))
-        elif db_field.name == 'attribute':
-            if settings.action != settings.IMPORT and settings.model:
-                field = forms.ChoiceField(
-                    label=field.label, required=field.required,
-                    choices=model_attributes(settings))
-
-        return field
-
-
-
 class FieldInline(
         ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
     model = Field
@@ -143,15 +115,8 @@ class FieldInline(
     fields = ('skip', 'position', 'name', 'attribute', 'converters')
 
 
-class FilterInline(
-        ObjectInlineMixin, FilterTypeChoicesInlineMixin, admin.TabularInline):
-    model = Filter
-    extra = 0
-    fields = ('position', 'attribute', 'filter_type', 'value')
-
-
 class SettingsForm(forms.ModelForm):
-    INITIAL = {}  
+    INITIAL = {}
 
     def __init__(self, *args, **kwargs):
         if kwargs.get('initial', None):
@@ -191,7 +156,7 @@ class SettingsAdmin(admin.ModelAdmin):
     )
     list_display_links = ('id', 'name', 'model')
     date_hierarchy = 'created_at'
-    inlines = (FieldInline, FilterInline)
+    inlines = (FieldInline,)
     actions = ['run']
     fieldsets = (
         (None, {
@@ -204,7 +169,8 @@ class SettingsAdmin(admin.ModelAdmin):
             )
         }),
         (_('mtr.sync:Additional options'),     {
-            'fields': (('create_fields', 'populate_from_file'), 
+            'fields': (
+                ('create_fields', 'populate_from_file'),
                 ('language_attributes', 'filter_dataset'),)
         })
     )

@@ -14,7 +14,8 @@ DOCS_DIR = 'docs'
 def clear():
     """Delete unnecessary and cached files"""
 
-    local("find . -name '~*' -or -name '*.pyo' -or -name '*.pyc' "
+    local(
+        "find . -name '~*' -or -name '*.pyo' -or -name '*.pyc' "
         "-or -name '__pycache__' -or -name 'Thubms.db' "
         "| xargs -I {} rm -vrf '{}'")
 
@@ -87,7 +88,8 @@ def locale(action='make', lang='en'):
             with lcd(os.path.join(*app.split('.'))):
                 local('django-admin.py compilemessages -l {}'.format(lang))
     else:
-        print('Invalid action: {}, available actions: "make"'
+        print(
+            'Invalid action: {}, available actions: "make"'
             ', "compile"'.format(action))
 
 
@@ -100,23 +102,17 @@ def install():
 
 
 @task
-def migrate(recreate_flag=False, create_user_flag=False):
+def migrate():
     """Simple data migration management"""
 
-    if django.get_version() >= '1.7' and recreate_flag == 'true':
-        recreate()
+    if django.get_version() >= '1.7':
         manage('makemigrations')
-    elif recreate_flag == 'true':
-        recreate()
+    else:
         for app in APPS + PROJECT_APPS:
             manage('schemamigration --initial {}'.format(app.split('.')[-1]))
         manage('syncdb --noinput')
 
     manage('migrate')
-
-    if create_user_flag == 'true':
-        manage('createsuperuser --username app --email app@app.com --noinput')
-        manage('changepassword app')
 
 
 @task
@@ -143,6 +139,11 @@ def recreate():
         else:
             local('rm -rf olddb.sqlite3')
 
+    migrate()
+
+    manage('createsuperuser --username app --email app@app.com --noinput')
+    manage('changepassword app')
+
 
 @task
 def subl():
@@ -162,5 +163,6 @@ def docs(action='make'):
             local('rm -f mtr*')
             local('sphinx-apidoc -o . ../mtr/')
         else:
-            print('Invalid action: {}, available actions: "make"'
+            print(
+                'Invalid action: {}, available actions: "make"'
                 ', "update"'.format(action))

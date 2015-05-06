@@ -1,5 +1,7 @@
 from collections import OrderedDict
 
+import django
+
 from django.utils.six.moves import filterfalse
 from django.db import models
 from django.conf import settings as django_settings
@@ -52,11 +54,16 @@ def model_settings(model):
 
 
 def models_list():
-    # TODO: get models deprecation
+    if django.get_version() <= '1.7':
+        mlist = models.get_models()
+    else:
+        from django.apps import apps
+
+        mlist = apps.get_models()
 
     mlist = filterfalse(
         lambda m: model_settings(m).get('ignore', False),
-        models.get_models())
+        mlist)
 
     return mlist
 
@@ -129,12 +136,6 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
                     field.rel.to._meta.verbose_name, label).capitalize())
         else:
             yield (name, label.capitalize())
-
-
-def filter_types(field):
-    # Return all filter types for field
-    
-    return []
 
 
 def make_model_class(settings):
