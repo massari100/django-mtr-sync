@@ -2,15 +2,22 @@ import os
 
 from functools import wraps
 
+import django
+
 from django.shortcuts import render
 
 from .settings import THEME_PATH
 
 
-def themed(template):
-    """Changing template themes by setting THEME_PATH"""
+def themed(template, version_subdirectory=False):
+    """Changing template themes by setting THEME_PATH and django version"""
 
-    return os.path.join('mtr', 'sync', THEME_PATH(), template)
+    path = THEME_PATH()
+
+    if version_subdirectory:
+        path = os.path.join(path, django.get_version()[:3])
+
+    return os.path.join('mtr', 'sync', path, template)
 
 
 def render_to(template, *args, **kwargs):

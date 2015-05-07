@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
+from mtr.sync.helpers import themed
+
 
 class AdminMixinTest(TestCase):
 
@@ -15,7 +17,7 @@ class AdminMixinTest(TestCase):
         content = self.client.get(reverse('admin:app_person_changelist'))
 
         self.assertIn(
-            'mtr/sync/default/admin/change_list.html',
+            themed('admin/change_list.html', True),
             map(lambda t: t.name, content.templates))
 
         self.assertContains(content, 'Export')

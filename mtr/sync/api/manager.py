@@ -5,6 +5,7 @@ from collections import OrderedDict
 from django.utils.six.moves import filterfalse
 from django.utils.translation import activate
 from django.http import QueryDict
+from django.contrib.admin.views.main import IGNORED_PARAMS
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import column_value, make_model_class, model_settings, \
@@ -91,6 +92,9 @@ class ProcessorManagerMixin(object):
             params = QueryDict(settings.filter_querystring).dict()
             orders = params.pop('o', '').split('.')
             fields = params.pop('fields', '').split(',')
+
+            for ignore in IGNORED_PARAMS:
+                params.pop(ignore, None)
 
             if '' not in orders and '' not in fields:
                 ordering = []

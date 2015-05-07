@@ -20,7 +20,7 @@ class ApiTestMixin(object):
     RELATED_MODEL = None
     RELATED_MANY = None
     PROCESSOR = None
-    MODEL_COUNT = 20
+    MODEL_COUNT = 10
     CREATE_PROCESSOR_AT_SETUP = True
 
     def setUp(self):

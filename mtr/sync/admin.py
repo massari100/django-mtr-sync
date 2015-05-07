@@ -13,15 +13,15 @@ from .settings import REGISTER_IN_ADMIN
 
 
 class SyncAdminMixin(object):
-    change_list_template = themed('admin/change_list.html')
+    change_list_template = themed('admin/change_list.html', True)
 
 
 class SyncTabularInlineMixin(object):
-    template = themed('admin/edit_inline/tabular.html')
+    template = themed('admin/edit_inline/tabular.html', True)
 
 
 class SyncStackedInlineMixin(object):
-    template = themed('admin/edit_inline/stacked.html')
+    template = themed('admin/edit_inline/stacked.html', True)
 
 
 class ErrorInline(admin.TabularInline):

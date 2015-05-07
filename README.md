@@ -41,17 +41,17 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Saves import, export settings for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
 - Custom filters (querysets, data-sets)
-- Modeltransation language activation (needs tests)
+- Modeltransation language activation
+- Inline support
 - Value processors (convert values before import or export)
+- Shortcuts at admin app
 - Action handler for more flexebility (for example not create model but generate source code for it, prepare data for model)
 - Supports: Django 1.6-1.8 Python 2.7, 3.3+
 
 ## Working on
-- Shortcuts at admin app
 - Multilingual (i18n) will be added to transifex for translating
 - Documentation
 - Different source input (url)
-- Inline support
 - Dashboard without admin
 - Adding support of JSON, YAML, XML
 - Permission control for import settings using django auth, to minimize human errors. For example, this would allow only the manager to choose the settings template for import and to upload files without configuring
