@@ -17,7 +17,8 @@ class OdsProcessor(Processor):
         self._path = path
         self._prepend = None
         self._workbook = ezodf.newdoc(doctype='ods', filename=path)
-        self._worksheet = ezodf.Table(self.settings.worksheet,
+        self._worksheet = ezodf.Table(
+            self.settings.worksheet,
             size=(self.end['row'], self.end['col']))
         self._workbook.sheets.append(self._worksheet)
 

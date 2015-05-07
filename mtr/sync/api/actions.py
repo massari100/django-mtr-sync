@@ -60,7 +60,8 @@ def _create_instances(model, model_attrs, related_models):
         getattr(instance, key).add(*values)
 
 
-@manager.register('action',
+@manager.register(
+    'action',
     label=_('mtr.sync:Create instances without filter'))
 def create(row, model, model_attrs, related_attrs, processor):
     sid = transaction.savepoint()
@@ -82,7 +83,8 @@ def create(row, model, model_attrs, related_attrs, processor):
             'related_attrs': related_attrs
         }
 
-        error_raised.send(processor,
+        error_raised.send(
+            processor,
             error=error_message,
             position=row,
             value=value,

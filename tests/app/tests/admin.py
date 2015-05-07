@@ -23,13 +23,22 @@ class AdminMixinTest(TestCase):
 
     def test_settings_export_import_modified_by_link(self):
         content = self.client.get(
-            '{}?action=export&model=app.person'.format(
+            '{}?action=export&model=app.person&filter='
+            'security_level__gte%3D10%26surname__icont'
+            'ains%3Ddas%26o%3D-3.2%26gender__exact%3DM'
+            '%26fields=action_checkbox%2Cname%2Csurname%'
+            '2Csecurity_level%2Cgender'.format(
                 reverse('admin:mtr_sync_settings_add')))
         form = content.context['adminform'].form
 
         self.assertEqual(form.initial['action'], 0)
         self.assertEqual(form.initial['model'], 'app.person')
         self.assertEqual(form.initial['create_fields'], True)
+        self.assertEqual(
+            form.initial['filter_querystring'],
+            'security_level__gte=10&surname__icontains=das'
+            '&o=-3.2&gender__exact=M&fields=action_check'
+            'box,name,surname,security_level,gender')
 
         content = self.client.get(
             '{}?action=import&model=app.person'.format(
@@ -40,6 +49,3 @@ class AdminMixinTest(TestCase):
         self.assertEqual(form.initial['model'], 'app.person')
         self.assertEqual(form.initial['create_fields'], True)
         self.assertEqual(form.initial['populate_from_file'], True)
-
-    # def test_export_with_admin_filters_enabled(self):
-    #     pass
