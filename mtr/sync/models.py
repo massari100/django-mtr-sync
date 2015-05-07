@@ -215,13 +215,30 @@ class Field(PositionMixin):
 
     """Data mapping field for Settings"""
 
+    # TODO: more filters and translations
+
+    FILTER_CHOICES = (
+        ('icontains', 'icontains'),
+        ('contains', 'contains'),
+        ('iexact', 'iexact'),
+        ('exact', 'exact'),
+        ('in', 'in'),
+        ('gt', 'gt'),
+        ('gte', 'gte'),
+        ('lt', 'lt'),
+        ('lte', 'lte'),
+    )
+
     name = models.CharField(_('mtr.sync:name'), max_length=255, blank=True)
     attribute = models.CharField(
         _('mtr.sync:model attribute'), max_length=255)
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
-    # update = models.BooleanField(_('mtr.sync:update'), default=True)
-    # find_by =
+    update = models.BooleanField(_('mtr.sync:update'), default=True)
+    find = models.BooleanField(_('mtr.sync:find'), default=False)
+    find_filter = models.CharField(
+        _('mtr.sync:filter type'), max_length=255, blank=True,
+        choices=FILTER_CHOICES)
 
     converters = models.CharField(_('mtr.sync:converters'), max_length=255)
 
