@@ -51,40 +51,6 @@ class ReportAdmin(admin.ModelAdmin):
         'mtr.sync:Link to file')
 
 
-class FieldForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        """Replace default attribute field to selectbox with choices"""
-
-        super(FieldForm, self).__init__(*args, **kwargs)
-
-        settings = self.initial.get('settings', None)
-        if settings:
-            for av_settings in self.fields['settings']._queryset:
-                if av_settings.id == settings:
-                    settings = av_settings
-                    break
-
-            if settings.action != settings.IMPORT and \
-                    settings.model:
-
-                field = self.fields['attribute']
-                self.fields['attribute'] = forms.ChoiceField(
-                    label=field.label, required=field.required,
-                    choices=model_attributes(settings))
-
-    class Meta:
-        fields = ['skip', 'name', 'attribute', 'converters']
-        exclude = []
-        model = Field
-
-
-class FieldAdmin(admin.ModelAdmin):
-    list_display = ('name', 'attribute', 'converters', 'settings')
-    list_filter = ('settings',)
-    form = FieldForm
-
-
 class ObjectInlineMixin(object):
 
     def get_formset(self, request, obj=None, **kwargs):
@@ -237,4 +203,3 @@ class SettingsAdmin(admin.ModelAdmin):
 if REGISTER_IN_ADMIN():
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Settings, SettingsAdmin)
-    admin.site.register(Field, FieldAdmin)

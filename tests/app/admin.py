@@ -7,9 +7,9 @@ from django.contrib import admin
 from modeltranslation.admin import TabbedTranslationAdmin
 
 if django.get_version() >= '1.7':
-    from mtr.sync.admin import SyncAdminMixin
+    from mtr.sync.admin import SyncAdminMixin, SyncStackedInlineMixin
 else:
-    from mtr_sync.admin import SyncAdminMixin
+    from mtr_sync.admin import SyncAdminMixin, SyncStackedInlineMixin
 
 
 class PersonAdmin(SyncAdminMixin, TabbedTranslationAdmin):
@@ -25,7 +25,13 @@ class PersonAdmin(SyncAdminMixin, TabbedTranslationAdmin):
     copy_100.short_description = 'Copy 100 objects with random data'
 
 
+class PersonStackedInline(SyncStackedInlineMixin, admin.StackedInline):
+    model = Person
+    extra = 0
+
+
 class OfficeAdmin(admin.ModelAdmin):
+    inlines = (PersonStackedInline,)
     list_display = ('office', 'address')
 
 

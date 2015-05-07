@@ -89,13 +89,15 @@ class ProcessorManagerMixin(object):
 
         if settings.filter_dataset and settings.filter_querystring:
             params = QueryDict(settings.filter_querystring).dict()
-            order = params.pop('o', '').split('.')
-            fields = params.pop('fields', '').split(',')
+            # order = params.pop('o', '').split('.')
+            # fields = params.pop('fields', '').split(',')
 
-            if order and fields:
-                dataset = dataset.order_by()
+            # if order and fields:
+                # dataset = dataset.order_by()
 
             dataset = dataset.filter(**params)
+
+            print(dataset)
 
         return dataset
 
