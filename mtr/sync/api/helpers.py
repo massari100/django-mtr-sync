@@ -7,7 +7,7 @@ from django.db import models
 from django.conf import settings as django_settings
 from django.db.models.fields import Field as ModelField
 
-from ..settings import MODEL_SETTINGS_NAME, HIDE_TRANSLATION_FIELDS
+from ..settings import MODEL_SETTINGS_NAME
 
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
@@ -68,7 +68,7 @@ def models_list():
     return mlist
 
 
-def model_fields(model):
+def model_fields(model, settings=None):
     """Return model field or custom method"""
 
     opts = model._meta
@@ -83,11 +83,13 @@ def model_fields(model):
     exclude = msettings.get('exclude', [])
     custom_fields = msettings.get('custom_fields', [])
     ordered_fields = []
+    hide_translation_fields = getattr(
+        settings, 'hide_translation_fields', False)
 
     for field in fields_arr:
         if field.name not in exclude:
             add_it = True
-            if HIDE_TRANSLATION_FIELDS:
+            if hide_translation_fields:
                 for lang, name in django_settings.LANGUAGES:
                     if field.name.endswith('_{}'.format(lang)):
                         add_it = False
@@ -102,18 +104,23 @@ def model_fields(model):
 
 
 def model_attributes(settings, prefix=None, model=None, parent=None):
-    """Return iterator of fields names by given mode_path"""
+    """Return iterator of fields names by given model in settings"""
 
     model = model or make_model_class(settings)
+    include_related = True and settings.include_related
 
-    for name, field in model_fields(model).items():
+    for name, field in model_fields(model, settings).items():
         label = name
         child_attrs = None
         m_prefix = None
 
         if isinstance(field, models.ForeignKey):
+            if not include_related:
+                continue
             m_prefix = '{}|_fk_|'
         elif isinstance(field, models.ManyToManyField):
+            if not include_related:
+                continue
             m_prefix = '{}|_m_|'
         elif isinstance(field, property):
             field = field.fget

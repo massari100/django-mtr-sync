@@ -2,6 +2,8 @@ from __future__ import unicode_literals
 
 from collections import OrderedDict
 
+import django
+
 from django.utils.six.moves import filterfalse
 from django.utils.translation import activate
 from django.http import QueryDict
@@ -119,7 +121,7 @@ class ProcessorManagerMixin(object):
 
         exclude = msettings.get('exclude', [])
 
-        fields = settings.fields_with_processors()
+        fields = settings.fields_with_converters()
         fields = list(filterfalse(
             lambda f: f.attribute in exclude, fields))
 
@@ -179,7 +181,7 @@ class ProcessorManagerMixin(object):
         """Prepare data using filters from settings and return iterator"""
 
         settings = processor.settings
-        fields = list(settings.fields_with_processors())
+        fields = list(settings.fields_with_converters())
 
         if settings.end_col:
             cols = column_value(settings.end_col)
@@ -194,14 +196,18 @@ class ProcessorManagerMixin(object):
             'items': self.model_data(processor, model, fields),
         }
 
-    def import_processors_modules(self):
+    def import_processors(self):
         """Import modules within IMPORT_PROCESSORS paths"""
 
         for module in IMPORT_PROCESSORS():
             __import__(module)
 
-        __import__('mtr.sync.api.converters')
-        __import__('mtr.sync.api.actions')
+        if django.get_version() >= '1.7':
+            __import__('mtr.sync.api.converters')
+            __import__('mtr.sync.api.actions')
+        else:
+            __import__('mtr_sync.api.converters')
+            __import__('mtr_sync.api.actions')
 
 
 class Manager(ProcessorManagerMixin):
@@ -281,4 +287,4 @@ class Manager(ProcessorManagerMixin):
         return item
 
 manager = Manager()
-manager.import_processors_modules()
+manager.import_processors()

@@ -4,7 +4,7 @@ from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 from django.conf import settings as django_settings
 
-from .settings import FILE_PATH, strip_media_root
+from .settings import FILE_PATH, DEFAULT_PROCESSOR, strip_media_root
 from .api import manager
 from .api.helpers import model_attributes, model_choices
 from .api.signals import export_started, export_completed, \
@@ -94,7 +94,8 @@ class Settings(ActionsMixin):
 
     processor = models.CharField(
         _('mtr.sync:format'), max_length=255,
-        choices=manager.processor_choices())
+        choices=manager.processor_choices(),
+        default=DEFAULT_PROCESSOR())
     worksheet = models.CharField(
         _('mtr.sync:worksheet page'), max_length=255, blank=True)
     include_header = models.BooleanField(
@@ -119,7 +120,7 @@ class Settings(ActionsMixin):
     language = models.CharField(
         _('mtr.sync:language'), blank=True,
         max_length=255, choices=django_settings.LANGUAGES)
-    language_attributes = models.BooleanField(
+    hide_translation_fields = models.BooleanField(
         _('mtr.sync:Hide translation prefixed fields'),
         default=True)
 
@@ -127,9 +128,13 @@ class Settings(ActionsMixin):
         _('mtr.sync:Create settings for fields'), default=True)
     populate_from_file = models.BooleanField(
         _('mtr.sync:Populate settings from file'), default=False)
+    start_after_save = models.BooleanField(
+        _('mtr.sync:Start action after saving'), default=False)
+    include_related = models.BooleanField(
+        _('mtr.sync:Include related fields'), default=True)
 
-    def fields_with_processors(self):
-        """Return iterator of fields with filters"""
+    def fields_with_converters(self):
+        """Return iterator of fields with converters"""
 
         fields = self.fields.exclude(skip=True)
         for field in fields:

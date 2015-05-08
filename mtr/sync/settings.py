@@ -1,5 +1,7 @@
 import os
 
+import django
+
 from django.conf import settings
 
 # custom prefix for avoiding name colissions
@@ -35,13 +37,25 @@ FILE_PATH = getattr_with_prefix('FILE_PATH', get_buffer_file_path)
 # theme path
 THEME_PATH = getattr_with_prefix('THEME_PATH', 'default')
 
-# additional api for import and export to register
-IMPORT_PROCESSORS = getattr_with_prefix('PROCESSORS', [
-    'mtr.sync.api.processors.xls',
-    'mtr.sync.api.processors.xlsx',
-    'mtr.sync.api.processors.ods',
-    'mtr.sync.api.processors.csv'
-])
+if django.get_version() >= '1.7':
+    # additional processor for import and export to register
+    IMPORT_PROCESSORS = getattr_with_prefix('PROCESSORS', [
+        'mtr.sync.api.processors.xlsx',
+        'mtr.sync.api.processors.xls',
+        'mtr.sync.api.processors.ods',
+        'mtr.sync.api.processors.csv'
+    ])
+else:
+    # additional processor for import and export to register
+    IMPORT_PROCESSORS = getattr_with_prefix('PROCESSORS', [
+        'mtr_sync.api.processors.xlsx',
+        'mtr_sync.api.processors.xls',
+        'mtr_sync.api.processors.ods',
+        'mtr_sync.api.processors.csv'
+    ])
+
+# default processor
+DEFAULT_PROCESSOR = getattr_with_prefix('DEFAULT_PROCESSOR', 'XlsxProcessor')
 
 # model attribute where settings placed
 MODEL_SETTINGS_NAME = getattr_with_prefix(
@@ -52,6 +66,3 @@ LIMIT_PREVIEW = getattr_with_prefix('LIMIT_PREVIEW', 20)
 
 # register models at admin for debugging
 REGISTER_IN_ADMIN = getattr_with_prefix('REGISTER_IN_ADMIN', True)
-
-# hide translation fields ends with _lang
-HIDE_TRANSLATION_FIELDS = True
