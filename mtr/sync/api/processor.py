@@ -217,6 +217,7 @@ class Processor(DataProcessor):
             self.report = response[1]
 
         data = self.manager.prepare_import_data(self, model)
+        params = self.manager.filter_dataset(self.settings) or {}
 
         max_rows, max_cols = self.open(path)
         self.set_dimensions(
@@ -227,6 +228,7 @@ class Processor(DataProcessor):
 
         for row, _model in items:
             model_attrs, related_attrs = self.prepare_attrs(_model)
+            model_attrs.update(**params)
             self.process_action(row, model, model_attrs, related_attrs)
 
         # send signal to save report

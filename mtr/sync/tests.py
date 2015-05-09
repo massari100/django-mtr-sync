@@ -20,7 +20,7 @@ class ApiTestMixin(object):
     RELATED_MODEL = None
     RELATED_MANY = None
     PROCESSOR = None
-    MODEL_COUNT = 10
+    MODEL_COUNT = 20
     CREATE_PROCESSOR_AT_SETUP = True
 
     def setUp(self):
@@ -81,8 +81,8 @@ class ProcessorTestMixin(ApiTestMixin):
 
     def check_file_existence_and_delete(self, report):
         """Delete report file"""
-        pass
-        # self.assertIsNone(os.remove(report.buffer_file.path))
+
+        self.assertIsNone(os.remove(report.buffer_file.path))
 
     def check_report_success(self, delete=False):
         """Create report from settings and assert it's successful"""
@@ -210,6 +210,7 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.settings.action = self.settings.IMPORT
         self.settings.buffer_file = report.buffer_file
+        self.settings.filter_querystring = ''
 
         self.manager.import_data(self.settings)
 
@@ -245,6 +246,7 @@ class ProcessorTestMixin(ApiTestMixin):
             attrs.append(model_attrs)
 
         self.settings.model = ''
+        self.settings.filter_querystring = ''
         self.settings.data_action = 'test_import'
         self.settings.action = self.settings.IMPORT
         self.settings.buffer_file = report.buffer_file
@@ -256,3 +258,6 @@ class ProcessorTestMixin(ApiTestMixin):
         self.manager.import_data(self.settings)
 
         self.assertNotEqual(attrs, [])
+
+    def test_import_data_with_filter_params(self):
+        pass

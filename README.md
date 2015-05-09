@@ -40,7 +40,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Supports: CSV(native python3, unicodecsv python2), XLS (using: xlwt-future, xlrd), XLSX (using: openpyxl optimized writer, reader mode, for fast processing of large volumes of data) and ODS(odfpy)
 - Saves import, export settings for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
-- Custom filters (querysets, data-sets)
+- Custom filters (for querysets)
 - Modeltransation language activation
 - Inline support
 - Value processors (convert values before import or export)

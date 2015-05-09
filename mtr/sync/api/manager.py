@@ -81,15 +81,7 @@ class ProcessorManagerMixin(object):
 
         return processor.export_data(data)
 
-    def prepare_export_dataset(self, settings):
-        current_model = make_model_class(settings)
-
-        if settings.dataset:
-            dataset = self.get_or_raise('dataset', settings.dataset)
-            dataset = dataset(current_model, settings)
-        else:
-            dataset = current_model._default_manager.all()
-
+    def filter_dataset(self, settings, dataset=None):
         if settings.filter_dataset and settings.filter_querystring:
             params = QueryDict(settings.filter_querystring).dict()
             orders = params.pop('o', '').split('.')
@@ -97,6 +89,11 @@ class ProcessorManagerMixin(object):
 
             for ignore in IGNORED_PARAMS:
                 params.pop(ignore, None)
+
+            if not dataset:
+                return params
+
+            dataset = dataset.filter(**params)
 
             if '' not in orders and '' not in fields:
                 ordering = []
@@ -107,7 +104,18 @@ class ProcessorManagerMixin(object):
                     ordering.append(field)
                 dataset = dataset.order_by(*ordering)
 
-            dataset = dataset.filter(**params)
+        return dataset
+
+    def prepare_export_dataset(self, settings):
+        current_model = make_model_class(settings)
+
+        if settings.dataset:
+            dataset = self.get_or_raise('dataset', settings.dataset)
+            dataset = dataset(current_model, settings)
+        else:
+            dataset = current_model._default_manager.all()
+
+        dataset = self.filter_dataset(settings, dataset)
 
         return dataset
 
