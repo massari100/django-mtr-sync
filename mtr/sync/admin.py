@@ -136,7 +136,7 @@ class SettingsAdmin(admin.ModelAdmin):
         (None, {
             'fields': (
                 ('name', 'language'),
-                ('action', 'processor'),
+                ('buffer_file', 'action', 'processor'),
                 ('start_col', 'end_col'), ('start_row', 'end_row'),
                 ('model', 'dataset', 'data_action'),
                 ('filename', 'worksheet', 'include_header'),
@@ -157,9 +157,6 @@ class SettingsAdmin(admin.ModelAdmin):
         model = request.GET.get('model', '')
         filter_querystring = request.GET.get('filter', '')
 
-        # TODO: create initial fields automaticaly
-        # TODO: modify attributes by simple custom widget
-
         if action == 'export':
             form.INITIAL['action'] = 0
             form.INITIAL['create_fields'] = True
@@ -169,12 +166,6 @@ class SettingsAdmin(admin.ModelAdmin):
 
         form.INITIAL['model'] = model
         form.INITIAL['filter_querystring'] = filter_querystring
-
-        # form.INITIAL['fields'] = [
-        #     {'order': 0},
-        # ]
-
-        # print(self.inlines)
 
         return form
 

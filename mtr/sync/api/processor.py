@@ -1,14 +1,16 @@
 from __future__ import unicode_literals
 
 import os
-
+import traceback
 
 from django.utils.six.moves import range
 from django.utils import timezone
+from django.db import transaction, Error
 
 from .signals import export_started, export_completed, \
-    import_started, import_completed
+    import_started, import_completed, error_raised
 from .helpers import column_value
+from .exceptions import ErrorChoicesMixin
 
 from ..settings import LIMIT_PREVIEW, FILE_PATH
 
@@ -229,7 +231,33 @@ class Processor(DataProcessor):
         for row, _model in items:
             model_attrs, related_attrs = self.prepare_attrs(_model)
             model_attrs.update(**params)
-            self.process_action(row, model, model_attrs, related_attrs)
+
+            sid = transaction.savepoint()
+
+            try:
+                with transaction.atomic():
+                    self.process_action(
+                        row, model, model_attrs, related_attrs)
+            except (Error, ValueError,
+                    AttributeError, TypeError, IndexError):
+
+                transaction.savepoint_rollback(sid)
+                error_message = traceback.format_exc()
+                if 'File' in error_message:
+                    error_message = 'File{}'.format(
+                        error_message.split('File')[-1])
+
+                value = {
+                    'model_attrs': model_attrs,
+                    'related_attrs': related_attrs
+                }
+
+                error_raised.send(
+                    self,
+                    error=error_message,
+                    position=row,
+                    value=value,
+                    step=ErrorChoicesMixin.IMPORT_DATA)
 
         # send signal to save report
         for response in import_completed.send(

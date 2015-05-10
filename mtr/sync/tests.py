@@ -258,6 +258,3 @@ class ProcessorTestMixin(ApiTestMixin):
         self.manager.import_data(self.settings)
 
         self.assertNotEqual(attrs, [])
-
-    def test_import_data_with_filter_params(self):
-        pass
