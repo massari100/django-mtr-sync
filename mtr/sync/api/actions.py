@@ -35,8 +35,8 @@ def _create_mtm_instance(
 
 @manager.register(
     'action',
-    label=_('mtr.sync:Create instances without filter'))
-def create(row, model, model_attrs, related_attrs, processor):
+    label=_('mtr.sync:Create only'))
+def create(model, model_attrs, related_attrs, **kwargs):
     instance = model(**model_attrs)
     fields = model_fields(model)
     add_after = {}
@@ -57,3 +57,29 @@ def create(row, model, model_attrs, related_attrs, processor):
 
     for key, values in add_after.items():
         getattr(instance, key).add(*values)
+
+
+@manager.register(
+    'action', label=_('mtr.sync:Update only'))
+def update(model, model_attrs, related_attrs, **kwargs):
+    filter_params = kwargs['params']
+    updating_fields = filter(lambda f: f.update, kwargs['fields'])
+
+    for field in filter(lambda f: f.find, kwargs['fields']):
+        field_name = field.attribute \
+            .replace('|_fk_|', '__').replace('|_m_|', '__')
+        field_value = kwargs['raw_attrs'][field.attribute]
+        field_filter = '{}__{}'.format(field_name, field.find_filter)
+        filter_params.update(**{field_filter: field_value})
+
+    if filter_params.keys():
+        instances = model._default_manager.filter(**filter_params)
+
+    update_values = {}
+    for field in updating_fields:
+        field_name = field.attribute \
+            .replace('|_fk_|', '__').replace('|_m_|', '__')
+        field_value = kwargs['raw_attrs'][field.attribute]
+        update_values[field_name] = field_value
+
+    instances.update(**update_values)

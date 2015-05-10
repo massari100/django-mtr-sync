@@ -201,13 +201,13 @@ class Processor(DataProcessor):
 
         return model_attrs, related_attrs
 
-    def process_action(self, row, model, model_attrs, related_attrs):
+    def process_action(self, model, model_attrs, related_attrs, **kwargs):
         # TODO: default actions in settings creation
 
         action = self.manager.get_or_raise(
             'action', self.settings.data_action or 'create')
 
-        return action(row, model, model_attrs, related_attrs, self)
+        return action(model, model_attrs, related_attrs, **kwargs)
 
     def import_data(self, model, path=None):
         """Import data to model and return errors if exists"""
@@ -230,14 +230,16 @@ class Processor(DataProcessor):
 
         for row, _model in items:
             model_attrs, related_attrs = self.prepare_attrs(_model)
-            model_attrs.update(**params)
+            # model_attrs.update(**params)
 
             sid = transaction.savepoint()
 
             try:
                 with transaction.atomic():
                     self.process_action(
-                        row, model, model_attrs, related_attrs)
+                        model, model_attrs, related_attrs,
+                        processor=self, path=path, fields=data['fields'],
+                        params=params, raw_attrs=_model)
             except (Error, ValueError,
                     AttributeError, TypeError, IndexError):
 

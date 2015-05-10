@@ -201,6 +201,7 @@ class ProcessorManagerMixin(object):
 
         return {
             'cols': len(fields),
+            'fields': fields,
             'items': self.model_data(processor, model, fields),
         }
 
