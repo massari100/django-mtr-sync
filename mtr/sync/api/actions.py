@@ -63,13 +63,17 @@ def create(model, model_attrs, related_attrs, **kwargs):
     'action', label=_('mtr.sync:Update only'))
 def update(model, model_attrs, related_attrs, **kwargs):
     filter_params = kwargs['params']
-    updating_fields = filter(lambda f: f.update, kwargs['fields'])
+    updating_fields = kwargs['fields']
+    updating_fields = list(filter(lambda f: f.update, kwargs['fields'])) \
+        or kwargs['fields']
 
     for field in filter(lambda f: f.find, kwargs['fields']):
-        field_name = field.attribute \
-            .replace('|_fk_|', '__').replace('|_m_|', '__')
-        field_value = kwargs['raw_attrs'][field.attribute]
-        field_filter = '{}__{}'.format(field_name, field.find_filter)
+        field_name = field.attribute .replace('|_fk_|', '__') \
+            .replace('|_m_|', '__')
+        field_value = model_attrs[field.attribute] or field.update_value
+        field_filter = field_name
+        if field.find_filter:
+            field_filter = '{}__{}'.format(field_name, field.find_filter)
         filter_params.update(**{field_filter: field_value})
 
     if filter_params.keys():
@@ -77,9 +81,8 @@ def update(model, model_attrs, related_attrs, **kwargs):
 
     update_values = {}
     for field in updating_fields:
-        field_name = field.attribute \
-            .replace('|_fk_|', '__').replace('|_m_|', '__')
-        field_value = kwargs['raw_attrs'][field.attribute]
-        update_values[field_name] = field_value
+        if '_|' not in field.attribute:
+            update_values[field.attribute] = model_attrs[field.attribute] \
+                or field.update_value
 
     instances.update(**update_values)

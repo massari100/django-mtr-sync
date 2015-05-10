@@ -86,7 +86,9 @@ class FieldInline(
         ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
     model = Field
     extra = 0
-    fields = ('skip', 'position', 'name', 'attribute', 'converters')
+    fields = (
+        'skip', 'position', 'name', 'attribute',
+        'find', 'find_filter', 'update', 'update_value', 'converters')
 
 
 class SettingsForm(forms.ModelForm):
@@ -113,6 +115,9 @@ class SettingsForm(forms.ModelForm):
                 and settings.buffer_file and settings.populate_from_file:
             settings.populate_from_buffer_file()
             settings.populate_from_file = False
+
+        if settings.run_after_save:
+            settings.run()
 
         settings.save()
 

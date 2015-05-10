@@ -128,7 +128,7 @@ class Settings(ActionsMixin):
         _('mtr.sync:Create settings for fields'), default=True)
     populate_from_file = models.BooleanField(
         _('mtr.sync:Populate settings from file'), default=False)
-    start_after_save = models.BooleanField(
+    run_after_save = models.BooleanField(
         _('mtr.sync:Start action after saving'), default=False)
     include_related = models.BooleanField(
         _('mtr.sync:Include related fields'), default=True)
@@ -240,6 +240,8 @@ class Field(PositionMixin):
     skip = models.BooleanField(_('mtr.sync:skip'), default=False)
 
     update = models.BooleanField(_('mtr.sync:update'), default=True)
+    update_value = models.CharField(
+        _('mtr.sync:value'), max_length=255, blank=True)
     find = models.BooleanField(_('mtr.sync:find'), default=False)
     find_filter = models.CharField(
         _('mtr.sync:filter type'), max_length=255, blank=True,
@@ -358,7 +360,6 @@ def save_import_report(sender, **kwargs):
         report.settings = sender.settings
 
     report.completed_at = kwargs['date']
-    report.status = report.SUCCESS
     report.save()
 
     return report

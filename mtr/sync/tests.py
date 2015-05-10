@@ -20,7 +20,7 @@ class ApiTestMixin(object):
     RELATED_MODEL = None
     RELATED_MANY = None
     PROCESSOR = None
-    MODEL_COUNT = 20
+    MODEL_COUNT = 30
     CREATE_PROCESSOR_AT_SETUP = True
 
     def setUp(self):
@@ -55,6 +55,7 @@ class ApiTestMixin(object):
 
         self.settings = Settings.objects.create(
             action=Settings.EXPORT,
+            data_action='create',
             processor=self.PROCESSOR.__name__, worksheet='test',
             model='{}.{}'.format(
                 self.model._meta.app_label, self.model.__name__).lower(),
@@ -124,7 +125,7 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.check_file_existence_and_delete(report)
 
-    def check_sheet_values_and_delete_report(self, report):
+    def check_sheet_values_and_delete_report(self, report, import_report=None):
         if self.settings.start_row:
             start_row = self.settings.start_row - 1
         else:
@@ -163,6 +164,9 @@ class ProcessorTestMixin(ApiTestMixin):
             worksheet, last, end_row, start_col)
 
         self.check_file_existence_and_delete(report)
+
+        if import_report:
+            self.assertEqual(import_report.status, import_report.SUCCESS)
 
     def open_report(self, report):
         """Open data file and return worksheet or other data source"""
@@ -212,9 +216,9 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.buffer_file = report.buffer_file
         self.settings.filter_querystring = ''
 
-        self.manager.import_data(self.settings)
+        import_report = self.manager.import_data(self.settings)
 
-        self.check_sheet_values_and_delete_report(report)
+        self.check_sheet_values_and_delete_report(report, import_report)
 
         self.assertEqual(before, self.queryset.count())
 
@@ -255,6 +259,8 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.settings.fields.create(attribute='test', position='1')
 
-        self.manager.import_data(self.settings)
+        import_report = self.manager.import_data(self.settings)
+
+        self.assertEqual(import_report.status, import_report.SUCCESS)
 
         self.assertNotEqual(attrs, [])
