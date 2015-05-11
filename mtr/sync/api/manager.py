@@ -11,19 +11,21 @@ from django.contrib.admin.views.main import IGNORED_PARAMS
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import column_value, make_model_class, model_settings, \
-    process_attribute
+    process_attribute, model_fields
 from ..settings import IMPORT_PROCESSORS
 
 
 class ProcessorManagerMixin(object):
 
-    def convert_value(self, value, model, field, export=False, action=None):
+    def convert_value(
+            self, value, model, field, mfields,
+            export=False, action=None):
         """Process value with filters and actions"""
 
         convert_action = 'export' if export else 'import'
 
         for convert_func in field.ordered_converters:
-            value = convert_func(value, model, field, convert_action)
+            value = convert_func(value, model, field, mfields, convert_action)
 
         return value
 
@@ -149,14 +151,17 @@ class ProcessorManagerMixin(object):
 
             fields = fields[:cols]
 
+        mfields = model_fields(model)
+
         return {
             'rows': queryset.count(),
             'cols': len(fields),
             'fields': fields,
+            'model_fields': mfields,
             'items': (
                 self.convert_value(
                     process_attribute(item, field.attribute),
-                    model, field, export=True)
+                    model, field, mfields, export=True)
                 for item in queryset
                 for field in fields
             )
@@ -173,14 +178,14 @@ class ProcessorManagerMixin(object):
 
         return processor.import_data(model, path)
 
-    def model_data(self, processor, model, fields):
+    def model_data(self, processor, model, fields, mfields):
         for row_index in processor.rows:
             _model = {}
             row = processor.read(row_index)
 
             for index, field in enumerate(fields):
                 col = column_value(field.name) if field.name else index
-                value = self.convert_value(row[col], model, field)
+                value = self.convert_value(row[col], model, field, mfields)
                 _model[field.attribute] = value
 
             yield row_index, _model
@@ -190,6 +195,7 @@ class ProcessorManagerMixin(object):
 
         settings = processor.settings
         fields = list(settings.fields_with_converters())
+        mfields = model_fields(model) if model else {}
 
         if settings.end_col:
             cols = column_value(settings.end_col)
@@ -202,7 +208,8 @@ class ProcessorManagerMixin(object):
         return {
             'cols': len(fields),
             'fields': fields,
-            'items': self.model_data(processor, model, fields),
+            'items': self.model_data(processor, model, fields, mfields),
+            'model_fields': mfields
         }
 
     def import_processors(self):
@@ -279,7 +286,7 @@ class Manager(ProcessorManagerMixin):
 
         return decorator
 
-    def register(self, type_name, item=None, name=None, label=None, **kwargs):
+    def register(self, type_name, label=None, name=None, item=None, **kwargs):
         """Decorator and function to config new processors, handlers"""
 
         func = self._register_dict(type_name, name, label, **kwargs)

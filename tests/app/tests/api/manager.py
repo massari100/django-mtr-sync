@@ -29,17 +29,17 @@ class ManagerTest(ApiTestMixin, TestCase):
     CREATE_PROCESSOR_AT_SETUP = False
 
     def test_registering_and_unregistering_processor(self):
-        self.manager.register('processor', TestProcessor)
+        self.manager.register('processor', item=TestProcessor)
         self.assertTrue(self.manager.has('processor', TestProcessor))
 
         self.manager.unregister('processor', TestProcessor)
         self.assertFalse(self.manager.has('processor', TestProcessor))
 
     def test_register_already_registered_processor(self):
-        self.manager.register('processor', TestProcessor)
+        self.manager.register('processor', item=TestProcessor)
 
         with self.assertRaises(ItemAlreadyRegistered):
-            self.manager.register('processor', TestProcessor)
+            self.manager.register('processor', item=TestProcessor)
 
     def test_make_processor_not_exist(self):
         with self.assertRaises(ItemDoesNotRegistered):
@@ -48,7 +48,7 @@ class ManagerTest(ApiTestMixin, TestCase):
     def test_processor_ordering(self):
         unordered_processors = [ThirdProcesor, TestProcessor, SecondProcessor]
         for processor in unordered_processors:
-            self.manager.register('processor', processor)
+            self.manager.register('processor', item=processor)
 
         ordered_processors = [TestProcessor, SecondProcessor, ThirdProcesor]
         self.assertEqual(
@@ -69,7 +69,7 @@ class ManagerTest(ApiTestMixin, TestCase):
             list(self.manager.converters.keys()), list(old_converters.keys()))
 
     def test_value_manipulation_converters(self):
-        self.manager.register('processor', self.PROCESSOR)
+        self.manager.register('processor', item=self.PROCESSOR)
         self.processor = self.manager.make_processor(self.settings)
         self.fields = self.settings.create_default_fields()
 

@@ -233,7 +233,8 @@ class Processor(DataProcessor):
                     action(
                         model, model_attrs, related_attrs,
                         processor=self, path=path, fields=data['fields'],
-                        params=params, raw_attrs=_model)
+                        params=params, raw_attrs=_model,
+                        model_fields=data['model_fields'])
             except (Error, ValueError,
                     AttributeError, TypeError, IndexError):
 

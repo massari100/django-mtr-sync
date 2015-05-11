@@ -5,7 +5,7 @@ from .manager import manager
 
 
 @manager.register('converter', label=_('mtr.sync:Auto'))
-def auto(value, model, field, action):
+def auto(value, model, field, mfields, action):
     """Auto convert values to field types in models"""
 
     if action == 'export':

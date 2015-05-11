@@ -2,25 +2,33 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # mtr group <inboxmtr@gmail.com>, 2015.
-#: admin.py:43
+#: admin.py:51
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: admin.py:172
+#: admin.py:151
 msgid "mtr.sync:Additional options"
 msgstr "Additional options"
 
-#: admin.py:226
+#: admin.py:197
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "Data synchronization started in background."
 
-#: admin.py:228
+#: admin.py:199
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
-#: api/actions.py:64
-msgid "mtr.sync:Create instances without filter"
-msgstr "Create instances without filter"
+#: api/actions.py:53
+msgid "mtr.sync:Create only"
+msgstr "Create only"
+
+#: api/actions.py:79
+msgid "mtr.sync:Update only"
+msgstr "Update only"
+
+#: api/actions.py:98
+msgid "mtr.sync:Update or create"
+msgstr "Update or create"
 
 #: api/converters.py:7
 msgid "mtr.sync:Auto"
@@ -107,7 +115,7 @@ msgstr "Import"
 msgid "mtr.sync:action"
 msgstr "action"
 
-#: models.py:74 models.py:218
+#: models.py:74 models.py:237
 msgid "mtr.sync:name"
 msgstr "name"
 
@@ -135,7 +143,7 @@ msgstr "model"
 msgid "mtr.sync:created at"
 msgstr "created at"
 
-#: models.py:93 models.py:276
+#: models.py:93 models.py:300
 msgid "mtr.sync:updated at"
 msgstr "updated at"
 
@@ -143,143 +151,210 @@ msgstr "updated at"
 msgid "mtr.sync:format"
 msgstr "format"
 
-#: models.py:99
+#: models.py:100
 msgid "mtr.sync:worksheet page"
 msgstr "worksheet page"
 
-#: models.py:101
+#: models.py:102
 msgid "mtr.sync:include header"
 msgstr "include header"
 
-#: models.py:104
+#: models.py:105
 msgid "mtr.sync:custom filename"
 msgstr "custom filename"
 
-#: models.py:106 models.py:267
+#: models.py:107 models.py:291
 msgid "mtr.sync:file"
 msgstr "file"
 
-#: models.py:109
+#: models.py:110
 msgid "mtr.sync:dataset"
 msgstr "dataset"
 
-#: models.py:112
+#: models.py:113
 msgid "mtr.sync:data action"
 msgstr "data action"
 
-#: models.py:115
+#: models.py:116
 msgid "mtr.sync:filter custom dataset"
 msgstr "filter custom dataset"
 
-#: models.py:117
+#: models.py:118
 msgid "mtr.sync:querystring"
 msgstr "querystring"
 
-#: models.py:120
+#: models.py:121
 msgid "mtr.sync:language"
 msgstr "language"
 
-#: models.py:123
+#: models.py:124
 msgid "mtr.sync:Hide translation prefixed fields"
 msgstr "Hide translation prefixed fields"
 
-#: models.py:127
+#: models.py:128
 msgid "mtr.sync:Create settings for fields"
 msgstr "Create settings for fields"
 
-#: models.py:129
+#: models.py:130
 msgid "mtr.sync:Populate settings from file"
 msgstr "Populate settings from file"
 
-#: models.py:202 models.py:203 models.py:229 models.py:279
+#: models.py:132
+msgid "mtr.sync:Start action after saving"
+msgstr "Start action after saving"
+
+#: models.py:134
+msgid "mtr.sync:Include related fields"
+msgstr "create file"
+
+#: models.py:207 models.py:208 models.py:253 models.py:303
 msgid "mtr.sync:settings"
 msgstr "settings"
 
-#: models.py:220
+#: models.py:239
 msgid "mtr.sync:model attribute"
 msgstr "model attribute"
 
-#: models.py:221
+#: models.py:240
 msgid "mtr.sync:skip"
 msgstr "skip"
 
-#: models.py:226
+#: models.py:242
+msgid "mtr.sync:update"
+msgstr "update"
+
+#: models.py:244
+msgid "mtr.sync:value"
+msgstr "value"
+
+#: models.py:245
+msgid "mtr.sync:find"
+msgstr "find"
+
+#: models.py:247
+msgid "mtr.sync:filter type"
+msgstr "filter type"
+
+#: models.py:250
 msgid "mtr.sync:converters"
 msgstr "converters"
 
-#: models.py:239
+#: models.py:263
 msgid "mtr.sync:field"
 msgstr "field"
 
-#: models.py:240
+#: models.py:264
 msgid "mtr.sync:fields"
 msgstr "fields"
 
-#: models.py:261
+#: models.py:285
 msgid "mtr.sync:Error"
 msgstr "Error"
 
-#: models.py:262
+#: models.py:286
 msgid "mtr.sync:Running"
 msgstr "Running"
 
-#: models.py:263
+#: models.py:287
 msgid "mtr.sync:Success"
 msgstr "Success"
 
-#: models.py:269
+#: models.py:293
 msgid "mtr.sync:status"
 msgstr "status"
 
-#: models.py:272
+#: models.py:296
 msgid "mtr.sync:started at"
 msgstr "started at"
 
-#: models.py:274
+#: models.py:298
 msgid "mtr.sync:completed at"
 msgstr "completed at"
 
-#: models.py:289
+#: models.py:313
 msgid "mtr.sync:report"
 msgstr "report"
 
-#: models.py:290
+#: models.py:314
 msgid "mtr.sync:reports"
 msgstr "reports"
 
-#: models.py:352
+#: models.py:375
 msgid "mtr.sync:message"
 msgstr "message"
 
-#: models.py:354
+#: models.py:377
 msgid "mtr.sync:step"
 msgstr "step"
 
-#: models.py:357
+#: models.py:380
 msgid "mtr.sync:input position"
 msgstr "input position"
 
-#: models.py:359
+#: models.py:382
 msgid "mtr.sync:input value"
 msgstr "input value"
 
-#: models.py:362
+#: models.py:385
 msgid "mtr.sync:error"
 msgstr "error"
 
-#: models.py:363
+#: models.py:386
 msgid "mtr.sync:errors"
 msgstr "errors"
 
-#: templates/mtr/sync/default/admin/change_list.html:8
+#: templates/mtr/sync/default/1.6/admin/change_list.html:8
+#: templates/mtr/sync/default/1.7/admin/change_list.html:8
+#: templates/mtr/sync/default/1.8/admin/change_list.html:8
 #: templates/mtr/sync/default/export.html:10
 #: templates/mtr/sync/default/export.html:15
 msgid "mtr.sync:Export"
 msgstr "Export"
 
-#: templates/mtr/sync/default/admin/change_list.html:11
+#: templates/mtr/sync/default/1.6/admin/change_list.html:11
+#: templates/mtr/sync/default/1.7/admin/change_list.html:11
+#: templates/mtr/sync/default/1.8/admin/change_list.html:11
 msgid "mtr.sync:Import"
 msgstr "Import"
+
+#: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:9
+#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:30
+#: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:9
+#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:30
+#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:10
+#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:33
+msgid "View on site"
+msgstr ""
+
+#: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:26
+#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:76
+#: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:26
+#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:78
+#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:27
+#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:81
+msgid "Remove"
+msgstr ""
+
+#: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:27
+#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:75
+#: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:27
+#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:77
+#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:28
+#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:80
+#, python-format
+msgid "Add another %(verbose_name)s"
+msgstr ""
+
+#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:17
+#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:17
+#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:17
+msgid "Delete?"
+msgstr ""
+
+#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:8
+#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:31
+msgid "Change"
+msgstr ""
 
 #: templates/mtr/sync/default/dashboard.html:5
 #: templates/mtr/sync/default/dashboard.html:15
@@ -303,3 +378,6 @@ msgstr "Last reports"
 #: templates/mtr/sync/default/dashboard.html:55
 msgid "mtr.sync:New settings"
 msgstr "New settings"
+
+#~ msgid "mtr.sync:Create instances without filter"
+#~ msgstr "Create instances without filter"

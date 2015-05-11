@@ -30,7 +30,7 @@ class ApiTestMixin(object):
         self.manager.processors = OrderedDict()
 
         if self.CREATE_PROCESSOR_AT_SETUP:
-            self.manager.register('processor', self.PROCESSOR)
+            self.manager.register('processor', item=self.PROCESSOR)
 
         # TODO: refactor instance creation
 

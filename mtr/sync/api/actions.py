@@ -2,7 +2,6 @@ from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from .manager import manager
-from .helpers import model_fields
 
 
 def _create_related_instance(instance, related_model, key, related_models):
@@ -33,12 +32,28 @@ def _create_mtm_instance(
     return add_after
 
 
-@manager.register(
-    'action',
-    label=_('mtr.sync:Create only'))
+def find_instances(model, model_attrs, params, fields):
+    filter_params = params
+
+    for field in filter(lambda f: f.find, fields):
+        field_name = field.attribute .replace('|_fk_|', '__') \
+            .replace('|_m_|', '__')
+        field_value = model_attrs[field.attribute] or field.update_value
+        field_filter = field_name
+        if field.find_filter:
+            field_filter = '{}__{}'.format(field_name, field.find_filter)
+        filter_params.update(**{field_filter: field_value})
+
+    if filter_params.keys():
+        instances = model._default_manager.filter(**filter_params)
+
+    return instances
+
+
+@manager.register('action', _('mtr.sync:Create only'))
 def create(model, model_attrs, related_attrs, **kwargs):
     instance = model(**model_attrs)
-    fields = model_fields(model)
+    fields = kwargs['model_fields']
     add_after = {}
 
     for key in related_attrs.keys():
@@ -58,26 +73,14 @@ def create(model, model_attrs, related_attrs, **kwargs):
     for key, values in add_after.items():
         getattr(instance, key).add(*values)
 
+    return instance
 
-@manager.register(
-    'action', label=_('mtr.sync:Update only'))
+
+@manager.register('action', _('mtr.sync:Update only'))
 def update(model, model_attrs, related_attrs, **kwargs):
-    filter_params = kwargs['params']
     updating_fields = kwargs['fields']
     updating_fields = list(filter(lambda f: f.update, kwargs['fields'])) \
         or kwargs['fields']
-
-    for field in filter(lambda f: f.find, kwargs['fields']):
-        field_name = field.attribute .replace('|_fk_|', '__') \
-            .replace('|_m_|', '__')
-        field_value = model_attrs[field.attribute] or field.update_value
-        field_filter = field_name
-        if field.find_filter:
-            field_filter = '{}__{}'.format(field_name, field.find_filter)
-        filter_params.update(**{field_filter: field_value})
-
-    if filter_params.keys():
-        instances = model._default_manager.filter(**filter_params)
 
     update_values = {}
     for field in updating_fields:
@@ -85,4 +88,16 @@ def update(model, model_attrs, related_attrs, **kwargs):
             update_values[field.attribute] = model_attrs[field.attribute] \
                 or field.update_value
 
+    instances = find_instances(
+        model, kwargs['raw_attrs'], kwargs['params'], kwargs['fields'])
     instances.update(**update_values)
+
+    return instances
+
+
+@manager.register('action', _('mtr.sync:Update or create'))
+def update_or_create(model, model_attrs, related_attrs, **kwargs):
+    instances = update(model, model_attrs, related_attrs, **kwargs)
+
+    if not instances:
+        create(model, model_attrs, related_attrs, **kwargs)

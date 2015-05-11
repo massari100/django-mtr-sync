@@ -151,7 +151,9 @@ class SettingsAdmin(admin.ModelAdmin):
         (_('mtr.sync:Additional options'),     {
             'fields': (
                 ('create_fields', 'include_related', 'populate_from_file'),
-                ('hide_translation_fields', 'filter_dataset'),)
+                (
+                    'run_after_save',
+                    'hide_translation_fields', 'filter_dataset'),)
         })
     )
     form = SettingsForm
