@@ -35,11 +35,11 @@ def get_buffer_file_path(instance, filename, absolute=False):
 FILE_PATH = getattr_with_prefix('FILE_PATH', get_buffer_file_path)
 
 # theme path
-THEME_PATH = getattr_with_prefix('THEME_PATH', 'default')
+THEME = getattr_with_prefix('THEME', 'default')
 
 if django.get_version() >= '1.7':
     # additional processor for import and export to register
-    IMPORT_PROCESSORS = getattr_with_prefix('PROCESSORS', [
+    PROCESSORS = getattr_with_prefix('PROCESSORS', [
         'mtr.sync.api.processors.xlsx',
         'mtr.sync.api.processors.xls',
         'mtr.sync.api.processors.ods',
@@ -47,7 +47,7 @@ if django.get_version() >= '1.7':
     ])
 else:
     # additional processor for import and export to register
-    IMPORT_PROCESSORS = getattr_with_prefix('PROCESSORS', [
+    PROCESSORS = getattr_with_prefix('PROCESSORS', [
         'mtr_sync.api.processors.xlsx',
         'mtr_sync.api.processors.xls',
         'mtr_sync.api.processors.ods',

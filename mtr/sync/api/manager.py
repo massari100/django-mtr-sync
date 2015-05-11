@@ -12,7 +12,7 @@ from django.contrib.admin.views.main import IGNORED_PARAMS
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import column_value, make_model_class, model_settings, \
     process_attribute, model_fields
-from ..settings import IMPORT_PROCESSORS
+from ..settings import PROCESSORS
 
 
 class ProcessorManagerMixin(object):
@@ -215,7 +215,7 @@ class ProcessorManagerMixin(object):
     def import_processors(self):
         """Import modules within IMPORT_PROCESSORS paths"""
 
-        for module in IMPORT_PROCESSORS():
+        for module in PROCESSORS():
             __import__(module)
 
         if django.get_version() >= '1.7':

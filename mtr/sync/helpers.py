@@ -6,13 +6,13 @@ import django
 
 from django.shortcuts import render
 
-from .settings import THEME_PATH
+from .settings import THEME
 
 
 def themed(template, version_subdirectory=False):
     """Changing template themes by setting THEME_PATH and django version"""
 
-    path = THEME_PATH()
+    path = THEME()
 
     if version_subdirectory:
         path = os.path.join(path, django.get_version()[:3])

@@ -37,6 +37,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'modeltranslation',
+    'grappelli',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -160,3 +161,5 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ALWAYS_EAGER = True
 CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+
+MTR_SYNC_THEME = 'grappelli'

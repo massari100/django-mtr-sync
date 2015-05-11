@@ -16,3 +16,4 @@ unicodecsv
 south
 django-modeltranslation
 django-debug-toolbar
+django-grappelli
