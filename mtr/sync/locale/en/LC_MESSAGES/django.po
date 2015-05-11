@@ -205,7 +205,7 @@ msgstr "Start action after saving"
 
 #: models.py:134
 msgid "mtr.sync:Include related fields"
-msgstr "create file"
+msgstr "Include related fields"
 
 #: models.py:207 models.py:208 models.py:253 models.py:303
 msgid "mtr.sync:settings"

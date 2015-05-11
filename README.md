@@ -19,7 +19,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 2. Add `mtr.sync` to `INSTALLED_APPS` in your settings file
 3. Migrate models `./manage.py migrate`
 4. Configure `Celery`
-5. Create settings for import or export data at `/admin/mtrsync/settings/` and run action `Sync data` to start process.
+5. Create settings for import or export data at `/admin/mtr_sync/settings/` and run action `Sync data` to start process.
 
 ## Video demonstration
 - Import action: [https://www.youtube.com/watch?v=JOgQCFB-leg](https://www.youtube.com/watch?v=JOgQCFB-leg)
@@ -45,11 +45,12 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Inline support
 - Value processors (convert values before import or export)
 - Shortcuts at admin app
+- Multilingual (i18n)
+- Template integration with django-grapelli
 - Action handler for more flexebility (for example not create model but generate source code for it, prepare data for model)
-- Supports: Django 1.6-1.8 Python 2.7, 3.3+
+- Supports: Django 1.6-1.8+ Python 2.7, 3.3+
 
 ## Working on
-- Multilingual (i18n) will be added to transifex for translating
 - Documentation
 - Different source input (url)
 - Dashboard without admin
@@ -57,7 +58,6 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Permission control for import settings using django auth, to minimize human errors. For example, this would allow only the manager to choose the settings template for import and to upload files without configuring
 - Export templates for (XLS, XLSX, ODS)
   - upload custom templates
-- Template integration with django-grapelli, django-suit
 - Periodic import, export for automatic updates
 - Video tutorial how to set up package and use it
 - Plugins for editors ckeditor and redactor — insert file from already exported files

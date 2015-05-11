@@ -19,7 +19,7 @@ class ThemedTest(TestCase):
         """Test changing to the new theme and then fallback to default"""
 
         new_settings = {
-            '{}_{}'.format(PREFIX, 'THEME_PATH'): self.theme_name
+            '{}_{}'.format(PREFIX, 'THEME'): self.theme_name
         }
 
         new_theme_path = os.path.join(
