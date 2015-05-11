@@ -157,7 +157,7 @@ class ProcessorManagerMixin(object):
             'rows': queryset.count(),
             'cols': len(fields),
             'fields': fields,
-            'model_fields': mfields,
+            'mfields': mfields,
             'items': (
                 self.convert_value(
                     process_attribute(item, field.attribute),
@@ -209,7 +209,7 @@ class ProcessorManagerMixin(object):
             'cols': len(fields),
             'fields': fields,
             'items': self.model_data(processor, model, fields, mfields),
-            'model_fields': mfields
+            'mfields': mfields
         }
 
     def import_processors(self):

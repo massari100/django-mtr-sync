@@ -234,7 +234,7 @@ class Processor(DataProcessor):
                         model, model_attrs, related_attrs,
                         processor=self, path=path, fields=data['fields'],
                         params=params, raw_attrs=_model,
-                        model_fields=data['model_fields'])
+                        mfields=data['mfields'])
             except (Error, ValueError,
                     AttributeError, TypeError, IndexError):
 

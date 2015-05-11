@@ -89,6 +89,7 @@ class FieldInline(
     fields = (
         'skip', 'position', 'name', 'attribute',
         'find', 'find_filter', 'update', 'update_value', 'converters')
+    sortable_field_name = 'position'
 
 
 class SettingsForm(forms.ModelForm):

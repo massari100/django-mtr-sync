@@ -53,7 +53,7 @@ def find_instances(model, model_attrs, params, fields):
 @manager.register('action', _('mtr.sync:Create only'))
 def create(model, model_attrs, related_attrs, **kwargs):
     instance = model(**model_attrs)
-    fields = kwargs['model_fields']
+    fields = kwargs['mfields']
     add_after = {}
 
     for key in related_attrs.keys():
@@ -83,8 +83,10 @@ def update(model, model_attrs, related_attrs, **kwargs):
         or kwargs['fields']
 
     update_values = {}
+    real_fields = kwargs['mfields']
     for field in updating_fields:
-        if '_|' not in field.attribute:
+        if '_|' not in field.attribute and \
+                isinstance(real_fields[field.attribute], models.Field):
             update_values[field.attribute] = model_attrs[field.attribute] \
                 or field.update_value
 
