@@ -13,7 +13,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'app.views.home', name='home'),
     # url(r'^blog/', include('blog.urls')),
 
-    (r'^grappelli/', include('grappelli.urls')),
+    url(r'^grappelli/', include('grappelli.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^admin/sync/', include('mtr.sync.urls', namespace='mtr.sync'))

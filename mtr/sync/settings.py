@@ -35,7 +35,10 @@ def get_buffer_file_path(instance, filename, absolute=False):
 FILE_PATH = getattr_with_prefix('FILE_PATH', get_buffer_file_path)
 
 # theme path
-THEME = getattr_with_prefix('THEME', 'default')
+DEFAULT_THEME = 'default'
+if 'grappelli' in settings.INSTALLED_APPS:
+    DEFAULT_THEME = 'grappelli'
+THEME = getattr_with_prefix('THEME', DEFAULT_THEME)
 
 if django.get_version() >= '1.7':
     # additional processor for import and export to register

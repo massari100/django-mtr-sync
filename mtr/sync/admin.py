@@ -140,21 +140,37 @@ class SettingsAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                ('name', 'language'),
-                ('buffer_file', 'action', 'processor'),
-                ('start_col', 'end_col'), ('start_row', 'end_row'),
-                ('model', 'dataset', 'data_action'),
-                ('filename', 'worksheet', 'include_header'),
-                ('filter_querystring',)
+                ('model', 'action'),
+                'processor',
+                ('name', 'filename'),
+                'run_after_save',
             )
         }),
-        (_('mtr.sync:Additional options'),     {
+
+        (_('mtr.sync:Data settings'), {
             'fields': (
-                ('create_fields', 'include_related', 'populate_from_file'),
-                (
-                    'run_after_save',
-                    'hide_translation_fields', 'filter_dataset'),)
-        })
+                ('dataset', 'data_action'),
+                ('filter_dataset', 'filter_querystring')
+            )
+        }),
+
+        (_('mtr.sync:Worksheet settings'), {
+            'fields': (
+                ('start_col', 'end_col'), ('start_row', 'end_row'),
+                ('include_header', 'populate_from_file'),
+                'worksheet',
+            )
+        }),
+
+        (_('mtr.sync:Language settings'), {
+            'fields': (('language', 'hide_translation_fields'),)
+        }),
+
+        (_('mtr.sync:Field settings'), {
+            'fields': (
+                ('create_fields', 'include_related'),
+            )
+        }),
     )
     form = SettingsForm
 
