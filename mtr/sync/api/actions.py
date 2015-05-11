@@ -50,8 +50,23 @@ def find_instances(model, model_attrs, params, fields):
     return instances
 
 
+def filter_attrs(model_attrs, fields, mfields):
+    update_fields = list(filter(lambda f: f.update, fields)) or fields
+    update_values = {}
+
+    for field in update_fields:
+        if '_|' not in field.attribute and \
+                isinstance(mfields[field.attribute], models.Field):
+            update_values[field.attribute] = model_attrs[field.attribute] \
+                or field.update_value
+
+    return update_values
+
+
 @manager.register('action', _('mtr.sync:Create only'))
 def create(model, model_attrs, related_attrs, **kwargs):
+    model_attrs = filter_attrs(
+        model_attrs, kwargs['fields'], kwargs['mfields'])
     instance = model(**model_attrs)
     fields = kwargs['mfields']
     add_after = {}
@@ -78,17 +93,8 @@ def create(model, model_attrs, related_attrs, **kwargs):
 
 @manager.register('action', _('mtr.sync:Update only'))
 def update(model, model_attrs, related_attrs, **kwargs):
-    updating_fields = kwargs['fields']
-    updating_fields = list(filter(lambda f: f.update, kwargs['fields'])) \
-        or kwargs['fields']
-
-    update_values = {}
-    real_fields = kwargs['mfields']
-    for field in updating_fields:
-        if '_|' not in field.attribute and \
-                isinstance(real_fields[field.attribute], models.Field):
-            update_values[field.attribute] = model_attrs[field.attribute] \
-                or field.update_value
+    update_values = filter_attrs(
+        model_attrs, kwargs['fields'], kwargs['mfields'])
 
     instances = find_instances(
         model, kwargs['raw_attrs'], kwargs['params'], kwargs['fields'])
