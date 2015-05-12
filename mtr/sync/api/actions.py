@@ -34,6 +34,7 @@ def _create_mtm_instance(
 
 def find_instances(model, model_attrs, params, fields):
     filter_params = params
+    instances = model._default_manager.all()
 
     for field in filter(lambda f: f.find, fields):
         field_name = field.attribute .replace('|_fk_|', '__') \
@@ -45,7 +46,7 @@ def find_instances(model, model_attrs, params, fields):
         filter_params.update(**{field_filter: field_value})
 
     if filter_params.keys():
-        instances = model._default_manager.filter(**filter_params)
+        instances = instances.filter(**filter_params)
 
     return instances
 
@@ -98,6 +99,7 @@ def update(model, model_attrs, related_attrs, **kwargs):
 
     instances = find_instances(
         model, kwargs['raw_attrs'], kwargs['params'], kwargs['fields'])
+
     instances.update(**update_values)
 
     return instances

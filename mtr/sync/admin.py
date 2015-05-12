@@ -27,8 +27,8 @@ class SyncStackedInlineMixin(object):
 class ErrorInline(admin.TabularInline):
     model = Error
     extra = 0
-    readonly_fields = (
-        'position', 'message', 'step', 'input_position', 'input_value')
+    # readonly_fields = (
+        # 'position', 'message', 'step', 'input_position', 'input_value')
 
 
 class ReportAdmin(admin.ModelAdmin):
@@ -144,7 +144,7 @@ class SettingsAdmin(admin.ModelAdmin):
                 ('model', 'action'),
                 'processor',
                 ('name', 'filename'),
-                'run_after_save',
+                ('buffer_file', 'run_after_save'),
             )
         }),
 
