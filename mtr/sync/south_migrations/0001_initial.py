@@ -33,7 +33,7 @@ class Migration(SchemaMigration):
             ('hide_translation_fields', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('create_fields', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('populate_from_file', self.gf('django.db.models.fields.BooleanField')(default=False)),
-            ('start_after_save', self.gf('django.db.models.fields.BooleanField')(default=False)),
+            ('run_after_save', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('include_related', self.gf('django.db.models.fields.BooleanField')(default=True)),
         ))
         db.send_create_signal('mtr_sync', ['Settings'])
@@ -46,6 +46,7 @@ class Migration(SchemaMigration):
             ('attribute', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('skip', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('update', self.gf('django.db.models.fields.BooleanField')(default=True)),
+            ('update_value', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('find', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('find_filter', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('converters', self.gf('django.db.models.fields.CharField')(max_length=255)),
@@ -115,7 +116,8 @@ class Migration(SchemaMigration):
             'position': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'settings': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'fields'", 'to': "orm['mtr_sync.Settings']"}),
             'skip': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'update': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
+            'update': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
+            'update_value': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
         },
         'mtr_sync.report': {
             'Meta': {'ordering': "('-id',)", 'object_name': 'Report'},
@@ -150,7 +152,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'populate_from_file': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'processor': ('django.db.models.fields.CharField', [], {'default': "'XlsxProcessor'", 'max_length': '255'}),
-            'start_after_save': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'run_after_save': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'start_col': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
             'start_row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),

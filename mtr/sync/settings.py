@@ -21,10 +21,9 @@ def strip_media_root(path):
 def get_buffer_file_path(instance, filename, absolute=False):
     """Generate file path for report"""
 
+    action = 'export' if instance.action else 'import'
     path = os.path.join(
-        settings.MEDIA_ROOT,
-        'sync', instance.get_action_display().lower(),
-        filename.lower())
+        settings.MEDIA_ROOT, 'sync', action, filename.lower())
 
     if not absolute:
         path = strip_media_root(path)

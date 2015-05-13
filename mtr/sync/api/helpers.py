@@ -3,6 +3,7 @@ from collections import OrderedDict
 import django
 
 from django.utils.six.moves import filterfalse
+from django.utils.encoding import smart_text
 from django.db import models
 from django.conf import settings as django_settings
 from django.db.models.fields import Field as ModelField
@@ -139,7 +140,7 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
 
         if child_attrs:
             for name, label in child_attrs:
-                yield (name, '{} | {}'.format(
+                yield (name, smart_text('{} | {}').format(
                     field.rel.to._meta.verbose_name, label).capitalize())
         else:
             yield (name, label.capitalize())
@@ -164,7 +165,7 @@ def model_choices():
             '{}.{}'.format(
                 model._meta.app_label.lower(),
                 model.__name__.lower()),
-            '{} | {}'.format(
+            smart_text('{} | {}').format(
                 model._meta.app_label.title(),
                 model._meta.verbose_name.title()))
 
