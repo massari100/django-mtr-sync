@@ -214,6 +214,7 @@ class Processor(DataProcessor):
         data = self.manager.prepare_import_data(self, model)
         params = self.manager.filter_dataset(self.settings) or {}
         action = self.manager.get_or_raise('action', self.settings.data_action)
+        context = self.manager.prepare_context(model, self)
 
         max_rows, max_cols = self.open(path)
         self.set_dimensions(
@@ -231,7 +232,7 @@ class Processor(DataProcessor):
             try:
                 with transaction.atomic():
                     action(
-                        model, model_attrs, related_attrs,
+                        model, model_attrs, related_attrs, context,
                         processor=self, path=path, fields=data['fields'],
                         params=params, raw_attrs=_model,
                         mfields=data['mfields'])

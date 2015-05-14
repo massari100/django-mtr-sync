@@ -295,7 +295,7 @@ class ProcessorTestMixin(ApiTestMixin):
         self.manager.unregister('action', 'test_import')
 
         @self.manager.register('action')
-        def test_import(model, model_attrs, related_attrs, **kwargs):
+        def test_import(model, model_attrs, related_attrs, context, **kwargs):
             attrs.append(model_attrs)
 
         self.settings.model = ''

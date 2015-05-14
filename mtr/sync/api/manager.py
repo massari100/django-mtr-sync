@@ -167,28 +167,17 @@ class ProcessorManagerMixin(object):
             )
         }
 
-    def import_data(self, settings, path=None):
-        """Import data to database"""
+    def prepare_context(self, model, processor):
+        prepares = []
+        for context in self.contexts.keys():
+            if self.settings.data_action in context:
+                prepares.append(self.contexts[context])
 
-        if settings.language:
-            activate(settings.language)
+        context = {}
+        for prepare in prepares:
+            context.update(prepare(model, processor))
 
-        processor = self.make_processor(settings)
-        model = make_model_class(settings)
-
-        return processor.import_data(model, path)
-
-    def model_data(self, processor, model, fields, mfields):
-        for row_index in processor.rows:
-            _model = {}
-            row = processor.read(row_index)
-
-            for index, field in enumerate(fields):
-                col = column_value(field.name) if field.name else index
-                value = self.convert_value(row[col], model, field, mfields)
-                _model[field.attribute] = value
-
-            yield row_index, _model
+        return context
 
     def prepare_import_data(self, processor, model):
         """Prepare data using filters from settings and return iterator"""
@@ -211,6 +200,29 @@ class ProcessorManagerMixin(object):
             'items': self.model_data(processor, model, fields, mfields),
             'mfields': mfields
         }
+
+    def import_data(self, settings, path=None):
+        """Import data to database"""
+
+        if settings.language:
+            activate(settings.language)
+
+        processor = self.make_processor(settings)
+        model = make_model_class(settings)
+
+        return processor.import_data(model, path)
+
+    def model_data(self, processor, model, fields, mfields):
+        for row_index in processor.rows:
+            _model = {}
+            row = processor.read(row_index)
+
+            for index, field in enumerate(fields):
+                col = column_value(field.name) if field.name else index
+                value = self.convert_value(row[col], model, field, mfields)
+                _model[field.attribute] = value
+
+            yield row_index, _model
 
     def import_processors(self):
         """Import modules within IMPORT_PROCESSORS paths"""
@@ -235,6 +247,7 @@ class Manager(ProcessorManagerMixin):
         self.actions = OrderedDict()
         self.converters = OrderedDict()
         self.datasets = OrderedDict()
+        self.contexts = OrderedDict()
 
     def _make_key(self, key):
         return '{}s'.format(key)

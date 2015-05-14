@@ -65,7 +65,7 @@ def filter_attrs(model_attrs, fields, mfields):
 
 
 @manager.register('action', _('mtr.sync:Create only'))
-def create(model, model_attrs, related_attrs, **kwargs):
+def create(model, model_attrs, related_attrs, context, **kwargs):
     model_attrs = filter_attrs(
         model_attrs, kwargs['fields'], kwargs['mfields'])
     instance = model(**model_attrs)
@@ -93,7 +93,7 @@ def create(model, model_attrs, related_attrs, **kwargs):
 
 
 @manager.register('action', _('mtr.sync:Update only'))
-def update(model, model_attrs, related_attrs, **kwargs):
+def update(model, model_attrs, related_attrs, context, **kwargs):
     update_values = filter_attrs(
         model_attrs, kwargs['fields'], kwargs['mfields'])
 
@@ -106,8 +106,8 @@ def update(model, model_attrs, related_attrs, **kwargs):
 
 
 @manager.register('action', _('mtr.sync:Update or create'))
-def update_or_create(model, model_attrs, related_attrs, **kwargs):
-    instances = update(model, model_attrs, related_attrs, **kwargs)
+def update_or_create(model, model_attrs, related_attrs, context, **kwargs):
+    instances = update(model, model_attrs, related_attrs, context, **kwargs)
 
     if not instances:
-        create(model, model_attrs, related_attrs, **kwargs)
+        create(model, model_attrs, related_attrs, context, **kwargs)
