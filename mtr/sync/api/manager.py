@@ -167,15 +167,18 @@ class ProcessorManagerMixin(object):
             )
         }
 
-    def prepare_context(self, model, processor):
+    def prepare_handlers(self, key_name, model, processor, context=None):
         prepares = []
-        for context in self.contexts.keys():
-            if self.settings.data_action in context:
-                prepares.append(self.contexts[context])
+        handlers = getattr(self, self._make_key(key_name))
+        for handler in handlers.keys():
+            if processor.settings.data_action in handler:
+                prepares.append(handlers[handler])
 
-        context = {}
+        context = context or {}
         for prepare in prepares:
-            context.update(prepare(model, processor))
+            result = prepare(model, processor, **context)
+            if isinstance(result, dict):
+                context.update(result)
 
         return context
 
@@ -247,7 +250,8 @@ class Manager(ProcessorManagerMixin):
         self.actions = OrderedDict()
         self.converters = OrderedDict()
         self.datasets = OrderedDict()
-        self.contexts = OrderedDict()
+        self.befores = OrderedDict()
+        self.afters = OrderedDict()
 
     def _make_key(self, key):
         return '{}s'.format(key)

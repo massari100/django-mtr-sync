@@ -247,7 +247,8 @@ class Field(PositionMixin):
         _('mtr.sync:filter type'), max_length=255, blank=True,
         choices=FILTER_CHOICES)
 
-    converters = models.CharField(_('mtr.sync:converters'), max_length=255)
+    converters = models.CharField(
+        _('mtr.sync:converters'), max_length=255, blank=True)
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
