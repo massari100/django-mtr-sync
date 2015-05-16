@@ -15,7 +15,7 @@ def getattr_with_prefix(name, default):
 
 
 def strip_media_root(path):
-    return path.split(settings.MEDIA_ROOT)[1].lstrip('/')
+    return path.split(settings.MEDIA_ROOT)[-1].lstrip('/')
 
 
 def get_buffer_file_path(instance, filename, absolute=False):

@@ -2,6 +2,8 @@
 
 from __future__ import unicode_literals
 
+import django
+
 import os
 import datetime
 
@@ -10,9 +12,14 @@ from collections import OrderedDict
 from django.utils import six
 from django.utils.translation import activate
 
-from mtr.sync.api import manager
-from mtr.sync.api.helpers import column_value
-from mtr.sync.models import Settings
+if django.get_version() >= '1.7':
+    from mtr.sync.api import manager
+    from mtr.sync.api.helpers import column_value
+    from mtr.sync.models import Settings
+else:
+    from mtr_sync.api import manager
+    from mtr_sync.api.helpers import column_value
+    from mtr_sync.models import Settings
 
 
 class ApiTestMixin(object):
