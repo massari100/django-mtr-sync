@@ -7,7 +7,7 @@ from django.contrib import admin
 from django import forms
 
 from .helpers import themed
-from .models import Report, Settings, Field, Error
+from .models import Report, Settings, Field, Message
 from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
@@ -24,15 +24,15 @@ class SyncStackedInlineMixin(object):
     template = themed('admin/edit_inline/stacked.html', True)
 
 
-class ErrorInline(admin.TabularInline):
-    model = Error
+class MessageInline(admin.TabularInline):
+    model = Message
     extra = 0
     # readonly_fields = (
         # 'position', 'message', 'step', 'input_position', 'input_value')
 
 
 class ReportAdmin(admin.ModelAdmin):
-    inlines = (ErrorInline,)
+    inlines = (MessageInline,)
     list_display = (
         'action', 'status', 'started_at', 'completed_at', 'buffer_file_link')
     list_filter = ('action', 'status', 'started_at', 'completed_at')

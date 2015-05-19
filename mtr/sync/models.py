@@ -367,9 +367,17 @@ def save_import_report(sender, **kwargs):
 
 
 @python_2_unicode_compatible
-class Error(PositionMixin, ErrorChoicesMixin):
+class Message(PositionMixin, ErrorChoicesMixin):
 
     """Report errors with info about step where raised"""
+
+    ERROR = 0
+    INFO = 1
+
+    MESSAGE_CHOICES = (
+        (ERROR, _('mtr.sync:Error')),
+        (INFO, _('mtr.sync:Info'))
+    )
 
     report = models.ForeignKey(Report, related_name='errors')
 
@@ -382,9 +390,12 @@ class Error(PositionMixin, ErrorChoicesMixin):
     input_value = models.TextField(
         _('mtr.sync:input value'), max_length=60000, null=True, blank=True)
 
+    type = models.PositiveSmallIntegerField(
+        _('mtr.sync:type'), choices=MESSAGE_CHOICES, default=ERROR)
+
     class Meta:
-        verbose_name = _('mtr.sync:error')
-        verbose_name_plural = _('mtr.sync:errors')
+        verbose_name = _('mtr.sync:message')
+        verbose_name_plural = _('mtr.sync:messages')
 
         ordering = ('position', )
 
@@ -397,7 +408,7 @@ class Error(PositionMixin, ErrorChoicesMixin):
         if self.position is None:
             self.position = self.__class__.objects \
                 .filter(report=self.report).count() + 1
-        super(Error, self).save(*args, **kwargs)
+        super(Message, self).save(*args, **kwargs)
 
 
 @receiver(error_raised)
@@ -405,7 +416,7 @@ def create_error(sender, **kwargs):
     position = kwargs.get('position', '')
     value = kwargs.get('value', None)
 
-    Error.objects.create(
+    Message.objects.create(
         report=sender.report, message=kwargs['error'],
         step=kwargs['step'], input_position=position,
         input_value=repr(value) if value else None)
