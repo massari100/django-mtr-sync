@@ -49,7 +49,7 @@ class Migration(SchemaMigration):
             ('update_value', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('find', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('find_filter', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('converters', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('converters', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('settings', self.gf('django.db.models.fields.related.ForeignKey')(related_name='fields', to=orm['mtr_sync.Settings'])),
         ))
         db.send_create_signal('mtr_sync', ['Field'])
@@ -67,8 +67,8 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('mtr_sync', ['Report'])
 
-        # Adding model 'Error'
-        db.create_table(u'mtr_sync_error', (
+        # Adding model 'Message'
+        db.create_table(u'mtr_sync_message', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('position', self.gf('django.db.models.fields.PositiveIntegerField')(null=True, blank=True)),
             ('report', self.gf('django.db.models.fields.related.ForeignKey')(related_name='errors', to=orm['mtr_sync.Report'])),
@@ -76,8 +76,9 @@ class Migration(SchemaMigration):
             ('step', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=10)),
             ('input_position', self.gf('django.db.models.fields.CharField')(max_length=10, blank=True)),
             ('input_value', self.gf('django.db.models.fields.TextField')(max_length=60000, null=True, blank=True)),
+            ('type', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
         ))
-        db.send_create_signal('mtr_sync', ['Error'])
+        db.send_create_signal('mtr_sync', ['Message'])
 
 
     def backwards(self, orm):
@@ -90,25 +91,15 @@ class Migration(SchemaMigration):
         # Deleting model 'Report'
         db.delete_table(u'mtr_sync_report')
 
-        # Deleting model 'Error'
-        db.delete_table(u'mtr_sync_error')
+        # Deleting model 'Message'
+        db.delete_table(u'mtr_sync_message')
 
 
     models = {
-        'mtr_sync.error': {
-            'Meta': {'ordering': "('position',)", 'object_name': 'Error'},
-            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'input_position': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
-            'input_value': ('django.db.models.fields.TextField', [], {'max_length': '60000', 'null': 'True', 'blank': 'True'}),
-            'message': ('django.db.models.fields.TextField', [], {'max_length': '10000'}),
-            'position': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
-            'report': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'errors'", 'to': "orm['mtr_sync.Report']"}),
-            'step': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '10'})
-        },
         'mtr_sync.field': {
             'Meta': {'ordering': "('position',)", 'object_name': 'Field'},
             'attribute': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'converters': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'converters': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'find': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'find_filter': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
@@ -118,6 +109,17 @@ class Migration(SchemaMigration):
             'skip': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'update': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'update_value': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})
+        },
+        'mtr_sync.message': {
+            'Meta': {'ordering': "('position',)", 'object_name': 'Message'},
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'input_position': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
+            'input_value': ('django.db.models.fields.TextField', [], {'max_length': '60000', 'null': 'True', 'blank': 'True'}),
+            'message': ('django.db.models.fields.TextField', [], {'max_length': '10000'}),
+            'position': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'report': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'errors'", 'to': "orm['mtr_sync.Report']"}),
+            'step': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '10'}),
+            'type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
         },
         'mtr_sync.report': {
             'Meta': {'ordering': "('-id',)", 'object_name': 'Report'},

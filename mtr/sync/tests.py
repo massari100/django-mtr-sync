@@ -67,14 +67,18 @@ class ApiTestMixin(object):
             model='{}.{}'.format(
                 self.model._meta.app_label, self.model.__name__).lower(),
             include_header=False,
-            dataset='some_dataset',
+            dataset='some_dataset' if django.get_version() >= '1.7' else '',
             filter_querystring='security_level__gte=10'
             '&surname__icontains=t&o=-3.2&gender__exact=M'
             '&fields=action_checkbox,name,surname,security_level,gender',
             language='de')
 
-        self.queryset = self.manager.get_or_raise('dataset', 'some_dataset')
-        self.queryset = self.queryset(self.MODEL, self.settings)
+        if django.get_version() >= '1.7':
+            self.queryset = self.manager.get_or_raise(
+                'dataset', 'some_dataset')
+            self.queryset = self.queryset(self.MODEL, self.settings)
+        else:
+            self.queryset = self.model.objects.all()
         self.queryset = self.queryset.filter(
             security_level__gte=10, surname__icontains='t',
             gender__exact='M').order_by('-security_level', 'surname')
