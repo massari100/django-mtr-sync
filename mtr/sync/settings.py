@@ -41,19 +41,25 @@ THEME = getattr_with_prefix('THEME', DEFAULT_THEME)
 
 if django.get_version() >= '1.7':
     # additional processor for import and export to register
-    PROCESSORS = getattr_with_prefix('PROCESSORS', [
+    MODULES = getattr_with_prefix('MODULES', [
         'mtr.sync.api.processors.xlsx',
         'mtr.sync.api.processors.xls',
         'mtr.sync.api.processors.ods',
-        'mtr.sync.api.processors.csv'
+        'mtr.sync.api.processors.csv',
+
+        'mtr.sync.api.actions',
+        'mtr.sync.api.converters'
     ])
 else:
     # additional processor for import and export to register
-    PROCESSORS = getattr_with_prefix('PROCESSORS', [
+    MODULES = getattr_with_prefix('MODULES', [
         'mtr_sync.api.processors.xlsx',
         'mtr_sync.api.processors.xls',
         'mtr_sync.api.processors.ods',
-        'mtr_sync.api.processors.csv'
+        'mtr_sync.api.processors.csv',
+
+        'mtr_sync.api.actions',
+        'mtr_sync.api.converters'
     ])
 
 # default processor

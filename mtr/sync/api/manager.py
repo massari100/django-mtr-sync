@@ -2,8 +2,6 @@ from __future__ import unicode_literals
 
 from collections import OrderedDict
 
-import django
-
 from django.utils.six.moves import filterfalse
 from django.utils.translation import activate
 from django.http import QueryDict
@@ -12,7 +10,7 @@ from django.contrib.admin.views.main import IGNORED_PARAMS
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import column_value, make_model_class, model_settings, \
     process_attribute, model_fields
-from ..settings import PROCESSORS
+from ..settings import MODULES
 
 
 class ProcessorManagerMixin(object):
@@ -227,18 +225,11 @@ class ProcessorManagerMixin(object):
 
             yield row_index, _model
 
-    def import_processors(self):
+    def import_dependecies(self):
         """Import modules within IMPORT_PROCESSORS paths"""
 
-        for module in PROCESSORS():
+        for module in MODULES():
             __import__(module)
-
-        if django.get_version() >= '1.7':
-            __import__('mtr.sync.api.converters')
-            __import__('mtr.sync.api.actions')
-        else:
-            __import__('mtr_sync.api.converters')
-            __import__('mtr_sync.api.actions')
 
 
 class Manager(ProcessorManagerMixin):
@@ -320,4 +311,4 @@ class Manager(ProcessorManagerMixin):
         return item
 
 manager = Manager()
-manager.import_processors()
+manager.import_dependecies()
