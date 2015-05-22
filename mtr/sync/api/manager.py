@@ -9,7 +9,7 @@ from django.contrib.admin.views.main import IGNORED_PARAMS
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import column_index, make_model_class, model_settings, \
-    process_attribute, model_fields, row_value
+    process_attribute, model_fields, cell_value
 from ..settings import MODULES
 
 
@@ -180,6 +180,25 @@ class ProcessorManagerMixin(object):
 
         return context
 
+    def prepare_context(self, settings, path):
+        context = {}
+        contexts = settings.contexts.all()
+
+        if not contexts:
+            return {}
+
+        processor = self.make_processor(settings)
+        max_rows, max_cols = processor.open(path)
+        processor.set_dimensions(
+            0, 0, max_rows, max_cols,
+            import_data=True)
+
+        for field in contexts:
+            context[field.name] = cell_value(
+                None, field.cell, processor)
+
+        return context
+
     def prepare_import_data(self, processor, model):
         """Prepare data using filters from settings and return iterator"""
 
@@ -219,7 +238,7 @@ class ProcessorManagerMixin(object):
             row = processor.read(row_index)
 
             for index, field in enumerate(fields):
-                value = row_value(row, field.name or index)
+                value = cell_value(row, field.name or index)
                 _model[field.attribute] = self.convert_value(
                     value, model, field, mfields)
 

@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from mtr.sync.api.helpers import column_name, column_index, \
-    model_attributes, process_attribute, row_value
+    model_attributes, process_attribute, cell_value
 from mtr.sync.tests import ApiTestMixin
 from mtr.sync.api.processors import csv
 
@@ -24,16 +24,16 @@ class HelpersTest(ApiTestMixin, TestCase):
     def test_row_values_from_col(self):
         cols = ['1', '2', '3', '4', '5']
 
-        self.assertEqual(row_value(cols, 0), cols[0])
-        self.assertEqual(row_value(cols, 'A'), cols[0])
-        self.assertEqual(row_value(cols, '4'), cols[4])
+        self.assertEqual(cell_value(cols, 0), cols[0])
+        self.assertEqual(cell_value(cols, 'A'), cols[0])
+        self.assertEqual(cell_value(cols, '4'), cols[4])
 
-        self.assertEqual(row_value(cols, 'A:C'), cols[:3])
-        self.assertEqual(row_value(cols, 'A:C,B'), cols[:3] + [cols[1]])
+        self.assertEqual(cell_value(cols, 'A-C'), cols[:3])
+        self.assertEqual(cell_value(cols, 'A-C,B'), cols[:3] + [cols[1]])
         self.assertEqual(
-            row_value(cols, 'A,B,D| '), ' '.join(cols[:2] + [cols[3]]))
+            cell_value(cols, 'A,B,D| '), ' '.join(cols[:2] + [cols[3]]))
         self.assertEqual(
-            row_value(cols, 'A:D,A:F,B|.'), '.'.join(
+            cell_value(cols, 'A-D,A-F,B|.'), '.'.join(
                 cols[:4] + cols[:5] + [cols[1]]))
 
     def test_model_attributes(self):

@@ -13,11 +13,11 @@ from ..settings import MODEL_SETTINGS_NAME
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
-def row_value(row, cols):
+def cell_value(row, cols, processor=None):
     if isinstance(cols, int):
         return row[cols]
 
-    if '|' not in cols and ':' not in cols and ',' not in cols:
+    if '|' not in cols and '-' not in cols and ',' not in cols:
         return row[column_index(cols)]
 
     value = []
@@ -27,12 +27,16 @@ def row_value(row, cols):
         cols, joiner = cols.split('|')
 
     for col in cols.split(','):
-        if ':' in col:
-            start, end = col.split(':')
+        if '-' in col:
+            start, end = col.split('-')
             value += row[column_index(start):column_index(end)+1]
         else:
+            if processor and ':' in col:
+                col, row = col.split(':')
+                row = processor.read(int(row))
             value.append(row[column_index(col)])
-    if joiner:
+    if joiner is not None:
+        joiner = joiner or ' '
         value = joiner.join(value)
 
     return value

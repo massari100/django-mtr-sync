@@ -7,7 +7,7 @@ from django.contrib import admin
 from django import forms
 
 from .helpers import themed
-from .models import Report, Settings, Field, Message
+from .models import Report, Settings, Field, Message, Context
 from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
@@ -28,7 +28,8 @@ class MessageInline(admin.TabularInline):
     model = Message
     extra = 0
     # readonly_fields = (
-        # 'position', 'message', 'step', 'input_position', 'input_value')
+    # 'position', 'message', 'step',
+    # 'input_position', 'input_value')
 
 
 class ReportAdmin(admin.ModelAdmin):
@@ -92,6 +93,12 @@ class FieldInline(
     sortable_field_name = 'position'
 
 
+class ContextInline(admin.TabularInline):
+    model = Context
+    extra = 0
+    fields = ('cell', 'name')
+
+
 class SettingsForm(forms.ModelForm):
     INITIAL = {}
 
@@ -136,7 +143,7 @@ class SettingsAdmin(admin.ModelAdmin):
     )
     list_display_links = ('id', 'name', 'model')
     date_hierarchy = 'created_at'
-    inlines = (FieldInline,)
+    inlines = (FieldInline, ContextInline)
     actions = ['run']
     fieldsets = (
         (None, {

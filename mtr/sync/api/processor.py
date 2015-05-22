@@ -214,7 +214,9 @@ class Processor(DataProcessor):
         data = self.manager.prepare_import_data(self, model)
         params = self.manager.filter_dataset(self.settings) or {}
         action = self.manager.get_or_raise('action', self.settings.data_action)
-        context = self.manager.prepare_handlers('before', model, self)
+        context = self.manager.prepare_context(self.settings, path)
+        context = self.manager.prepare_handlers(
+            'before', model, self, context)
 
         max_rows, max_cols = self.open(path)
         self.set_dimensions(

@@ -273,6 +273,27 @@ class Field(PositionMixin):
 
 
 @python_2_unicode_compatible
+class Context(models.Model):
+
+    """Context for importing values in action"""
+
+    name = models.CharField(_('mtr.sync.name'), max_length=255)
+    cell = models.CharField(_('mtr.sync:field'), max_length=255)
+
+    settings = models.ForeignKey(
+        Settings, verbose_name=_('mtr.sync:settings'),
+        related_name='contexts', null=True, blank=True
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('mtr.sync:context')
+        verbose_name_plural = _('mtr.sync:contexts')
+
+
+@python_2_unicode_compatible
 class Report(ActionsMixin):
 
     """Reports for imported and exported operations and link to files
