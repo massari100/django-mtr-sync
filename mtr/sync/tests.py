@@ -14,11 +14,11 @@ from django.utils.translation import activate
 
 if django.get_version() >= '1.7':
     from mtr.sync.api import manager
-    from mtr.sync.api.helpers import column_value
+    from mtr.sync.api.helpers import column_index
     from mtr.sync.models import Settings
 else:
     from mtr_sync.api import manager
-    from mtr_sync.api.helpers import column_value
+    from mtr_sync.api.helpers import column_index
     from mtr_sync.models import Settings
 
 
@@ -149,13 +149,13 @@ class ProcessorTestMixin(ApiTestMixin):
             end_row = self.queryset.count() - 1
 
         if self.settings.start_col:
-            start_col = column_value(self.settings.start_col) - 1
+            start_col = column_index(self.settings.start_col) - 1
         else:
             start_col = 0
 
         if self.settings.start_col and self.settings.end_col:
             fields_limit = self.settings.end_col - \
-                column_value(self.settings.start_col) + 1
+                column_index(self.settings.start_col) + 1
         else:
             fields_limit = len(self.fields)
 

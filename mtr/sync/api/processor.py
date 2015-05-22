@@ -9,7 +9,7 @@ from django.db import transaction, Error
 
 from .signals import export_started, export_completed, \
     import_started, import_completed, error_raised
-from .helpers import column_value
+from .helpers import column_index
 from .exceptions import ErrorChoicesMixin
 
 from ..settings import LIMIT_PREVIEW, FILE_PATH
@@ -42,7 +42,7 @@ class DataProcessor(object):
 
     def _set_cols_dimensions(self, import_data, field_cols):
         if self.settings.start_col:
-            start_col_index = column_value(self.settings.start_col)
+            start_col_index = column_index(self.settings.start_col)
             if start_col_index > self.start['col']:
                 self.start['col'] = start_col_index - 1
 
@@ -53,7 +53,7 @@ class DataProcessor(object):
             self.end['col'] = self.start['col'] + field_cols
 
         if self.settings.end_col:
-            end_col_index = column_value(self.settings.end_col)
+            end_col_index = column_index(self.settings.end_col)
 
             if end_col_index < self.end['col']:
                 self.end['col'] = end_col_index

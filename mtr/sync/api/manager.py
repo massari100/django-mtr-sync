@@ -8,8 +8,8 @@ from django.http import QueryDict
 from django.contrib.admin.views.main import IGNORED_PARAMS
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
-from .helpers import column_value, make_model_class, model_settings, \
-    process_attribute, model_fields
+from .helpers import column_index, make_model_class, model_settings, \
+    process_attribute, model_fields, row_value
 from ..settings import MODULES
 
 
@@ -142,9 +142,9 @@ class ProcessorManagerMixin(object):
             queryset = queryset[:rows]
 
         if settings.end_col:
-            cols = column_value(settings.end_col)
+            cols = column_index(settings.end_col)
             if settings.start_col:
-                cols -= column_value(settings.start_col)
+                cols -= column_index(settings.start_col)
                 cols += 1
 
             fields = fields[:cols]
@@ -188,9 +188,9 @@ class ProcessorManagerMixin(object):
         mfields = model_fields(model) if model else {}
 
         if settings.end_col:
-            cols = column_value(settings.end_col)
+            cols = column_index(settings.end_col)
             if settings.start_col:
-                cols -= column_value(settings.start_col)
+                cols -= column_index(settings.start_col)
                 cols += 1
 
             fields = fields[:cols]
@@ -219,9 +219,9 @@ class ProcessorManagerMixin(object):
             row = processor.read(row_index)
 
             for index, field in enumerate(fields):
-                col = column_value(field.name) if field.name else index
-                value = self.convert_value(row[col], model, field, mfields)
-                _model[field.attribute] = value
+                value = row_value(row, field.name or index)
+                _model[field.attribute] = self.convert_value(
+                    value, model, field, mfields)
 
             yield row_index, _model
 

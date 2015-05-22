@@ -13,6 +13,31 @@ from ..settings import MODEL_SETTINGS_NAME
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
+def row_value(row, cols):
+    if isinstance(cols, int):
+        return row[cols]
+
+    if '|' not in cols and ':' not in cols and ',' not in cols:
+        return row[column_index(cols)]
+
+    value = []
+    joiner = None
+
+    if '|' in cols:
+        cols, joiner = cols.split('|')
+
+    for col in cols.split(','):
+        if ':' in col:
+            start, end = col.split(':')
+            value += row[column_index(start):column_index(end)+1]
+        else:
+            value.append(row[column_index(col)])
+    if joiner:
+        value = joiner.join(value)
+
+    return value
+
+
 def column_name(index):
     """Return column name for given index"""
     name = ''
@@ -30,24 +55,18 @@ def column_name(index):
 def column_index(value):
     """Return column index for given name"""
 
-    for index in range(0, 18279):
-        name = column_name(index)
-        if name == value:
-            return index
-
-    raise IndexError
-
-
-def column_value(value):
-    """Return column index or convert from value"""
-
     if isinstance(value, int):
         return value
 
     if value.isdigit():
         return int(value)
 
-    return column_index(value)
+    for index in range(0, 18279):
+        name = column_name(index)
+        if name == value:
+            return index
+
+    raise IndexError
 
 
 def model_settings(model):
