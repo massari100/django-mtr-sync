@@ -31,9 +31,9 @@ class HelpersTest(ApiTestMixin, TestCase):
         self.assertEqual(cell_value(cols, 'A-C'), cols[:3])
         self.assertEqual(cell_value(cols, 'A-C,B'), cols[:3] + [cols[1]])
         self.assertEqual(
-            cell_value(cols, 'A,B,D| '), ' '.join(cols[:2] + [cols[3]]))
+            cell_value(cols, 'A,B,D|'), ' '.join(cols[:2] + [cols[3]]))
         self.assertEqual(
-            cell_value(cols, 'A-D,A-F,B|.'), '.'.join(
+            cell_value(cols, 'A-D,A-F,B|'), ' '.join(
                 cols[:4] + cols[:5] + [cols[1]]))
 
     def test_model_attributes(self):

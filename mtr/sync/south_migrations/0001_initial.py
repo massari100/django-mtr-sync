@@ -38,6 +38,23 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal('mtr_sync', ['Settings'])
 
+        # Adding model 'Sequence'
+        db.create_table(u'mtr_sync_sequence', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('buffer_file', self.gf('django.db.models.fields.files.FileField')(db_index=True, max_length=100, blank=True)),
+        ))
+        db.send_create_signal(u'mtr_sync', ['Sequence'])
+
+        # Adding M2M table for field settings on 'Sequence'
+        m2m_table_name = db.shorten_name(u'mtr_sync_sequence_settings')
+        db.create_table(m2m_table_name, (
+            ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
+            ('sequence', models.ForeignKey(orm[u'mtr_sync.sequence'], null=False)),
+            ('settings', models.ForeignKey(orm['mtr_sync.settings'], null=False))
+        ))
+        db.create_unique(m2m_table_name, ['sequence_id', 'settings_id'])
+
         # Adding model 'Field'
         db.create_table(u'mtr_sync_field', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -93,6 +110,12 @@ class Migration(SchemaMigration):
     def backwards(self, orm):
         # Deleting model 'Settings'
         db.delete_table(u'mtr_sync_settings')
+
+        # Deleting model 'Sequence'
+        db.delete_table(u'mtr_sync_sequence')
+
+        # Removing M2M table for field settings on 'Sequence'
+        db.delete_table(db.shorten_name(u'mtr_sync_sequence_settings'))
 
         # Deleting model 'Field'
         db.delete_table(u'mtr_sync_field')
@@ -150,6 +173,13 @@ class Migration(SchemaMigration):
             'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'status': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
+        },
+        u'mtr_sync.sequence': {
+            'Meta': {'object_name': 'Sequence'},
+            'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            'settings': ('django.db.models.fields.related.ManyToManyField', [], {'to': "orm['mtr_sync.Settings']", 'symmetrical': 'False'})
         },
         'mtr_sync.settings': {
             'Meta': {'ordering': "('-id',)", 'object_name': 'Settings'},

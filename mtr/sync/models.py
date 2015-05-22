@@ -203,6 +203,23 @@ class Settings(ActionsMixin):
         elif self.action == self.IMPORT:
             import_data.apply_async(args=[{'id': self.id}])
 
+    def create_copy(self):
+        fields = self.fields.all()
+        contexts = self.contexts.all()
+
+        self.id = None
+        self.save()
+
+        for field in fields:
+            field.id = None
+            field.settings_id = self.id
+            field.save()
+
+        for context in contexts:
+            context.id = None
+            context.settings_id = self.id
+            context.save()
+
     class Meta:
         verbose_name = _('mtr.sync:settings')
         verbose_name_plural = _('mtr.sync:settings')
@@ -212,7 +229,24 @@ class Settings(ActionsMixin):
         app_label = 'mtr_sync'
 
     def __str__(self):
-        return self.name or str(self.id)
+        return self.name or self.worksheet or str(self.id)
+
+
+@python_2_unicode_compatible
+class Sequence(models.Model):
+    name = models.CharField(_('mtr.sync:name'), max_length=255)
+    buffer_file = models.FileField(
+        _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+
+    settings = models.ManyToManyField(
+        Settings, verbose_name=_('mtr.sync:settings'))
+
+    class Meta:
+        verbose_name = _('mtr.sync:sequence')
+        verbose_name_plural = _('mtr.sync:sequences')
+
+    def __str__(self):
+        return self.name
 
 
 @python_2_unicode_compatible

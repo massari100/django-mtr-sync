@@ -7,7 +7,7 @@ from django.contrib import admin
 from django import forms
 
 from .helpers import themed
-from .models import Report, Settings, Field, Message, Context
+from .models import Report, Settings, Field, Message, Context, Sequence
 from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
@@ -27,16 +27,14 @@ class SyncStackedInlineMixin(object):
 class MessageInline(admin.TabularInline):
     model = Message
     extra = 0
-    # readonly_fields = (
-    # 'position', 'message', 'step',
-    # 'input_position', 'input_value')
 
 
 class ReportAdmin(admin.ModelAdmin):
     inlines = (MessageInline,)
     list_display = (
         'action', 'status', 'started_at', 'completed_at', 'buffer_file_link')
-    list_filter = ('action', 'status', 'started_at', 'completed_at')
+    list_filter = (
+        'action', 'status', 'settings', 'started_at', 'completed_at')
     search_fields = ('buffer_file',)
     readonly_fields = ('completed_at',)
     date_hierarchy = 'started_at'
@@ -138,13 +136,14 @@ class SettingsForm(forms.ModelForm):
 
 class SettingsAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'name', 'action', 'model',
+        '__str__', 'action', 'model',
         'processor', 'created_at', 'updated_at'
     )
-    list_display_links = ('id', 'name', 'model')
+    list_filter = ('sequence',)
+    list_display_links = ('__str__', 'model')
     date_hierarchy = 'created_at'
     inlines = (FieldInline, ContextInline)
-    actions = ['run']
+    actions = ['run', 'copy']
     fieldsets = (
         (None, {
             'fields': (
@@ -216,12 +215,42 @@ class SettingsAdmin(admin.ModelAdmin):
         for settings in queryset:
             settings.run()
 
-            self.message_user(
-                request,
-                _('mtr.sync:Data synchronization started in background.'))
+        self.message_user(
+            request,
+            _('mtr.sync:Data synchronization started in background.'))
+    run.short_description = _('mtr.sync:Sync data')
 
+    def copy(self, request, queryset):
+        """Copy selected settings"""
+
+        for settings in queryset:
+            settings.create_copy()
+
+        self.message_user(
+            request,
+            _('mtr.sync:Copies successfully created'))
+    copy.short_description = _('mtr.sync:Create a copy of settings')
+
+
+class SequenceAdmin(admin.ModelAdmin):
+    list_display = ('name', 'buffer_file')
+    filter_horizontal = ('settings', )
+    actions = ('run',)
+
+    def run(self, request, queryset):
+        """Run action with selected settings"""
+
+        for sequence in queryset:
+            for settings in sequence.settings.all():
+                settings.buffer_file = sequence.buffer_file
+                settings.run()
+
+        self.message_user(
+            request,
+            _('mtr.sync:Data synchronization started in background.'))
     run.short_description = _('mtr.sync:Sync data')
 
 if REGISTER_IN_ADMIN():
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Settings, SettingsAdmin)
+    admin.site.register(Sequence, SequenceAdmin)

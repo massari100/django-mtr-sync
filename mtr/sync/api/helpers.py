@@ -33,7 +33,7 @@ def cell_value(row, cols, processor=None):
         else:
             if processor and ':' in col:
                 col, row = col.split(':')
-                row = processor.read(int(row))
+                row = processor.read(row)
             value.append(row[column_index(col)])
     if joiner is not None:
         joiner = joiner or ' '
