@@ -22,7 +22,7 @@ class HelpersTest(ApiTestMixin, TestCase):
         self.assertEqual(column_index('A'), 0)
 
     def test_row_values_from_col(self):
-        cols = ['1', '2', '3', '4', '5']
+        cols = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
         self.assertEqual(cell_value(cols, 0), cols[0])
         self.assertEqual(cell_value(cols, 'A'), cols[0])
@@ -35,6 +35,8 @@ class HelpersTest(ApiTestMixin, TestCase):
         self.assertEqual(
             cell_value(cols, 'A-D,A-F,B|'), ' '.join(
                 cols[:4] + cols[:5] + [cols[1]]))
+        self.assertEqual(
+            cell_value(cols, 'A-D,B+A'), ' '.join(cols))
 
     def test_model_attributes(self):
         fields = model_attributes(self.settings)
