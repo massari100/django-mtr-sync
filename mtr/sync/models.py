@@ -312,7 +312,7 @@ class Context(models.Model):
     """Context for importing values in action"""
 
     name = models.CharField(_('mtr.sync.name'), max_length=255)
-    cell = models.CharField(_('mtr.sync:field'), max_length=255)
+    cell = models.TextField(_('mtr.sync:field'), max_length=100000)
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('mtr.sync:settings'),

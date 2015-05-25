@@ -14,32 +14,42 @@ _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 
 def cell_value(row, cols, processor=None):
+    # TODO: refactor to normal cell parsing
+
     if isinstance(cols, int):
         return row[cols]
 
     if '|' not in cols and '-' not in cols and ',' not in cols:
         return row[column_index(cols)]
 
-    value = []
-    joiner = None
+    items = []
 
-    if '|' in cols:
-        cols, joiner = cols.split('|')
+    for item in cols.split('+'):
+        value = []
+        joiner = None
 
-    for col in cols.split(','):
-        if '-' in col:
-            start, end = col.split('-')
-            value += row[column_index(start):column_index(end)+1]
+        if '|' in item:
+            item, joiner = item.split('|')
+
+        for col in item.split(','):
+            if '-' in col:
+                start, end = col.split('-')
+                value += row[column_index(start):column_index(end)+1]
+            else:
+                if processor and ':' in col:
+                    col, row = col.split(':')
+                    row = processor.read(row)
+                value.append(row[column_index(col)])
+        if joiner is not None:
+            joiner = joiner or ' '
+            value = joiner.join(value)
+
+        if '+' in cols:
+            items.append(value)
         else:
-            if processor and ':' in col:
-                col, row = col.split(':')
-                row = processor.read(row)
-            value.append(row[column_index(col)])
-    if joiner is not None:
-        joiner = joiner or ' '
-        value = joiner.join(value)
+            items = value
 
-    return value
+    return items
 
 
 def column_name(index):
