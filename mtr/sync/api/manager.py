@@ -192,9 +192,10 @@ class ProcessorManagerMixin(object):
         processor.set_dimensions(
             0, 0, max_rows, max_cols,
             import_data=True)
+        processor._read_from_start = True
 
         for field in contexts:
-            context[field.name] = cell_value(
+            context[field.name] = field.value or cell_value(
                 None, field.cell, processor)
 
         return context
@@ -214,8 +215,10 @@ class ProcessorManagerMixin(object):
 
             fields = fields[:cols]
 
+        # TODO: refactor
+
         return {
-            'cols': len(fields),
+            # 'cols': len(processor._cells),
             'fields': fields,
             'items': self.model_data(processor, model, fields, mfields),
             'mfields': mfields

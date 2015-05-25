@@ -221,7 +221,8 @@ class Processor(DataProcessor):
         max_rows, max_cols = self.open(path)
         self.set_dimensions(
             0, 0, max_rows, max_cols,
-            import_data=True, field_cols=data['cols'])
+            import_data=True)
+        # ,field_cols=data['cols'])
 
         items = data['items']
 

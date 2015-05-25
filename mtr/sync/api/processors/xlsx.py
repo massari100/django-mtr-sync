@@ -40,6 +40,7 @@ class XlsxProcessor(Processor):
         self._worksheet = self._workbook.get_sheet_by_name(
             self.settings.worksheet)
 
+        self._read_from_start = False
         self._rows = self._worksheet.iter_rows()
         self._rows_counter = 0
 
@@ -58,6 +59,10 @@ class XlsxProcessor(Processor):
         row += 1
 
         try:
+            if self._read_from_start:
+                self._rows = self._worksheet.iter_rows()
+                self._rows_counter = 0
+
             while self._rows_counter < row:
                 self._rows_counter += 1
                 value = next(self._rows)

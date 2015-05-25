@@ -3,6 +3,7 @@ import os
 from functools import partial
 
 from django.utils.translation import gettext_lazy as _
+from django.utils.encoding import smart_text
 from django.contrib import admin
 from django import forms
 
@@ -42,7 +43,7 @@ class ReportAdmin(admin.ModelAdmin):
     def buffer_file_link(self, obj):
         """Display download link"""
 
-        return '<a href="{}">{}</a>'.format(
+        return smart_text('<a href="{}">{}</a>').format(
             obj.get_absolute_url(), os.path.basename(obj.buffer_file.name))
 
     buffer_file_link.allow_tags = True
@@ -94,7 +95,6 @@ class FieldInline(
 class ContextInline(admin.TabularInline):
     model = Context
     extra = 0
-    fields = ('cell', 'name')
 
 
 class SettingsForm(forms.ModelForm):

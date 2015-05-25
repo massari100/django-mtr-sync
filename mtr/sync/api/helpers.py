@@ -11,15 +11,23 @@ from django.db.models.fields import Field as ModelField
 from ..settings import MODEL_SETTINGS_NAME
 
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+_symbols = (':', '|', ',', '+', '-')
 
 
 def cell_value(row, cols, processor=None):
-    # TODO: refactor to normal cell parsing
+    # TODO: refactor to normal cell parsing with cells indexes
 
     if isinstance(cols, int):
         return row[cols]
 
-    if '|' not in cols and '-' not in cols and ',' not in cols:
+    # TODO: use regex
+    no_symbols_finded = True
+    for symbol in _symbols:
+        if symbol in cols:
+            no_symbols_finded = False
+            break
+
+    if no_symbols_finded:
         return row[column_index(cols)]
 
     items = []
@@ -32,17 +40,17 @@ def cell_value(row, cols, processor=None):
             item, joiner = item.split('|')
 
         for col in item.split(','):
+            if processor and ':' in col:
+                col, row = col.split(':')
+                row = processor.read(int(row)-1)
             if '-' in col:
                 start, end = col.split('-')
                 value += row[column_index(start):column_index(end)+1]
             else:
-                if processor and ':' in col:
-                    col, row = col.split(':')
-                    row = processor.read(row)
                 value.append(row[column_index(col)])
         if joiner is not None:
             joiner = joiner or ' '
-            value = joiner.join(value)
+            value = joiner.join(map(lambda v: smart_text(v), value))
 
         if '+' in cols:
             items.append(value)
