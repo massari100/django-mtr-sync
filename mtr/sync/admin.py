@@ -82,7 +82,7 @@ class AttributeChoicesInlineMixin(object):
 
 
 class FieldInline(
-        ObjectInlineMixin, AttributeChoicesInlineMixin, admin.TabularInline):
+        ObjectInlineMixin, AttributeChoicesInlineMixin, admin.StackedInline):
     model = Field
     extra = 0
     fields = (

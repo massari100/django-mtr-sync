@@ -2,43 +2,51 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # mtr group <inboxmtr@gmail.com>, 2015.
-#: admin.py:51
+#: admin.py:50
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: admin.py:150
+#: admin.py:157
 msgid "mtr.sync:Data settings"
 msgstr "Data settings"
 
-#: admin.py:157
+#: admin.py:164
 msgid "mtr.sync:Worksheet settings"
 msgstr "Worksheet settings"
 
-#: admin.py:165
+#: admin.py:172
 msgid "mtr.sync:Language settings"
 msgstr "Language settings"
 
-#: admin.py:169
+#: admin.py:176
 msgid "mtr.sync:Field settings"
 msgstr "Field settings"
 
-#: admin.py:213
+#: admin.py:220 admin.py:250
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "Data synchronization started in background."
 
-#: admin.py:215
+#: admin.py:221 admin.py:251
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
-#: api/actions.py:53
+#: admin.py:231
+msgid "mtr.sync:Copies successfully created"
+msgstr "Copies successfully created"
+
+#: admin.py:232
+msgid "mtr.sync:Create a copy of settings"
+msgstr "Create a copy of settings"
+
+#: api/actions.py:67
 msgid "mtr.sync:Create only"
 msgstr "Create only"
 
-#: api/actions.py:79
+#: api/actions.py:95
 msgid "mtr.sync:Update only"
 msgstr "Update only"
 
-#: api/actions.py:98
+#: api/actions.py:108
 msgid "mtr.sync:Update or create"
 msgstr "Update or create"
 
@@ -129,7 +137,7 @@ msgstr "Import"
 msgid "mtr.sync:action"
 msgstr "action"
 
-#: models.py:74 models.py:237
+#: models.py:74 models.py:237 models.py:271 models.py:314
 msgid "mtr.sync:name"
 msgstr "name"
 
@@ -157,7 +165,7 @@ msgstr "model"
 msgid "mtr.sync:created at"
 msgstr "created at"
 
-#: models.py:93 models.py:300
+#: models.py:93 models.py:356
 msgid "mtr.sync:updated at"
 msgstr "updated at"
 
@@ -177,7 +185,7 @@ msgstr "include header"
 msgid "mtr.sync:custom filename"
 msgstr "custom filename"
 
-#: models.py:107 models.py:291
+#: models.py:107 models.py:239 models.py:347
 msgid "mtr.sync:file"
 msgstr "file"
 
@@ -221,101 +229,126 @@ msgstr "Start action after saving"
 msgid "mtr.sync:Include related fields"
 msgstr "Include related fields"
 
-#: models.py:207 models.py:208 models.py:253 models.py:303
+#: models.py:224 models.py:225 models.py:242 models.py:288 models.py:318
+#: models.py:359
 msgid "mtr.sync:settings"
 msgstr "settings"
 
-#: models.py:239
+#: models.py:245
+msgid "mtr.sync:sequence"
+msgstr "sequence"
+
+#: models.py:246
+msgid "mtr.sync:sequences"
+msgstr "sequences"
+
+#: models.py:273
 msgid "mtr.sync:model attribute"
 msgstr "model attribute"
 
-#: models.py:240
+#: models.py:274
 msgid "mtr.sync:skip"
 msgstr "skip"
 
-#: models.py:242
+#: models.py:276
 msgid "mtr.sync:update"
 msgstr "update"
 
-#: models.py:244
+#: models.py:278
 msgid "mtr.sync:value"
 msgstr "value"
 
-#: models.py:245
+#: models.py:279
 msgid "mtr.sync:find"
 msgstr "find"
 
-#: models.py:247
+#: models.py:281
 msgid "mtr.sync:filter type"
 msgstr "filter type"
 
-#: models.py:250
+#: models.py:285
 msgid "mtr.sync:converters"
 msgstr "converters"
 
-#: models.py:263
+#: models.py:298
 msgid "mtr.sync:field"
 msgstr "field"
 
-#: models.py:264
+#: models.py:299
 msgid "mtr.sync:fields"
 msgstr "fields"
 
-#: models.py:285
+#: models.py:315
+msgid "mtr.sync:cell"
+msgstr "cell"
+
+#: models.py:326
+msgid "mtr.sync:context"
+msgstr "context"
+
+#: models.py:327
+msgid "mtr.sync:contexts"
+msgstr "contexts"
+
+#: models.py:341 models.py:433
 msgid "mtr.sync:Error"
 msgstr "Error"
 
-#: models.py:286
+#: models.py:342
 msgid "mtr.sync:Running"
 msgstr "Running"
 
-#: models.py:287
+#: models.py:343
 msgid "mtr.sync:Success"
 msgstr "Success"
 
-#: models.py:293
+#: models.py:349
 msgid "mtr.sync:status"
 msgstr "status"
 
-#: models.py:296
+#: models.py:352
 msgid "mtr.sync:started at"
 msgstr "started at"
 
-#: models.py:298
+#: models.py:354
 msgid "mtr.sync:completed at"
 msgstr "completed at"
 
-#: models.py:313
+#: models.py:369
 msgid "mtr.sync:report"
 msgstr "report"
 
-#: models.py:314
+#: models.py:370
 msgid "mtr.sync:reports"
 msgstr "reports"
 
-#: models.py:375
+#: models.py:434
+msgid "mtr.sync:Info"
+msgstr "Info"
+
+#: models.py:439 models.py:452
 msgid "mtr.sync:message"
 msgstr "message"
 
-#: models.py:377
+#: models.py:441
 msgid "mtr.sync:step"
 msgstr "step"
 
-#: models.py:380
+#: models.py:444
 msgid "mtr.sync:input position"
 msgstr "input position"
 
-#: models.py:382
+#: models.py:446
 msgid "mtr.sync:input value"
 msgstr "input value"
 
-#: models.py:385
-msgid "mtr.sync:error"
-msgstr "error"
+#: models.py:449
+msgid "mtr.sync:type"
+msgstr "type"
 
-#: models.py:386
-msgid "mtr.sync:errors"
-msgstr "errors"
+#: models.py:453
+msgid "mtr.sync:messages"
+msgstr "messages"
 
 #: templates/mtr/sync/default/1.6/admin/change_list.html:8
 #: templates/mtr/sync/default/1.7/admin/change_list.html:8
@@ -468,6 +501,12 @@ msgstr ""
 #: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:9
 msgid "Add Another"
 msgstr ""
+
+#~ msgid "mtr.sync:error"
+#~ msgstr "error"
+
+#~ msgid "mtr.sync:errors"
+#~ msgstr "errors"
 
 #~ msgid "mtr.sync:Additional options"
 #~ msgstr "Additional options"
