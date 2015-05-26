@@ -33,7 +33,8 @@ class MessageInline(admin.TabularInline):
 class ReportAdmin(admin.ModelAdmin):
     inlines = (MessageInline,)
     list_display = (
-        'action', 'status', 'started_at', 'completed_at', 'buffer_file_link')
+        'action', 'status', 'settings',
+        'started_at', 'completed_at', 'buffer_file_link')
     list_filter = (
         'action', 'status', 'settings', 'started_at', 'completed_at')
     search_fields = ('buffer_file',)
@@ -243,6 +244,7 @@ class SequenceAdmin(admin.ModelAdmin):
         for sequence in queryset:
             for settings in sequence.settings.all():
                 settings.buffer_file = sequence.buffer_file
+                settings.save()
                 settings.run()
 
         self.message_user(

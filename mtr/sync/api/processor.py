@@ -12,7 +12,7 @@ from .signals import export_started, export_completed, \
 from .helpers import column_index
 from .exceptions import ErrorChoicesMixin
 
-from ..settings import LIMIT_PREVIEW, FILE_PATH
+from ..settings import FILE_PATH
 
 
 class DataProcessor(object):
@@ -28,10 +28,6 @@ class DataProcessor(object):
         if self.settings.end_row and \
                 self.settings.end_row < self.end['row']:
             self.end['row'] = self.settings.end_row
-
-        limit = LIMIT_PREVIEW()
-        if preview and limit < self.end['row']:
-            self.end['row'] = limit + self.start['row'] - 1
 
         if self.settings.include_header:
             if import_data:

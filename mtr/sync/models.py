@@ -384,15 +384,13 @@ class Report(ActionsMixin):
 
 @receiver(export_started)
 def create_export_report(sender, **kwargs):
-    return Report.export_objects.create(action=Report.EXPORT)
+    return Report.export_objects.create(
+        action=Report.EXPORT, settings=sender.settings)
 
 
 @receiver(export_completed)
 def save_export_report(sender, **kwargs):
     report = sender.report
-
-    if sender.settings.id:
-        report.settings = sender.settings
 
     report.completed_at = kwargs['date']
     report.buffer_file = kwargs['path']
@@ -406,15 +404,13 @@ def save_export_report(sender, **kwargs):
 def create_import_report(sender, **kwargs):
     return Report.import_objects.create(
         buffer_file=strip_media_root(kwargs['path']),
+        settings=sender.settings,
         action=Report.IMPORT)
 
 
 @receiver(import_completed)
 def save_import_report(sender, **kwargs):
     report = sender.report
-
-    if sender.settings.id:
-        report.settings = sender.settings
 
     report.completed_at = kwargs['date']
     report.save()

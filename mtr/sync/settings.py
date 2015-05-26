@@ -70,8 +70,5 @@ DEFAULT_PROCESSOR = getattr_with_prefix('DEFAULT_PROCESSOR', 'XlsxProcessor')
 MODEL_SETTINGS_NAME = getattr_with_prefix(
     'MODEL_SETTINGS_NAME', 'sync_settings')
 
-# limit preview of data on settings page
-LIMIT_PREVIEW = getattr_with_prefix('LIMIT_PREVIEW', 20)
-
 # register models at admin for debugging
 REGISTER_IN_ADMIN = getattr_with_prefix('REGISTER_IN_ADMIN', True)
