@@ -75,8 +75,8 @@ class Migration(SchemaMigration):
         db.create_table(u'mtr_sync_context', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('cell', self.gf('django.db.models.fields.CharField')(max_length=1000)),
-            ('value', self.gf('django.db.models.fields.CharField')(max_length=1000)),
+            ('cell', self.gf('django.db.models.fields.CharField')(max_length=1000, blank=True)),
+            ('value', self.gf('django.db.models.fields.CharField')(max_length=1000, blank=True)),
             ('settings', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='contexts', null=True, to=orm['mtr_sync.Settings'])),
         ))
         db.send_create_signal(u'mtr_sync', ['Context'])
@@ -134,11 +134,11 @@ class Migration(SchemaMigration):
     models = {
         u'mtr_sync.context': {
             'Meta': {'object_name': 'Context'},
-            'cell': ('django.db.models.fields.CharField', [], {'max_length': '1000'}),
+            'cell': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'settings': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'contexts'", 'null': 'True', 'to': "orm['mtr_sync.Settings']"}),
-            'value': ('django.db.models.fields.CharField', [], {'max_length': '1000'})
+            'value': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'blank': 'True'})
         },
         'mtr_sync.field': {
             'Meta': {'ordering': "('position',)", 'object_name': 'Field'},
