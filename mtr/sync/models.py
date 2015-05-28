@@ -329,6 +329,41 @@ class Context(models.Model):
 
 
 @python_2_unicode_compatible
+class ReplaceCategory(models.Model):
+
+    """Categories for groups of values, to simplify editing in admin"""
+
+    name = models.CharField(_('mtr.sync:name'), max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('mtr.sync:replacer category')
+        verbose_name_plural = _('mtr.sync:replacer categories')
+
+
+@python_2_unicode_compatible
+class Replacer(models.Model):
+
+    """Replace vlaues from report to values used in database"""
+
+    value = models.TextField(_('mtr.sync:value'), max_length=100000)
+    change_to = models.TextField(_('mtr.sync:change to'), max_length=100000)
+    regex = models.TextField(_('mtr.sync:regex'), max_length=1000)
+    category = models.ForeignKey(
+        ReplaceCategory, verbose_name=_('mtr.sync:category'),
+        related_name='replacers', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('mtr.sync:replacer')
+        verbose_name_plural = _('mtr.sync:replacers')
+
+
+@python_2_unicode_compatible
 class Report(ActionsMixin):
 
     """Reports for imported and exported operations and link to files
