@@ -8,7 +8,8 @@ from django.contrib import admin
 from django import forms
 
 from .helpers import themed
-from .models import Report, Settings, Field, Message, Context, Sequence
+from .models import Report, Settings, Field, Message, Context, Sequence, \
+    Replacer, ReplacerCategory
 from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
 
@@ -89,7 +90,8 @@ class FieldInline(
     extra = 0
     fields = (
         'skip', 'position', 'name', 'attribute',
-        'find', 'find_filter', 'update', 'update_value', 'converters')
+        'find', 'find_filter', 'update', 'update_value', 'converters',
+        'category')
     sortable_field_name = 'position'
 
 
@@ -252,7 +254,20 @@ class SequenceAdmin(admin.ModelAdmin):
             _('mtr.sync:Data synchronization started in background.'))
     run.short_description = _('mtr.sync:Sync data')
 
+
+class ReplacerCategoryAdmin(admin.ModelAdmin):
+    list_display = ['id', 'name']
+    list_editable = ['name']
+
+
+class ReplacerAdmin(admin.ModelAdmin):
+    list_display = ['id', 'value', 'change_to', 'regex', 'category']
+    list_editable = ['value', 'change_to', 'regex', 'category']
+
+
 if REGISTER_IN_ADMIN():
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Settings, SettingsAdmin)
     admin.site.register(Sequence, SequenceAdmin)
+    admin.site.register(Replacer, ReplacerAdmin)
+    admin.site.register(ReplacerCategory, ReplacerCategoryAdmin)

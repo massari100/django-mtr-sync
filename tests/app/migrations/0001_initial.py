@@ -13,7 +13,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Office',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('office', models.CharField(verbose_name='office', max_length=255)),
                 ('address', models.CharField(verbose_name='address', max_length=255)),
             ],
@@ -25,17 +25,17 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Person',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('name', models.CharField(verbose_name='name', max_length=255)),
-                ('name_de', models.CharField(verbose_name='name', null=True, max_length=255)),
-                ('name_en', models.CharField(verbose_name='name', null=True, max_length=255)),
+                ('name_de', models.CharField(verbose_name='name', max_length=255, null=True)),
+                ('name_en', models.CharField(verbose_name='name', max_length=255, null=True)),
                 ('surname', models.CharField(verbose_name='surname', max_length=255)),
-                ('surname_de', models.CharField(verbose_name='surname', null=True, max_length=255)),
-                ('surname_en', models.CharField(verbose_name='surname', null=True, max_length=255)),
-                ('gender', models.CharField(verbose_name='gender', choices=[('M', 'Male'), ('F', 'Female')], max_length=255)),
+                ('surname_de', models.CharField(verbose_name='surname', max_length=255, null=True)),
+                ('surname_en', models.CharField(verbose_name='surname', max_length=255, null=True)),
+                ('gender', models.CharField(verbose_name='gender', max_length=255, choices=[('M', 'Male'), ('F', 'Female')])),
                 ('security_level', models.PositiveIntegerField(verbose_name='security level')),
-                ('some_excluded_field', models.DecimalField(decimal_places=3, verbose_name='some decimal', max_digits=10, null=True)),
-                ('office', models.ForeignKey(to='app.Office', blank=True, null=True)),
+                ('some_excluded_field', models.DecimalField(max_digits=10, verbose_name='some decimal', null=True, decimal_places=3)),
+                ('office', models.ForeignKey(to='app.Office', null=True, blank=True)),
             ],
             options={
                 'verbose_name': 'person',
@@ -45,7 +45,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Tag',
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, verbose_name='ID', serialize=False)),
+                ('id', models.AutoField(verbose_name='ID', auto_created=True, serialize=False, primary_key=True)),
                 ('name', models.CharField(verbose_name='tag', max_length=255)),
             ],
             options={

@@ -250,6 +250,41 @@ class Sequence(models.Model):
 
 
 @python_2_unicode_compatible
+class ReplacerCategory(models.Model):
+
+    """Categories for groups of values, to simplify editing in admin"""
+
+    name = models.CharField(_('mtr.sync:name'), max_length=255)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('mtr.sync:replacer category')
+        verbose_name_plural = _('mtr.sync:replacer categories')
+
+
+@python_2_unicode_compatible
+class Replacer(models.Model):
+
+    """Replace vlaues from report to values used in database"""
+
+    value = models.TextField(_('mtr.sync:value'), max_length=100000)
+    change_to = models.TextField(_('mtr.sync:change to'), max_length=100000)
+    regex = models.TextField(_('mtr.sync:regex'), max_length=1000)
+    category = models.ForeignKey(
+        ReplacerCategory, verbose_name=_('mtr.sync:category'),
+        related_name='replacers', null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _('mtr.sync:replacer')
+        verbose_name_plural = _('mtr.sync:replacers')
+
+
+@python_2_unicode_compatible
 class Field(PositionMixin):
 
     """Data mapping field for Settings"""
@@ -280,6 +315,9 @@ class Field(PositionMixin):
     find_filter = models.CharField(
         _('mtr.sync:filter type'), max_length=255, blank=True,
         choices=FILTER_CHOICES)
+    category = models.ForeignKey(
+        ReplacerCategory, verbose_name=_('mtr.sync:replacer category'),
+        related_name='fields', null=True, blank=True)
 
     converters = models.CharField(
         _('mtr.sync:converters'), max_length=255, blank=True)
@@ -326,41 +364,6 @@ class Context(models.Model):
     class Meta:
         verbose_name = _('mtr.sync:context')
         verbose_name_plural = _('mtr.sync:contexts')
-
-
-@python_2_unicode_compatible
-class ReplaceCategory(models.Model):
-
-    """Categories for groups of values, to simplify editing in admin"""
-
-    name = models.CharField(_('mtr.sync:name'), max_length=255)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _('mtr.sync:replacer category')
-        verbose_name_plural = _('mtr.sync:replacer categories')
-
-
-@python_2_unicode_compatible
-class Replacer(models.Model):
-
-    """Replace vlaues from report to values used in database"""
-
-    value = models.TextField(_('mtr.sync:value'), max_length=100000)
-    change_to = models.TextField(_('mtr.sync:change to'), max_length=100000)
-    regex = models.TextField(_('mtr.sync:regex'), max_length=1000)
-    category = models.ForeignKey(
-        ReplaceCategory, verbose_name=_('mtr.sync:category'),
-        related_name='replacers', null=True, blank=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _('mtr.sync:replacer')
-        verbose_name_plural = _('mtr.sync:replacers')
 
 
 @python_2_unicode_compatible
