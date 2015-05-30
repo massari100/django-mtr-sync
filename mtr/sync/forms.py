@@ -1,9 +1,9 @@
-from django import forms
+# from django import forms
 
-from .models import Settings
+# from .models import Settings
 
 
-class SettingsForm(forms.ModelForm):
+# class SettingsForm(forms.ModelForm):
 
-    class Meta:
-        model = Settings
+#     class Meta:
+#         model = Settings

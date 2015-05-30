@@ -315,7 +315,7 @@ class Field(PositionMixin):
     find_filter = models.CharField(
         _('mtr.sync:filter type'), max_length=255, blank=True,
         choices=FILTER_CHOICES)
-    category = models.ForeignKey(
+    replacer_category = models.ForeignKey(
         ReplacerCategory, verbose_name=_('mtr.sync:replacer category'),
         related_name='fields', null=True, blank=True)
 
