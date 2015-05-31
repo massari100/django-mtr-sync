@@ -255,6 +255,11 @@ class ReplacerCategory(models.Model):
     """Categories for groups of values, to simplify editing in admin"""
 
     name = models.CharField(_('mtr.sync:name'), max_length=255)
+    attribute = models.CharField(
+        _('mtr.sync:model attribute'), max_length=255)
+    model = models.CharField(
+        _('mtr.sync:model'), max_length=255,
+        choices=model_choices(), blank=True)
 
     def __str__(self):
         return self.name
