@@ -55,6 +55,25 @@ class Migration(SchemaMigration):
         ))
         db.create_unique(m2m_table_name, ['sequence_id', 'settings_id'])
 
+        # Adding model 'ReplacerCategory'
+        db.create_table(u'mtr_sync_replacercategory', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('attribute', self.gf('django.db.models.fields.CharField')(max_length=255)),
+            ('model', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+        ))
+        db.send_create_signal(u'mtr_sync', ['ReplacerCategory'])
+
+        # Adding model 'Replacer'
+        db.create_table(u'mtr_sync_replacer', (
+            (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
+            ('value', self.gf('django.db.models.fields.TextField')(max_length=100000)),
+            ('change_to', self.gf('django.db.models.fields.TextField')(max_length=100000)),
+            ('regex', self.gf('django.db.models.fields.TextField')(max_length=1000)),
+            ('category', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='replacers', null=True, to=orm['mtr_sync.ReplacerCategory'])),
+        ))
+        db.send_create_signal(u'mtr_sync', ['Replacer'])
+
         # Adding model 'Field'
         db.create_table(u'mtr_sync_field', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
@@ -66,6 +85,7 @@ class Migration(SchemaMigration):
             ('update_value', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('find', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('find_filter', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('replacer_category', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='fields', null=True, to=orm['mtr_sync.ReplacerCategory'])),
             ('converters', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('settings', self.gf('django.db.models.fields.related.ForeignKey')(related_name='fields', to=orm['mtr_sync.Settings'])),
         ))
@@ -118,6 +138,12 @@ class Migration(SchemaMigration):
         # Removing M2M table for field settings on 'Sequence'
         db.delete_table(db.shorten_name(u'mtr_sync_sequence_settings'))
 
+        # Deleting model 'ReplacerCategory'
+        db.delete_table(u'mtr_sync_replacercategory')
+
+        # Deleting model 'Replacer'
+        db.delete_table(u'mtr_sync_replacer')
+
         # Deleting model 'Field'
         db.delete_table(u'mtr_sync_field')
 
@@ -149,6 +175,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'position': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
+            'replacer_category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'fields'", 'null': 'True', 'to': u"orm['mtr_sync.ReplacerCategory']"}),
             'settings': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'fields'", 'to': "orm['mtr_sync.Settings']"}),
             'skip': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'update': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
@@ -164,6 +191,21 @@ class Migration(SchemaMigration):
             'report': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'errors'", 'to': "orm['mtr_sync.Report']"}),
             'step': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '10'}),
             'type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
+        },
+        u'mtr_sync.replacer': {
+            'Meta': {'object_name': 'Replacer'},
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'replacers'", 'null': 'True', 'to': u"orm['mtr_sync.ReplacerCategory']"}),
+            'change_to': ('django.db.models.fields.TextField', [], {'max_length': '100000'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'regex': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
+            'value': ('django.db.models.fields.TextField', [], {'max_length': '100000'})
+        },
+        u'mtr_sync.replacercategory': {
+            'Meta': {'object_name': 'ReplacerCategory'},
+            'attribute': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
+            u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'model': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
         'mtr_sync.report': {
             'Meta': {'ordering': "('-id',)", 'object_name': 'Report'},
