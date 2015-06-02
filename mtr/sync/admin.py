@@ -1,5 +1,3 @@
-import os
-
 from functools import partial
 
 from django.utils.translation import gettext_lazy as _
@@ -45,8 +43,8 @@ class ReportAdmin(admin.ModelAdmin):
     def buffer_file_link(self, obj):
         """Display download link"""
 
-        return smart_text('<a href="{}">{}</a>').format(
-            obj.get_absolute_url(), os.path.basename(obj.buffer_file.name))
+        return smart_text('<a href="{0}">{0}</a>').format(
+            obj.get_absolute_url())
 
     buffer_file_link.allow_tags = True
     buffer_file_link.short_description = _(
@@ -140,7 +138,7 @@ class SettingsForm(forms.ModelForm):
 class SettingsAdmin(admin.ModelAdmin):
     list_display = (
         '__str__', 'action', 'model',
-        'processor', 'created_at', 'updated_at'
+        'processor', 'created_at', 'last_report'
     )
     list_filter = ('sequence',)
     list_display_links = ('__str__', 'model')
@@ -233,6 +231,15 @@ class SettingsAdmin(admin.ModelAdmin):
             request,
             _('mtr.sync:Copies successfully created'))
     copy.short_description = _('mtr.sync:Create a copy of settings')
+
+    def last_report(self, obj):
+        report = obj.reports.first()
+        if report:
+            return smart_text('<a href="{0}">{0}</a>').format(
+                report.get_absolute_url())
+        return ''
+    last_report.short_description = _('mtr.sync:Last report')
+    last_report.allow_tags = True
 
 
 class SequenceAdmin(admin.ModelAdmin):
