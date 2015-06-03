@@ -89,7 +89,7 @@ class FieldInline(
     fields = (
         'skip', 'position', 'name', 'attribute',
         'find', 'find_filter', 'update', 'update_value', 'converters',
-        'category')
+        'replacer_category')
     sortable_field_name = 'position'
 
 

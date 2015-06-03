@@ -173,9 +173,10 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
                     field, '__name__', repr(field))))
 
         if m_prefix:
-            child_attrs = model_attributes(
-                    settings, m_prefix.format(name),
-                    model=field.rel.to, parent=model)
+            child_attrs = []
+            # child_attrs = model_attributes(
+            #         settings, m_prefix.format(name),
+            #         model=field.rel.to, parent=model)
         if prefix:
             name = ''.join((prefix, name))
 
