@@ -81,6 +81,14 @@ class ProcessorManagerMixin(object):
 
         return processor.export_data(data)
 
+    def export_data_inline(self, **settings):
+        """Export data from inline settings, without creating instances"""
+        pass
+
+    def import_data_inline(self, **settings):
+        """Import data from inline settings, without creating instances"""
+        pass
+
     def filter_dataset(self, settings, dataset=None):
         if settings.filter_dataset and settings.filter_querystring:
             params = QueryDict(settings.filter_querystring).dict()

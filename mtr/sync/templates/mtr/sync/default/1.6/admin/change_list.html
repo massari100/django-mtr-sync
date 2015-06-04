@@ -4,10 +4,5 @@
 
 {% block object-tools-items %}
     {{ block.super }}
-    <li>
-        <a href="{% url 'admin:mtr_sync_settings_add' %}?action=export&amp;model={{ opts.app_label }}.{{ opts.model_name }}{% if request.GET.keys %}&amp;filter={{ request.GET.urlencode|urlencode }}%26fields={{ cl.list_display|join:','|urlencode }}{% endif %}">{% trans 'mtr.sync:Export' %}</a>
-    </li>
-    <li>
-        <a href="{% url 'admin:mtr_sync_settings_add' %}?action=import&amp;model={{ opts.app_label }}.{{ opts.model_name }}{% if request.GET.keys %}&amp;filter={{ request.GET.urlencode|urlencode }}%26fields={{ cl.list_display|join:','|urlencode }}{% endif %}">{% trans 'mtr.sync:Import' %}</a>
-    </li>
+    {% include 'mtr/sync/default/object_tools.html' %}
 {% endblock %}
