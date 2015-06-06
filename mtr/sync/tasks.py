@@ -17,8 +17,3 @@ def export_data(params, data=None):
 def import_data(params, path=None):
     manager.import_data(
         make_from_params(Settings, params), path)
-
-
-@shared_task
-def check_periodic_export():
-    pass

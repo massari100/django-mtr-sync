@@ -2,41 +2,45 @@
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 # mtr group <inboxmtr@gmail.com>, 2015.
-#: admin.py:53
+#: admin.py:51
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: admin.py:160
+#: admin.py:158
 msgid "mtr.sync:Data settings"
 msgstr "Data settings"
 
-#: admin.py:167
+#: admin.py:165
 msgid "mtr.sync:Worksheet settings"
 msgstr "Worksheet settings"
 
-#: admin.py:175
+#: admin.py:173
 msgid "mtr.sync:Language settings"
 msgstr "Language settings"
 
-#: admin.py:179
+#: admin.py:177
 msgid "mtr.sync:Field settings"
 msgstr "Field settings"
 
-#: admin.py:223 admin.py:254
+#: admin.py:221 admin.py:261
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "Data synchronization started in background."
 
-#: admin.py:224 admin.py:255
+#: admin.py:222 admin.py:262
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
-#: admin.py:234
+#: admin.py:232
 msgid "mtr.sync:Copies successfully created"
 msgstr "Copies successfully created"
 
-#: admin.py:235
+#: admin.py:233
 msgid "mtr.sync:Create a copy of settings"
 msgstr "Create a copy of settings"
+
+#: admin.py:241
+msgid "mtr.sync:Last report"
+msgstr "Last report"
 
 #: api/actions.py:67
 msgid "mtr.sync:Create only"
@@ -378,28 +382,6 @@ msgstr "type"
 msgid "mtr.sync:messages"
 msgstr "messages"
 
-#: templates/mtr/sync/default/1.6/admin/change_list.html:8
-#: templates/mtr/sync/default/1.7/admin/change_list.html:8
-#: templates/mtr/sync/default/1.8/admin/change_list.html:8
-#: templates/mtr/sync/default/export.html:10
-#: templates/mtr/sync/default/export.html:15
-#: templates/mtr/sync/grappelli/1.6/admin/change_list.html:8
-#: templates/mtr/sync/grappelli/1.7/admin/change_list.html:8
-#: templates/mtr/sync/grappelli/1.8/admin/change_list.html:8
-#: templates/mtr/sync/grappelli/export.html:10
-#: templates/mtr/sync/grappelli/export.html:15
-msgid "mtr.sync:Export"
-msgstr "Export"
-
-#: templates/mtr/sync/default/1.6/admin/change_list.html:11
-#: templates/mtr/sync/default/1.7/admin/change_list.html:11
-#: templates/mtr/sync/default/1.8/admin/change_list.html:11
-#: templates/mtr/sync/grappelli/1.6/admin/change_list.html:11
-#: templates/mtr/sync/grappelli/1.7/admin/change_list.html:11
-#: templates/mtr/sync/grappelli/1.8/admin/change_list.html:11
-msgid "mtr.sync:Import"
-msgstr "Import"
-
 #: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:9
 #: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:30
 #: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:9
@@ -480,6 +462,20 @@ msgstr "Last reports"
 #: templates/mtr/sync/grappelli/dashboard.html:55
 msgid "mtr.sync:New settings"
 msgstr "New settings"
+
+#: templates/mtr/sync/default/export.html:10
+#: templates/mtr/sync/default/export.html:15
+#: templates/mtr/sync/default/object_tools.html:2
+#: templates/mtr/sync/grappelli/export.html:10
+#: templates/mtr/sync/grappelli/export.html:15
+#: templates/mtr/sync/grappelli/object_tools.html:2
+msgid "mtr.sync:Export"
+msgstr "Export"
+
+#: templates/mtr/sync/default/object_tools.html:5
+#: templates/mtr/sync/grappelli/object_tools.html:5
+msgid "mtr.sync:Import"
+msgstr "Import"
 
 #: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:8
 #: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:8
