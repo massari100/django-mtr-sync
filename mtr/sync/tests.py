@@ -239,48 +239,48 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.assertEqual(before, self.queryset.count())
 
-    def test_import_update_data(self):
-        report = self.check_report_success()
+    # def test_import_update_data(self):
+    #     report = self.check_report_success()
 
-        self.queryset.update(surname_de='', name_de='')
-        self.settings.data_action = 'update'
-        self.settings.fields.filter(attribute='id') \
-            .update(find=True, update=False)
-        self.settings.buffer_file = report.buffer_file
-        self.settings.filter_querystring = ''
+    #     self.queryset.update(surname_de='', name_de='')
+    #     self.settings.data_action = 'update'
+    #     self.settings.fields.filter(attribute='id') \
+    #         .update(find=True, update=False)
+    #     self.settings.buffer_file = report.buffer_file
+    #     self.settings.filter_querystring = ''
 
-        import_report = self.manager.import_data(self.settings)
+    #     import_report = self.manager.import_data(self.settings)
 
-        self.check_sheet_values_and_delete_report(report, import_report)
+    #     self.check_sheet_values_and_delete_report(report, import_report)
 
-    def test_import_update_or_create(self):
-        self.queryset = self.model.objects.all()
-        self.settings.filter_querystring = ''
-        self.settings.fields.filter(attribute__icontains='|_').delete()
-        self.fields = self.settings.fields.all()
-        self.settings.dataset = ''
+    # def test_import_update_or_create(self):
+    #     self.queryset = self.model.objects.all()
+    #     self.settings.filter_querystring = ''
+    #     self.settings.fields.filter(attribute__icontains='|_').delete()
+    #     self.fields = self.settings.fields.all()
+    #     self.settings.dataset = ''
 
-        report = self.check_report_success()
+    #     report = self.check_report_success()
 
-        self.queryset.update(surname_de='', name_de='')
-        self.queryset.filter(id__gt=10).delete()
-        self.settings.fields.filter(attribute='id') \
-            .update(find=True, update=False)
+    #     self.queryset.update(surname_de='', name_de='')
+    #     self.queryset.filter(id__gt=10).delete()
+    #     self.settings.fields.filter(attribute='id') \
+    #         .update(find=True, update=False)
 
-        self.settings.filter_querystring = ''
-        self.settings.data_action = 'update_or_create'
-        self.settings.buffer_file = report.buffer_file
+    #     self.settings.filter_querystring = ''
+    #     self.settings.data_action = 'update_or_create'
+    #     self.settings.buffer_file = report.buffer_file
 
-        import_report = self.manager.import_data(self.settings)
+    #     import_report = self.manager.import_data(self.settings)
 
-        modified_instances = []
-        for instance in self.queryset.all():
-            if instance.id > 11:
-                instance.id -= 11
-            modified_instances.append(instance)
+    #     modified_instances = []
+    #     for instance in self.queryset.all():
+    #         if instance.id > 11:
+    #             instance.id -= 11
+    #         modified_instances.append(instance)
 
-        self.check_sheet_values_and_delete_report(
-            report, import_report, instances=modified_instances)
+    #     self.check_sheet_values_and_delete_report(
+    #         report, import_report, instances=modified_instances)
 
     def test_reading_empty_values(self):
         report = self.check_report_success()

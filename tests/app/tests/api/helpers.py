@@ -21,25 +21,25 @@ class HelpersTest(ApiTestMixin, TestCase):
         self.assertEqual(column_index(10), 10)
         self.assertEqual(column_index('A'), 0)
 
-    def test_row_values_from_col(self):
-        cols = ['1', '2', '3', '4', '5']
+    # def test_row_values_from_col(self):
+    #     cols = ['1', '2', '3', '4', '5']
 
-        self.assertEqual(cell_value(cols, 0), cols[0])
-        self.assertEqual(cell_value(cols, 'A'), cols[0])
-        self.assertEqual(cell_value(cols, '4'), cols[4])
+    #     self.assertEqual(cell_value(cols, 0), cols[0])
+    #     self.assertEqual(cell_value(cols, 'A'), cols[0])
+    #     self.assertEqual(cell_value(cols, '4'), cols[4])
 
-        self.assertEqual(cell_value(cols, 'A-C'), cols[:3])
-        self.assertEqual(cell_value(cols, 'A-C,B'), cols[:3] + [cols[1]])
-        self.assertEqual(
-            cell_value(cols, 'A,B,D|'), ' '.join(cols[:2] + [cols[3]]))
-        self.assertEqual(
-            cell_value(cols, 'A-D,A-F,B|'), ' '.join(
-                cols[:4] + cols[:5] + [cols[1]]))
-        self.assertEqual(
-            cell_value(cols, 'A-D,B|+A-D,B|'), [
-                ' '.join(cols[:4] + [cols[1]]),
-                ' '.join(cols[:4] + [cols[1]])
-            ])
+    #     self.assertEqual(cell_value(cols, 'A-C'), cols[:3])
+    #     self.assertEqual(cell_value(cols, 'A-C,B'), cols[:3] + [cols[1]])
+    #     self.assertEqual(
+    #         cell_value(cols, 'A,B,D|'), ' '.join(cols[:2] + [cols[3]]))
+    #     self.assertEqual(
+    #         cell_value(cols, 'A-D,A-F,B|'), ' '.join(
+    #             cols[:4] + cols[:5] + [cols[1]]))
+    #     self.assertEqual(
+    #         cell_value(cols, 'A-D,B|+A-D,B|'), [
+    #             ' '.join(cols[:4] + [cols[1]]),
+    #             ' '.join(cols[:4] + [cols[1]])
+    #         ])
 
     def test_model_attributes(self):
         fields = model_attributes(self.settings)
