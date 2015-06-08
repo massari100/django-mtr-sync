@@ -32,6 +32,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Creates reports about importing and exporting operations
 - Auto discovering models for use in package
 - Data range settings (start, end cells in table), for example, if you need to import data where there is a header with logo or any other unnecessary information
+- Replacer admin feature
 - Field settings:
   - maps model fields with data fields
   - adds and removes fields (ability to skip fields on import)
