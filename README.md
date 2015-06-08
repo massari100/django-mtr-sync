@@ -32,12 +32,11 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Creates reports about importing and exporting operations
 - Auto discovering models for use in package
 - Data range settings (start, end cells in table), for example, if you need to import data where there is a header with logo or any other unnecessary information
-- Replacer admin feature
 - Field settings:
   - maps model fields with data fields
   - adds and removes fields (ability to skip fields on import)
   - set start cell of exporting data
-  - related models(fields, supports only ForeignKey, ManyToMany) import-export by choosing main model
+  - related models import-export by choosing main model
 - Supports: CSV(native python3, unicodecsv python2), XLS (using: xlwt-future, xlrd), XLSX (using: openpyxl optimized writer, reader mode, for fast processing of large volumes of data) and ODS(odfpy)
 - Saves import, export settings for the processing of data from various sources and for simplicity
 - Integration with standart django admin app
@@ -53,6 +52,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 
 ## Working on
 - Documentation
+- Replacer model for minimizing dublication content
 - Different source input (url)
 - Dashboard without admin
 - Adding support of JSON, YAML, XML
