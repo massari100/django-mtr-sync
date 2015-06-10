@@ -1,4 +1,4 @@
-from django.utils.translation import gettext_lazy as _
+from ..helpers import gettext_lazy as _
 
 
 class ErrorChoicesMixin(object):
@@ -16,17 +16,17 @@ class ErrorChoicesMixin(object):
     UNDEFINED = 10
 
     STEP_CHOICES = (
-        (PREPARE_QUERYSET, _('mtr.sync:prepare queryset')),
-        (PREPARE_DATA, _('mtr.sync:prepare data')),
-        (SETUP_DIMENSIONS, _('mtr.sync:setup dimensions for file')),
-        (OPEN_FILE, _('mtr.sync:open file')),
-        (CREATE_FILE, _('mtr.sync:create file')),
-        (WRITE_HEADER, _('mtr.sync:write header')),
-        (WRITE_DATA, _('mtr.sync:write data')),
-        (SAVE_FILE, _('mtr.sync:save file')),
-        (READ_FILE, _('mtr.sync:read file')),
-        (IMPORT_DATA, _('mtr.sync:import data')),
-        (UNDEFINED, _('mtr.sync:unexpected error'))
+        (PREPARE_QUERYSET, _('prepare queryset')),
+        (PREPARE_DATA, _('prepare data')),
+        (SETUP_DIMENSIONS, _('setup dimensions for file')),
+        (OPEN_FILE, _('open file')),
+        (CREATE_FILE, _('create file')),
+        (WRITE_HEADER, _('write header')),
+        (WRITE_DATA, _('write data')),
+        (SAVE_FILE, _('save file')),
+        (READ_FILE, _('read file')),
+        (IMPORT_DATA, _('import data')),
+        (UNDEFINED, _('unexpected error'))
     )
 
 

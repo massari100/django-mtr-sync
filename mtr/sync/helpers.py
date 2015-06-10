@@ -5,8 +5,21 @@ from functools import wraps
 import django
 
 from django.shortcuts import render
+from django.utils.translation import gettext_lazy as gettext_lazy_original
 
-from .settings import THEME
+from .settings import THEME, GETTEXT_CONTEXT
+
+
+def gettext_prefix(string, context=None):
+    """Adding prefix for gettext message string"""
+
+    return '{}:{}'.format(GETTEXT_CONTEXT() or context, string)
+
+
+def gettext_lazy(string, context=None):
+    """Lazy gettext shortcut"""
+
+    return gettext_lazy_original(gettext_prefix(string, context))
 
 
 def themed(template, version_subdirectory=False):

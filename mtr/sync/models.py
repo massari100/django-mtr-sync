@@ -1,7 +1,6 @@
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
 from django.conf import settings as django_settings
 
 from .settings import FILE_PATH, DEFAULT_PROCESSOR, strip_media_root
@@ -10,11 +9,12 @@ from .api.helpers import model_attributes, model_choices
 from .api.signals import export_started, export_completed, \
     import_started, import_completed, error_raised
 from .api.exceptions import ErrorChoicesMixin
+from .helpers import gettext_lazy as _
 
 
 class PositionMixin(models.Model):
     position = models.PositiveIntegerField(
-        _('mtr.sync:position'), null=True, blank=True)
+        _('position'), null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -60,7 +60,7 @@ class ActionsMixin(models.Model):
     )
 
     action = models.PositiveSmallIntegerField(
-        _('mtr.sync:action'), choices=ACTION_CHOICES, db_index=True)
+        _('action'), choices=ACTION_CHOICES, db_index=True)
 
     class Meta:
         abstract = True
@@ -71,67 +71,67 @@ class Settings(ActionsMixin):
 
     """Settings for imported and exported files"""
 
-    name = models.CharField(_('mtr.sync:name'), blank=True, max_length=100)
+    name = models.CharField(_('name'), blank=True, max_length=100)
 
     start_col = models.CharField(
-        _('mtr.sync:start column'), max_length=10, blank=True)
+        _('start column'), max_length=10, blank=True)
     start_row = models.PositiveIntegerField(
-        _('mtr.sync:start row'), null=True, blank=True)
+        _('start row'), null=True, blank=True)
 
     end_col = models.CharField(
-        _('mtr.sync:end column'), max_length=10, blank=True)
+        _('end column'), max_length=10, blank=True)
     end_row = models.PositiveIntegerField(
-        _('mtr.sync:end row'), null=True, blank=True)
+        _('end row'), null=True, blank=True)
 
     model = models.CharField(
-        _('mtr.sync:model'), max_length=255,
+        _('model'), max_length=255,
         choices=model_choices(), blank=True)
 
     created_at = models.DateTimeField(
-        _('mtr.sync:created at'), auto_now_add=True)
+        _('created at'), auto_now_add=True)
     updated_at = models.DateTimeField(
-        _('mtr.sync:updated at'), auto_now=True)
+        _('updated at'), auto_now=True)
 
     processor = models.CharField(
-        _('mtr.sync:format'), max_length=255,
+        _('format'), max_length=255,
         choices=manager.processor_choices(),
         default=DEFAULT_PROCESSOR())
     worksheet = models.CharField(
-        _('mtr.sync:worksheet page'), max_length=255, blank=True)
+        _('worksheet page'), max_length=255, blank=True)
     include_header = models.BooleanField(
-        _('mtr.sync:include header'), default=True)
+        _('include header'), default=True)
 
     filename = models.CharField(
-        _('mtr.sync:custom filename'), max_length=255, blank=True)
+        _('custom filename'), max_length=255, blank=True)
     buffer_file = models.FileField(
-        _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+        _('file'), upload_to=FILE_PATH(), db_index=True, blank=True)
 
     dataset = models.CharField(
-        _('mtr.sync:dataset'), max_length=255, blank=True,
+        _('dataset'), max_length=255, blank=True,
         choices=manager.dataset_choices())
     data_action = models.CharField(
-        _('mtr.sync:data action'), blank=True,
+        _('data action'), blank=True,
         max_length=255, choices=manager.action_choices())
     filter_dataset = models.BooleanField(
-        _('mtr.sync:filter custom dataset'), default=True)
+        _('filter custom dataset'), default=True)
     filter_querystring = models.CharField(
-        _('mtr.sync:querystring'), max_length=255, blank=True)
+        _('querystring'), max_length=255, blank=True)
 
     language = models.CharField(
-        _('mtr.sync:language'), blank=True,
+        _('language'), blank=True,
         max_length=255, choices=django_settings.LANGUAGES)
     hide_translation_fields = models.BooleanField(
-        _('mtr.sync:Hide translation prefixed fields'),
+        _('Hide translation prefixed fields'),
         default=True)
 
     create_fields = models.BooleanField(
-        _('mtr.sync:Create settings for fields'), default=True)
+        _('Create settings for fields'), default=True)
     populate_from_file = models.BooleanField(
-        _('mtr.sync:Populate settings from file'), default=False)
+        _('Populate settings from file'), default=False)
     run_after_save = models.BooleanField(
-        _('mtr.sync:Start action after saving'), default=False)
+        _('Start action after saving'), default=False)
     include_related = models.BooleanField(
-        _('mtr.sync:Include related fields'), default=True)
+        _('Include related fields'), default=True)
 
     def fields_with_converters(self):
         """Return iterator of fields with converters"""
@@ -221,8 +221,8 @@ class Settings(ActionsMixin):
             context.save()
 
     class Meta:
-        verbose_name = _('mtr.sync:settings')
-        verbose_name_plural = _('mtr.sync:settings')
+        verbose_name = _('settings')
+        verbose_name_plural = _('settings')
 
         ordering = ('-id',)
 
@@ -234,16 +234,16 @@ class Settings(ActionsMixin):
 
 @python_2_unicode_compatible
 class Sequence(models.Model):
-    name = models.CharField(_('mtr.sync:name'), max_length=255)
+    name = models.CharField(_('name'), max_length=255)
     buffer_file = models.FileField(
-        _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+        _('file'), upload_to=FILE_PATH(), db_index=True, blank=True)
 
     settings = models.ManyToManyField(
-        Settings, verbose_name=_('mtr.sync:settings'))
+        Settings, verbose_name=_('settings'))
 
     class Meta:
-        verbose_name = _('mtr.sync:sequence')
-        verbose_name_plural = _('mtr.sync:sequences')
+        verbose_name = _('sequence')
+        verbose_name_plural = _('sequences')
 
     def __str__(self):
         return self.name
@@ -254,19 +254,19 @@ class ReplacerCategory(models.Model):
 
     """Categories for groups of values, to simplify editing in admin"""
 
-    name = models.CharField(_('mtr.sync:name'), max_length=255)
+    name = models.CharField(_('name'), max_length=255)
     attribute = models.CharField(
-        _('mtr.sync:model attribute'), max_length=255)
+        _('model attribute'), max_length=255)
     model = models.CharField(
-        _('mtr.sync:model'), max_length=255,
+        _('model'), max_length=255,
         choices=model_choices(), blank=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = _('mtr.sync:replacer category')
-        verbose_name_plural = _('mtr.sync:replacer categories')
+        verbose_name = _('replacer category')
+        verbose_name_plural = _('replacer categories')
 
 
 @python_2_unicode_compatible
@@ -274,19 +274,19 @@ class Replacer(models.Model):
 
     """Replace vlaues from report to values used in database"""
 
-    value = models.TextField(_('mtr.sync:value'), max_length=100000)
-    change_to = models.TextField(_('mtr.sync:change to'), max_length=100000)
-    regex = models.TextField(_('mtr.sync:regex'), max_length=1000)
+    value = models.TextField(_('value'), max_length=100000)
+    change_to = models.TextField(_('change to'), max_length=100000)
+    regex = models.TextField(_('regex'), max_length=1000)
     category = models.ForeignKey(
-        ReplacerCategory, verbose_name=_('mtr.sync:category'),
+        ReplacerCategory, verbose_name=_('category'),
         related_name='replacers', null=True, blank=True)
 
     def __str__(self):
         return self.name
 
     class Meta:
-        verbose_name = _('mtr.sync:replacer')
-        verbose_name_plural = _('mtr.sync:replacers')
+        verbose_name = _('replacer')
+        verbose_name_plural = _('replacers')
 
 
 @python_2_unicode_compatible
@@ -308,27 +308,27 @@ class Field(PositionMixin):
         ('lte', 'lte'),
     )
 
-    name = models.CharField(_('mtr.sync:name'), max_length=255, blank=True)
+    name = models.CharField(_('name'), max_length=255, blank=True)
     attribute = models.CharField(
-        _('mtr.sync:model attribute'), max_length=255)
-    skip = models.BooleanField(_('mtr.sync:skip'), default=False)
+        _('model attribute'), max_length=255)
+    skip = models.BooleanField(_('skip'), default=False)
 
-    update = models.BooleanField(_('mtr.sync:update'), default=True)
+    update = models.BooleanField(_('update'), default=True)
     update_value = models.CharField(
-        _('mtr.sync:value'), max_length=255, blank=True)
-    find = models.BooleanField(_('mtr.sync:find'), default=False)
+        _('value'), max_length=255, blank=True)
+    find = models.BooleanField(_('find'), default=False)
     find_filter = models.CharField(
-        _('mtr.sync:filter type'), max_length=255, blank=True,
+        _('filter type'), max_length=255, blank=True,
         choices=FILTER_CHOICES)
     replacer_category = models.ForeignKey(
-        ReplacerCategory, verbose_name=_('mtr.sync:replacer category'),
+        ReplacerCategory, verbose_name=_('replacer category'),
         related_name='fields', null=True, blank=True)
 
     converters = models.CharField(
-        _('mtr.sync:converters'), max_length=255, blank=True)
+        _('converters'), max_length=255, blank=True)
 
     settings = models.ForeignKey(
-        Settings, verbose_name=_('mtr.sync:settings'), related_name='fields')
+        Settings, verbose_name=_('settings'), related_name='fields')
 
     def save(self, *args, **kwargs):
         if self.position is None:
@@ -338,8 +338,8 @@ class Field(PositionMixin):
         super(Field, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = _('mtr.sync:field')
-        verbose_name_plural = _('mtr.sync:fields')
+        verbose_name = _('field')
+        verbose_name_plural = _('fields')
 
         ordering = ('position',)
 
@@ -354,12 +354,12 @@ class Context(models.Model):
 
     """Context for importing values in action"""
 
-    name = models.CharField(_('mtr.sync:name'), max_length=255)
-    cell = models.CharField(_('mtr.sync:cell'), max_length=1000, blank=True)
-    value = models.CharField(_('mtr.sync:value'), max_length=1000, blank=True)
+    name = models.CharField(_('name'), max_length=255)
+    cell = models.CharField(_('cell'), max_length=1000, blank=True)
+    value = models.CharField(_('value'), max_length=1000, blank=True)
 
     settings = models.ForeignKey(
-        Settings, verbose_name=_('mtr.sync:settings'),
+        Settings, verbose_name=_('settings'),
         related_name='contexts', null=True, blank=True
     )
 
@@ -367,8 +367,8 @@ class Context(models.Model):
         return self.name
 
     class Meta:
-        verbose_name = _('mtr.sync:context')
-        verbose_name_plural = _('mtr.sync:contexts')
+        verbose_name = _('context')
+        verbose_name_plural = _('contexts')
 
 
 @python_2_unicode_compatible
@@ -382,25 +382,25 @@ class Report(ActionsMixin):
     SUCCESS = 2
 
     STATUS_CHOICES = (
-        (ERROR, _('mtr.sync:Error')),
-        (RUNNING, _('mtr.sync:Running')),
-        (SUCCESS, _('mtr.sync:Success'))
+        (ERROR, _('Error')),
+        (RUNNING, _('Running')),
+        (SUCCESS, _('Success'))
     )
 
     buffer_file = models.FileField(
-        _('mtr.sync:file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+        _('file'), upload_to=FILE_PATH(), db_index=True, blank=True)
     status = models.PositiveSmallIntegerField(
-        _('mtr.sync:status'), choices=STATUS_CHOICES, default=RUNNING)
+        _('status'), choices=STATUS_CHOICES, default=RUNNING)
 
     started_at = models.DateTimeField(
-        _('mtr.sync:started at'), auto_now_add=True)
+        _('started at'), auto_now_add=True)
     completed_at = models.DateTimeField(
-        _('mtr.sync:completed at'), null=True, blank=True)
+        _('completed at'), null=True, blank=True)
     updated_at = models.DateTimeField(
-        _('mtr.sync:updated at'), auto_now=True)
+        _('updated at'), auto_now=True)
 
     settings = models.ForeignKey(
-        Settings, verbose_name=_('mtr.sync:settings'),
+        Settings, verbose_name=_('settings'),
         related_name='reports', null=True, blank=True
     )
 
@@ -410,8 +410,8 @@ class Report(ActionsMixin):
     running_objects = RunningManager()
 
     class Meta:
-        verbose_name = _('mtr.sync:report')
-        verbose_name_plural = _('mtr.sync:reports')
+        verbose_name = _('report')
+        verbose_name_plural = _('reports')
 
         ordering = ('-id',)
 
@@ -470,27 +470,27 @@ class Message(PositionMixin, ErrorChoicesMixin):
     INFO = 1
 
     MESSAGE_CHOICES = (
-        (ERROR, _('mtr.sync:Error')),
-        (INFO, _('mtr.sync:Info'))
+        (ERROR, _('Error')),
+        (INFO, _('Info'))
     )
 
     report = models.ForeignKey(Report, related_name='errors')
 
-    message = models.TextField(_('mtr.sync:message'), max_length=10000)
+    message = models.TextField(_('message'), max_length=10000)
     step = models.PositiveSmallIntegerField(
-        _('mtr.sync:step'), choices=ErrorChoicesMixin.STEP_CHOICES,
+        _('step'), choices=ErrorChoicesMixin.STEP_CHOICES,
         default=ErrorChoicesMixin.UNDEFINED)
     input_position = models.CharField(
-        _('mtr.sync:input position'), max_length=10, blank=True)
+        _('input position'), max_length=10, blank=True)
     input_value = models.TextField(
-        _('mtr.sync:input value'), max_length=60000, null=True, blank=True)
+        _('input value'), max_length=60000, null=True, blank=True)
 
     type = models.PositiveSmallIntegerField(
-        _('mtr.sync:type'), choices=MESSAGE_CHOICES, default=ERROR)
+        _('type'), choices=MESSAGE_CHOICES, default=ERROR)
 
     class Meta:
-        verbose_name = _('mtr.sync:message')
-        verbose_name_plural = _('mtr.sync:messages')
+        verbose_name = _('message')
+        verbose_name_plural = _('messages')
 
         ordering = ('position', )
 

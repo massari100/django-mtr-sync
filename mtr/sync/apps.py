@@ -10,4 +10,4 @@ if django.get_version() >= '1.7':
     class MtrSyncConfig(AppConfig):
         name = 'mtr.sync'
         label = 'mtr_sync'
-        verbose_name = _('mtr.sync:Data sync')
+        verbose_name = _('Data sync')

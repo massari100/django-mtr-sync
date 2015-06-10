@@ -1,17 +1,16 @@
 import os
 
-from django.utils.translation import gettext_lazy as _
-
 import ezodf
 
 from ..processor import Processor
 from ..manager import manager
+from ...helpers import gettext_lazy as _
 
 
 @manager.register('processor')
 class OdsProcessor(Processor):
     file_format = '.ods'
-    file_description = _('mtr.sync:ODF Spreadsheet')
+    file_description = _('ODF Spreadsheet')
 
     def create(self, path):
         self._path = path

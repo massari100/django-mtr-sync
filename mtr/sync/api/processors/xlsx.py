@@ -4,16 +4,15 @@ os.environ['OPENPYXL_LXML'] = 'False'
 
 import openpyxl
 
-from django.utils.translation import gettext_lazy as _
-
 from ..processor import Processor
 from ..manager import manager
+from ...helpers import gettext_lazy as _
 
 
 @manager.register('processor')
 class XlsxProcessor(Processor):
     file_format = '.xlsx'
-    file_description = _('mtr.sync:Microsoft Excel 2007/2010/2013 XML')
+    file_description = _('Microsoft Excel 2007/2010/2013 XML')
 
     def create(self, path):
         self._path = path

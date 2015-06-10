@@ -1,16 +1,15 @@
 import xlrd
 import xlwt
 
-from django.utils.translation import gettext_lazy as _
-
 from ..processor import Processor
 from ..manager import manager
+from ...helpers import gettext_lazy as _
 
 
 @manager.register('processor')
 class XlsProcessor(Processor):
     file_format = '.xls'
-    file_description = _('mtr.sync:Microsoft Excel 97/2000/XP/2003')
+    file_description = _('Microsoft Excel 97/2000/XP/2003')
 
     def create(self, path):
         self._path = path

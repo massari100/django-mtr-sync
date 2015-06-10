@@ -1,7 +1,7 @@
-from django.utils.translation import gettext_lazy as _
 from django.db import models
 
 from .manager import manager
+from ..helpers import gettext_lazy as _
 
 
 def _create_related_instance(instance, related_model, key, related_models):
@@ -64,7 +64,7 @@ def filter_attrs(model_attrs, fields, mfields):
     return update_values
 
 
-@manager.register('action', _('mtr.sync:Create only'))
+@manager.register('action', _('Create only'))
 def create(model, model_attrs, related_attrs, context, **kwargs):
     model_attrs = filter_attrs(
         model_attrs, kwargs['fields'], kwargs['mfields'])
@@ -92,7 +92,7 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
     return instance
 
 
-@manager.register('action', _('mtr.sync:Update only'))
+@manager.register('action', _('Update only'))
 def update(model, model_attrs, related_attrs, context, **kwargs):
     update_values = filter_attrs(
         model_attrs, kwargs['fields'], kwargs['mfields'])
@@ -105,7 +105,7 @@ def update(model, model_attrs, related_attrs, context, **kwargs):
     return instances
 
 
-@manager.register('action', _('mtr.sync:Update or create'))
+@manager.register('action', _('Update or create'))
 def update_or_create(model, model_attrs, related_attrs, context, **kwargs):
     instances = update(model, model_attrs, related_attrs, context, **kwargs)
 

@@ -72,3 +72,6 @@ MODEL_SETTINGS_NAME = getattr_with_prefix(
 
 # register models at admin for debugging
 REGISTER_IN_ADMIN = getattr_with_prefix('REGISTER_IN_ADMIN', True)
+
+# gettext context
+GETTEXT_CONTEXT = getattr_with_prefix('GETTEXT_CONTEXT', 'mtr.sync')

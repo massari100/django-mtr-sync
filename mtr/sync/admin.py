@@ -1,11 +1,10 @@
 from functools import partial
 
-from django.utils.translation import gettext_lazy as _
 from django.utils.encoding import smart_text
 from django.contrib import admin
 from django import forms
 
-from .helpers import themed
+from .helpers import themed, gettext_lazy as _
 from .models import Report, Settings, Field, Message, Context, Sequence, \
     Replacer, ReplacerCategory
 from .api.helpers import model_attributes
@@ -155,14 +154,14 @@ class SettingsAdmin(admin.ModelAdmin):
             )
         }),
 
-        (_('mtr.sync:Data settings'), {
+        (_('Data settings'), {
             'fields': (
                 ('dataset', 'data_action'),
                 ('filter_dataset', 'filter_querystring')
             )
         }),
 
-        (_('mtr.sync:Worksheet settings'), {
+        (_('Worksheet settings'), {
             'fields': (
                 ('start_col', 'end_col'), ('start_row', 'end_row'),
                 ('include_header', 'populate_from_file'),
@@ -170,11 +169,11 @@ class SettingsAdmin(admin.ModelAdmin):
             )
         }),
 
-        (_('mtr.sync:Language settings'), {
+        (_('Language settings'), {
             'fields': (('language', 'hide_translation_fields'),)
         }),
 
-        (_('mtr.sync:Field settings'), {
+        (_('Field settings'), {
             'fields': (
                 ('create_fields', 'include_related'),
             )
@@ -218,8 +217,8 @@ class SettingsAdmin(admin.ModelAdmin):
 
         self.message_user(
             request,
-            _('mtr.sync:Data synchronization started in background.'))
-    run.short_description = _('mtr.sync:Sync data')
+            _('Data synchronization started in background.'))
+    run.short_description = _('Sync data')
 
     def copy(self, request, queryset):
         """Copy selected settings"""
@@ -229,8 +228,8 @@ class SettingsAdmin(admin.ModelAdmin):
 
         self.message_user(
             request,
-            _('mtr.sync:Copies successfully created'))
-    copy.short_description = _('mtr.sync:Create a copy of settings')
+            _('Copies successfully created'))
+    copy.short_description = _('Create a copy of settings')
 
     def last_report(self, obj):
         report = obj.reports.first()
@@ -238,7 +237,7 @@ class SettingsAdmin(admin.ModelAdmin):
             return smart_text('<a href="{0}">{0}</a>').format(
                 report.get_absolute_url())
         return ''
-    last_report.short_description = _('mtr.sync:Last report')
+    last_report.short_description = _('Last report')
     last_report.allow_tags = True
 
 
@@ -258,8 +257,8 @@ class SequenceAdmin(admin.ModelAdmin):
 
         self.message_user(
             request,
-            _('mtr.sync:Data synchronization started in background.'))
-    run.short_description = _('mtr.sync:Sync data')
+            _('Data synchronization started in background.'))
+    run.short_description = _('Sync data')
 
 
 class ReplacerCategoryAdmin(admin.ModelAdmin):

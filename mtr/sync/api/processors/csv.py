@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 
-from django.utils.translation import gettext_lazy as _
 from django.utils import six
 
 if six.PY2:
@@ -10,12 +9,13 @@ else:
 
 from ..processor import Processor
 from ..manager import manager
+from ...helpers import gettext_lazy as _
 
 
 @manager.register('processor')
 class CsvProcessor(Processor):
     file_format = '.csv'
-    file_description = _('mtr.sync:CSV')
+    file_description = _('CSV')
 
     def create(self, path):
         # TODO: csv additional settings
