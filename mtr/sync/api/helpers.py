@@ -174,7 +174,7 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
                 field, 'verbose_name', getattr(
                     field, '__name__', repr(field))))
 
-        if m_prefix:
+        if m_prefix and field.rel.to != model:
             child_attrs = []
             child_attrs = model_attributes(
                     settings, m_prefix.format(name),
