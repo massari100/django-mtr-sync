@@ -6,6 +6,7 @@ import traceback
 from django.utils.six.moves import range
 from django.utils import timezone
 from django.db import transaction, Error
+from django.core.exceptions import ValidationError
 
 from .signals import export_started, export_completed, \
     import_started, import_completed, error_raised
@@ -235,7 +236,7 @@ class Processor(DataProcessor):
                         processor=self, path=path, fields=data['fields'],
                         params=params, raw_attrs=_model,
                         mfields=data['mfields'])
-            except (Error, ValueError,
+            except (Error, ValueError, ValidationError,
                     AttributeError, TypeError, IndexError):
 
                 transaction.savepoint_rollback(sid)

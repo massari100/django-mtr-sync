@@ -312,6 +312,7 @@ class Field(PositionMixin):
         ('gte', 'gte'),
         ('lt', 'lt'),
         ('lte', 'lte'),
+        ('not', 'not')
     )
 
     name = models.CharField(_('name'), max_length=255, blank=True)
@@ -320,12 +321,20 @@ class Field(PositionMixin):
     skip = models.BooleanField(_('skip'), default=False)
 
     update = models.BooleanField(_('update'), default=True)
-    update_value = models.CharField(
-        _('value'), max_length=255, blank=True)
     find = models.BooleanField(_('find'), default=False)
-    find_filter = models.CharField(
-        _('filter type'), max_length=255, blank=True,
+
+    set_filter = models.CharField(
+        _('set filter type'), max_length=255, blank=True,
         choices=FILTER_CHOICES)
+    set_value = models.CharField(
+        _('set value'), max_length=255, blank=True)
+
+    find_filter = models.CharField(
+        _('find filter type'), max_length=255, blank=True,
+        choices=FILTER_CHOICES)
+    find_value = models.CharField(
+        _('find value'), max_length=255, blank=True)
+
     replacer_category = models.ForeignKey(
         ReplacerCategory, verbose_name=_('replacer category'),
         related_name='fields', null=True, blank=True)
@@ -352,7 +361,7 @@ class Field(PositionMixin):
         app_label = 'mtr_sync'
 
     def __str__(self):
-        return self.name or self.attribute
+        return '{} {}'.format(self.attribute, self.name)
 
 
 @python_2_unicode_compatible

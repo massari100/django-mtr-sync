@@ -86,7 +86,8 @@ class FieldInline(
     extra = 0
     fields = (
         'skip', 'position', 'name', 'attribute',
-        'find', 'find_filter', 'update', 'update_value', 'converters',
+        'find', 'find_filter', 'find_value', 'update',
+        'set_filter', 'set_value', 'converters',
         'replacer_category')
     sortable_field_name = 'position'
 

@@ -57,7 +57,7 @@ if django.get_version() >= '1.7':
     ])
 else:
     PROCESSORS = getattr_with_prefix('PROCESSORS', [
-        'mtr_sync.sync.api.processors.xlsx',
+        'mtr_sync.api.processors.xlsx',
         'mtr_sync.api.processors.xls',
         'mtr_sync.api.processors.ods',
         'mtr_sync.api.processors.csv',
