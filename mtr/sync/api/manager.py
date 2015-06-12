@@ -234,7 +234,7 @@ class ProcessorManagerMixin(object):
         # TODO: refactor
 
         return {
-            # 'cols': len(processor._cells),
+            'cols': len(fields),
             'fields': fields,
             'items': self.model_data(processor, model, fields, mfields),
             'mfields': mfields

@@ -20,7 +20,7 @@ def cell_value(row, cols, processor=None):
     if isinstance(cols, int):
         return row[cols]
     else:
-        return row[column_name(cols)]
+        return row[column_index(cols)]
 
     # TODO: use regex
     # no_symbols_finded = True

@@ -55,8 +55,8 @@ class ActionsMixin(models.Model):
     IMPORT = 1
 
     ACTION_CHOICES = (
-        (EXPORT, _('mtr.actions:Export')),
-        (IMPORT, _('mtr.actions:Import'))
+        (EXPORT, _('Export')),
+        (IMPORT, _('Import'))
     )
 
     action = models.PositiveSmallIntegerField(
@@ -196,12 +196,18 @@ class Settings(ActionsMixin):
     def run(self):
         """Run import or export task from celery"""
 
-        from .tasks import export_data, import_data
+        if 'celery' in django_settings.INSTALLED_APPS:
+            from .tasks import export_data, import_data
 
-        if self.action == self.EXPORT:
-            export_data.apply_async(args=[{'id': self.id}])
-        elif self.action == self.IMPORT:
-            import_data.apply_async(args=[{'id': self.id}])
+            if self.action == self.EXPORT:
+                export_data.apply_async(args=[{'id': self.id}])
+            elif self.action == self.IMPORT:
+                import_data.apply_async(args=[{'id': self.id}])
+        else:
+            if self.action == self.EXPORT:
+                manager.export_data(self)
+            elif self.action == self.IMPORT:
+                manager.import_data(self)
 
     def create_copy(self):
         fields = self.fields.all()

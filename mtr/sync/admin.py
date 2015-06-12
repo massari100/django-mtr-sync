@@ -23,13 +23,12 @@ class SyncStackedInlineMixin(object):
     template = themed('admin/edit_inline/stacked.html', True)
 
 
-class MessageInline(admin.TabularInline):
-    model = Message
-    extra = 0
+class MessageAdmin(admin.ModelAdmin):
+    list_display = ('input_position', 'type', 'message', 'step', 'report')
+    list_filter = ('type', 'report')
 
 
 class ReportAdmin(admin.ModelAdmin):
-    inlines = (MessageInline,)
     list_display = (
         'action', 'status', 'settings',
         'started_at', 'completed_at', 'buffer_file_link')
@@ -273,6 +272,7 @@ class ReplacerAdmin(admin.ModelAdmin):
 
 if REGISTER_IN_ADMIN():
     admin.site.register(Report, ReportAdmin)
+    admin.site.register(Message, MessageAdmin)
     admin.site.register(Settings, SettingsAdmin)
     admin.site.register(Sequence, SequenceAdmin)
     admin.site.register(Replacer, ReplacerAdmin)

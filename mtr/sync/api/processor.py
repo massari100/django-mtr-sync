@@ -45,7 +45,7 @@ class DataProcessor(object):
                 if not import_data:
                     self.end['col'] += self.start['col']
 
-        if field_cols:
+        if field_cols and field_cols > self.end['col']:
             self.end['col'] = self.start['col'] + field_cols
 
         if self.settings.end_col:
@@ -217,8 +217,8 @@ class Processor(DataProcessor):
         max_rows, max_cols = self.open(path)
         self.set_dimensions(
             0, 0, max_rows, max_cols,
-            import_data=True)
-        # ,field_cols=data['cols'])
+            import_data=True,
+            field_cols=data['cols'])
 
         items = data['items']
 
@@ -240,9 +240,12 @@ class Processor(DataProcessor):
 
                 transaction.savepoint_rollback(sid)
                 error_message = traceback.format_exc()
-                if 'File' in error_message:
-                    error_message = 'File{}'.format(
-                        error_message.split('File')[-1])
+
+                # QUESTION: Show full stack?
+
+                # if 'File' in error_message:
+                #     error_message = 'File{}'.format(
+                #         error_message.split('File')[-1])
 
                 value = {
                     'model_attrs': model_attrs,
