@@ -147,7 +147,7 @@ def model_fields(model, settings=None):
     return OrderedDict(ordered_fields)
 
 
-def model_attributes(settings, prefix=None, model=None, parent=None):
+def model_attributes(settings, prefix=None, model=None, parent=None, level=0):
     """Return iterator of fields names by given model in settings"""
 
     model = model or make_model_class(settings)
@@ -157,6 +157,9 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
         label = name
         child_attrs = None
         m_prefix = None
+
+        if level > 1:
+            continue
 
         if isinstance(field, models.ForeignKey):
             if not include_related:
@@ -174,11 +177,11 @@ def model_attributes(settings, prefix=None, model=None, parent=None):
                 field, 'verbose_name', getattr(
                     field, '__name__', repr(field))))
 
-        if m_prefix and field.rel.to != model:
+        if m_prefix:
             child_attrs = []
             child_attrs = model_attributes(
                     settings, m_prefix.format(name),
-                    model=field.rel.to, parent=model)
+                    model=field.rel.to, parent=model, level=level+1)
         if prefix:
             name = ''.join((prefix, name))
 

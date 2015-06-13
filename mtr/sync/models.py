@@ -1,5 +1,6 @@
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
+from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings as django_settings
 
@@ -128,10 +129,10 @@ class Settings(ActionsMixin):
         _('Create settings for fields'), default=True)
     populate_from_file = models.BooleanField(
         _('Populate settings from file'), default=False)
-    run_after_save = models.BooleanField(
-        _('Start action after saving'), default=False)
     include_related = models.BooleanField(
         _('Include related fields'), default=True)
+    edit_attributes = models.BooleanField(
+        _('Edit field attributes'), default=False)
 
     def fields_with_converters(self):
         """Return iterator of fields with converters"""
@@ -236,6 +237,26 @@ class Settings(ActionsMixin):
 
     def __str__(self):
         return self.name or self.worksheet or str(self.id)
+
+
+@receiver(post_save, sender=Settings)
+def settings_post_save(sender, **kwargs):
+    settings = kwargs['instance']
+
+    post_save.disconnect(settings_post_save, sender=Settings)
+
+    if settings.create_fields:
+        settings.create_default_fields()
+        settings.create_fields = False
+
+    if settings.action == settings.IMPORT \
+            and settings.buffer_file and settings.populate_from_file:
+        settings.populate_from_buffer_file()
+        settings.populate_from_file = False
+
+    settings.save()
+
+    post_save.connect(settings_post_save, sender=Settings)
 
 
 @python_2_unicode_compatible
@@ -361,7 +382,7 @@ class Field(PositionMixin):
         app_label = 'mtr_sync'
 
     def __str__(self):
-        return '{} {}'.format(self.attribute, self.name)
+        return self.name or self.attribute
 
 
 @python_2_unicode_compatible

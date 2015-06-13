@@ -72,7 +72,7 @@ class AttributeChoicesInlineMixin(object):
             ).formfield_for_dbfield(db_field, **kwargs)
 
         if db_field.name == 'attribute':
-            if settings.action != settings.IMPORT and settings.model:
+            if settings.model and not settings.edit_attributes:
                 field = forms.ChoiceField(
                     label=field.label, required=field.required,
                     choices=model_attributes(settings))
@@ -106,29 +106,6 @@ class SettingsForm(forms.ModelForm):
 
         super(SettingsForm, self).__init__(*args, **kwargs)
 
-    def save(self, commit=True):
-        settings = super(SettingsForm, self).save(commit=commit)
-
-        # BUG: why always commit=False
-
-        settings.save()
-
-        if settings.create_fields:
-            settings.create_default_fields()
-            settings.create_fields = False
-
-        if settings.action == settings.IMPORT \
-                and settings.buffer_file and settings.populate_from_file:
-            settings.populate_from_buffer_file()
-            settings.populate_from_file = False
-
-        if settings.run_after_save:
-            settings.run()
-
-        settings.save()
-
-        return settings
-
     class Meta:
         exclude = []
         model = Settings
@@ -150,7 +127,7 @@ class SettingsAdmin(admin.ModelAdmin):
                 ('model', 'action'),
                 'processor',
                 ('name', 'filename'),
-                ('buffer_file', 'run_after_save'),
+                'buffer_file'
             )
         }),
 
@@ -175,7 +152,7 @@ class SettingsAdmin(admin.ModelAdmin):
 
         (_('Field settings'), {
             'fields': (
-                ('create_fields', 'include_related'),
+                ('create_fields', 'include_related', 'edit_attributes'),
             )
         }),
     )

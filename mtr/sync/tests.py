@@ -27,7 +27,7 @@ class ApiTestMixin(object):
     RELATED_MODEL = None
     RELATED_MANY = None
     PROCESSOR = None
-    MODEL_COUNT = 50
+    MODEL_COUNT = 25
     CREATE_PROCESSOR_AT_SETUP = True
 
     def setUp(self):
@@ -128,6 +128,8 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.end_col = 15
         self.settings.end_row = 99
         self.settings.action = self.settings.IMPORT
+        [field.delete() for field in self.settings.fields.all()]
+        self.settings.create_default_fields()
         self.settings.buffer_file = report.buffer_file
 
         report = self.manager.import_data(self.settings)
@@ -232,6 +234,8 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.action = self.settings.IMPORT
         self.settings.buffer_file = report.buffer_file
         self.settings.filter_querystring = ''
+        [field.delete() for field in self.settings.fields.all()]
+        self.settings.create_default_fields()
 
         import_report = self.manager.import_data(self.settings)
 
@@ -244,11 +248,14 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.queryset.update(surname_de='', name_de='')
         self.settings.data_action = 'update'
+
+        self.settings.filter_querystring = ''
+        self.settings.buffer_file = report.buffer_file
+        self.settings.action = self.settings.IMPORT
+        [field.delete() for field in self.settings.fields.all()]
+        self.settings.create_default_fields()
         self.settings.fields.filter(attribute='id') \
             .update(find=True, update=False)
-
-        self.settings.buffer_file = report.buffer_file
-        self.settings.filter_querystring = ''
 
         import_report = self.manager.import_data(self.settings)
 
@@ -271,6 +278,9 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.filter_querystring = ''
         self.settings.data_action = 'update_or_create'
         self.settings.buffer_file = report.buffer_file
+        self.settings.action = self.settings.IMPORT
+        [field.delete() for field in self.settings.fields.all()]
+        self.settings.create_default_fields()
 
         import_report = self.manager.import_data(self.settings)
 
