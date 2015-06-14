@@ -72,7 +72,7 @@ def _create_mtm_instance(
 
 def filter_fields(
         filter_params, model_attrs, fields, remove_markers=True,
-        can_create=True):
+        can_create=True, only_instance=False):
 
     for field in filter(lambda f: f.find, fields):
         field_name = field.attribute
@@ -87,7 +87,7 @@ def filter_fields(
         filter_params.update(**{field_filter: field_value})
 
         if can_create and field.set_filter == 'not' \
-                and field_value == field.set_value:
+                and not field_value and not only_instance:
             can_create = False
 
     if can_create:
@@ -127,13 +127,14 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
     related_filters = filter_fields(
         {}, kwargs['raw_attrs'], kwargs['fields'], remove_markers=False)
     instance_filters = filter_fields(
-        {}, kwargs['raw_attrs'], kwargs['fields'])
+        {}, kwargs['raw_attrs'], kwargs['fields'], only_instance=True)
 
     model_attrs = filter_attrs(
         model_attrs, kwargs['fields'], kwargs['mfields'])
     fields = kwargs['mfields']
 
-    instance, can_create = _find_instance(instance_filters, model)
+    instance, can_create = _find_instance(
+        instance_filters, model)
 
     if not can_create:
         return instance
