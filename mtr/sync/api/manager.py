@@ -15,15 +15,13 @@ from ..settings import PROCESSORS, ACTIONS, CONVERTERS
 
 class ProcessorManagerMixin(object):
 
-    def convert_value(
-            self, value, model, field, mfields,
-            export=False, action=None):
+    def convert_value(self, value, field, export=False, action=None):
         """Process value with filters and actions"""
 
         convert_action = 'export' if export else 'import'
 
         for convert_func in field.ordered_converters:
-            value = convert_func(value, model, field, mfields, convert_action)
+            value = convert_func(value, convert_action)
 
         return value
 
@@ -175,7 +173,7 @@ class ProcessorManagerMixin(object):
             'items': (
                 self.convert_value(
                     process_attribute(item, field.attribute),
-                    model, field, mfields, export=True)
+                    field, export=True)
                 for item in queryset
                 for field in fields
             )
@@ -236,7 +234,7 @@ class ProcessorManagerMixin(object):
         return {
             'cols': len(fields),
             'fields': fields,
-            'items': self.model_data(processor, model, fields, mfields),
+            'items': self.model_data(processor, model, fields),
             'mfields': mfields
         }
 
@@ -251,15 +249,14 @@ class ProcessorManagerMixin(object):
 
         return processor.import_data(model, path)
 
-    def model_data(self, processor, model, fields, mfields):
+    def model_data(self, processor, model, fields):
         for row_index in processor.rows:
             _model = {}
             row = processor.read(row_index)
 
             for index, field in enumerate(fields):
                 value = cell_value(row, field.name or index)
-                _model[field.attribute] = self.convert_value(
-                    value, model, field, mfields)
+                _model[field.attribute] = self.convert_value(value, field)
 
             yield row_index, _model
 

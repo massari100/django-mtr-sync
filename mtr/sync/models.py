@@ -188,8 +188,13 @@ class Settings(ActionsMixin):
         for name, label in model_attributes(self):
             label = label if self.action != self.IMPORT and add_label else ''
             if name not in exclude:
+                if '|_m_|' in name:
+                    converters = 'comalist'
+                else:
+                    converters = 'string'
+
                 field = self.fields.create(
-                    attribute=name, name=label, converters='auto')
+                    attribute=name, name=label, converters=converters)
                 fields.append(field)
 
         return fields

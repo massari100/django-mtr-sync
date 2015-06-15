@@ -32,8 +32,12 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
 
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
+            elif value:
+                value = str(value)
 
-            self.assertEqual('' if value is None else value, sheet_value)
+            self.assertEqual(
+                '' if value is None else value,
+                '' if sheet_value is None else sheet_value)
 
 
 class XlsxProcessorTest(ProcessorTestMixin, TestCase):
@@ -64,8 +68,12 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
 
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
+            elif value:
+                value = str(value)
 
-            self.assertEqual('' if value is None else value, sheet_value)
+            self.assertEqual(
+                '' if value is None else value,
+                '' if sheet_value is None else sheet_value)
 
 
 class CsvProcessorTest(ProcessorTestMixin, TestCase):
@@ -93,10 +101,12 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
 
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
-            if sheet_value.isdigit():
-                sheet_value = int(sheet_value)
+            elif value:
+                value = str(value)
 
-            self.assertEqual('' if value is None else value, sheet_value)
+            self.assertEqual(
+                '' if value is None else value,
+                '' if sheet_value is None else sheet_value)
 
         self._f.close()
 
@@ -122,8 +132,12 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
 
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
+            elif value:
+                value = str(value)
 
-            self.assertEqual('' if value is None else value, sheet_value)
+            self.assertEqual(
+                '' if value is None else value,
+                '' if sheet_value is None else sheet_value)
 
 
 class ProcessorTest(TestCase):
