@@ -242,12 +242,6 @@ class Processor(DataProcessor):
                 transaction.savepoint_rollback(sid)
                 error_message = traceback.format_exc()
 
-                # QUESTION: Show full stack?
-
-                # if 'File' in error_message:
-                #     error_message = 'File{}'.format(
-                #         error_message.split('File')[-1])
-
                 value = {
                     'model_attrs': model_attrs,
                     'related_attrs': related_attrs

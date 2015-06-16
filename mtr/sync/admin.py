@@ -9,6 +9,7 @@ from .models import Report, Settings, Field, Message, Context, Sequence, \
     Replacer, ReplacerCategory
 from .api.helpers import model_attributes
 from .settings import REGISTER_IN_ADMIN
+from .forms import SettingsAdminForm
 
 
 class SyncAdminMixin(object):
@@ -97,20 +98,6 @@ class ContextInline(admin.TabularInline):
     extra = 0
 
 
-class SettingsForm(forms.ModelForm):
-    INITIAL = {}
-
-    def __init__(self, *args, **kwargs):
-        if kwargs.get('initial', None):
-            kwargs['initial'].update(self.INITIAL)
-
-        super(SettingsForm, self).__init__(*args, **kwargs)
-
-    class Meta:
-        exclude = []
-        model = Settings
-
-
 class SettingsAdmin(admin.ModelAdmin):
     list_display = (
         '__str__', 'action', 'model',
@@ -156,7 +143,7 @@ class SettingsAdmin(admin.ModelAdmin):
             )
         }),
     )
-    form = SettingsForm
+    form = SettingsAdminForm
 
     def get_form(self, request, obj=None, **kwargs):
         form = super(SettingsAdmin, self).get_form(request, obj, **kwargs)

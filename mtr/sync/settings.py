@@ -39,6 +39,7 @@ DEFAULT_THEME = 'default'
 if 'grappelli' in settings.INSTALLED_APPS:
     DEFAULT_THEME = 'grappelli'
 THEME = getattr_with_prefix('THEME', DEFAULT_THEME)
+
 if django.get_version() >= '1.7':
     # additional dependensies for import and export to register
     PROCESSORS = getattr_with_prefix('PROCESSORS', [

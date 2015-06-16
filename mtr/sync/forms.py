@@ -1,9 +1,17 @@
-# from django import forms
+from django import forms
 
-# from .models import Settings
+from .models import Settings
 
 
-# class SettingsForm(forms.ModelForm):
+class SettingsAdminForm(forms.ModelForm):
+    INITIAL = {}
 
-#     class Meta:
-#         model = Settings
+    def __init__(self, *args, **kwargs):
+        if kwargs.get('initial', None):
+            kwargs['initial'].update(self.INITIAL)
+
+        super(SettingsAdminForm, self).__init__(*args, **kwargs)
+
+    class Meta:
+        exclude = []
+        model = Settings
