@@ -13,7 +13,7 @@ from .settings import THEME, GETTEXT_CONTEXT
 def gettext_prefix(string, context=None):
     """Adding prefix for gettext message string"""
 
-    return '{}:{}'.format(GETTEXT_CONTEXT() or context, string)
+    return '{}:{}'.format(GETTEXT_CONTEXT or context, string)
 
 
 def gettext_lazy(string, context=None):
@@ -25,7 +25,7 @@ def gettext_lazy(string, context=None):
 def themed(template, version_subdirectory=False):
     """Changing template themes by setting THEME_PATH and django version"""
 
-    path = THEME()
+    path = THEME
 
     if version_subdirectory:
         path = os.path.join(path, django.get_version()[:3])

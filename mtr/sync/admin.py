@@ -235,7 +235,7 @@ class ReplacerAdmin(admin.ModelAdmin):
     list_editable = ['value', 'change_to', 'regex', 'category']
 
 
-if REGISTER_IN_ADMIN():
+if REGISTER_IN_ADMIN:
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Message, MessageAdmin)
     admin.site.register(Settings, SettingsAdmin)

@@ -96,7 +96,7 @@ class Settings(ActionsMixin):
     processor = models.CharField(
         _('format'), max_length=255,
         choices=manager.processor_choices(),
-        default=DEFAULT_PROCESSOR())
+        default=DEFAULT_PROCESSOR)
     worksheet = models.CharField(
         _('worksheet page'), max_length=255, blank=True)
     include_header = models.BooleanField(
@@ -105,7 +105,7 @@ class Settings(ActionsMixin):
     filename = models.CharField(
         _('custom filename'), max_length=255, blank=True)
     buffer_file = models.FileField(
-        _('file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+        _('file'), upload_to=FILE_PATH, db_index=True, blank=True)
 
     dataset = models.CharField(
         _('dataset'), max_length=255, blank=True,
@@ -268,7 +268,7 @@ def settings_post_save(sender, **kwargs):
 class Sequence(models.Model):
     name = models.CharField(_('name'), max_length=255)
     buffer_file = models.FileField(
-        _('file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+        _('file'), upload_to=FILE_PATH, db_index=True, blank=True)
 
     settings = models.ManyToManyField(
         Settings, verbose_name=_('settings'))
@@ -429,7 +429,7 @@ class Report(ActionsMixin):
     )
 
     buffer_file = models.FileField(
-        _('file'), upload_to=FILE_PATH(), db_index=True, blank=True)
+        _('file'), upload_to=FILE_PATH, db_index=True, blank=True)
     status = models.PositiveSmallIntegerField(
         _('status'), choices=STATUS_CHOICES, default=RUNNING)
 

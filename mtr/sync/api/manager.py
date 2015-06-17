@@ -263,7 +263,7 @@ class ProcessorManagerMixin(object):
     def import_dependecies(self):
         """Import modules within IMPORT_PROCESSORS paths"""
 
-        modules = PROCESSORS() + ACTIONS() + CONVERTERS()
+        modules = PROCESSORS + ACTIONS + CONVERTERS
 
         for module in modules:
             __import__(module)

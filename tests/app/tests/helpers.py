@@ -25,7 +25,7 @@ class ThemedTest(TestCase):
         new_theme_path = os.path.join(
             'mtr', 'sync', self.theme_name, self.template_name)
         default_theme_path = os.path.join(
-            'mtr', 'sync', THEME(), self.template_name)
+            'mtr', 'sync', THEME, self.template_name)
 
         with self.settings(**new_settings):
             self.assertEquals(themed(self.template_name), new_theme_path)
@@ -36,7 +36,7 @@ class ThemedTest(TestCase):
             'mtr', 'sync', os.path.join(self.theme_name, self.version),
             self.template_name)
         default_theme_path_with_version = os.path.join(
-            'mtr', 'sync', os.path.join(THEME(), self.version),
+            'mtr', 'sync', os.path.join(THEME, self.version),
             self.template_name)
 
         with self.settings(**new_settings):

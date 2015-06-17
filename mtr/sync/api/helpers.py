@@ -94,7 +94,7 @@ def column_index(value):
 
 
 def model_settings(model):
-    return getattr(model, MODEL_SETTINGS_NAME(), {})
+    return getattr(model, MODEL_SETTINGS_NAME, {})
 
 
 def models_list():
