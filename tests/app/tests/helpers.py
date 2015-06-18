@@ -3,6 +3,7 @@ import os
 import django
 
 from django.test import TestCase
+from django.utils.six.moves import reload_module
 
 from mtr.sync.settings import PREFIX, THEME
 from mtr.sync.helpers import themed
