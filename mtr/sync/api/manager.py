@@ -10,7 +10,7 @@ from django.contrib.admin.views.main import IGNORED_PARAMS
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import column_index, make_model_class, model_settings, \
     process_attribute, model_fields, cell_value
-from ..settings import PROCESSORS, ACTIONS, CONVERTERS
+from ..settings import SETTINGS
 
 
 class ProcessorManagerMixin(object):
@@ -263,7 +263,8 @@ class ProcessorManagerMixin(object):
     def import_dependecies(self):
         """Import modules within IMPORT_PROCESSORS paths"""
 
-        modules = PROCESSORS + ACTIONS + CONVERTERS
+        modules = SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] \
+            + SETTINGS['CONVERTERS']
 
         for module in modules:
             __import__(module)

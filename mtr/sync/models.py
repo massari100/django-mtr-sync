@@ -4,7 +4,7 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings as django_settings
 
-from .settings import FILE_PATH, DEFAULT_PROCESSOR, strip_media_root
+from .settings import SETTINGS, strip_media_root
 from .api import manager
 from .api.helpers import model_attributes, model_choices
 from .api.signals import export_started, export_completed, \
@@ -96,7 +96,7 @@ class Settings(ActionsMixin):
     processor = models.CharField(
         _('format'), max_length=255,
         choices=manager.processor_choices(),
-        default=DEFAULT_PROCESSOR)
+        default=SETTINGS['DEFAULT_PROCESSOR'])
     worksheet = models.CharField(
         _('worksheet page'), max_length=255, blank=True)
     include_header = models.BooleanField(
@@ -105,7 +105,7 @@ class Settings(ActionsMixin):
     filename = models.CharField(
         _('custom filename'), max_length=255, blank=True)
     buffer_file = models.FileField(
-        _('file'), upload_to=FILE_PATH, db_index=True, blank=True)
+        _('file'), upload_to=SETTINGS['FILE_PATH'], db_index=True, blank=True)
 
     dataset = models.CharField(
         _('dataset'), max_length=255, blank=True,
@@ -268,7 +268,7 @@ def settings_post_save(sender, **kwargs):
 class Sequence(models.Model):
     name = models.CharField(_('name'), max_length=255)
     buffer_file = models.FileField(
-        _('file'), upload_to=FILE_PATH, db_index=True, blank=True)
+        _('file'), upload_to=SETTINGS['FILE_PATH'], db_index=True, blank=True)
 
     settings = models.ManyToManyField(
         Settings, verbose_name=_('settings'))
@@ -429,7 +429,7 @@ class Report(ActionsMixin):
     )
 
     buffer_file = models.FileField(
-        _('file'), upload_to=FILE_PATH, db_index=True, blank=True)
+        _('file'), upload_to=SETTINGS['FILE_PATH'], db_index=True, blank=True)
     status = models.PositiveSmallIntegerField(
         _('status'), choices=STATUS_CHOICES, default=RUNNING)
 

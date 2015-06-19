@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from mtr.sync.settings import FILE_PATH
+from mtr.sync.settings import SETTINGS
 
 
 class MockInstance(object):
@@ -17,5 +17,5 @@ class SettingsTest(TestCase):
 
         with self.settings(**new_settings):
             self.assertEqual(
-                FILE_PATH(instance, 'filename.xls'),
+                SETTINGS['FILE_PATH'](instance, 'filename.xls'),
                 'sync/import/filename.xls')

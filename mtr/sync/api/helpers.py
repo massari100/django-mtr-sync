@@ -8,8 +8,6 @@ from django.db import models
 from django.conf import settings as django_settings
 from django.db.models.fields import Field as ModelField
 
-from ..settings import MODEL_SETTINGS_NAME
-
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 _symbols = (':', '|', ',', '+', '-')
 
@@ -94,7 +92,7 @@ def column_index(value):
 
 
 def model_settings(model):
-    return getattr(model, MODEL_SETTINGS_NAME, {})
+    return getattr(model, 'sync_settings', {})
 
 
 def models_list():
