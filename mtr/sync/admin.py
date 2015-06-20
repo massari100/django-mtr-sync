@@ -127,7 +127,7 @@ class SettingsAdmin(admin.ModelAdmin):
 
         (_('Worksheet settings'), {
             'fields': (
-                ('start_col', 'end_col'), ('start_row', 'end_row'),
+                ('start_row', 'end_row'),
                 ('include_header', 'populate_from_file'),
                 'worksheet',
             )

@@ -178,9 +178,9 @@ def update(model, model_attrs, related_attrs, context, **kwargs):
     return instances
 
 
-@manager.register('action', _('Update or create'))
-def update_or_create(model, model_attrs, related_attrs, context, **kwargs):
-    instances = update(model, model_attrs, related_attrs, context, **kwargs)
+# @manager.register('action', _('Update or create'))
+# def update_or_create(model, model_attrs, related_attrs, context, **kwargs):
+#     instances = update(model, model_attrs, related_attrs, context, **kwargs)
 
-    if not instances:
-        create(model, model_attrs, related_attrs, context, **kwargs)
+#     if not instances:
+#         create(model, model_attrs, related_attrs, context, **kwargs)

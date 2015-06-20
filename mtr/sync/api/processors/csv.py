@@ -24,14 +24,10 @@ class CsvProcessor(Processor):
         self._f = open(path, 'w')
         self._writer = csv.writer(self._f, dialect='excel')
 
-        # prepend rows and cols
+        # prepend rows
         if self.start['row'] > 1:
             for i in range(0, self.start['row']):
                 self._writer.writerow([])
-
-        if self.start['col'] > 1:
-            self._prepend = [None, ]
-            self._prepend *= self.start['col']
 
     def open(self, path):
         self._f = open(path, 'r')
@@ -54,7 +50,7 @@ class CsvProcessor(Processor):
         if self._prepend:
             value = self._prepend + value
 
-        self._writer.writerow(value[:self.end['col']])
+        self._writer.writerow(value)
 
     def _get_row(self, row):
         value = None
@@ -65,7 +61,7 @@ class CsvProcessor(Processor):
                 self._rows_counter += 1
                 value = next(self._reader)
         except StopIteration:
-            return [''] * self.end['col']
+            return [''] * (max(self.cells) + 1)
 
         return value
 

@@ -22,11 +22,11 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
 
         return worksheet
 
-    def check_values(self, worksheet, instance, row, index_prepend=0):
+    def check_values(self, worksheet, instance, row):
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
             try:
-                sheet_value = worksheet.cell_value(row, index+index_prepend)
+                sheet_value = worksheet.cell_value(row, index)
             except IndexError:
                 sheet_value = ''
 
@@ -58,12 +58,12 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
             if index == row:
                 return value
 
-    def check_values(self, worksheet, instance, row, index_prepend=0):
+    def check_values(self, worksheet, instance, row):
         row_values = self._get_row_values(row, worksheet.iter_rows())
 
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
-            sheet_value = row_values[index + index_prepend].value
+            sheet_value = row_values[index].value
             sheet_value = '' if sheet_value is None else sheet_value
 
             if isinstance(value, list):
@@ -92,12 +92,12 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
             if index == row:
                 return value
 
-    def check_values(self, worksheet, instance, row, index_prepend=0):
+    def check_values(self, worksheet, instance, row):
         row_values = self._get_row_values(row, worksheet)
 
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
-            sheet_value = row_values[index + index_prepend]
+            sheet_value = row_values[index]
 
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))
@@ -123,12 +123,12 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
 
         return worksheet
 
-    def check_values(self, worksheet, instance, row, index_prepend=0):
+    def check_values(self, worksheet, instance, row):
         row_values = worksheet.row(row)
 
         for index, field in enumerate(self.fields):
             value = process_attribute(instance, field.attribute)
-            sheet_value = row_values[index + index_prepend].value
+            sheet_value = row_values[index].value
 
             if isinstance(value, list):
                 value = ','.join(map(lambda v: str(v), value))

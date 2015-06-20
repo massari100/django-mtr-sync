@@ -16,7 +16,6 @@ class XlsxProcessor(Processor):
 
     def create(self, path):
         self._path = path
-        self._prepend = None
         self._workbook = openpyxl.Workbook(optimized_write=True)
         self._worksheet = self._workbook.create_sheet()
         self._worksheet.title = self.settings.worksheet
@@ -25,10 +24,6 @@ class XlsxProcessor(Processor):
         if self.start['row'] > 1:
             for i in range(0, self.start['row']):
                 self._worksheet.append([])
-
-        if self.start['col'] > 1:
-            self._prepend = [None, ]
-            self._prepend *= self.start['col']
 
     def open(self, path):
         self._workbook = openpyxl.load_workbook(path, use_iterators=True)
@@ -48,10 +43,7 @@ class XlsxProcessor(Processor):
             self._worksheet.get_highest_column())
 
     def write(self, row, value):
-        if self._prepend:
-            value = self._prepend + value
-
-        self._worksheet.append(value[:self.end['col']])
+        self._worksheet.append(value)
 
     def _get_row(self, row):
         value = None
@@ -66,7 +58,7 @@ class XlsxProcessor(Processor):
                 self._rows_counter += 1
                 value = next(self._rows)
         except StopIteration:
-            return [''] * self.end['col']
+            return [''] * (max(self.cells) + 1)
 
         return list(map(lambda v: v.value, value))
 

@@ -150,19 +150,6 @@ class ProcessorTestMixin(ApiTestMixin):
         else:
             end_row = self.queryset.count() - 1
 
-        if self.settings.start_col:
-            start_col = column_index(self.settings.start_col) - 1
-        else:
-            start_col = 0
-
-        if self.settings.start_col and self.settings.end_col:
-            fields_limit = self.settings.end_col - \
-                column_index(self.settings.start_col) + 1
-        else:
-            fields_limit = len(self.fields)
-
-        self.fields = self.fields[:fields_limit]
-
         if self.queryset.count() < end_row:
             end_row = self.queryset.count() + start_row - 1
             last = self.queryset.last()
@@ -176,11 +163,11 @@ class ProcessorTestMixin(ApiTestMixin):
 
         worksheet = self.open_report(report)
         self.check_values(
-            worksheet, first, start_row, start_col)
+            worksheet, first, start_row)
 
         worksheet = self.open_report(report)
         self.check_values(
-            worksheet, last, end_row, start_col)
+            worksheet, last, end_row)
 
         self.check_file_existence_and_delete(report)
 
@@ -202,8 +189,6 @@ class ProcessorTestMixin(ApiTestMixin):
 
     def test_export_all_dimension_settings(self):
         self.settings.start_row = 25
-        self.settings.start_col = 'J'
-        self.settings.end_col = 20
         self.settings.end_row = 250
 
         report = self.check_report_success()
@@ -217,8 +202,6 @@ class ProcessorTestMixin(ApiTestMixin):
 
     def test_import_create_data(self):
         self.settings.start_row = 1
-        self.settings.start_col = 10
-        self.settings.end_col = 20
         self.settings.end_row = 250
 
         report = self.check_report_success()
@@ -261,47 +244,44 @@ class ProcessorTestMixin(ApiTestMixin):
 
         self.check_sheet_values_and_delete_report(report, import_report)
 
-    def test_import_update_or_create(self):
-        self.queryset = self.model.objects.all()
-        self.settings.filter_querystring = ''
-        self.settings.fields.filter(attribute__icontains='|_').delete()
-        self.fields = self.settings.fields.all()
-        self.settings.dataset = ''
+    # def test_import_update_or_create(self):
+    #     self.queryset = self.model.objects.all()
+    #     self.settings.filter_querystring = ''
+    #     self.settings.fields.filter(attribute__icontains='|_').delete()
+    #     self.fields = self.settings.fields.all()
+    #     self.settings.dataset = ''
 
-        report = self.check_report_success()
+    #     report = self.check_report_success()
 
-        self.queryset.update(surname_de='', name_de='')
-        self.queryset.filter(id__gt=10).delete()
-        self.settings.fields.filter(attribute='id') \
-            .update(find=True, update=False)
+    #     self.queryset.update(surname_de='', name_de='')
+    #     self.queryset.filter(id__gt=10).delete()
+    #     self.settings.fields.filter(attribute='id') \
+    #         .update(find=True, update=False)
 
-        self.settings.filter_querystring = ''
-        self.settings.data_action = 'update_or_create'
-        self.settings.buffer_file = report.buffer_file
-        self.settings.action = self.settings.IMPORT
-        [field.delete() for field in self.settings.fields.all()]
-        self.settings.create_default_fields()
+    #     self.settings.filter_querystring = ''
+    #     self.settings.data_action = 'update_or_create'
+    #     self.settings.buffer_file = report.buffer_file
+    #     self.settings.action = self.settings.IMPORT
+    #     [field.delete() for field in self.settings.fields.all()]
+    #     self.settings.create_default_fields()
 
-        import_report = self.manager.import_data(self.settings)
+    #     import_report = self.manager.import_data(self.settings)
 
-        modified_instances = []
-        for instance in self.queryset.all():
-            if instance.id > 11:
-                instance.id -= 11
-            modified_instances.append(instance)
+    #     modified_instances = []
+    #     for instance in self.queryset.all():
+    #         if instance.id > 11:
+    #             instance.id -= 11
+    #         modified_instances.append(instance)
 
-        self.check_sheet_values_and_delete_report(
-            report, import_report, instances=modified_instances)
+    #     self.check_sheet_values_and_delete_report(
+    #         report, import_report, instances=modified_instances)
 
     def test_reading_empty_values(self):
         report = self.check_report_success()
 
         max_rows, max_cols = self.processor.open(report.buffer_file.path)
         self.processor.set_dimensions(
-            0, 0, max_rows, max_cols, import_data=True)
-
-        self.assertEqual(
-            self.processor.end['col'], len(self.processor.read(10000)))
+            0, max_rows, max_cols, import_data=True)
 
         self.assertEqual(
             ['', '', ''], self.processor.read(10000, [0, 23543, 434]))

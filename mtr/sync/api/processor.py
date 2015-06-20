@@ -10,7 +10,6 @@ from django.core.exceptions import ValidationError
 
 from .signals import export_started, export_completed, \
     import_started, import_completed, error_raised
-from .helpers import column_index
 from .exceptions import ErrorChoicesMixin
 
 from ..settings import SETTINGS
@@ -18,7 +17,7 @@ from ..settings import SETTINGS
 
 class DataProcessor(object):
 
-    def _set_rows_dimensions(self, preview, import_data):
+    def _set_rows_dimensions(self, import_data):
         if self.settings.start_row and \
                 self.settings.start_row > self.start['row']:
             self.start['row'] = self.settings.start_row - 1
@@ -37,37 +36,18 @@ class DataProcessor(object):
                 self.start['row'] += 1
                 self.end['row'] += 1
 
-    def _set_cols_dimensions(self, import_data, field_cols):
-        if self.settings.start_col:
-            start_col_index = column_index(self.settings.start_col)
-            if start_col_index > self.start['col']:
-                self.start['col'] = start_col_index - 1
-
-                if not import_data:
-                    self.end['col'] += self.start['col']
-
-        if field_cols and field_cols > self.end['col']:
-            self.end['col'] = self.start['col'] + field_cols
-
-        if self.settings.end_col:
-            end_col_index = column_index(self.settings.end_col)
-
-            if end_col_index < self.end['col']:
-                self.end['col'] = end_col_index
-
     def set_dimensions(
-            self, start_row, start_col, end_row, end_col, preview=False,
+            self, start_row, end_row, end_cols,
             import_data=False, field_cols=None):
         """Return start, end table dimensions"""
 
-        self.start = {'row': start_row, 'col': start_col}
-        self.end = {'row': end_row, 'col': end_col}
+        self.start = {'row': start_row}
+        self.end = {'row': end_row}
 
-        self._set_rows_dimensions(preview, import_data)
-        self._set_cols_dimensions(import_data, field_cols)
+        self._set_rows_dimensions(import_data)
 
-        self.cells = range(self.start['col'], self.end['col'])
         self.rows = range(self.start['row'], self.end['row'])
+        self.cells = range(0, end_cols)
 
 
 class Processor(DataProcessor):
@@ -134,7 +114,7 @@ class Processor(DataProcessor):
         for response in export_started.send(self):
             self.report = response[1]
 
-        self.set_dimensions(0, 0, data['rows'], data['cols'])
+        self.set_dimensions(0, data['rows'], data['cols'])
         filename, path = self.create_export_path()
         self.create(path)
 
@@ -217,9 +197,8 @@ class Processor(DataProcessor):
 
         max_rows, max_cols = self.open(path)
         self.set_dimensions(
-            0, 0, max_rows, max_cols,
-            import_data=True,
-            field_cols=data['cols'])
+            0, max_rows, max_cols,
+            import_data=True)
 
         items = data['items']
 
