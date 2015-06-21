@@ -74,13 +74,9 @@ class Settings(ActionsMixin):
 
     name = models.CharField(_('name'), blank=True, max_length=100)
 
-    start_col = models.CharField(
-        _('start column'), max_length=10, blank=True)
     start_row = models.PositiveIntegerField(
         _('start row'), null=True, blank=True)
 
-    end_col = models.CharField(
-        _('end column'), max_length=10, blank=True)
     end_row = models.PositiveIntegerField(
         _('end row'), null=True, blank=True)
 

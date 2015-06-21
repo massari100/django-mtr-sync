@@ -56,7 +56,7 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
 
 
 if django.get_version() <= '1.7':
-    SETTINGS = SETTINGS.update({
+    SETTINGS.update({
         'PROCESSORS': [
             'mtr_sync.api.processors.xlsx',
             'mtr_sync.api.processors.xls',
@@ -65,4 +65,5 @@ if django.get_version() <= '1.7':
         ],
         'ACTIONS': ['mtr_sync.api.actions'],
         'CONVERTERS': ['mtr_sync.api.converters']
-    }).update(getattr_with_prefix('SYNC', 'SETTINGS', {}))
+    })
+    SETTINGS.update(getattr_with_prefix('SYNC', 'SETTINGS', {}))
