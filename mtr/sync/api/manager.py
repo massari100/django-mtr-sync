@@ -213,14 +213,6 @@ class ProcessorManagerMixin(object):
         fields = list(settings.fields_with_converters())
         mfields = model_fields(model) if model else {}
 
-        if settings.end_col:
-            cols = column_index(settings.end_col)
-            if settings.start_col:
-                cols -= column_index(settings.start_col)
-                cols += 1
-
-            fields = fields[:cols]
-
         # TODO: refactor
 
         return {

@@ -5,7 +5,7 @@ from functools import wraps
 import django
 
 from django.shortcuts import render
-from django.utils.translation import gettext_lazy as gettext_lazy_original
+from django.utils.translation import ugettext_lazy as ugettext_lazy_original
 
 
 def gettext_prefix(string, context=None):
@@ -17,7 +17,7 @@ def gettext_prefix(string, context=None):
 def gettext_lazy(string, context=None):
     """Lazy gettext shortcut"""
 
-    return gettext_lazy_original(gettext_prefix(string, context))
+    return ugettext_lazy_original(gettext_prefix(string, context))
 
 
 def themed(template, version_subdirectory=False):

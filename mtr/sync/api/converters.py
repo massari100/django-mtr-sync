@@ -10,7 +10,9 @@ from ..helpers import gettext_lazy as _
 @manager.register('converter', label=_('Decimal'))
 def decimal(value, action):
     if value:
-        return Decimal(value.replace(',', '.'))
+        if isinstance(value, text_type):
+            value = value.replace(',', '.')
+        return Decimal(value)
     else:
         return Decimal(0)
 
