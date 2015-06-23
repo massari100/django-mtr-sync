@@ -6,11 +6,11 @@ from ..helpers import gettext_lazy as _
 
 def _find_instance(filters, model, key=None, marker=None):
     instance = None
-    can_create = False
     filter_attrs = {}
+    filters, can_create = filters
 
-    if isinstance(filters, tuple):
-        filters, can_create = filters
+    if not can_create:
+        return None, can_create
 
     for k, v in filters.items():
         if key and '{}{}'.format(key, marker or '') in k:
@@ -23,6 +23,8 @@ def _find_instance(filters, model, key=None, marker=None):
     if filter_attrs.keys():
         instance = model._default_manager \
             .filter(**filter_attrs).first()
+        if instance:
+            can_create = False
 
     return instance, can_create
 
@@ -64,6 +66,8 @@ def _create_mtm_instance(
         if related_instance is None:
             item = related_model(**instance_attr)
             item.save()
+        else:
+            item = related_instance
 
         add_after.setdefault(key, []).append(item)
 
@@ -83,7 +87,8 @@ def filter_fields(
         field_filter = field_name
 
         if field.find_filter:
-            field_filter = '{}__{}'.format(field_name, field.find_filter)
+            field_filter = '{}__{}'.format(
+                field_name, field.find_filter or 'exact')
         filter_params.update(**{field_filter: field_value})
 
         if can_create and field.set_filter == 'not' \
@@ -178,9 +183,9 @@ def update(model, model_attrs, related_attrs, context, **kwargs):
     return instances
 
 
-# @manager.register('action', _('Update or create'))
-# def update_or_create(model, model_attrs, related_attrs, context, **kwargs):
-#     instances = update(model, model_attrs, related_attrs, context, **kwargs)
+@manager.register('action', _('Update or create'))
+def update_or_create(model, model_attrs, related_attrs, context, **kwargs):
+    instances = update(model, model_attrs, related_attrs, context, **kwargs)
 
-#     if not instances:
-#         create(model, model_attrs, related_attrs, context, **kwargs)
+    if not instances:
+        create(model, model_attrs, related_attrs, context, **kwargs)
