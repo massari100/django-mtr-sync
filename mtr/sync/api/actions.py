@@ -4,34 +4,19 @@ from .manager import manager
 from ..helpers import gettext_lazy as _
 
 
-def _find_instance(filters, model, key=None, marker=None):
+def _find_instance(filters, model):
     instance = None
-    filter_attrs = {}
     filters, can_create = filters
 
-    if not can_create:
-        return None, can_create
-
-    for k, v in filters.items():
-        if key and '{}{}'.format(key, marker or '') in k:
-            if marker:
-                k = k.split(marker)[1]
-            filter_attrs[k] = v
-        elif not key:
-            filter_attrs[k] = v
-
-    if filter_attrs.keys():
+    if filters.keys() and can_create:
         instance = model._default_manager \
-            .filter(**filter_attrs).first()
-        if instance:
-            can_create = False
+            .filter(**filters).first()
 
     return instance, can_create
 
 
-def _create_related_instance(instance, filters, related_model, key, attrs):
-    related_instance, can_create = _find_instance(
-        filters, related_model, key, '|_fk_|')
+def _create_related_instance(instance, filters, related_model, attrs, key):
+    related_instance, can_create = _find_instance(filters, related_model)
 
     if not can_create:
         return
@@ -44,7 +29,7 @@ def _create_related_instance(instance, filters, related_model, key, attrs):
 
 
 def _create_mtm_instance(
-        add_after, instance, filters, related_model, key, related_models):
+        add_after, instance, filters, related_model, related_models, key):
     instance_attrs = []
     rel_values = list(related_models[key].values())
     indexes = len(rel_values[0])
@@ -57,8 +42,7 @@ def _create_mtm_instance(
         instance_attrs.append(instance_values)
 
     for instance_attr in instance_attrs:
-        related_instance, can_create = _find_instance(
-            filters, related_model, key, '|_m_|')
+        related_instance, can_create = _find_instance(filters, related_model)
 
         if not can_create:
             continue
@@ -75,30 +59,27 @@ def _create_mtm_instance(
 
 
 def filter_fields(
-        filter_params, model_attrs, fields, remove_markers=True,
-        can_create=True, only_instance=False):
+        model_attrs, fields, key=None, can_create=True, params=None):
+    filter_params = params or {}
 
     for field in filter(lambda f: f.find, fields):
-        field_name = field.attribute
-        if remove_markers:
-            field_name = field_name.replace('|_fk_|', '__') \
-                .replace('|_m_|', '__')
-        field_value = field.find_value or model_attrs[field.attribute]
-        field_filter = field_name
-
         if field.find_filter:
-            field_filter = '{}__{}'.format(
-                field_name, field.find_filter or 'exact')
-        filter_params.update(**{field_filter: field_value})
+            filter_attr = field.attribute
+
+            if key and key in field.attribute:
+                filter_attr = filter_attr.split(key)[1]
+            elif '|_' in field.attribute or key is not None:
+                continue
+
+            field_value = field.find_value or model_attrs[field.attribute]
+            field_filter = '{}__{}'.format(filter_attr, field.find_filter)
+            filter_params.update(**{field_filter: field_value})
 
         if can_create and field.set_filter == 'not' \
-                and not field_value and not only_instance:
+                and not field_value and not key:
             can_create = False
 
-    if can_create:
-        return filter_params, can_create
-    else:
-        return filter_params
+    return filter_params, can_create
 
 
 def filter_attrs(model_attrs, fields, mfields):
@@ -118,8 +99,8 @@ def find_instances(model, model_attrs, params, fields):
     filter_params = params
     instances = model._default_manager.all()
 
-    filter_params = filter_fields(
-        filter_params, model_attrs, fields, can_create=False)
+    filter_params, can_create = filter_fields(
+        model_attrs, fields, can_create=False, params=filter_params)
 
     if filter_params.keys():
         instances = instances.filter(**filter_params)
@@ -129,10 +110,9 @@ def find_instances(model, model_attrs, params, fields):
 
 @manager.register('action', _('Create only'))
 def create(model, model_attrs, related_attrs, context, **kwargs):
-    related_filters = filter_fields(
-        {}, kwargs['raw_attrs'], kwargs['fields'], remove_markers=False)
-    instance_filters = filter_fields(
-        {}, kwargs['raw_attrs'], kwargs['fields'], only_instance=True)
+    instance_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'],)
+    fk_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_fk_|')
+    mtm_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_m_|')
 
     model_attrs = filter_attrs(
         model_attrs, kwargs['fields'], kwargs['mfields'])
@@ -155,12 +135,13 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
 
         if isinstance(related_field, models.ForeignKey):
             _create_related_instance(
-                instance, related_filters, related_model, key, related_attrs)
+                instance, fk_filters, related_model,
+                related_attrs, key)
 
         elif isinstance(related_field, models.ManyToManyField):
             _create_mtm_instance(
-                add_after, instance, related_filters,
-                related_model, key, related_attrs)
+                add_after, instance, mtm_filters,
+                related_model, related_attrs, key)
 
     instance.save()
 

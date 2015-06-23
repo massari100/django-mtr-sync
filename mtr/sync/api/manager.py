@@ -8,7 +8,7 @@ from django.http import QueryDict
 from django.contrib.admin.views.main import IGNORED_PARAMS
 
 from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
-from .helpers import column_index, make_model_class, model_settings, \
+from .helpers import make_model_class, model_settings, \
     process_attribute, model_fields, cell_value
 from ..settings import SETTINGS
 

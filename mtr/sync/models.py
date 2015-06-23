@@ -353,7 +353,7 @@ class Field(PositionMixin):
 
     find_filter = models.CharField(
         _('find filter type'), max_length=255, blank=True,
-        choices=FILTER_CHOICES)
+        choices=FILTER_CHOICES, default='exact')
     find_value = models.CharField(
         _('find value'), max_length=255, blank=True)
 

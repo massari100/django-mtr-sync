@@ -101,7 +101,7 @@ class ContextInline(admin.TabularInline):
 class SettingsAdmin(admin.ModelAdmin):
     list_display = (
         '__str__', 'action', 'model',
-        'processor', 'created_at', 'last_report'
+        'processor', 'created_at'#, 'last_report'
     )
     list_filter = ('sequence',)
     list_display_links = ('__str__', 'model')
@@ -195,14 +195,14 @@ class SettingsAdmin(admin.ModelAdmin):
             _('Copies successfully created'))
     copy.short_description = _('Create a copy of settings')
 
-    def last_report(self, obj):
-        report = obj.reports.first()
-        if report:
-            return smart_text('<a href="{0}">{0}</a>').format(
-                report.get_absolute_url())
-        return ''
-    last_report.short_description = _('Last report')
-    last_report.allow_tags = True
+    # def last_report(self, obj):
+    #     report = obj.reports.first()
+    #     if report:
+    #         return smart_text('<a href="{0}">{0}</a>').format(
+    #             report)
+    #     return ''
+    # last_report.short_description = _('Last report')
+    # last_report.allow_tags = True
 
 
 class SequenceAdmin(admin.ModelAdmin):
