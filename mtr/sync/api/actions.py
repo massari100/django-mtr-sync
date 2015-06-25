@@ -63,6 +63,8 @@ def filter_fields(
     filter_params = params or {}
 
     for field in filter(lambda f: f.find, fields):
+        field_value = field.find_value or model_attrs[field.attribute]
+
         if field.find_filter:
             filter_attr = field.attribute
 
@@ -71,7 +73,6 @@ def filter_fields(
             elif '|_' in field.attribute or key is not None:
                 continue
 
-            field_value = field.find_value or model_attrs[field.attribute]
             field_filter = '{}__{}'.format(filter_attr, field.find_filter)
             filter_params.update(**{field_filter: field_value})
 
@@ -143,7 +144,12 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
                 add_after, instance, mtm_filters,
                 related_model, related_attrs, key)
 
-    instance.save()
+    # poor save instance delay
+    # try:
+    #     instance.save()
+    # except IntegrityError:
+    #     time.sleep(2)
+    #     instance.save()
 
     for key, values in add_after.items():
         getattr(instance, key).add(*values)
