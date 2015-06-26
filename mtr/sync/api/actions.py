@@ -8,7 +8,7 @@ def _find_instance(filters, model):
     instance = None
     filters, can_create = filters
 
-    if filters.keys() and can_create:
+    if filters and can_create:
         instance = model._default_manager \
             .filter(**filters).first()
 
@@ -74,10 +74,9 @@ def filter_fields(
                 continue
 
             field_filter = '{}__{}'.format(filter_attr, field.find_filter)
-            filter_params.update(**{field_filter: field_value})
+            filter_params[field_filter] = field_value
 
-        if can_create and field.set_filter == 'not' \
-                and not field_value and not key:
+        if can_create and field.set_filter == 'not' and not field_value:
             can_create = False
 
     return filter_params, can_create
@@ -144,12 +143,7 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
                 add_after, instance, mtm_filters,
                 related_model, related_attrs, key)
 
-    # poor save instance delay
-    # try:
-    #     instance.save()
-    # except IntegrityError:
-    #     time.sleep(2)
-    #     instance.save()
+    instance.save()
 
     for key, values in add_after.items():
         getattr(instance, key).add(*values)
