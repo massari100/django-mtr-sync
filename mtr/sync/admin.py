@@ -1,8 +1,10 @@
 from functools import partial
 
+from django.utils import formats
 from django.utils.encoding import smart_text
 from django.contrib import admin
 from django import forms
+from django.core.urlresolvers import reverse
 
 from .helpers import themed, gettext_lazy as _
 from .models import Report, Settings, Field, Message, Context, Sequence, \
@@ -101,7 +103,7 @@ class ContextInline(admin.TabularInline):
 class SettingsAdmin(admin.ModelAdmin):
     list_display = (
         '__str__', 'action', 'model',
-        'processor', 'created_at'#, 'last_report'
+        'processor', 'created_at', 'latest_run_messages'
     )
     list_filter = ('sequence',)
     list_display_links = ('__str__', 'model')
@@ -195,14 +197,17 @@ class SettingsAdmin(admin.ModelAdmin):
             _('Copies successfully created'))
     copy.short_description = _('Create a copy of settings')
 
-    # def last_report(self, obj):
-    #     report = obj.reports.first()
-    #     if report:
-    #         return smart_text('<a href="{0}">{0}</a>').format(
-    #             report)
-    #     return ''
-    # last_report.short_description = _('Last report')
-    # last_report.allow_tags = True
+    def latest_run_messages(self, obj):
+        report = obj.reports.first()
+        if report:
+            return smart_text('<a href="{}{}">{} - {}</a>').format(
+                reverse('admin:mtr_sync_message_changelist'),
+                '?report__id__exact={}'.format(report.id),
+                formats.localize(report.started_at),
+                report.get_status_display())
+        return ''
+    latest_run_messages.short_description = _('Latest run messages')
+    latest_run_messages.allow_tags = True
 
 
 class SequenceAdmin(admin.ModelAdmin):

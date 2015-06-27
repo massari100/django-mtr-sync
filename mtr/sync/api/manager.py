@@ -296,8 +296,7 @@ class Manager(ProcessorManagerMixin):
             values = getattr(self, key, OrderedDict())
             position = getattr(func, 'position', 0)
             new_name = func_name or func.__name__
-            if label:
-                func.label = label
+            func.label = label
 
             if values is not None:
                 if values.get(new_name, None) is not None:

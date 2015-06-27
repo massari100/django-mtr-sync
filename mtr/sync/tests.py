@@ -14,11 +14,9 @@ from django.utils.translation import activate
 
 if django.get_version() >= '1.7':
     from mtr.sync.api import manager
-    from mtr.sync.api.helpers import column_index
     from mtr.sync.models import Settings
 else:
     from mtr_sync.api import manager
-    from mtr_sync.api.helpers import column_index
     from mtr_sync.models import Settings
 
 
@@ -67,7 +65,7 @@ class ApiTestMixin(object):
             model='{}.{}'.format(
                 self.model._meta.app_label, self.model.__name__).lower(),
             include_header=False,
-            dataset='some_dataset' if django.get_version() >= '1.7' else '',
+            dataset='some_dataset',
             filter_querystring='security_level__gte=10'
             '&surname__icontains=t&o=-3.2&gender__exact=M'
             '&fields=action_checkbox,name,surname,security_level,gender',
@@ -118,14 +116,12 @@ class ProcessorTestMixin(ApiTestMixin):
     def test_report_empty_import_errors(self):
         self.settings.start_row = 100
         self.settings.start_col = 18
-        self.settings.end_col = 38
         self.settings.end_row = 350
 
         report = self.check_report_success()
 
         self.settings.start_row = 1
         self.settings.start_col = 1
-        self.settings.end_col = 15
         self.settings.end_row = 99
         self.settings.action = self.settings.IMPORT
         [field.delete() for field in self.settings.fields.all()]
@@ -243,38 +239,6 @@ class ProcessorTestMixin(ApiTestMixin):
         import_report = self.manager.import_data(self.settings)
 
         self.check_sheet_values_and_delete_report(report, import_report)
-
-    def test_import_update_or_create(self):
-        self.queryset = self.model.objects.all()
-        self.settings.filter_querystring = ''
-        self.settings.fields.filter(attribute__icontains='|_').delete()
-        self.fields = self.settings.fields.all()
-        self.settings.dataset = ''
-
-        report = self.check_report_success()
-
-        self.queryset.update(surname_de='', name_de='')
-        self.queryset.filter(id__gt=10).delete()
-        self.settings.fields.filter(attribute='id') \
-            .update(find=True, update=False)
-
-        self.settings.filter_querystring = ''
-        self.settings.data_action = 'update_or_create'
-        self.settings.buffer_file = report.buffer_file
-        self.settings.action = self.settings.IMPORT
-        [field.delete() for field in self.settings.fields.all()]
-        self.settings.create_default_fields()
-
-        import_report = self.manager.import_data(self.settings)
-
-        modified_instances = []
-        for instance in self.queryset.all():
-            if instance.id > 11:
-                instance.id -= 11
-            modified_instances.append(instance)
-
-        self.check_sheet_values_and_delete_report(
-            report, import_report, instances=modified_instances)
 
     def test_reading_empty_values(self):
         report = self.check_report_success()
