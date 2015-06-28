@@ -21,43 +21,43 @@ def cell_value(row, cols, processor=None):
         return row[column_index(cols)]
 
     # TODO: use regex
-    # no_symbols_finded = True
-    # for symbol in _symbols:
-    #     if symbol in cols:
-    #         no_symbols_finded = False
-    #         break
+    no_symbols_finded = True
+    for symbol in _symbols:
+        if symbol in cols:
+            no_symbols_finded = False
+            break
 
-    # if no_symbols_finded:
-    #     return row[column_index(cols)]
+    if no_symbols_finded:
+        return row[column_index(cols)]
 
-    # items = []
+    items = []
 
-    # for item in cols.split('+'):
-    #     value = []
-    #     joiner = None
+    for item in cols.split('+'):
+        value = []
+        joiner = None
 
-    #     if '|' in item:
-    #         item, joiner = item.split('|')
+        if '|' in item:
+            item, joiner = item.split('|')
 
-    #     for col in item.split(','):
-    #         if processor and ':' in col:
-    #             col, row = col.split(':')
-    #             row = processor.read(int(row)-1)
-    #         if '-' in col:
-    #             start, end = col.split('-')
-    #             value += row[column_index(start):column_index(end)+1]
-    #         else:
-    #             value.append(row[column_index(col)])
-    #     if joiner is not None:
-    #         joiner = joiner or ' '
-    #         value = joiner.join(map(lambda v: smart_text(v), value))
+        for col in item.split(','):
+            if processor and ':' in col:
+                col, row = col.split(':')
+                row = processor.read(int(row)-1)
+            if '-' in col:
+                start, end = col.split('-')
+                value += row[column_index(start):column_index(end)+1]
+            else:
+                value.append(row[column_index(col)])
+        if joiner is not None:
+            joiner = joiner or ' '
+            value = joiner.join(map(lambda v: smart_text(v), value))
 
-    #     if '+' in cols:
-    #         items.append(value)
-    #     else:
-    #         items = value
+        if '+' in cols:
+            items.append(value)
+        else:
+            items = value
 
-    # return items
+    return items
 
 
 def column_name(index):

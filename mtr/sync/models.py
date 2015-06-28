@@ -150,7 +150,7 @@ class Settings(ActionsMixin):
         max_row, max_col = processor.open(self.buffer_file.path)
         processor.set_dimensions(0, 0, max_row, max_col)
 
-        start_row, start_col = 0, 0
+        start_row = 0
 
         index = 1
         while index < max_row:
@@ -159,16 +159,12 @@ class Settings(ActionsMixin):
 
             for col_index, col in enumerate(row):
                 if col:
-                    start_col = col_index + 1
                     index = max_row
                     break
             index += 1
 
         self.start_row = start_row
         self.end_row = max_row
-
-        self.start_col = start_col
-        self.end_col = max_col
 
     def create_default_fields(self, exclude=None, add_label=True):
         """Create all fields for selected model"""

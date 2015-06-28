@@ -4,7 +4,6 @@ from ..helpers import gettext_lazy as _
 class ErrorChoicesMixin(object):
     PREPARE_QUERYSET = 0
     PREPARE_DATA = 1
-    SETUP_DIMENSIONS = 2
     OPEN_FILE = 3
     CREATE_FILE = 4
     WRITE_HEADER = 5
@@ -18,7 +17,6 @@ class ErrorChoicesMixin(object):
     STEP_CHOICES = (
         (PREPARE_QUERYSET, _('prepare queryset')),
         (PREPARE_DATA, _('prepare data')),
-        (SETUP_DIMENSIONS, _('setup dimensions for file')),
         (OPEN_FILE, _('open file')),
         (CREATE_FILE, _('create file')),
         (WRITE_HEADER, _('write header')),
