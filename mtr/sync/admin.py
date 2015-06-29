@@ -211,7 +211,7 @@ class SettingsAdmin(admin.ModelAdmin):
 
 
 class SequenceAdmin(admin.ModelAdmin):
-    list_display = ('name', 'buffer_file')
+    list_display = ('name', 'buffer_file', 'latest_sync')
     filter_horizontal = ('settings', )
     actions = ('run',)
 
@@ -228,6 +228,23 @@ class SequenceAdmin(admin.ModelAdmin):
             request,
             _('Data synchronization started in background.'))
     run.short_description = _('Sync data')
+
+    def get_readonly_fields(self, request, obj=None):
+        if not request.user.is_superuser:
+            return ('name', 'settings')
+        return tuple()
+
+    def latest_sync(self, obj):
+        report = obj.settings.first().reports.first()
+        if report:
+            return smart_text('<a href="{}{}">{} - {}</a>').format(
+                reverse('admin:mtr_sync_message_changelist'),
+                '?report__id__exact={}'.format(report.id),
+                formats.localize(report.started_at),
+                report.get_status_display())
+        return ''
+    latest_sync.short_description = _('Latest sync')
+    latest_sync.allow_tags = True
 
 
 class ReplacerCategoryAdmin(admin.ModelAdmin):
