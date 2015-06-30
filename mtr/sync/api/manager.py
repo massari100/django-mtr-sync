@@ -171,7 +171,7 @@ class ProcessorManagerMixin(object):
             )
         }
 
-    def prepare_handlers(self, key_name, model, processor, context=None):
+    def prepare_handlers(self, key_name, processor, model, context=None):
         prepares = []
         handlers = getattr(self, self._make_key(key_name))
         for handler in handlers.keys():
@@ -180,9 +180,7 @@ class ProcessorManagerMixin(object):
 
         context = context or {}
         for prepare in prepares:
-            result = prepare(model, processor, **context)
-            if isinstance(result, dict):
-                context.update(result)
+            context = prepare(model, context)
 
         return context
 
@@ -265,6 +263,7 @@ class Manager(ProcessorManagerMixin):
         self.datasets = OrderedDict()
         self.befores = OrderedDict()
         self.afters = OrderedDict()
+        self.errors = OrderedDict()
 
     def _make_key(self, key):
         return '{}s'.format(key)
@@ -296,7 +295,9 @@ class Manager(ProcessorManagerMixin):
             values = getattr(self, key, OrderedDict())
             position = getattr(func, 'position', 0)
             new_name = func_name or func.__name__
+
             func.label = label
+            func.use_transaction = kwargs.get('use_transaction', False)
 
             if values is not None:
                 if values.get(new_name, None) is not None:

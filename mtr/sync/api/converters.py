@@ -31,8 +31,9 @@ def comalist(value, action):
         if isinstance(value, list):
             return ','.join(map(lambda v: smart_text(v), value))
     else:
-        if isinstance(value, text_type) and ',' in value:
+        if isinstance(value, text_type):
             return value.split(',')
+    return [value]
 
 
 @manager.register('converter', label=_('Boolean'))

@@ -192,33 +192,38 @@ class Processor(DataProcessor):
         params = self.manager.filter_dataset(self.settings) or {}
         action = self.manager.get_or_raise('action', self.settings.data_action)
         context = self.manager.prepare_context(self.settings, path)
-        context = self.manager.prepare_handlers(
-            'before', model, self, context)
+        context = self.manager.prepare_handlers('before', self, model, context)
 
         max_rows, max_cols = self.open(path)
         self.set_dimensions(
             0, max_rows, max_cols,
             import_data=True)
 
-        items = data['items']
+        use_transaction = getattr(action, 'use_transaction', False)
+        if use_transaction:
+            action = transaction.atomic(action)
 
-        for row, _model in items:
+        for row, _model in data['items']:
             model_attrs, related_attrs = self.prepare_attrs(_model)
             model_attrs.update(**params)
 
-            sid = transaction.savepoint()
+            kwargs = dict(
+                processor=self, path=path, fields=data['fields'],
+                params=params, raw_attrs=_model,
+                mfields=data['mfields'],
+            )
+
+            if use_transaction:
+                sid = transaction.savepoint()
 
             try:
-                with transaction.atomic():
-                    context = action(
-                        model, model_attrs, related_attrs, context,
-                        processor=self, path=path, fields=data['fields'],
-                        params=params, raw_attrs=_model,
-                        mfields=data['mfields'])
+                context = action(
+                    model, model_attrs, related_attrs, context, **kwargs)
             except (Error, ValueError, ValidationError,
                     AttributeError, TypeError, IndexError):
+                if use_transaction:
+                    transaction.savepoint_rollback(sid)
 
-                transaction.savepoint_rollback(sid)
                 error_message = traceback.format_exc()
 
                 value = {
@@ -234,7 +239,13 @@ class Processor(DataProcessor):
                     step=ErrorChoicesMixin.IMPORT_DATA)
                 self.report.status = self.report.ERROR
 
-        self.manager.prepare_handlers('after', model, self, context)
+                context.update(kwargs)
+                context['error_message'] = error_message
+
+                self.manager.prepare_handlers(
+                    'error', self, model, context)
+
+        self.manager.prepare_handlers('after', self, model, context)
 
         # send signal to save report
         for response in import_completed.send(

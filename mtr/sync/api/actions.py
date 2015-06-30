@@ -108,7 +108,7 @@ def find_instances(model, model_attrs, params, fields):
     return instances
 
 
-@manager.register('action', _('Create only'))
+@manager.register('action', _('Create only'), use_transaction=True)
 def create(model, model_attrs, related_attrs, context, **kwargs):
     instance_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'],)
     fk_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_fk_|')
@@ -148,7 +148,7 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
     for key, values in add_after.items():
         getattr(instance, key).add(*values)
 
-    return instance
+    return context
 
 
 @manager.register('action', _('Update only'))
