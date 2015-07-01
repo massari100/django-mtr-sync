@@ -507,7 +507,7 @@ class Message(PositionMixin, ErrorChoicesMixin):
         (INFO, _('Info'))
     )
 
-    report = models.ForeignKey(Report, related_name='errors')
+    report = models.ForeignKey(Report, related_name='messages')
 
     message = models.TextField(_('message'), max_length=10000)
     step = models.PositiveSmallIntegerField(

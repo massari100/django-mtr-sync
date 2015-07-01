@@ -32,6 +32,8 @@ class ApiTestMixin(object):
         self.model = self.MODEL
         self.relatedmodel = self.RELATED_MODEL
         self.manager = manager
+        self.manager.import_dependecies()
+
         self.manager.processors = OrderedDict()
 
         if self.CREATE_PROCESSOR_AT_SETUP:
@@ -71,12 +73,9 @@ class ApiTestMixin(object):
             '&fields=action_checkbox,name,surname,security_level,gender',
             language='de')
 
-        if django.get_version() >= '1.7':
-            self.queryset = self.manager.get_or_raise(
-                'dataset', 'some_dataset')
-            self.queryset = self.queryset(self.MODEL, self.settings)
-        else:
-            self.queryset = self.model.objects.all()
+        self.queryset = self.manager.get_or_raise(
+            'dataset', 'some_dataset')
+        self.queryset = self.queryset(self.MODEL, self.settings)
         self.queryset = self.queryset.filter(
             security_level__gte=10, surname__icontains='t',
             gender__exact='M').order_by('-security_level', 'surname')
@@ -130,7 +129,7 @@ class ProcessorTestMixin(ApiTestMixin):
 
         report = self.manager.import_data(self.settings)
 
-        self.assertEqual(report.errors.count(), self.settings.end_row)
+        self.assertEqual(report.messages.count(), self.settings.end_row)
 
         self.check_file_existence_and_delete(report)
 

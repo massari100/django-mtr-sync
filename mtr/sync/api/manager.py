@@ -242,15 +242,6 @@ class ProcessorManagerMixin(object):
 
             yield row_index, _model
 
-    def import_dependecies(self):
-        """Import modules within IMPORT_PROCESSORS paths"""
-
-        modules = SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] \
-            + SETTINGS['CONVERTERS']
-
-        for module in modules:
-            __import__(module)
-
 
 class Manager(ProcessorManagerMixin):
 
@@ -264,6 +255,8 @@ class Manager(ProcessorManagerMixin):
         self.befores = OrderedDict()
         self.afters = OrderedDict()
         self.errors = OrderedDict()
+
+        self.imported = False
 
     def _make_key(self, key):
         return '{}s'.format(key)
@@ -331,6 +324,18 @@ class Manager(ProcessorManagerMixin):
             items.pop(getattr(item, '__name__', item), None)
 
         return item
+
+    def import_dependecies(self):
+        """Import modules within aditional paths"""
+
+        if not self.imported:
+            modules = SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] \
+                + SETTINGS['CONVERTERS']
+
+            for module in modules:
+                __import__(module)
+
+            self.imported = True
 
 manager = Manager()
 manager.import_dependecies()

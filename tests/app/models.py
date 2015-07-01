@@ -1,11 +1,16 @@
 import random
 
+import django
+
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils import six
 from django.utils.six.moves import range
 from django.db import models
 
-from mtr.sync.api import manager
+if django.get_version() >= '1.7':
+    from mtr.sync.api import manager
+else:
+    from mtr_sync.api import manager
 
 
 @python_2_unicode_compatible

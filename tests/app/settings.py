@@ -161,3 +161,8 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ALWAYS_EAGER = True
 CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
+
+
+SYNC_SETTINGS = {
+    'ACTIONS': ['mtr.sync.api.actions', 'app.models']
+}
