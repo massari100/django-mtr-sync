@@ -114,14 +114,13 @@ class ProcessorTestMixin(ApiTestMixin):
 
     def test_report_empty_import_errors(self):
         self.settings.start_row = 100
-        self.settings.start_col = 18
         self.settings.end_row = 350
 
         report = self.check_report_success()
 
         self.settings.start_row = 1
-        self.settings.start_col = 1
         self.settings.end_row = 99
+        self.settings.dataset = ''
         self.settings.action = self.settings.IMPORT
         [field.delete() for field in self.settings.fields.all()]
         self.settings.create_default_fields()
@@ -210,6 +209,7 @@ class ProcessorTestMixin(ApiTestMixin):
             tag.delete()
 
         self.settings.action = self.settings.IMPORT
+        self.settings.dataset = ''
         self.settings.buffer_file = report.buffer_file
         self.settings.filter_querystring = ''
         [field.delete() for field in self.settings.fields.all()]
@@ -234,6 +234,7 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.create_default_fields()
         self.settings.fields.filter(attribute='id') \
             .update(find=True, update=False)
+        self.settings.dataset = ''
 
         import_report = self.manager.import_data(self.settings)
 
@@ -249,8 +250,12 @@ class ProcessorTestMixin(ApiTestMixin):
         self.assertEqual(
             ['', '', ''], self.processor.read(10000, [0, 23543, 434]))
 
-    def test_import_data_without_model_and_fields(self):
-        report = self.check_report_success()
+    def test_import_data_cutsom_dataset_without_model_fields(self):
+        self.manager.unregister('dataset', 'custom_data')
+
+        @self.manager.register('dataset')
+        def custom_data(model, settings):
+            return [[x, y] for x in range(10) for y in range(10)]
 
         for field in self.settings.fields.all():
             field.delete()
@@ -266,9 +271,8 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.model = ''
         self.settings.filter_querystring = ''
         self.settings.data_action = 'test_import'
+        self.settings.dataset = 'custom_data'
         self.settings.action = self.settings.IMPORT
-        self.settings.buffer_file = report.buffer_file
-        self.settings.populate_from_buffer_file()
         self.settings.create_default_fields()
 
         self.settings.fields.create(attribute='test', position='1')

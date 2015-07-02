@@ -181,7 +181,8 @@ class Processor(DataProcessor):
     def import_data(self, model, path=None):
         """Import data to model and return errors if exists"""
 
-        path = path or self.settings.buffer_file.path
+        if self.settings.buffer_file:
+            path = self.settings.buffer_file.path
 
         # send signal to create report
         for response in import_started.send(self, path=path):
@@ -194,10 +195,11 @@ class Processor(DataProcessor):
         context = self.manager.prepare_context(self.settings, path)
         context = self.manager.prepare_handlers('before', self, model, context)
 
-        max_rows, max_cols = self.open(path)
-        self.set_dimensions(
-            0, max_rows, max_cols,
-            import_data=True)
+        if path:
+            max_rows, max_cols = self.open(path)
+            self.set_dimensions(
+                0, max_rows, max_cols,
+                import_data=True)
 
         use_transaction = getattr(action, 'use_transaction', False)
         if use_transaction:

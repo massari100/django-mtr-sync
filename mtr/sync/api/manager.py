@@ -216,7 +216,7 @@ class ProcessorManagerMixin(object):
         return {
             'cols': len(fields),
             'fields': fields,
-            'items': self.model_data(processor, model, fields),
+            'items': self.model_data(settings, processor, model, fields),
             'mfields': mfields
         }
 
@@ -231,16 +231,31 @@ class ProcessorManagerMixin(object):
 
         return processor.import_data(model, path)
 
-    def model_data(self, processor, model, fields):
-        for row_index in processor.rows:
+    def prepare_import_dataset(self, settings, processor, model, fields):
+        """Get data from diferent source registered at dataset"""
+
+        if settings.dataset:
+            dataset = self.get_or_raise('dataset', settings.dataset)
+            dataset = dataset(model, settings)
+
+            for index, row in enumerate(dataset):
+                yield index, row
+        else:
+            for index in processor.rows:
+                yield index, processor.read(index)
+
+    def model_data(self, settings, processor, model, fields):
+        dataset = self.prepare_import_dataset(
+            settings, processor, model, fields)
+
+        for index, row in dataset:
             _model = {}
-            row = processor.read(row_index)
 
             for index, field in enumerate(fields):
                 value = cell_value(row, field.name or index)
                 _model[field.attribute] = self.convert_value(value, field)
 
-            yield row_index, _model
+            yield index, _model
 
 
 class Manager(ProcessorManagerMixin):
