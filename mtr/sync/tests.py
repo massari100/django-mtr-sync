@@ -282,3 +282,21 @@ class ProcessorTestMixin(ApiTestMixin):
         self.assertEqual(import_report.status, import_report.SUCCESS)
 
         self.assertNotEqual(attrs, [])
+
+    def test_import_create_or_update(self):
+        report = self.check_report_success()
+
+        self.queryset.update(surname_de='', name_de='')
+        self.settings.data_action = 'update'
+
+        self.settings.filter_querystring = ''
+        self.settings.buffer_file = report.buffer_file
+        self.settings.action = self.settings.IMPORT
+        [field.delete() for field in self.settings.fields.all()]
+        self.settings.create_default_fields()
+        self.settings.fields.filter(attribute='id') \
+            .update(find=True, update=False)
+        self.settings.dataset = ''
+
+        import_report = self.manager.import_data(self.settings)
+

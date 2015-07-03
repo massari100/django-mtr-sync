@@ -15,7 +15,8 @@ def _find_instance(filters, model):
     return instance, can_create
 
 
-def _create_related_instance(instance, filters, related_model, attrs, key):
+def _create_related_instance(
+        instance, filters, related_model, attrs, key, updated_attrs):
     related_instance, can_create = _find_instance(filters, related_model)
 
     if not can_create:
@@ -25,12 +26,16 @@ def _create_related_instance(instance, filters, related_model, attrs, key):
         related_instance = related_model(**attrs[key])
         related_instance.save()
 
-    setattr(instance, key, related_instance)
+        instance.__class__.objects.filter(id=instance.id) \
+            .update(**{key: related_instance})
+    elif updated_attrs:
+        related_model.filter(id=related_instance.id).update(**updated_attrs)
 
 
 def _create_mtm_instance(
-        add_after, instance, filters, related_model, related_models, key):
-    instance_attrs = []
+        instance, filters, related_model,
+        related_models, key, updated_attrs):
+    instances_attrs = []
     rel_values = list(related_models[key].values())
     indexes = len(rel_values[0])
 
@@ -39,23 +44,22 @@ def _create_mtm_instance(
         for k in related_models[key].keys():
             value = related_models[key][k][index]
             instance_values[k] = value
-        instance_attrs.append(instance_values)
+        instances_attrs.append(instance_values)
 
-    for instance_attr in instance_attrs:
+    for instance_attrs in instances_attrs:
         related_instance, can_create = _find_instance(filters, related_model)
 
         if not can_create:
             continue
 
         if related_instance is None:
-            item = related_model(**instance_attr)
-            item.save()
-        else:
-            item = related_instance
+            related_instance = related_model(**instance_attrs)
+            related_instance.save()
 
-        add_after.setdefault(key, []).append(item)
-
-    return add_after
+            getattr(instance, key).add(related_instance)
+        elif updated_attrs:
+            related_model.filter(id=related_instance.id) \
+                .update(**updated_attrs)
 
 
 def filter_fields(
@@ -82,12 +86,13 @@ def filter_fields(
     return filter_params, can_create
 
 
-def filter_attrs(model_attrs, fields, mfields):
+def filter_attrs(model_attrs, fields, mfields, name=None):
     update_fields = list(filter(lambda f: f.update, fields)) or fields
     update_values = {}
 
     for field in update_fields:
-        if '_|' not in field.attribute and \
+        if ('_|' not in field.attribute and name is None or
+            name and name in field.attribute) and \
                 isinstance(mfields[field.attribute], models.Field):
             update_values[field.attribute] = field.set_value or \
                 model_attrs[field.attribute]
@@ -110,13 +115,20 @@ def find_instances(model, model_attrs, params, fields):
 
 @manager.register('action', _('Create only'), use_transaction=True)
 def create(model, model_attrs, related_attrs, context, **kwargs):
+    update = kwargs.get('update', False)
+    fk_updated_attrs, m_updated_attrs = None, None
+
+    # TODO: refactor to one loop preparation and DOCS!
+
     instance_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'],)
     fk_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_fk_|')
-    mtm_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_m_|')
+    m_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_m_|')
 
-    model_attrs = filter_attrs(
-        model_attrs, kwargs['fields'], kwargs['mfields'])
-    fields = kwargs['mfields']
+    if update:
+        fk_updated_attrs = filter_attrs(
+            related_attrs, kwargs['fields'], kwargs['mfields'], '|_fk_|')
+        m_updated_attrs = filter_attrs(
+            related_attrs, kwargs['fields'], kwargs['mfields'], '|_m_|')
 
     instance, can_create = _find_instance(
         instance_filters, model)
@@ -126,32 +138,36 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
 
     if instance is None:
         instance = model(**model_attrs)
-
-    add_after = {}
+        instance.save()
+    elif update:
+        updated_attrs = filter_attrs(
+            model_attrs, kwargs['fields'], kwargs['mfields'])
+        model.filter(id=instance.id).update(**updated_attrs)
 
     for key in related_attrs.keys():
-        related_field = fields.get(key)
+        related_field = kwargs['mfields'].get(key)
         related_model = related_field.rel.to
 
         if isinstance(related_field, models.ForeignKey):
             _create_related_instance(
                 instance, fk_filters, related_model,
-                related_attrs, key)
+                related_attrs, key, fk_updated_attrs)
 
         elif isinstance(related_field, models.ManyToManyField):
             _create_mtm_instance(
-                add_after, instance, mtm_filters,
-                related_model, related_attrs, key)
-
-    instance.save()
-
-    for key, values in add_after.items():
-        getattr(instance, key).add(*values)
+                instance, m_filters, related_model,
+                related_attrs, key, m_updated_attrs)
 
     return context
 
 
-@manager.register('action', _('Update only'))
+@manager.register('action', _('Create or update'), use_transaction=True)
+def create_or_update(*args, **kwargs):
+    kwargs['update'] = True
+    return create(*args, **kwargs)
+
+
+@manager.register('action', _('Update only'), use_transaction=True)
 def update(model, model_attrs, related_attrs, context, **kwargs):
     update_values = filter_attrs(
         model_attrs, kwargs['fields'], kwargs['mfields'])
