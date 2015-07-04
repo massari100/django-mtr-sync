@@ -217,6 +217,8 @@ class ProcessorTestMixin(ApiTestMixin):
 
         import_report = self.manager.import_data(self.settings)
 
+        self.assertEqual(import_report.status, import_report.SUCCESS)
+
         self.check_sheet_values_and_delete_report(report, import_report)
 
         self.assertEqual(before, self.queryset.count())
@@ -237,6 +239,8 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.dataset = ''
 
         import_report = self.manager.import_data(self.settings)
+
+        self.assertEqual(import_report.status, import_report.SUCCESS)
 
         self.check_sheet_values_and_delete_report(report, import_report)
 
@@ -287,7 +291,7 @@ class ProcessorTestMixin(ApiTestMixin):
         report = self.check_report_success()
 
         self.queryset.update(surname_de='', name_de='')
-        self.settings.data_action = 'update'
+        self.settings.data_action = 'create_or_update'
 
         self.settings.filter_querystring = ''
         self.settings.buffer_file = report.buffer_file
@@ -300,3 +304,4 @@ class ProcessorTestMixin(ApiTestMixin):
 
         import_report = self.manager.import_data(self.settings)
 
+        self.check_sheet_values_and_delete_report(report, import_report)

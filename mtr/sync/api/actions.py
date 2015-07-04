@@ -1,6 +1,7 @@
 from django.db import models
 
 from .manager import manager
+from .helpers import process_attribute
 from ..helpers import gettext_lazy as _
 
 
@@ -91,9 +92,8 @@ def filter_attrs(model_attrs, fields, mfields, name=None):
     update_values = {}
 
     for field in update_fields:
-        if ('_|' not in field.attribute and name is None or
-            name and name in field.attribute) and \
-                isinstance(mfields[field.attribute], models.Field):
+        if ('_|' not in field.attribute and name is None) or \
+            (name and name in field.attribute):
             update_values[field.attribute] = field.set_value or \
                 model_attrs[field.attribute]
 
