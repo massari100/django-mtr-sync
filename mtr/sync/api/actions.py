@@ -93,7 +93,7 @@ def filter_attrs(model_attrs, fields, mfields, name=None):
 
     for field in update_fields:
         if ('_|' not in field.attribute and name is None) or \
-            (name and name in field.attribute):
+                (name and name in field.attribute):
             update_values[field.attribute] = field.set_value or \
                 model_attrs[field.attribute]
 

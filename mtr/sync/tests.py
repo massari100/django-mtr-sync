@@ -300,6 +300,8 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.create_default_fields()
         self.settings.fields.filter(attribute='id') \
             .update(find=True, update=False)
+        self.settings.fields.filter(
+            attribute__in=['none_param', 'cutsom_method']).update(update=False)
         self.settings.dataset = ''
 
         import_report = self.manager.import_data(self.settings)

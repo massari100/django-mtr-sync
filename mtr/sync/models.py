@@ -343,7 +343,9 @@ class Field(PositionMixin):
 
     set_filter = models.CharField(
         _('set filter type'), max_length=255, blank=True,
-        choices=FILTER_CHOICES)
+        choices=(
+            ('not', _('Not create or update instance if empty cell'),)
+        ))
     set_value = models.CharField(
         _('set value'), max_length=255, blank=True)
 
