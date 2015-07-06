@@ -13,12 +13,27 @@ from .api.exceptions import ErrorChoicesMixin
 from .helpers import gettext_lazy as _
 
 
-class PositionMixin(models.Model):
+class PositionRelatedMixin(models.Model):
+    POSITION_RELATED_FIELD = None
+
     position = models.PositiveIntegerField(
         _('position'), null=True, blank=True)
 
     class Meta:
         abstract = True
+
+        ordering = ('position',)
+
+    def save(self, *args, **kwargs):
+        related_field = getattr(self, self.POSITION_RELATED_FIELD, None)
+
+        if self.position is None and related_field is not None:
+            self.position = self.__class__.objects.filter(**{
+                self.POSITION_RELATED_FIELD: related_field}) \
+                .aggregate(models.Max('position'))['position__max']
+            self.position = self.position + 1 if self.position else 0
+
+        super().save(*args, **kwargs)
 
 
 class ExportManager(models.Manager):
@@ -314,9 +329,11 @@ class Replacer(models.Model):
 
 
 @python_2_unicode_compatible
-class Field(PositionMixin):
+class Field(PositionRelatedMixin):
 
     """Data mapping field for Settings"""
+
+    POSITION_RELATED_FIELD = 'settings'
 
     # TODO: more filters and translations
 
@@ -365,18 +382,9 @@ class Field(PositionMixin):
     settings = models.ForeignKey(
         Settings, verbose_name=_('settings'), related_name='fields')
 
-    def save(self, *args, **kwargs):
-        if self.position is None:
-            self.position = self.__class__.objects \
-                .filter(settings=self.settings).count() + 1
-
-        super(Field, self).save(*args, **kwargs)
-
-    class Meta:
+    class Meta(PositionRelatedMixin.Meta):
         verbose_name = _('field')
         verbose_name_plural = _('fields')
-
-        ordering = ('position',)
 
         app_label = 'mtr_sync'
 
@@ -497,9 +505,11 @@ def save_import_report(sender, **kwargs):
 
 
 @python_2_unicode_compatible
-class Message(PositionMixin, ErrorChoicesMixin):
+class Message(PositionRelatedMixin, ErrorChoicesMixin):
 
     """Report errors with info about step where raised"""
+
+    POSITION_RELATED_FIELD = 'report'
 
     ERROR = 0
     INFO = 1
@@ -523,22 +533,14 @@ class Message(PositionMixin, ErrorChoicesMixin):
     type = models.PositiveSmallIntegerField(
         _('type'), choices=MESSAGE_CHOICES, default=ERROR)
 
-    class Meta:
+    class Meta(PositionRelatedMixin.Meta):
         verbose_name = _('message')
         verbose_name_plural = _('messages')
-
-        ordering = ('position', )
 
         app_label = 'mtr_sync'
 
     def __str__(self):
         return self.message
-
-    def save(self, *args, **kwargs):
-        if self.position is None:
-            self.position = self.__class__.objects \
-                .filter(report=self.report).count() + 1
-        super(Message, self).save(*args, **kwargs)
 
 
 @receiver(error_raised)
