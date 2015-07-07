@@ -32,7 +32,6 @@ class ApiTestMixin(object):
         self.model = self.MODEL
         self.relatedmodel = self.RELATED_MODEL
         self.manager = manager
-        self.manager.import_dependecies()
 
         self.manager.processors = OrderedDict()
 
