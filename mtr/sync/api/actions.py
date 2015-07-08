@@ -1,11 +1,10 @@
 from django.db import models
 
 from .manager import manager
-from .helpers import process_attribute
 from ..helpers import gettext_lazy as _
 
 
-def _find_instance(filters, model):
+def find_instance(filters, model):
     instance = None
     filters, can_create = filters
 
@@ -16,9 +15,9 @@ def _find_instance(filters, model):
     return instance, can_create
 
 
-def _create_related_instance(
+def create_related_instance(
         instance, filters, related_model, attrs, key, updated_attrs):
-    related_instance, can_create = _find_instance(filters, related_model)
+    related_instance, can_create = find_instance(filters, related_model)
 
     if not can_create:
         return
@@ -33,7 +32,7 @@ def _create_related_instance(
         related_model.filter(id=related_instance.id).update(**updated_attrs)
 
 
-def _create_mtm_instance(
+def create_mtm_instance(
         instance, filters, related_model,
         related_models, key, updated_attrs):
     instances_attrs = []
@@ -48,7 +47,7 @@ def _create_mtm_instance(
         instances_attrs.append(instance_values)
 
     for instance_attrs in instances_attrs:
-        related_instance, can_create = _find_instance(filters, related_model)
+        related_instance, can_create = find_instance(filters, related_model)
 
         if not can_create:
             continue
@@ -91,11 +90,13 @@ def filter_attrs(model_attrs, fields, mfields, name=None):
     update_fields = list(filter(lambda f: f.update, fields)) or fields
     update_values = {}
 
-    for field in update_fields:
-        if ('_|' not in field.attribute and name is None) or \
-                (name and name in field.attribute):
-            update_values[field.attribute] = field.set_value or \
-                model_attrs[field.attribute]
+    # TODO: use name as separator for ForeignKey and ManyToManyField
+
+    # for field in update_fields:
+    #     if ('_|' not in field.attribute and name is None) or \
+    #             (name and name in field.attribute):
+    #         update_values[field.attribute] = field.set_value or \
+    #             model_attrs[field.attribute]
 
     return update_values
 
@@ -120,7 +121,7 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
 
     # TODO: refactor to one loop preparation and DOCS!
 
-    instance_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'],)
+    instance_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'])
     fk_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_fk_|')
     m_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_m_|')
 
@@ -130,8 +131,7 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
         m_updated_attrs = filter_attrs(
             related_attrs, kwargs['fields'], kwargs['mfields'], '|_m_|')
 
-    instance, can_create = _find_instance(
-        instance_filters, model)
+    instance, can_create = find_instance(instance_filters, model)
 
     if not can_create:
         return instance
@@ -149,12 +149,12 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
         related_model = related_field.rel.to
 
         if isinstance(related_field, models.ForeignKey):
-            _create_related_instance(
+            create_related_instance(
                 instance, fk_filters, related_model,
                 related_attrs, key, fk_updated_attrs)
 
         elif isinstance(related_field, models.ManyToManyField):
-            _create_mtm_instance(
+            create_mtm_instance(
                 instance, m_filters, related_model,
                 related_attrs, key, m_updated_attrs)
 
