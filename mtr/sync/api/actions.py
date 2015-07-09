@@ -90,13 +90,11 @@ def filter_attrs(model_attrs, fields, mfields, name=None):
     update_fields = list(filter(lambda f: f.update, fields)) or fields
     update_values = {}
 
-    # TODO: use name as separator for ForeignKey and ManyToManyField
-
-    # for field in update_fields:
-    #     if ('_|' not in field.attribute and name is None) or \
-    #             (name and name in field.attribute):
-    #         update_values[field.attribute] = field.set_value or \
-    #             model_attrs[field.attribute]
+    for field in update_fields:
+        if ('_|' not in field.attribute and name is None) or \
+                (name and name in field.attribute):
+            update_values[field.attribute] = field.set_value or \
+                model_attrs[field.attribute]
 
     return update_values
 
