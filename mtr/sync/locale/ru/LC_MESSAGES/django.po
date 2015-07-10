@@ -49,7 +49,7 @@ msgstr "Синхронизировать"
 
 #: admin.py:197
 msgid "mtr.sync:Copies successfully created"
-msgstr ""
+msgstr "Копии успешно созданы"
 
 #: admin.py:198
 msgid "mtr.sync:Create a copy of settings"
@@ -69,23 +69,23 @@ msgstr "Только обновить"
 
 #: api/converters.py:10
 msgid "mtr.sync:Decimal"
-msgstr ""
+msgstr "Число с запятой"
 
 #: api/converters.py:20
 msgid "mtr.sync:String"
-msgstr ""
+msgstr "Строка"
 
 #: api/converters.py:28
 msgid "mtr.sync:Coma separated list"
-msgstr ""
+msgstr "Спсиок через запятую"
 
 #: api/converters.py:38
 msgid "mtr.sync:Boolean"
-msgstr ""
+msgstr "Истина, ложь"
 
 #: api/converters.py:46
 msgid "mtr.sync:File path"
-msgstr ""
+msgstr "Путь к файлу"
 
 #: api/exceptions.py:18
 msgid "mtr.sync:prepare queryset"
@@ -350,7 +350,7 @@ msgstr "контексты"
 
 #: models.py:418 models.py:506
 msgid "mtr.sync:Error"
-msgstr "Завершено с ошибками"
+msgstr "Ошибка"
 
 #: models.py:419
 msgid "mtr.sync:Running"
