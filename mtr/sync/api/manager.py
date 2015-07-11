@@ -295,8 +295,8 @@ class Manager(ProcessorManagerMixin):
         return False
 
     def _register_dict(self, type_name, func_name, label, **kwargs):
-        """Return decorator for adding functions as key, value to dict
-        and send manager_registered signal to handle new params"""
+        """Return decorator for adding functions as key, value
+        to instance, dict"""
 
         def decorator(func):
             key = self._make_key(type_name)

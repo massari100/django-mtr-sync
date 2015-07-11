@@ -4,6 +4,13 @@ from .manager import manager
 from ..helpers import gettext_lazy as _
 
 
+def update_instance(instance, attrs):
+    for key, value in attrs.items():
+        setattr(instance, key, value)
+    instance.save()
+    return instance
+
+
 def find_instance(filters, model):
     instance = None
     filters, can_create = filters
@@ -25,11 +32,8 @@ def create_related_instance(
     if related_instance is None:
         related_instance = related_model(**attrs[key])
         related_instance.save()
-
-        instance.__class__.objects.filter(id=instance.id) \
-            .update(**{key: related_instance})
     elif updated_attrs:
-        related_model.filter(id=related_instance.id).update(**updated_attrs)
+        related_instance = update_instance(related_instance, updated_attrs)
 
 
 def create_mtm_instance(
@@ -58,8 +62,7 @@ def create_mtm_instance(
 
             getattr(instance, key).add(related_instance)
         elif updated_attrs:
-            related_model.filter(id=related_instance.id) \
-                .update(**updated_attrs)
+            related_instance = update_instance(related_instance, updated_attrs)
 
 
 def filter_fields(
@@ -86,7 +89,7 @@ def filter_fields(
     return filter_params, can_create
 
 
-def filter_attrs(model_attrs, fields, mfields, name=None):
+def filter_attrs(raw_attrs, fields, mfields, name=None):
     update_fields = list(filter(lambda f: f.update, fields)) or fields
     update_values = {}
 
@@ -94,7 +97,7 @@ def filter_attrs(model_attrs, fields, mfields, name=None):
         if ('_|' not in field.attribute and name is None) or \
                 (name and name in field.attribute):
             update_values[field.attribute] = field.set_value or \
-                model_attrs[field.attribute]
+                raw_attrs[field.attribute]
 
     return update_values
 
@@ -125,9 +128,9 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
 
     if update:
         fk_updated_attrs = filter_attrs(
-            related_attrs, kwargs['fields'], kwargs['mfields'], '|_fk_|')
+            kwargs['raw_attrs'], kwargs['fields'], kwargs['mfields'], '|_fk_|')
         m_updated_attrs = filter_attrs(
-            related_attrs, kwargs['fields'], kwargs['mfields'], '|_m_|')
+            kwargs['raw_attrs'], kwargs['fields'], kwargs['mfields'], '|_m_|')
 
     instance, can_create = find_instance(instance_filters, model)
 
@@ -139,8 +142,8 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
         instance.save()
     elif update:
         updated_attrs = filter_attrs(
-            model_attrs, kwargs['fields'], kwargs['mfields'])
-        model.filter(id=instance.id).update(**updated_attrs)
+            kwargs['raw_attrs'], kwargs['fields'], kwargs['mfields'])
+        update_instance(instance, updated_attrs)
 
     for key in related_attrs.keys():
         related_field = kwargs['mfields'].get(key)
@@ -167,12 +170,13 @@ def create_or_update(*args, **kwargs):
 
 @manager.register('action', _('Update only'), use_transaction=True)
 def update(model, model_attrs, related_attrs, context, **kwargs):
-    update_values = filter_attrs(
-        model_attrs, kwargs['fields'], kwargs['mfields'])
+    updated_values = filter_attrs(
+        kwargs['raw_attrs'], kwargs['fields'], kwargs['mfields'])
 
     instances = find_instances(
         model, kwargs['raw_attrs'], kwargs['params'], kwargs['fields'])
 
-    instances.update(**update_values)
+    for instance in instances:
+        update_instance(instance, updated_values)
 
-    return instances
+    return context
