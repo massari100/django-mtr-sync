@@ -297,7 +297,7 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.action = self.settings.IMPORT
         [field.delete() for field in self.settings.fields.all()]
         self.settings.create_default_fields()
-        self.settings.fields.filter(attribute='id') \
+        self.settings.fields.filter(attribute__icontains='id') \
             .update(find=True, update=False)
         self.settings.fields.filter(
             attribute__in=['none_param', 'cutsom_method']).update(update=False)

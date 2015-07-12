@@ -50,3 +50,11 @@ def filepath(value, action):
         return value.path
     else:
         return value
+
+
+@manager.register('converter', label=_('Integer'))
+def integer(value, action):
+    if value:
+        return int(value)
+    else:
+        return value
