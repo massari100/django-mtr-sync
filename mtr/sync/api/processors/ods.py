@@ -14,11 +14,11 @@ class OdsProcessor(Processor):
 
     def create(self, path):
         self._path = path
-        self._prepend = None
+        self._max_cells = max(self.cells)
         self._workbook = ezodf.newdoc(doctype='ods', filename=path)
         self._worksheet = ezodf.Table(
             self.settings.worksheet,
-            size=(self.end['row'], max(self.cells) + 1))
+            size=(self.end['row'], self._max_cells + 1))
         self._workbook.sheets.append(self._worksheet)
 
     def open(self, path):

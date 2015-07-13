@@ -41,6 +41,7 @@ class CsvProcessor(Processor):
             maxrows += 1
             if len(row) > maxcols:
                 maxcols = len(row)
+        self._max_cells = maxcols
 
         self._f.seek(0)
 
@@ -61,7 +62,7 @@ class CsvProcessor(Processor):
                 self._rows_counter += 1
                 value = next(self._reader)
         except StopIteration:
-            return [''] * (max(self.cells) + 1)
+            return [''] * (self._max_cells + 1)
 
         return value
 

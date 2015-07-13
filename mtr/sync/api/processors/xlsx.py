@@ -37,10 +37,11 @@ class XlsxProcessor(Processor):
         self._read_from_start = False
         self._rows = self._worksheet.iter_rows()
         self._rows_counter = 0
+        self._max_cells = self._worksheet.get_highest_column()
 
         return (
             self._worksheet.get_highest_row(),
-            self._worksheet.get_highest_column())
+            self._max_cells)
 
     def write(self, row, value):
         self._worksheet.append(value)
@@ -58,7 +59,7 @@ class XlsxProcessor(Processor):
                 self._rows_counter += 1
                 value = next(self._rows)
         except StopIteration:
-            return [''] * (max(self.cells) + 1)
+            return [''] * (self._max_cells + 1)
 
         return list(map(lambda v: v.value, value))
 
