@@ -8,6 +8,7 @@ def update_instance(instance, attrs):
     for key, value in attrs.items():
         setattr(instance, key, value)
     instance.save()
+
     return instance
 
 
@@ -32,6 +33,9 @@ def create_related_instance(
     if related_instance is None:
         related_instance = related_model(**attrs[key])
         related_instance.save()
+
+        instance.__class__.objects.filter(id=instance.id) \
+            .update(**{key: related_instance.id})
     elif updated_attrs:
         related_instance = update_instance(related_instance, updated_attrs)
 
@@ -135,7 +139,7 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
     instance, can_create = find_instance(instance_filters, model)
 
     if not can_create:
-        return instance
+        return context
 
     if instance is None:
         instance = model(**model_attrs)
@@ -143,7 +147,7 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
     elif update:
         updated_attrs = filter_attrs(
             kwargs['raw_attrs'], kwargs['fields'], kwargs['mfields'])
-        update_instance(instance, updated_attrs)
+        instance = update_instance(instance, updated_attrs)
 
     for key in related_attrs.keys():
         related_field = kwargs['mfields'].get(key)

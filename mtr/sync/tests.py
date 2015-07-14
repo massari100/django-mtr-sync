@@ -166,6 +166,8 @@ class ProcessorTestMixin(ApiTestMixin):
 
         if import_report:
             self.assertEqual(import_report.status, import_report.SUCCESS)
+        else:
+            self.assertEqual(report.status, report.SUCCESS)
 
     def open_report(self, report):
         """Open data file and return worksheet or other data source"""
@@ -216,8 +218,6 @@ class ProcessorTestMixin(ApiTestMixin):
 
         import_report = self.manager.import_data(self.settings)
 
-        self.assertEqual(import_report.status, import_report.SUCCESS)
-
         self.check_sheet_values_and_delete_report(report, import_report)
 
         self.assertEqual(before, self.queryset.count())
@@ -238,8 +238,6 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.dataset = ''
 
         import_report = self.manager.import_data(self.settings)
-
-        self.assertEqual(import_report.status, import_report.SUCCESS)
 
         self.check_sheet_values_and_delete_report(report, import_report)
 
@@ -277,21 +275,21 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.dataset = 'custom_data'
         self.settings.action = self.settings.IMPORT
         self.settings.create_default_fields()
-
         self.settings.fields.create(attribute='test', position='1')
 
-        import_report = self.manager.import_data(self.settings)
-
-        self.assertEqual(import_report.status, import_report.SUCCESS)
+        self.manager.import_data(self.settings)
 
         self.assertNotEqual(attrs, [])
 
     def test_import_create_or_update(self):
+        self.settings.start_row = 1
+        self.settings.end_row = 250
+
         report = self.check_report_success()
 
         self.queryset.update(surname_de='', name_de='')
-        self.settings.data_action = 'create_or_update'
 
+        self.settings.data_action = 'create_or_update'
         self.settings.filter_querystring = ''
         self.settings.buffer_file = report.buffer_file
         self.settings.action = self.settings.IMPORT
@@ -299,8 +297,6 @@ class ProcessorTestMixin(ApiTestMixin):
         self.settings.create_default_fields()
         self.settings.fields.filter(attribute__icontains='id') \
             .update(find=True, update=False)
-        self.settings.fields.filter(
-            attribute__in=['none_param', 'cutsom_method']).update(update=False)
         self.settings.dataset = ''
 
         import_report = self.manager.import_data(self.settings)
