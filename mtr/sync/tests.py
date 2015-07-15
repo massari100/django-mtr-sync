@@ -133,6 +133,11 @@ class ProcessorTestMixin(ApiTestMixin):
 
     def check_sheet_values_and_delete_report(
             self, report, import_report=None, instances=None):
+        if import_report:
+            self.assertEqual(import_report.status, import_report.SUCCESS)
+        else:
+            self.assertEqual(report.status, report.SUCCESS)
+
         if self.settings.start_row:
             start_row = self.settings.start_row - 1
         else:
@@ -163,11 +168,6 @@ class ProcessorTestMixin(ApiTestMixin):
             worksheet, last, end_row)
 
         self.check_file_existence_and_delete(report)
-
-        if import_report:
-            self.assertEqual(import_report.status, import_report.SUCCESS)
-        else:
-            self.assertEqual(report.status, report.SUCCESS)
 
     def open_report(self, report):
         """Open data file and return worksheet or other data source"""

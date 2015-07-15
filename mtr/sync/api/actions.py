@@ -78,13 +78,15 @@ def filter_fields(
 
         if field.find_filter:
             filter_attr = field.attribute
+            find_filter = field.find_filter
 
             if key and key in field.attribute:
                 filter_attr = filter_attr.split(key)[1]
+                find_filter = find_filter if find_filter != 'exact' else 'in'
             elif '|_' in field.attribute or key is not None:
                 continue
 
-            field_filter = '{}__{}'.format(filter_attr, field.find_filter)
+            field_filter = '{}__{}'.format(filter_attr, find_filter)
             filter_params[field_filter] = field_value
 
         if can_create and field.set_filter == 'not' and not field_value:

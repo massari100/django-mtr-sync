@@ -33,7 +33,7 @@ class PositionRelatedMixin(models.Model):
                 .aggregate(models.Max('position'))['position__max']
             self.position = self.position + 1 if self.position else 0
 
-        super().save(*args, **kwargs)
+        super(PositionRelatedMixin, self).save(*args, **kwargs)
 
 
 class ExportManager(models.Manager):

@@ -40,11 +40,14 @@ def manage(command, prefix=None, nocd=False):
 def test(coverage=False):
     """Test listed apps"""
 
-    apps = []
-    apps.extend(PROJECT_APPS)
-    apps.extend(APPS)
-    test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), apps))
-    command = "test {} --pattern='*.py'".format(test_apps)
+    if django.get_version() >= '1.7':
+        apps = []
+        apps.extend(PROJECT_APPS)
+        apps.extend(APPS)
+        test_apps = ' '.join(map(lambda app: '{}.tests'.format(app), apps))
+        command = "test {} --pattern='*.py'".format(test_apps)
+    else:
+        command = "test --pattern='*.py'"
 
     if coverage:
         coverage = "coverage run --omit=*.virtualenvs/*," \

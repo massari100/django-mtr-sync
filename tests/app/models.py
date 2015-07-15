@@ -1,16 +1,9 @@
 import random
 
-import django
-
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils import six
 from django.utils.six.moves import range
 from django.db import models
-
-if django.get_version() >= '1.7':
-    from mtr.sync.api import manager
-else:
-    from mtr_sync.api import manager
 
 
 @python_2_unicode_compatible
@@ -102,8 +95,3 @@ class Person(models.Model):
         'custom_fields': ['custom_method', 'none_param'],
         'exclude': ['some_excluded_field']
     }
-
-
-@manager.register('dataset', label='some description')
-def some_dataset(model, settings):
-    return model.objects.filter(security_level__gte=30)

@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.test import TestCase
+from django.utils.encoding import smart_text
 
 from mtr.sync.tests import ProcessorTestMixin
 from mtr.sync.api.helpers import process_attribute
@@ -31,9 +32,9 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
                 sheet_value = ''
 
             if isinstance(value, list):
-                value = ','.join(map(lambda v: str(v), value))
+                value = ','.join(map(lambda v: smart_text(v), value))
             elif value:
-                value = str(value)
+                value = smart_text(value)
 
             self.assertEqual(
                 '' if value is None else value,
@@ -67,9 +68,9 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
             sheet_value = '' if sheet_value is None else sheet_value
 
             if isinstance(value, list):
-                value = ','.join(map(lambda v: str(v), value))
+                value = ','.join(map(lambda v: smart_text(v), value))
             elif value:
-                value = str(value)
+                value = smart_text(value)
 
             self.assertEqual(
                 '' if value is None else value,
@@ -100,9 +101,9 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
             sheet_value = row_values[index]
 
             if isinstance(value, list):
-                value = ','.join(map(lambda v: str(v), value))
+                value = ','.join(map(lambda v: smart_text(v), value))
             elif value:
-                value = str(value)
+                value = smart_text(value)
 
             self.assertEqual(
                 '' if value is None else value,
@@ -131,9 +132,9 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
             sheet_value = row_values[index].value
 
             if isinstance(value, list):
-                value = ','.join(map(lambda v: str(v), value))
+                value = ','.join(map(lambda v: smart_text(v), value))
             elif value:
-                value = str(value)
+                value = smart_text(value)
 
             self.assertEqual(
                 '' if value is None else value,
