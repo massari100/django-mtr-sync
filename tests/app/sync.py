@@ -2,9 +2,9 @@ import django
 
 
 if django.get_version() >= '1.7':
-    from mtr.sync.api import manager
+    from mtr.sync.api.manager import manager
 else:
-    from mtr_sync.api import manager
+    from mtr_sync.api.manager import manager
 
 
 @manager.register('dataset', label='some description')

@@ -164,5 +164,5 @@ CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
 
 SYNC_SETTINGS = {
-    'ACTIONS': ['mtr.sync.api.actions', 'app.models']
+    'ACTIONS': ['mtr.sync.api.actions', 'app.sync']
 }
