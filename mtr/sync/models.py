@@ -87,17 +87,22 @@ class Settings(ActionsMixin):
 
     """Settings for imported and exported files"""
 
-    name = models.CharField(_('name'), blank=True, max_length=100)
+    name = models.CharField(
+        _('name'), blank=True, max_length=100,
+        help_text=_('Small description of operation'))
 
     start_row = models.PositiveIntegerField(
-        _('start row'), null=True, blank=True)
+        _('start row'), null=True, blank=True,
+        help_text=_("Reading or writing start index (including itself)"))
 
     end_row = models.PositiveIntegerField(
-        _('end row'), null=True, blank=True)
+        _('end row'), null=True, blank=True,
+        help_text=_("Reading or writing end index (including itself)"))
 
     model = models.CharField(
         _('model'), max_length=255,
-        choices=model_choices(), blank=True)
+        choices=model_choices(), blank=True,
+        help_text=_("Choose database model if action need it"))
 
     created_at = models.DateTimeField(
         _('created at'), auto_now_add=True)
@@ -107,43 +112,75 @@ class Settings(ActionsMixin):
     processor = models.CharField(
         _('format'), max_length=255,
         choices=manager.processor_choices(),
-        default=SETTINGS['DEFAULT_PROCESSOR'])
+        default=SETTINGS['DEFAULT_PROCESSOR'],
+        help_text=_("Choose file type"))
     worksheet = models.CharField(
-        _('worksheet page'), max_length=255, blank=True)
+        _('worksheet page'), max_length=255, blank=True,
+        help_text=_("Page name of sheet book"))
     include_header = models.BooleanField(
-        _('include header'), default=True)
+        _('include header'), default=True,
+        help_text=_(
+            "Check it if you need to write field names in"
+            " export or skip it in import"))
 
     filename = models.CharField(
-        _('custom filename'), max_length=255, blank=True)
+        _('custom filename'), max_length=255, blank=True,
+        help_text=_("Custom filename for export"))
     buffer_file = models.FileField(
-        _('file'), upload_to=SETTINGS['FILE_PATH'], db_index=True, blank=True)
+        _('file'), upload_to=SETTINGS['FILE_PATH'], db_index=True, blank=True,
+        help_text=_("File for import action"))
 
     dataset = models.CharField(
         _('dataset'), max_length=255, blank=True,
-        choices=manager.dataset_choices())
+        choices=manager.dataset_choices(),
+        help_text=_(
+            "Custom registered dataset if you import or export"
+            " data from different source, for example network or ftp server"))
     data_action = models.CharField(
         _('data action'), blank=True,
-        max_length=255, choices=manager.action_choices())
+        max_length=255, choices=manager.action_choices(),
+        help_text=_(
+            "What will be done with data, for example,"
+            " create or some custom opeartion eg. download image from server"
+            ))
     filter_dataset = models.BooleanField(
-        _('filter custom dataset'), default=True)
+        _('filter custom dataset'), default=True, help_text=_(
+            "Check it if you have custom queryset and want to filter"
+            " from querystring, for example from admin button"))
     filter_querystring = models.CharField(
-        _('querystring'), max_length=255, blank=True)
+        _('querystring'), max_length=255, blank=True, help_text=_(
+            "Querystring from admin or other source, if you choose import"
+            " action this params will be used for updating!"))
 
     language = models.CharField(
         _('language'), blank=True,
-        max_length=255, choices=django_settings.LANGUAGES)
+        max_length=255, choices=django_settings.LANGUAGES, help_text=_(
+            "Activates language before action, for example if you want you"
+            " have modeltranslation app and you need to export or import only"
+            " for choosed language"))
     hide_translation_fields = models.BooleanField(
         _('Hide translation prefixed fields'),
-        default=True)
+        default=True, help_text=_(
+            "If you don't want to create _lang field"
+            " settings and dublicate in attribute list, handy if you using"
+            " modeltranslation"))
 
     create_fields = models.BooleanField(
-        _('Create settings for fields'), default=True)
+        _('Create settings for fields'), default=True,
+        help_text=_("Automaticaly creates all settings for model fields"))
     populate_from_file = models.BooleanField(
-        _('Populate settings from file'), default=False)
+        _('Populate settings from file'), default=False,
+        help_text=_(
+            "Read start row, end row and first worksheet page"
+            " from given file"))
     include_related = models.BooleanField(
-        _('Include related fields'), default=True)
+        _('Include related fields'), default=True, help_text=_(
+            "Include ForeignKey and ManyToManyField fields when using "
+            "'create fields' option"))
     edit_attributes = models.BooleanField(
-        _('Edit field attributes'), default=False)
+        _('Edit field attributes'), default=False, help_text=_(
+            "If you want to add custom attributes for custom action, by"
+            " checking this option, you can edit attributes"))
 
     def fields_with_converters(self):
         """Return iterator of fields with converters"""
