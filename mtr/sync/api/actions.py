@@ -34,13 +34,13 @@ def create_related_instance(
         related_instance = related_model(**attrs[key])
         related_instance.save()
 
-        instance.__class__.objects.filter(id=instance.id) \
-            .update(**{key: related_instance.id})
+        setattr(instance, key, related_instance)
     elif updated_attrs:
         related_instance = update_instance(related_instance, updated_attrs)
 
 
 def create_mtm_instance(
+        add_after,
         instance, filters, related_model,
         related_models, key, updated_attrs):
     instances_attrs = []
@@ -64,9 +64,11 @@ def create_mtm_instance(
             related_instance = related_model(**instance_attrs)
             related_instance.save()
 
-            getattr(instance, key).add(related_instance)
+            add_after.setdefault(key, []).append(related_instance)
         elif updated_attrs:
             related_instance = update_instance(related_instance, updated_attrs)
+
+    return add_after
 
 
 def filter_fields(
@@ -124,6 +126,8 @@ def find_instances(model, model_attrs, params, fields):
 @manager.register('action', _('Create only'), use_transaction=True)
 def create(model, model_attrs, related_attrs, context, **kwargs):
     update = kwargs.get('update', False)
+    save_instance = False
+    add_after = {}
     fk_updated_attrs, m_updated_attrs = None, None
 
     # TODO: refactor to one loop preparation and DOCS!
@@ -145,7 +149,7 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
 
     if instance is None:
         instance = model(**model_attrs)
-        instance.save()
+        save_instance = True
     elif update:
         updated_attrs = filter_attrs(
             kwargs['raw_attrs'], kwargs['fields'], kwargs['mfields'])
@@ -162,8 +166,15 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
 
         elif isinstance(related_field, models.ManyToManyField):
             create_mtm_instance(
+                add_after,
                 instance, m_filters, related_model,
                 related_attrs, key, m_updated_attrs)
+
+    if save_instance:
+        instance.save()
+
+    for key, instances in add_after.items():
+        getattr(instance, key).add(*instances)
 
     return context
 
