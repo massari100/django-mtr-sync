@@ -3,6 +3,7 @@ import os
 import django
 
 from fabric.api import local, task, lcd
+from babel.messages.pofile import read_po, write_po
 
 APPS = ['mtr.sync' if django.get_version() >= '1.7' else 'mtr_sync']
 PROJECT_APPS = ['app']
@@ -84,7 +85,15 @@ def locale(action='make', lang='en'):
 
     if action == 'make':
         for app in APPS:
-            with lcd(os.path.join(*app.split('.'))):
+            app_path = os.path.join(*app.split('.'))
+            with lcd(app_path):
+                # with open(os.path.join(
+                #         app_path, 'locale', lang,
+                #         'LC_MESSAGES', 'django.po'), 'wb+') as f:
+                #     catalog = read_po(f)
+                #     for message in catalog:
+                #         message.id = message.id.replace('{}:'.format(app), '')
+                #     write_po(f, catalog, include_previous=True)
                 local('django-admin.py makemessages -l {}'.format(lang))
     elif action == 'compile':
         for app in APPS:
