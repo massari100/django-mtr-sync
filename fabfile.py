@@ -86,15 +86,31 @@ def locale(action='make', lang='en'):
     if action == 'make':
         for app in APPS:
             app_path = os.path.join(*app.split('.'))
+            # TODO: strip to regex, move to function
+
             with lcd(app_path):
-                # with open(os.path.join(
-                #         app_path, 'locale', lang,
-                #         'LC_MESSAGES', 'django.po'), 'wb+') as f:
-                #     catalog = read_po(f)
-                #     for message in catalog:
-                #         message.id = message.id.replace('{}:'.format(app), '')
-                #     write_po(f, catalog, include_previous=True)
+                po_path = os.path.join(
+                    app_path, 'locale', lang, 'LC_MESSAGES', 'django.po')
+                with open(po_path, 'rb') as f:
+                    catalog = read_po(f)
+                    for message in catalog:
+                        message.id = message.id.lstrip('{}:'.format(app))
+                        message.string = \
+                            message.string.lstrip('{}:'.format(app))
+                with open(po_path, 'wb') as f:
+                    write_po(f, catalog, include_previous=True)
                 local('django-admin.py makemessages -l {}'.format(lang))
+                with open(po_path, 'rb') as f:
+                    catalog = read_po(f)
+                    for message in catalog:
+                        if lang == 'en':
+                            message.string = str(message.id)
+                        else:
+                            message.string = \
+                                '{}:{}'.format(app, message.string)
+                        message.id = '{}:{}'.format(app, message.id)
+                with open(po_path, 'wb') as f:
+                    write_po(f, catalog, include_previous=True)
     elif action == 'compile':
         for app in APPS:
             with lcd(os.path.join(*app.split('.'))):
