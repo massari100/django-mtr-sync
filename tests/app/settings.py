@@ -37,7 +37,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = (
     'modeltranslation',
-    'grappelli',
+    # 'grappelli',
 
     'django.contrib.admin',
     'django.contrib.auth',

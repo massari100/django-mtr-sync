@@ -101,7 +101,7 @@ class ContextInline(admin.TabularInline):
     extra = 0
 
 
-class SettingsAdmin(admin.ModelAdmin):
+class SettingsAdmin(SyncAdminMixin, admin.ModelAdmin):
     list_display = (
         '__str__', 'action', 'model',
         'processor', 'created_at', 'latest_run_messages'
