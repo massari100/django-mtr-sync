@@ -4,7 +4,7 @@ import sys
 
 from django.templatetags.i18n import TemplateSyntaxError, Variable, Node, \
     render_value_in_context, TOKEN_TEXT, TOKEN_VAR
-from django.template import Library
+from django.template import Library, VariableDoesNotExist
 from django.template.defaulttags import token_kwargs
 from django.utils import six, translation
 
@@ -325,3 +325,31 @@ def do_block_translate(parser, token):
     return BlockTranslateNode(extra_context, singular, plural, countervar,
                               counter, message_context, trimmed=trimmed,
                               asvar=asvar)
+
+
+class SetVarNode(Node):
+
+    def __init__(self, var_name, var_value):
+        self.var_name = var_name
+        self.var_value = var_value
+
+    def render(self, context):
+        try:
+            value = Variable(self.var_value).resolve(context)
+        except VariableDoesNotExist:
+            value = ""
+        context[self.var_name] = value
+        return u""
+
+
+@register.tag('set')
+def set_var(parser, token):
+    """
+        {% set <var_name>  = <var_value> %}
+    """
+    parts = token.split_contents()
+    if len(parts) < 4:
+        raise TemplateSyntaxError(
+            "'set' tag must be of the form:  {% set <var_na"
+            "me>  = <var_value> %}")
+    return SetVarNode(parts[1], parts[3])
