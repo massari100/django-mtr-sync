@@ -17,7 +17,7 @@ class PositionRelatedMixin(models.Model):
     POSITION_RELATED_FIELD = None
 
     position = models.PositiveIntegerField(
-        _('position'), null=True, blank=True)
+        _('position'), null=True, blank=True, default=1)
 
     class Meta:
         abstract = True
@@ -31,7 +31,7 @@ class PositionRelatedMixin(models.Model):
             self.position = self.__class__.objects.filter(**{
                 self.POSITION_RELATED_FIELD: related_field}) \
                 .aggregate(models.Max('position'))['position__max']
-            self.position = self.position + 1 if self.position else 0
+            self.position = self.position + 1 if self.position else 1
 
         super(PositionRelatedMixin, self).save(*args, **kwargs)
 

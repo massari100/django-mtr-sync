@@ -7,6 +7,7 @@ Subpackages
 .. toctree::
 
     mtr.sync.api
+    mtr.sync.templatetags
 
 Submodules
 ----------
@@ -71,22 +72,6 @@ mtr.sync.tests module
 ---------------------
 
 .. automodule:: mtr.sync.tests
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-mtr.sync.urls module
---------------------
-
-.. automodule:: mtr.sync.urls
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-mtr.sync.views module
----------------------
-
-.. automodule:: mtr.sync.views
     :members:
     :undoc-members:
     :show-inheritance:
