@@ -72,6 +72,26 @@ class Person(models.Model):
             newobj.save()
         self.save()
 
+    @classmethod
+    def populate_for_test(cls, count):
+        instance = cls.objects.create(
+            name=six.text_type('test instance éprouver'),
+            surname='test surname',
+            gender='M', security_level=10)
+        r_instance = Office.objects.create(
+            office='test', address='addr')
+        tags = [Tag(name='test'), Tag(name='test1')]
+
+        for tag in tags:
+            tag.save()
+            instance.tags.add(tag)
+
+        instance.office = r_instance
+        instance.save()
+        instance.populate(count)
+
+        return instance, r_instance, tags
+
     @property
     def custom_method(self):
         return six.text_type('{}-{}').format(self.name, self.surname)
