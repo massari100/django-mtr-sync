@@ -11,38 +11,53 @@ class XlsProcessor(Processor):
     file_format = '.xls'
     file_description = _('Microsoft Excel 97/2000/XP/2003')
 
+    # def __init__(self, settings=None):
+        # self.settings = settings
+        # self.nrows = 0
+        # self.ncols = 0
+
     def create(self, path):
-        self._path = path
-        self._workbook = xlwt.Workbook('utf-8')
-        self._worksheet = self._workbook.add_sheet(self.settings.worksheet)
+        self.path = path
+        self.workbook = xlwt.Workbook('utf-8')
+
+        if self.settings:
+            self.worksheet = self.workbook.add_sheet(self.settings.worksheet)
+
+        return self.workbook
 
     def open(self, path):
-        self._workbook = xlrd.open_workbook(path)
+        self.workbook = xlrd.open_workbook(path)
 
-        if not self.settings.worksheet:
-            self.settings.worksheet = self._workbook.sheet_names()[0]
+        if self.settings:
+            if not self.settings.worksheet:
+                self.settings.worksheet = self.workbook.sheet_names()[0]
 
-        self._worksheet = self._workbook.sheet_by_name(self.settings.worksheet)
+            self.worksheet = \
+                self.workbook.sheet_by_name(self.settings.worksheet)
 
-        return self._worksheet.nrows, self._worksheet.ncols
+            self.nrows, self.ncols = \
+                self.worksheet.nrows, self.worksheet.ncols
 
-    def write(self, row, value):
+        return self.worksheet
+
+    def write(self, row, value, cells=None):
+        cells = self.cells or cells or len(row)
         for index, cell in enumerate(self.cells):
-            self._worksheet.write(
+            self.worksheet.write(
                 row, cell,
                 '' if value[index] is None else value[index])
 
     def read(self, row, cells=None):
         data = []
-        cells = cells or self.cells
+        cells = cells or self.cells or len(row)
 
         for cell in cells:
             try:
-                data.append(self._worksheet.cell_value(row, cell))
+                data.append(self.worksheet.cell_value(row, cell))
             except IndexError:
                 data.append('')
 
         return data
 
     def save(self):
-        self._workbook.save(self._path)
+        self.workbook.save(self.path)

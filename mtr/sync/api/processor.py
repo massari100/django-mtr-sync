@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 import os
 import traceback
 
-from django.utils.six.moves import range
 from django.utils import timezone
 from django.db import transaction, Error
 from django.core.exceptions import ValidationError
@@ -15,42 +14,7 @@ from .exceptions import ErrorChoicesMixin
 from ..settings import SETTINGS
 
 
-class DataProcessor(object):
-
-    def _set_rows_dimensions(self, import_data):
-        if self.settings.start_row and \
-                self.settings.start_row > self.start['row']:
-            self.start['row'] = self.settings.start_row - 1
-
-            if not import_data:
-                self.end['row'] += self.start['row']
-
-        if self.settings.end_row and \
-                self.settings.end_row < self.end['row']:
-            self.end['row'] = self.settings.end_row
-
-        if self.settings.include_header:
-            if import_data:
-                self.start['row'] += 1
-            else:
-                self.start['row'] += 1
-                self.end['row'] += 1
-
-    def set_dimensions(
-            self, start_row, end_row, end_cols,
-            import_data=False, field_cols=None):
-        """Return start, end table dimensions"""
-
-        self.start = {'row': start_row}
-        self.end = {'row': end_row}
-
-        self._set_rows_dimensions(import_data)
-
-        self.rows = range(self.start['row'], self.end['row'])
-        self.cells = range(0, end_cols)
-
-
-class Processor(DataProcessor):
+class Processor(object):
 
     """Base implementation of import and export operations"""
 
@@ -196,7 +160,7 @@ class Processor(DataProcessor):
         context = self.manager.prepare_handlers('before', self, model, context)
 
         if path:
-            max_rows, max_cols = self.open(path)
+            self.open(path)
             self.set_dimensions(
                 0, max_rows, max_cols,
                 import_data=True)

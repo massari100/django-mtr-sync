@@ -9,7 +9,6 @@ import datetime
 
 from collections import OrderedDict
 
-from django.utils import six
 from django.utils.translation import activate
 
 if django.get_version() >= '1.7':
