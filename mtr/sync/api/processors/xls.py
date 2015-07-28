@@ -11,11 +11,6 @@ class XlsProcessor(Processor):
     file_format = '.xls'
     file_description = _('Microsoft Excel 97/2000/XP/2003')
 
-    # def __init__(self, settings=None):
-        # self.settings = settings
-        # self.nrows = 0
-        # self.ncols = 0
-
     def create(self, path):
         self.path = path
         self.workbook = xlwt.Workbook('utf-8')
@@ -59,5 +54,7 @@ class XlsProcessor(Processor):
 
         return data
 
-    def save(self):
-        self.workbook.save(self.path)
+    def save(self, path=None):
+        path = path or self.path
+
+        self.workbook.save(path)

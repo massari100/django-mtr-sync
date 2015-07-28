@@ -15,36 +15,37 @@ class XlsxProcessor(Processor):
     file_description = _('Microsoft Excel 2007/2010/2013 XML')
 
     def create(self, path):
-        self._path = path
-        self._workbook = openpyxl.Workbook(optimized_write=True)
-        self._worksheet = self._workbook.create_sheet()
-        self._worksheet.title = self.settings.worksheet
+        self.path = path
+        self.workbook = openpyxl.Workbook(optimized_write=True)
+        self.worksheet = self.workbook.create_sheet()
 
-        # prepend rows and cols
-        if self.start['row'] > 1:
-            for i in range(0, self.start['row']):
-                self._worksheet.append([])
+        if self.settings:
+            self.worksheet.title = self.settings.worksheet
 
     def open(self, path):
-        self._workbook = openpyxl.load_workbook(path, use_iterators=True)
+        # TODO: make write and read params
 
-        if not self.settings.worksheet:
-            self.settings.worksheet = self._workbook.get_sheet_names()[0]
+        self.workbook = openpyxl.load_workbook(
+            path, guess_types=False, use_iterators=True,
+            keep_vba=False, data_only=True, read_only=True)
 
-        self._worksheet = self._workbook.get_sheet_by_name(
-            self.settings.worksheet)
+        if self.settings:
+            if not self.settings.worksheet:
+                self.settings.worksheet = self.workbook.get_sheet_names()[0]
 
-        self._read_from_start = False
-        self._rows = self._worksheet.iter_rows()
-        self._rows_counter = 0
-        self._max_cells = self._worksheet.get_highest_column()
+            self.worksheet = self.workbook.get_sheet_by_name(
+                self.settings.worksheet)
 
-        return (
-            self._worksheet.get_highest_row(),
-            self._max_cells)
+            # self._read_from_start = False
+            self._rows = self._worksheet.iter_rows()
+
+            self.nrows = self.worksheet.get_highest_row()
+            self.ncells = self.worksheet.get_highest_column()
+
+        return self.workbook
 
     def write(self, row, value):
-        self._worksheet.append(value)
+        self.worksheet.append(value)
 
     def _get_row(self, row):
         value = None
@@ -76,5 +77,7 @@ class XlsxProcessor(Processor):
 
         return readed
 
-    def save(self):
-        self._workbook.save(self._path)
+    def save(self, path=None):
+        path = path or self.path
+
+        self.workbook.save(path)
