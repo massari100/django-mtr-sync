@@ -22,7 +22,7 @@ class Processor(object):
     file_format = None
     file_description = None
 
-    def __init__(self, settings, manager):
+    def __init__(self, settings=None, manager=None):
         self.settings = settings
         self.manager = manager
         self.report = None
@@ -161,9 +161,6 @@ class Processor(object):
 
         if path:
             self.open(path)
-            self.set_dimensions(
-                0, max_rows, max_cols,
-                import_data=True)
 
         use_transaction = getattr(action, 'use_transaction', False)
         if use_transaction:

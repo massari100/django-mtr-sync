@@ -13,32 +13,38 @@ class OdsProcessor(Processor):
     file_description = _('ODF Spreadsheet')
 
     def create(self, path):
-        self._path = path
-        self._max_cells = max(self.cells)
-        self._workbook = ezodf.newdoc(doctype='ods', filename=path)
-        self._worksheet = ezodf.Table(
-            self.settings.worksheet,
-            size=(self.end['row'], self._max_cells + 1))
-        self._workbook.sheets.append(self._worksheet)
+        self.path = path
+        # self.max_cells = max(self.cells)
+
+        self.workbook = ezodf.newdoc(doctype='ods', filename=path)
+
+        if self.settings:
+            self.worksheet = ezodf.Table(self.settings.worksheet)
+            # size=(self.end['row'], self._max_cells + 1))
+            self.workbook.sheets.append(self._worksheet)
+
+        return self.workbook
 
     def open(self, path):
         ezodf.config.set_table_expand_strategy('all')
 
-        self._path = path
-        self._workbook = ezodf.opendoc(self._path)
+        self.path = path
+        self.workbook = ezodf.opendoc(self.path)
 
         ezodf.config.reset_table_expand_strategy()
 
-        if not self.settings.worksheet:
-            self.settings.worksheet = self._workbook.sheets[0].name
+        if self.settings:
+            if not self.settings.worksheet:
+                self.settings.worksheet = self.workbook.sheets[0].name
 
-        self._worksheet = self._workbook.sheets[self.settings.worksheet]
+            self.worksheet = self.workbook.sheets[self.settings.worksheet]
 
-        return self._worksheet.nrows(), self._worksheet.ncols()
+            self.nrows = self.worksheet.nrows()
+            self.ncols = self.worksheet.ncols()
 
     def write(self, row, value):
         for index, cell in enumerate(self.cells):
-            self._worksheet[row, cell].set_value(
+            self.worksheet[row, cell].set_value(
                 '' if value[index] is None else value[index])
 
     def read(self, row, cells=None):
@@ -47,16 +53,18 @@ class OdsProcessor(Processor):
 
         for index, cell in enumerate(cells):
             try:
-                readed.append(self._worksheet[row, cell].value)
+                readed.append(self.worksheet[row, cell].value)
             except IndexError:
                 readed.append('')
 
         return readed
 
-    def save(self):
-        self._workbook.save()
+    def save(self, path=None):
+        path = path or self.path
+
+        self.workbook.save(path)
 
         try:
-            os.remove('{}.bak'.format(self._path))
+            os.remove('{}.bak'.format(path))
         except OSError:
             pass

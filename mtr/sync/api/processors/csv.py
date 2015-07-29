@@ -20,14 +20,14 @@ class CsvProcessor(Processor):
     def create(self, path):
         # TODO: csv additional settings
 
-        self._prepend = None
+        # self._prepend = None
         self._f = open(path, 'w')
         self._writer = csv.writer(self._f, dialect='excel')
 
         # prepend rows
-        if self.start['row'] > 1:
-            for i in range(0, self.start['row']):
-                self._writer.writerow([])
+        # if self.start['row'] > 1:
+            # for i in range(0, self.start['row']):
+                # self._writer.writerow([])
 
     def open(self, path):
         self._f = open(path, 'r')
@@ -37,6 +37,8 @@ class CsvProcessor(Processor):
         maxrows = 0
         maxcols = 0
 
+        # QUESTION: Do we need it?
+
         for row in self._reader:
             maxrows += 1
             if len(row) > maxcols:
@@ -45,17 +47,19 @@ class CsvProcessor(Processor):
 
         self._f.seek(0)
 
-        return maxrows, maxcols
+        self.nrows, self.ncols = maxrows, maxcols
+
+        return self._reader
 
     def write(self, row, value):
-        if self._prepend:
-            value = self._prepend + value
+        # if self._prepend:
+            # value = self._prepend + value
 
         self._writer.writerow(value)
 
     def _get_row(self, row):
         value = None
-        row += 1
+        row += 1  # Using 1 first index notation
 
         try:
             while self._rows_counter < row:
@@ -72,17 +76,14 @@ class CsvProcessor(Processor):
         cells = cells or self.cells
 
         for index in cells:
-            # TODO: value convert
-
             try:
-                item = value[index]
-                if item.isdigit():
-                    item = int(item)
-                readed.append(item)
+                readed.append(value[index])
             except IndexError:
                 readed.append('')
 
         return readed
 
-    def save(self):
+    def save(self, path=None):
+        # TODO: custom file
+
         self._f.close()
