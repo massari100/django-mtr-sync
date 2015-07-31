@@ -102,8 +102,7 @@ def models_list():
         mlist = apps.get_models()
 
     mlist = filterfalse(
-        lambda m: model_settings(m).get('ignore', False),
-        mlist)
+        lambda m: model_settings(m).get('ignore', False), mlist)
 
     return mlist
 
