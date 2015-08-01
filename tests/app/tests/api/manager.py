@@ -2,8 +2,8 @@ from django.test import TestCase
 
 from mtr.sync.tests import ApiTestMixin
 from mtr.sync.api import Processor
-from mtr.sync.api.processors.xls import XlsProcessor
-from mtr.sync.api.exceptions import ItemAlreadyRegistered, \
+from mtr.sync.lib.processors.xls import XlsProcessor
+from mtr.sync.lib.exceptions import ItemAlreadyRegistered, \
     ItemDoesNotRegistered
 
 from ...models import Person, Office, Tag

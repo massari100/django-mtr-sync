@@ -1,9 +1,9 @@
 from django.test import TestCase
 
-from mtr.sync.api.helpers import column_name, column_index, \
+from mtr.sync.lib.helpers import column_name, column_index, \
     model_attributes, process_attribute, cell_value
 from mtr.sync.tests import ApiTestMixin
-from mtr.sync.api.processors import csv
+from mtr.sync.lib.processors import csv
 
 from ...models import Person, Office, Tag
 

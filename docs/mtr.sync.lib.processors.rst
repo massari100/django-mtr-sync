@@ -1,37 +1,37 @@
-mtr.sync.api.processors package
+mtr.sync.lib.processors package
 ===============================
 
 Submodules
 ----------
 
-mtr.sync.api.processors.csv module
+mtr.sync.lib.processors.csv module
 ----------------------------------
 
-.. automodule:: mtr.sync.api.processors.csv
+.. automodule:: mtr.sync.lib.processors.csv
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.processors.ods module
+mtr.sync.lib.processors.ods module
 ----------------------------------
 
-.. automodule:: mtr.sync.api.processors.ods
+.. automodule:: mtr.sync.lib.processors.ods
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.processors.xls module
+mtr.sync.lib.processors.xls module
 ----------------------------------
 
-.. automodule:: mtr.sync.api.processors.xls
+.. automodule:: mtr.sync.lib.processors.xls
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.processors.xlsx module
+mtr.sync.lib.processors.xlsx module
 -----------------------------------
 
-.. automodule:: mtr.sync.api.processors.xlsx
+.. automodule:: mtr.sync.lib.processors.xlsx
     :members:
     :undoc-members:
     :show-inheritance:
@@ -40,7 +40,7 @@ mtr.sync.api.processors.xlsx module
 Module contents
 ---------------
 
-.. automodule:: mtr.sync.api.processors
+.. automodule:: mtr.sync.lib.processors
     :members:
     :undoc-members:
     :show-inheritance:

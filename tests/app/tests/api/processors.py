@@ -4,9 +4,9 @@ from django.test import TestCase
 from django.utils.encoding import smart_text
 
 from mtr.sync.tests import ProcessorTestMixin
-from mtr.sync.api.helpers import process_attribute
-from mtr.sync.api.processor import Processor
-from mtr.sync.api.processors import xls, xlsx, csv, ods
+from mtr.sync.lib.helpers import process_attribute
+from mtr.sync.lib.processor import Processor
+from mtr.sync.lib.processors import xls, xlsx, csv, ods
 
 from ...models import Person, Office, Tag
 

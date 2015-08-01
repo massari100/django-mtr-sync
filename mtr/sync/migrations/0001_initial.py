@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-import mtr.sync.api.exceptions
+import mtr.sync.lib.exceptions
 import mtr.sync.settings
 
 
@@ -65,7 +65,7 @@ class Migration(migrations.Migration):
                 'abstract': False,
                 'ordering': ('position',),
             },
-            bases=(models.Model, mtr.sync.api.exceptions.ErrorChoicesMixin),
+            bases=(models.Model, mtr.sync.lib.exceptions.ErrorChoicesMixin),
         ),
         migrations.CreateModel(
             name='Replacer',

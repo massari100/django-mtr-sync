@@ -6,7 +6,7 @@ Subpackages
 
 .. toctree::
 
-    mtr.sync.api
+    mtr.sync.lib
     mtr.sync.templatetags
 
 Submodules

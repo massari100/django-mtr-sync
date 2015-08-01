@@ -5,11 +5,11 @@ from django.dispatch import receiver
 from django.conf import settings as django_settings
 
 from .settings import SETTINGS, strip_media_root
-from .api import manager
-from .api.helpers import model_attributes, model_choices
-from .api.signals import export_started, export_completed, \
+from .lib.manager import manager
+from .lib.helpers import model_attributes, model_choices
+from .lib.signals import export_started, export_completed, \
     import_started, import_completed, error_raised
-from .api.exceptions import ErrorChoicesMixin
+from .lib.exceptions import ErrorChoicesMixin
 from .helpers import gettext_lazy as _
 
 

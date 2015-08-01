@@ -5,7 +5,7 @@ if 'celery' in settings.INSTALLED_APPS:
 elif 'django_rq' in settings.INSTALLED_APPS:
     from django_rq import job
 
-from .api import manager
+from .lib.manager import manager
 from .models import Settings
 from .helpers import make_from_params
 

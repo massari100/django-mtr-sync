@@ -47,25 +47,25 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
 
     # additional dependensies for import and export to register
     'PROCESSORS': [
-        'mtr.sync.api.processors.xlsx',
-        'mtr.sync.api.processors.xls',
-        'mtr.sync.api.processors.ods',
-        'mtr.sync.api.processors.csv',
+        'mtr.sync.lib.processors.xlsx',
+        'mtr.sync.lib.processors.xls',
+        'mtr.sync.lib.processors.ods',
+        'mtr.sync.lib.processors.csv',
     ],
-    'ACTIONS': ['mtr.sync.api.actions'],
-    'CONVERTERS': ['mtr.sync.api.converters']
+    'ACTIONS': ['mtr.sync.lib.actions'],
+    'CONVERTERS': ['mtr.sync.lib.converters']
 })
 
 
 if django.get_version() <= '1.7':
     SETTINGS.update({
         'PROCESSORS': [
-            'mtr_sync.api.processors.xlsx',
-            'mtr_sync.api.processors.xls',
-            'mtr_sync.api.processors.ods',
-            'mtr_sync.api.processors.csv',
+            'mtr_sync.lib.processors.xlsx',
+            'mtr_sync.lib.processors.xls',
+            'mtr_sync.lib.processors.ods',
+            'mtr_sync.lib.processors.csv',
         ],
-        'ACTIONS': ['mtr_sync.api.actions'],
-        'CONVERTERS': ['mtr_sync.api.converters']
+        'ACTIONS': ['mtr_sync.lib.actions'],
+        'CONVERTERS': ['mtr_sync.lib.converters']
     })
     SETTINGS.update(getattr_with_prefix('SYNC', 'SETTINGS', {}))

@@ -1,4 +1,4 @@
-mtr.sync.api package
+mtr.sync.lib package
 ====================
 
 Subpackages
@@ -6,63 +6,63 @@ Subpackages
 
 .. toctree::
 
-    mtr.sync.api.processors
+    mtr.sync.lib.processors
 
 Submodules
 ----------
 
-mtr.sync.api.actions module
+mtr.sync.lib.actions module
 ---------------------------
 
-.. automodule:: mtr.sync.api.actions
+.. automodule:: mtr.sync.lib.actions
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.converters module
+mtr.sync.lib.converters module
 ------------------------------
 
-.. automodule:: mtr.sync.api.converters
+.. automodule:: mtr.sync.lib.converters
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.exceptions module
+mtr.sync.lib.exceptions module
 ------------------------------
 
-.. automodule:: mtr.sync.api.exceptions
+.. automodule:: mtr.sync.lib.exceptions
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.helpers module
+mtr.sync.lib.helpers module
 ---------------------------
 
-.. automodule:: mtr.sync.api.helpers
+.. automodule:: mtr.sync.lib.helpers
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.manager module
+mtr.sync.lib.manager module
 ---------------------------
 
-.. automodule:: mtr.sync.api.manager
+.. automodule:: mtr.sync.lib.manager
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.processor module
+mtr.sync.lib.processor module
 -----------------------------
 
-.. automodule:: mtr.sync.api.processor
+.. automodule:: mtr.sync.lib.processor
     :members:
     :undoc-members:
     :show-inheritance:
 
-mtr.sync.api.signals module
+mtr.sync.lib.signals module
 ---------------------------
 
-.. automodule:: mtr.sync.api.signals
+.. automodule:: mtr.sync.lib.signals
     :members:
     :undoc-members:
     :show-inheritance:
@@ -71,7 +71,7 @@ mtr.sync.api.signals module
 Module contents
 ---------------
 
-.. automodule:: mtr.sync.api
+.. automodule:: mtr.sync.lib
     :members:
     :undoc-members:
     :show-inheritance:

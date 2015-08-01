@@ -9,7 +9,7 @@ from django.core.urlresolvers import reverse
 from .helpers import themed, gettext_lazy as _
 from .models import Report, Settings, Field, Message, Context, Sequence, \
     Replacer, ReplacerCategory
-from .api.helpers import model_attributes
+from .lib.helpers import model_attributes
 from .settings import SETTINGS
 from .forms import SettingsAdminForm
 
