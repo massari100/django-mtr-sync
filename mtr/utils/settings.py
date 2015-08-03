@@ -1,6 +1,12 @@
 from django.conf import settings
 
 
+def strip_media_root(path):
+    if path:
+        return path.split(settings.MEDIA_ROOT.rstrip('/'))[1].lstrip('/')
+    return path
+
+
 def getattr_with_prefix(prefix, name, default):
     """Custom settings prefix for avoiding name colissions"""
 

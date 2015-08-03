@@ -6,11 +6,11 @@ from django.contrib import admin
 from django import forms
 from django.core.urlresolvers import reverse
 
-from .helpers import themed, gettext_lazy as _
+from .utils.helpers import themed
 from .models import Report, Settings, Field, Message, Context, Sequence, \
     Replacer, ReplacerCategory
 from .lib.helpers import model_attributes
-from .settings import SETTINGS
+from .settings import SETTINGS, gettext_lazy as _
 from .forms import SettingsAdminForm
 
 

@@ -4,22 +4,7 @@ import django
 
 from django.conf import settings
 
-
-# TODO: move to mtr.utils
-def getattr_with_prefix(prefix, name, default):
-    """Custom settings prefix for avoiding name colissions"""
-
-    prefix = getattr(settings, '{}_SETTINGS_PREFIX'.format(prefix), prefix)
-
-    default.update(getattr(settings, '{}_{}'.format(prefix, name), {}))
-
-    return default
-
-
-def strip_media_root(path):
-    if path:
-        return path.split(settings.MEDIA_ROOT.rstrip('/'))[1].lstrip('/')
-    return path
+from ..utils.settings import getattr_with_prefix, strip_media_root
 
 
 def get_buffer_file_path(instance, filename, absolute=False):
