@@ -32,6 +32,7 @@ class TranslateNode(Node):
         output = self.filter_expression.resolve(context)
         value = render_value_in_context(output, context)
         # print(self.request.resolve(context).resolver_match.app_name)
+        # TODO: using current app or set context resolve string
         if self.asvar:
             context[self.asvar] = value
             return ''

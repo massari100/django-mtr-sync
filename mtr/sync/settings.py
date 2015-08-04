@@ -1,10 +1,12 @@
 import os
 
-import django
-
 from django.conf import settings
 
 from ..utils.settings import getattr_with_prefix, strip_media_root
+from ..utils.helpers import make_prefixed_gettext_lazy
+
+
+gettext_lazy = make_prefixed_gettext_lazy('mtr.sync')
 
 
 def get_buffer_file_path(instance, filename, absolute=False):
@@ -40,17 +42,3 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
     'ACTIONS': ['mtr.sync.lib.actions'],
     'CONVERTERS': ['mtr.sync.lib.converters']
 })
-
-
-if django.get_version() <= '1.7':
-    SETTINGS.update({
-        'PROCESSORS': [
-            'mtr_sync.lib.processors.xlsx',
-            'mtr_sync.lib.processors.xls',
-            'mtr_sync.lib.processors.ods',
-            'mtr_sync.lib.processors.csv',
-        ],
-        'ACTIONS': ['mtr_sync.lib.actions'],
-        'CONVERTERS': ['mtr_sync.lib.converters']
-    })
-    SETTINGS.update(getattr_with_prefix('SYNC', 'SETTINGS', {}))
