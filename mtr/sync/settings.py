@@ -3,10 +3,6 @@ import os
 from django.conf import settings
 
 from ..utils.settings import getattr_with_prefix, strip_media_root
-from ..utils.helpers import make_prefixed_gettext_lazy
-
-
-gettext_lazy = make_prefixed_gettext_lazy('mtr.sync')
 
 
 def get_buffer_file_path(instance, filename, absolute=False):

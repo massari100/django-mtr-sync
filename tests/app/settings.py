@@ -51,14 +51,9 @@ INSTALLED_APPS = (
     'app'
 )
 
-if django.get_version() >= '1.7':
-    INSTALLED_APPS += (
-        'mtr.sync',
-    )
-else:
-    INSTALLED_APPS += (
-        'mtr_sync',
-    )
+INSTALLED_APPS += (
+    'mtr.sync',
+)
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

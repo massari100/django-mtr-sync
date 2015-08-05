@@ -4,7 +4,8 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.conf import settings as django_settings
 
-from .settings import SETTINGS, strip_media_root, gettext_lazy as _
+from .settings import SETTINGS, strip_media_root
+from .translation import gettext_lazy as _
 from .lib.manager import manager
 from .lib.helpers import model_attributes, model_choices
 from .lib.signals import export_started, export_completed, \

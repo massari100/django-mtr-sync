@@ -1,3 +1,5 @@
+# coding: utf-8
+
 import random
 
 from django.utils.encoding import python_2_unicode_compatible
