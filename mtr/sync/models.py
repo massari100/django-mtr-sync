@@ -324,11 +324,13 @@ class Sequence(models.Model):
         _('file'), upload_to=SETTINGS['FILE_PATH'], db_index=True, blank=True)
 
     settings = models.ManyToManyField(
-        Settings, verbose_name=_('settings'))
+        Settings, verbose_name=_('settings'), related_name='sequences')
 
     class Meta:
         verbose_name = _('sequence')
         verbose_name_plural = _('sequences')
+
+        app_label = 'mtr_sync'
 
     def __str__(self):
         return self.name
@@ -372,6 +374,8 @@ class Replacer(models.Model):
     class Meta:
         verbose_name = _('replacer')
         verbose_name_plural = _('replacers')
+
+        app_label = 'mtr_sync'
 
 
 @python_2_unicode_compatible
@@ -458,6 +462,8 @@ class Context(models.Model):
     class Meta:
         verbose_name = _('context')
         verbose_name_plural = _('contexts')
+
+        app_label = 'mtr_sync'
 
 
 @python_2_unicode_compatible

@@ -107,7 +107,7 @@ class SettingsAdmin(SyncAdminMixin, admin.ModelAdmin):
         '__str__', 'action', 'model',
         'processor', 'created_at', 'latest_run_messages'
     )
-    list_filter = ('sequence',)
+    list_filter = ('sequences',)
     list_display_links = ('__str__', 'model')
     date_hierarchy = 'created_at'
     inlines = (FieldInline, ContextInline)

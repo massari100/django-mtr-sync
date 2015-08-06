@@ -1,7 +1,7 @@
 from django.test import TestCase
 
 from mtr.sync.tests import ApiTestMixin
-from mtr.sync.api import Processor
+from mtr.sync.lib import Processor
 from mtr.sync.lib.processors.xls import XlsProcessor
 from mtr.sync.lib.exceptions import ItemAlreadyRegistered, \
     ItemDoesNotRegistered
