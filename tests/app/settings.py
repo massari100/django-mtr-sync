@@ -51,10 +51,6 @@ INSTALLED_APPS = (
     'app'
 )
 
-INSTALLED_APPS += (
-    'mtr.sync',
-)
-
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -63,16 +59,22 @@ MIDDLEWARE_CLASSES = (
 )
 
 if django.get_version() >= '1.7':
+    INSTALLED_APPS += (
+        'mtr.sync',
+    )
+
     MIDDLEWARE_CLASSES += (
         'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     )
 else:
     INSTALLED_APPS += (
         'south',
+        'mtr_sync'
     )
+
     SOUTH_MIGRATION_MODULES = {
         'app': 'app.south_migrations',
-        'mtr.sync': 'sync.south_migrations'
+        'mtr_sync': 'mtr.sync.south_migrations'
     }
 
 MIDDLEWARE_CLASSES += (

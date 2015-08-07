@@ -2,6 +2,7 @@ from django.core.files.storage import FileSystemStorage
 
 
 class OverwriteDublicateFileSystemStorage(FileSystemStorage):
+
     def get_available_name(self, name):
         return name
 

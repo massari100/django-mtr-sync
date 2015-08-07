@@ -2,7 +2,7 @@ import os
 
 from django.conf import settings
 
-from ..utils.settings import getattr_with_prefix, strip_media_root
+from mtr.utils.settings import getattr_with_prefix, strip_media_root
 
 
 def get_buffer_file_path(instance, filename, absolute=False):

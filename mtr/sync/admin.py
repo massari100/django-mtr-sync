@@ -6,13 +6,14 @@ from django.contrib import admin
 from django import forms
 from django.core.urlresolvers import reverse
 
+from mtr.utils.helpers import themed
+
 from .models import Report, Settings, Field, Message, Context, Sequence, \
     Replacer, ReplacerCategory
 from .lib.helpers import model_attributes
 from .settings import SETTINGS
 from .translation import gettext_lazy as _
 from .forms import SettingsAdminForm
-from ..utils.helpers import themed
 
 
 class SyncAdminMixin(object):

@@ -1,6 +1,6 @@
 from django.utils.translation import gettext_lazy, gettext
 
-from .settings import THEMES, GETTEXT
+from .settings import GETTEXT
 
 
 def make_prefixed_string(func, makeprefix, makeformat=None):

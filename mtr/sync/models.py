@@ -355,6 +355,8 @@ class ReplacerCategory(models.Model):
         verbose_name = _('replacer category')
         verbose_name_plural = _('replacer categories')
 
+        app_label = 'mtr_sync'
+
 
 @python_2_unicode_compatible
 class Replacer(models.Model):

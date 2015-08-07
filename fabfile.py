@@ -5,7 +5,7 @@ import django
 from fabric.api import local, task, lcd
 from babel.messages.pofile import read_po, write_po
 
-APPS = ['mtr.sync']
+APPS = ['mtr.sync' if django.get_version() >= '1.7' else 'mtr_sync']
 PROJECT_APPS = ['app']
 PROJECT_DIR = 'tests'
 DOCS_DIR = 'docs'

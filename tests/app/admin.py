@@ -1,8 +1,13 @@
+import django
+
 from django.contrib import admin
 
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from mtr.sync.admin import SyncAdminMixin, SyncStackedInlineMixin
+if django.get_version() >= '1.7':
+    from mtr.sync.admin import SyncAdminMixin, SyncStackedInlineMixin
+else:
+    from mtr_sync.admin import SyncAdminMixin, SyncStackedInlineMixin
 
 from .models import Person, Office, Tag
 
