@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'Settings'
-        db.create_table(u'mtr_sync_settings', (
+        db.create_table(u'sync_settings', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('action', self.gf('django.db.models.fields.PositiveSmallIntegerField')(db_index=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=100, blank=True)),
@@ -34,46 +34,46 @@ class Migration(SchemaMigration):
             ('include_related', self.gf('django.db.models.fields.BooleanField')(default=True)),
             ('edit_attributes', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
-        db.send_create_signal('mtr_sync', ['Settings'])
+        db.send_create_signal(u'sync', ['Settings'])
 
         # Adding model 'Sequence'
-        db.create_table(u'mtr_sync_sequence', (
+        db.create_table(u'sync_sequence', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('buffer_file', self.gf('django.db.models.fields.files.FileField')(db_index=True, max_length=100, blank=True)),
         ))
-        db.send_create_signal('mtr_sync', ['Sequence'])
+        db.send_create_signal(u'sync', ['Sequence'])
 
         # Adding M2M table for field settings on 'Sequence'
-        m2m_table_name = db.shorten_name(u'mtr_sync_sequence_settings')
+        m2m_table_name = db.shorten_name(u'sync_sequence_settings')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
-            ('sequence', models.ForeignKey(orm['mtr_sync.sequence'], null=False)),
-            ('settings', models.ForeignKey(orm['mtr_sync.settings'], null=False))
+            ('sequence', models.ForeignKey(orm[u'sync.sequence'], null=False)),
+            ('settings', models.ForeignKey(orm[u'sync.settings'], null=False))
         ))
         db.create_unique(m2m_table_name, ['sequence_id', 'settings_id'])
 
         # Adding model 'ReplacerCategory'
-        db.create_table(u'mtr_sync_replacercategory', (
+        db.create_table(u'sync_replacercategory', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('attribute', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('model', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
-        db.send_create_signal('mtr_sync', ['ReplacerCategory'])
+        db.send_create_signal(u'sync', ['ReplacerCategory'])
 
         # Adding model 'Replacer'
-        db.create_table(u'mtr_sync_replacer', (
+        db.create_table(u'sync_replacer', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('value', self.gf('django.db.models.fields.TextField')(max_length=100000)),
             ('change_to', self.gf('django.db.models.fields.TextField')(max_length=100000)),
             ('regex', self.gf('django.db.models.fields.TextField')(max_length=1000)),
-            ('category', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='replacers', null=True, to=orm['mtr_sync.ReplacerCategory'])),
+            ('category', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='replacers', null=True, to=orm['sync.ReplacerCategory'])),
         ))
-        db.send_create_signal('mtr_sync', ['Replacer'])
+        db.send_create_signal(u'sync', ['Replacer'])
 
         # Adding model 'Field'
-        db.create_table(u'mtr_sync_field', (
+        db.create_table(u'sync_field', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('position', self.gf('django.db.models.fields.PositiveIntegerField')(default=1, null=True, blank=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
@@ -85,24 +85,24 @@ class Migration(SchemaMigration):
             ('set_value', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('find_filter', self.gf('django.db.models.fields.CharField')(default='exact', max_length=255, blank=True)),
             ('find_value', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('replacer_category', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='fields', null=True, to=orm['mtr_sync.ReplacerCategory'])),
+            ('replacer_category', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='fields', null=True, to=orm['sync.ReplacerCategory'])),
             ('converters', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
-            ('settings', self.gf('django.db.models.fields.related.ForeignKey')(related_name='fields', to=orm['mtr_sync.Settings'])),
+            ('settings', self.gf('django.db.models.fields.related.ForeignKey')(related_name='fields', to=orm['sync.Settings'])),
         ))
-        db.send_create_signal('mtr_sync', ['Field'])
+        db.send_create_signal(u'sync', ['Field'])
 
         # Adding model 'Context'
-        db.create_table(u'mtr_sync_context', (
+        db.create_table(u'sync_context', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('cell', self.gf('django.db.models.fields.CharField')(max_length=1000, blank=True)),
             ('value', self.gf('django.db.models.fields.CharField')(max_length=1000, blank=True)),
-            ('settings', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='contexts', null=True, to=orm['mtr_sync.Settings'])),
+            ('settings', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='contexts', null=True, to=orm['sync.Settings'])),
         ))
-        db.send_create_signal('mtr_sync', ['Context'])
+        db.send_create_signal(u'sync', ['Context'])
 
         # Adding model 'Report'
-        db.create_table(u'mtr_sync_report', (
+        db.create_table(u'sync_report', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('action', self.gf('django.db.models.fields.PositiveSmallIntegerField')(db_index=True)),
             ('buffer_file', self.gf('django.db.models.fields.files.FileField')(db_index=True, max_length=100, blank=True)),
@@ -110,63 +110,63 @@ class Migration(SchemaMigration):
             ('started_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('completed_at', self.gf('django.db.models.fields.DateTimeField')(null=True, blank=True)),
             ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
-            ('settings', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='reports', null=True, to=orm['mtr_sync.Settings'])),
+            ('settings', self.gf('django.db.models.fields.related.ForeignKey')(blank=True, related_name='reports', null=True, to=orm['sync.Settings'])),
         ))
-        db.send_create_signal('mtr_sync', ['Report'])
+        db.send_create_signal(u'sync', ['Report'])
 
         # Adding model 'Message'
-        db.create_table(u'mtr_sync_message', (
+        db.create_table(u'sync_message', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('position', self.gf('django.db.models.fields.PositiveIntegerField')(default=1, null=True, blank=True)),
-            ('report', self.gf('django.db.models.fields.related.ForeignKey')(related_name='messages', to=orm['mtr_sync.Report'])),
+            ('report', self.gf('django.db.models.fields.related.ForeignKey')(related_name='messages', to=orm['sync.Report'])),
             ('message', self.gf('django.db.models.fields.TextField')(max_length=10000)),
             ('step', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=1)),
             ('input_position', self.gf('django.db.models.fields.CharField')(max_length=10, blank=True)),
             ('input_value', self.gf('django.db.models.fields.TextField')(max_length=60000, null=True, blank=True)),
             ('type', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=0)),
         ))
-        db.send_create_signal('mtr_sync', ['Message'])
+        db.send_create_signal(u'sync', ['Message'])
 
 
     def backwards(self, orm):
         # Deleting model 'Settings'
-        db.delete_table(u'mtr_sync_settings')
+        db.delete_table(u'sync_settings')
 
         # Deleting model 'Sequence'
-        db.delete_table(u'mtr_sync_sequence')
+        db.delete_table(u'sync_sequence')
 
         # Removing M2M table for field settings on 'Sequence'
-        db.delete_table(db.shorten_name(u'mtr_sync_sequence_settings'))
+        db.delete_table(db.shorten_name(u'sync_sequence_settings'))
 
         # Deleting model 'ReplacerCategory'
-        db.delete_table(u'mtr_sync_replacercategory')
+        db.delete_table(u'sync_replacercategory')
 
         # Deleting model 'Replacer'
-        db.delete_table(u'mtr_sync_replacer')
+        db.delete_table(u'sync_replacer')
 
         # Deleting model 'Field'
-        db.delete_table(u'mtr_sync_field')
+        db.delete_table(u'sync_field')
 
         # Deleting model 'Context'
-        db.delete_table(u'mtr_sync_context')
+        db.delete_table(u'sync_context')
 
         # Deleting model 'Report'
-        db.delete_table(u'mtr_sync_report')
+        db.delete_table(u'sync_report')
 
         # Deleting model 'Message'
-        db.delete_table(u'mtr_sync_message')
+        db.delete_table(u'sync_message')
 
 
     models = {
-        'mtr_sync.context': {
+        u'sync.context': {
             'Meta': {'object_name': 'Context'},
             'cell': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'settings': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'contexts'", 'null': 'True', 'to': "orm['mtr_sync.Settings']"}),
+            'settings': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'contexts'", 'null': 'True', 'to': u"orm['sync.Settings']"}),
             'value': ('django.db.models.fields.CharField', [], {'max_length': '1000', 'blank': 'True'})
         },
-        'mtr_sync.field': {
+        u'sync.field': {
             'Meta': {'ordering': "('position',)", 'object_name': 'Field'},
             'attribute': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'converters': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -176,58 +176,58 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'position': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
-            'replacer_category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'fields'", 'null': 'True', 'to': "orm['mtr_sync.ReplacerCategory']"}),
+            'replacer_category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'fields'", 'null': 'True', 'to': u"orm['sync.ReplacerCategory']"}),
             'set_filter': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'set_value': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'settings': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'fields'", 'to': "orm['mtr_sync.Settings']"}),
+            'settings': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'fields'", 'to': u"orm['sync.Settings']"}),
             'skip': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'update': ('django.db.models.fields.BooleanField', [], {'default': 'True'})
         },
-        'mtr_sync.message': {
+        u'sync.message': {
             'Meta': {'ordering': "('position',)", 'object_name': 'Message'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'input_position': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
             'input_value': ('django.db.models.fields.TextField', [], {'max_length': '60000', 'null': 'True', 'blank': 'True'}),
             'message': ('django.db.models.fields.TextField', [], {'max_length': '10000'}),
             'position': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
-            'report': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'messages'", 'to': "orm['mtr_sync.Report']"}),
+            'report': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'messages'", 'to': u"orm['sync.Report']"}),
             'step': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
             'type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
         },
-        'mtr_sync.replacer': {
+        u'sync.replacer': {
             'Meta': {'object_name': 'Replacer'},
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'replacers'", 'null': 'True', 'to': "orm['mtr_sync.ReplacerCategory']"}),
+            'category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'replacers'", 'null': 'True', 'to': u"orm['sync.ReplacerCategory']"}),
             'change_to': ('django.db.models.fields.TextField', [], {'max_length': '100000'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'regex': ('django.db.models.fields.TextField', [], {'max_length': '1000'}),
             'value': ('django.db.models.fields.TextField', [], {'max_length': '100000'})
         },
-        'mtr_sync.replacercategory': {
+        u'sync.replacercategory': {
             'Meta': {'object_name': 'ReplacerCategory'},
             'attribute': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'model': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'})
         },
-        'mtr_sync.report': {
+        u'sync.report': {
             'Meta': {'ordering': "('-id',)", 'object_name': 'Report'},
             'action': ('django.db.models.fields.PositiveSmallIntegerField', [], {'db_index': 'True'}),
             'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
             'completed_at': ('django.db.models.fields.DateTimeField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'settings': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'reports'", 'null': 'True', 'to': "orm['mtr_sync.Settings']"}),
+            'settings': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'reports'", 'null': 'True', 'to': u"orm['sync.Settings']"}),
             'started_at': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'status': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'})
         },
-        'mtr_sync.sequence': {
+        u'sync.sequence': {
             'Meta': {'object_name': 'Sequence'},
             'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'settings': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'sequences'", 'symmetrical': 'False', 'to': "orm['mtr_sync.Settings']"})
+            'settings': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'sequences'", 'symmetrical': 'False', 'to': u"orm['sync.Settings']"})
         },
-        'mtr_sync.settings': {
+        u'sync.settings': {
             'Meta': {'ordering': "('-id',)", 'object_name': 'Settings'},
             'action': ('django.db.models.fields.PositiveSmallIntegerField', [], {'db_index': 'True'}),
             'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
@@ -255,4 +255,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['mtr_sync']
+    complete_apps = ['sync']

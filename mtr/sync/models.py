@@ -291,8 +291,6 @@ class Settings(ActionsMixin):
 
         ordering = ('-id',)
 
-        app_label = 'mtr_sync'
-
     def __str__(self):
         return self.name or self.worksheet or str(self.id)
 
@@ -330,8 +328,6 @@ class Sequence(models.Model):
         verbose_name = _('sequence')
         verbose_name_plural = _('sequences')
 
-        app_label = 'mtr_sync'
-
     def __str__(self):
         return self.name
 
@@ -355,8 +351,6 @@ class ReplacerCategory(models.Model):
         verbose_name = _('replacer category')
         verbose_name_plural = _('replacer categories')
 
-        app_label = 'mtr_sync'
-
 
 @python_2_unicode_compatible
 class Replacer(models.Model):
@@ -376,8 +370,6 @@ class Replacer(models.Model):
     class Meta:
         verbose_name = _('replacer')
         verbose_name_plural = _('replacers')
-
-        app_label = 'mtr_sync'
 
 
 @python_2_unicode_compatible
@@ -438,8 +430,6 @@ class Field(PositionRelatedMixin):
         verbose_name = _('field')
         verbose_name_plural = _('fields')
 
-        app_label = 'mtr_sync'
-
     def __str__(self):
         return self.name or self.attribute
 
@@ -464,8 +454,6 @@ class Context(models.Model):
     class Meta:
         verbose_name = _('context')
         verbose_name_plural = _('contexts')
-
-        app_label = 'mtr_sync'
 
 
 @python_2_unicode_compatible
@@ -511,8 +499,6 @@ class Report(ActionsMixin):
         verbose_name_plural = _('reports')
 
         ordering = ('-id',)
-
-        app_label = 'mtr_sync'
 
     def __str__(self):
         return '{} - {}'.format(self.started_at, self.get_status_display())
@@ -590,8 +576,6 @@ class Message(PositionRelatedMixin, ErrorChoicesMixin):
     class Meta(PositionRelatedMixin.Meta):
         verbose_name = _('message')
         verbose_name_plural = _('messages')
-
-        app_label = 'mtr_sync'
 
     def __str__(self):
         return self.message
