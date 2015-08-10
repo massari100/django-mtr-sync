@@ -88,6 +88,9 @@ class Manager(object):
 
         if not self.imported:
             for module in modules:
-                __import__(module)
+                try:
+                    __import__(module)
+                except:
+                    pass
 
             self.imported = True
