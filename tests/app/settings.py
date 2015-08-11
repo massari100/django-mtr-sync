@@ -50,7 +50,8 @@ INSTALLED_APPS = (
 
     'app',
 
-    'mtr.sync'
+    'mtr.sync',
+    'mtr.utils'
 )
 
 MIDDLEWARE_CLASSES = (

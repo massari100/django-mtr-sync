@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 
-from mtr.sync.helpers import themed
+from mtr.utils.helpers import themed
 
 
 class AdminMixinTest(TestCase):

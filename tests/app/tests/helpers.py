@@ -5,7 +5,7 @@ import django
 from django.test import TestCase
 
 from mtr.sync.settings import SETTINGS
-from mtr.sync.helpers import themed
+from mtr.utils.helpers import themed
 
 
 class ThemedTest(TestCase):
