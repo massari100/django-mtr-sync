@@ -16,7 +16,7 @@ class CharNullField(models.CharField):
             return value
 
     def get_prep_value(self, value):
-        value = super().get_prep_value(value)
+        value = super(CharNullField, self).get_prep_value(value)
 
         if not value:
             return None
@@ -50,7 +50,7 @@ class PositionRootMixin(models.Model):
                 .aggregate(models.Max('position'))['position__max']
             self.position = self.position + 1 if self.position else 1
 
-        super().save(*args, **kwargs)
+        super(PositionRootMixin, self).save(*args, **kwargs)
 
 
 class PositionRelatedMixin(models.Model):
@@ -73,7 +73,7 @@ class PositionRelatedMixin(models.Model):
                 .aggregate(models.Max('position'))['position__max']
             self.position = self.position + 1 if self.position else 1
 
-        super().save(*args, **kwargs)
+        super(PositionRelatedMixin, self).save(*args, **kwargs)
 
 
 class TreePositionMixin(models.Model):
@@ -99,4 +99,4 @@ class TreePositionMixin(models.Model):
                 .aggregate(models.Max('position'))['position__max']
             self.position = self.position + 1 if self.position else 0
 
-        super().save(*args, **kwargs)
+        super(TreePositionMixin, self).save(*args, **kwargs)
