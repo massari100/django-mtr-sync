@@ -12,28 +12,7 @@ from .lib.signals import export_started, export_completed, \
     import_started, import_completed, error_raised
 from .lib.exceptions import ErrorChoicesMixin
 
-
-class PositionRelatedMixin(models.Model):
-    POSITION_RELATED_FIELD = None
-
-    position = models.PositiveIntegerField(
-        _('position'), null=True, blank=True, default=1)
-
-    class Meta:
-        abstract = True
-
-        ordering = ('position',)
-
-    def save(self, *args, **kwargs):
-        related_field = getattr(self, self.POSITION_RELATED_FIELD, None)
-
-        if self.position is None and related_field is not None:
-            self.position = self.__class__.objects.filter(**{
-                self.POSITION_RELATED_FIELD: related_field}) \
-                .aggregate(models.Max('position'))['position__max']
-            self.position = self.position + 1 if self.position else 1
-
-        super(PositionRelatedMixin, self).save(*args, **kwargs)
+from mtr.utils.models import PositionRelatedMixin
 
 
 class ExportManager(models.Manager):
