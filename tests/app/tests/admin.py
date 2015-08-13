@@ -26,7 +26,7 @@ class AdminMixinTest(TestCase):
         self.assertContains(content, 'Import')
 
     def test_settings_export_import_modified_by_link(self):
-        if django.get_version()[:2] > '1.6':
+        if django.get_version()[:3] > '1.6':
             link = reverse('admin:mtr_sync_settings_add')
         else:
             link = reverse('admin:sync_settings_add')
