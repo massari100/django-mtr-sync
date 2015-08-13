@@ -3,6 +3,6 @@
 {% load i18n %}
 
 {% block object-tools-items %}
-    {% include 'mtr/sync/default/object_tools.html' %}
+    {% include 'mtr/sync/default/object_tools.html' with version='1.6' %}
     {{ block.super }}
 {% endblock %}

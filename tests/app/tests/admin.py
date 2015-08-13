@@ -1,3 +1,5 @@
+import django
+
 from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
@@ -24,13 +26,17 @@ class AdminMixinTest(TestCase):
         self.assertContains(content, 'Import')
 
     def test_settings_export_import_modified_by_link(self):
+        if django.get_version()[:2] > '1.6':
+            link = reverse('admin:mtr_sync_settings_add')
+        else:
+            link = reverse('admin:sync_settings_add')
+
         content = self.client.get(
             '{}?action=export&model=app.person&filter='
             'security_level__gte%3D10%26surname__icont'
             'ains%3Ddas%26o%3D-3.2%26gender__exact%3DM'
             '%26fields=action_checkbox%2Cname%2Csurname%'
-            '2Csecurity_level%2Cgender'.format(
-                reverse('admin:mtr_sync_settings_add')))
+            '2Csecurity_level%2Cgender'.format(link))
         form = content.context['adminform'].form
 
         self.assertEqual(form.initial['action'], 0)
@@ -43,8 +49,7 @@ class AdminMixinTest(TestCase):
             'box,name,surname,security_level,gender')
 
         content = self.client.get(
-            '{}?action=import&model=app.person'.format(
-                reverse('admin:mtr_sync_settings_add')))
+            '{}?action=import&model=app.person'.format(link))
         form = content.context['adminform'].form
 
         self.assertEqual(form.initial['action'], 1)
