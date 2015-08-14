@@ -24,68 +24,46 @@ msgid "mtr.sync:Link to file"
 msgstr "Ссылка на файл"
 
 #: admin.py:124
-#, fuzzy
-#| msgid "mtr.sync:Data settings"
 msgid "Data settings"
 msgstr "Настройки данных"
 
 #: admin.py:131
-#, fuzzy
-#| msgid "mtr.sync:Worksheet settings"
 msgid "Worksheet settings"
 msgstr "Настройки файла (документа)"
 
 #: admin.py:139
-#, fuzzy
-#| msgid "mtr.sync:Language settings"
 msgid "Language settings"
 msgstr "Настройки языка"
 
 #: admin.py:143
-#, fuzzy
-#| msgid "mtr.sync:Field settings"
 msgid "Field settings"
 msgstr "Настройки полей"
 
 #: admin.py:187 admin.py:230
-#, fuzzy
-#| msgid "mtr.sync:Data synchronization started in background."
 msgid "Data synchronization started in background."
 msgstr "Синхронизация отправлена в фоновый режим"
 
 #: admin.py:188 admin.py:231
-#, fuzzy
-#| msgid "mtr.sync:Sync data"
 msgid "Sync data"
 msgstr "Синхронизировать"
 
 #: admin.py:198
-#, fuzzy
-#| msgid "mtr.sync:Copies successfully created"
 msgid "Copies successfully created"
 msgstr "Копии успешно созданы"
 
 #: admin.py:199
-#, fuzzy
-#| msgid "mtr.sync:Create a copy of settings"
 msgid "Create a copy of settings"
 msgstr "Создать копию настроек"
 
 #: admin.py:210
-#, fuzzy
-#| msgid "mtr.sync:Latest run messages"
 msgid "Latest run messages"
 msgstr "Отчет с последнего запуска"
 
 #: admin.py:247
-#, fuzzy
-#| msgid "Data sync"
 msgid "Latest sync"
 msgstr "Синхронизация"
 
 #: api/actions.py:126
-#, fuzzy
-#| msgid "mtr.sync:Create only"
 msgid "Create only"
 msgstr "Только создать"
 
@@ -94,14 +72,10 @@ msgid "Create or update"
 msgstr ""
 
 #: api/actions.py:188
-#, fuzzy
-#| msgid "mtr.sync:Update only"
 msgid "Update only"
 msgstr "Только обновить"
 
 #: api/converters.py:10
-#, fuzzy
-#| msgid "mtr.sync:Decimal"
 msgid "Decimal"
 msgstr "Число с запятой"
 
@@ -110,20 +84,14 @@ msgid "String"
 msgstr ""
 
 #: api/converters.py:28
-#, fuzzy
-#| msgid "mtr.sync:Coma separated list"
 msgid "Coma separated list"
 msgstr "Спсиок через запятую"
 
 #: api/converters.py:39
-#, fuzzy
-#| msgid "mtr.sync:Boolean"
 msgid "Boolean"
 msgstr "Истина, ложь"
 
 #: api/converters.py:47
-#, fuzzy
-#| msgid "mtr.sync:File path"
 msgid "File path"
 msgstr "Путь к файлу"
 
@@ -192,8 +160,6 @@ msgid "Data sync"
 msgstr "Синхронизация"
 
 #: models.py:20
-#, fuzzy
-#| msgid "mtr.sync:position"
 msgid "position"
 msgstr "позиция"
 
@@ -218,8 +184,6 @@ msgid "Small description of operation"
 msgstr ""
 
 #: models.py:95
-#, fuzzy
-#| msgid "mtr.sync:start row"
 msgid "start row"
 msgstr "начальная строка"
 
@@ -228,8 +192,6 @@ msgid "Reading or writing start index (including itself)"
 msgstr ""
 
 #: models.py:99
-#, fuzzy
-#| msgid "mtr.sync:end row"
 msgid "end row"
 msgstr "конечная строка"
 
@@ -246,14 +208,10 @@ msgid "Choose database model if action need it"
 msgstr ""
 
 #: models.py:108
-#, fuzzy
-#| msgid "mtr.sync:created at"
 msgid "created at"
 msgstr "дата создания"
 
 #: models.py:110 models.py:489
-#, fuzzy
-#| msgid "mtr.sync:updated at"
 msgid "updated at"
 msgstr "дата обновления"
 
@@ -262,14 +220,10 @@ msgid "format"
 msgstr ""
 
 #: models.py:116
-#, fuzzy
-#| msgid "mtr.sync:set filter type"
 msgid "Choose file type"
 msgstr "фильтр ячейки"
 
 #: models.py:118
-#, fuzzy
-#| msgid "mtr.sync:worksheet page"
 msgid "worksheet page"
 msgstr "страница документа"
 
@@ -278,8 +232,6 @@ msgid "Page name of sheet book"
 msgstr ""
 
 #: models.py:121
-#, fuzzy
-#| msgid "mtr.sync:include header"
 msgid "include header"
 msgstr "включая заголовок"
 
@@ -289,8 +241,6 @@ msgid ""
 msgstr ""
 
 #: models.py:127
-#, fuzzy
-#| msgid "mtr.sync:custom filename"
 msgid "custom filename"
 msgstr "имя файла"
 
@@ -307,8 +257,6 @@ msgid "File for import action"
 msgstr ""
 
 #: models.py:134
-#, fuzzy
-#| msgid "mtr.sync:dataset"
 msgid "dataset"
 msgstr "пользовательский набор данных"
 
@@ -319,8 +267,6 @@ msgid ""
 msgstr ""
 
 #: models.py:140
-#, fuzzy
-#| msgid "mtr.sync:data action"
 msgid "data action"
 msgstr "обработчик данных"
 
@@ -331,8 +277,6 @@ msgid ""
 msgstr ""
 
 #: models.py:147
-#, fuzzy
-#| msgid "mtr.sync:filter custom dataset"
 msgid "filter custom dataset"
 msgstr "фильтровать пользовательский набор данных"
 
@@ -343,8 +287,6 @@ msgid ""
 msgstr ""
 
 #: models.py:151
-#, fuzzy
-#| msgid "mtr.sync:querystring"
 msgid "querystring"
 msgstr "строка запроса"
 
@@ -355,8 +297,6 @@ msgid ""
 msgstr ""
 
 #: models.py:156
-#, fuzzy
-#| msgid "mtr.sync:language"
 msgid "language"
 msgstr "язык"
 
@@ -368,8 +308,6 @@ msgid ""
 msgstr ""
 
 #: models.py:162
-#, fuzzy
-#| msgid "mtr.sync:Hide translation prefixed fields"
 msgid "Hide translation prefixed fields"
 msgstr "Скрыть поля с префиксами перевода"
 
@@ -380,20 +318,14 @@ msgid ""
 msgstr ""
 
 #: models.py:169
-#, fuzzy
-#| msgid "mtr.sync:Create settings for fields"
 msgid "Create settings for fields"
 msgstr "Создать поля автоматически"
 
 #: models.py:170
-#, fuzzy
-#| msgid "mtr.sync:Create settings for fields"
 msgid "Automaticaly creates all settings for model fields"
 msgstr "Создать поля автоматически"
 
 #: models.py:172
-#, fuzzy
-#| msgid "mtr.sync:Populate settings from file"
 msgid "Populate settings from file"
 msgstr "Взять настройки с файла"
 
@@ -402,8 +334,6 @@ msgid "Read start row, end row and first worksheet page from given file"
 msgstr ""
 
 #: models.py:177
-#, fuzzy
-#| msgid "mtr.sync:Include related fields"
 msgid "Include related fields"
 msgstr "Включить в поля зависимости"
 
@@ -414,8 +344,6 @@ msgid ""
 msgstr ""
 
 #: models.py:181
-#, fuzzy
-#| msgid "mtr.sync:Edit field attributes"
 msgid "Edit field attributes"
 msgstr "Редактировать атрибуты поля в ручную"
 
@@ -427,38 +355,26 @@ msgstr ""
 
 #: models.py:289 models.py:290 models.py:327 models.py:429 models.py:451
 #: models.py:492
-#, fuzzy
-#| msgid "mtr.sync:settings"
 msgid "settings"
 msgstr "настройки"
 
 #: models.py:330
-#, fuzzy
-#| msgid "mtr.sync:sequence"
 msgid "sequence"
 msgstr "синхронизация"
 
 #: models.py:331
-#, fuzzy
-#| msgid "mtr.sync:sequences"
 msgid "sequences"
 msgstr "синхронизация"
 
 #: models.py:344 models.py:401
-#, fuzzy
-#| msgid "mtr.sync:model attribute"
 msgid "model attribute"
 msgstr "атрибут модели"
 
 #: models.py:353 models.py:422
-#, fuzzy
-#| msgid "mtr.sync:replacer category"
 msgid "replacer category"
 msgstr "категория замещения"
 
 #: models.py:354
-#, fuzzy
-#| msgid "mtr.sync:replacer categories"
 msgid "replacer categories"
 msgstr "категории замещения"
 
@@ -467,8 +383,6 @@ msgid "value"
 msgstr ""
 
 #: models.py:363
-#, fuzzy
-#| msgid "mtr.sync:change to"
 msgid "change to"
 msgstr "заменить на"
 
@@ -477,20 +391,14 @@ msgid "regex"
 msgstr ""
 
 #: models.py:366
-#, fuzzy
-#| msgid "mtr.sync:category"
 msgid "category"
 msgstr "категория"
 
 #: models.py:373
-#, fuzzy
-#| msgid "mtr.sync:replacer"
 msgid "replacer"
 msgstr "замещение"
 
 #: models.py:374
-#, fuzzy
-#| msgid "mtr.sync:replacers"
 msgid "replacers"
 msgstr "замещение"
 
@@ -507,8 +415,6 @@ msgid "find"
 msgstr ""
 
 #: models.py:408
-#, fuzzy
-#| msgid "mtr.sync:set filter type"
 msgid "set filter type"
 msgstr "фильтр ячейки"
 
@@ -517,26 +423,18 @@ msgid "Not create or update instance if empty cell"
 msgstr ""
 
 #: models.py:413
-#, fuzzy
-#| msgid "mtr.sync:set value"
 msgid "set value"
 msgstr "значение"
 
 #: models.py:416
-#, fuzzy
-#| msgid "mtr.sync:find filter type"
 msgid "find filter type"
 msgstr "фильтр для поиска"
 
 #: models.py:419
-#, fuzzy
-#| msgid "mtr.sync:find value"
 msgid "find value"
 msgstr "значение для поиска"
 
 #: models.py:426
-#, fuzzy
-#| msgid "mtr.sync:converters"
 msgid "converters"
 msgstr "преобразователи"
 
@@ -553,14 +451,10 @@ msgid "cell"
 msgstr ""
 
 #: models.py:459
-#, fuzzy
-#| msgid "mtr.sync:context"
 msgid "context"
 msgstr "контекст"
 
 #: models.py:460
-#, fuzzy
-#| msgid "mtr.sync:contexts"
 msgid "contexts"
 msgstr "контексты"
 
@@ -569,14 +463,10 @@ msgid "Error"
 msgstr ""
 
 #: models.py:475
-#, fuzzy
-#| msgid "mtr.sync:Running"
 msgid "Running"
 msgstr "В обработке"
 
 #: models.py:476
-#, fuzzy
-#| msgid "mtr.sync:Success"
 msgid "Success"
 msgstr "Успешно завершено"
 
@@ -585,14 +475,10 @@ msgid "status"
 msgstr ""
 
 #: models.py:485
-#, fuzzy
-#| msgid "mtr.sync:started at"
 msgid "started at"
 msgstr "дата начала"
 
 #: models.py:487
-#, fuzzy
-#| msgid "mtr.sync:completed at"
 msgid "completed at"
 msgstr "дата завершения"
 
@@ -601,8 +487,6 @@ msgid "report"
 msgstr ""
 
 #: models.py:503
-#, fuzzy
-#| msgid "mtr.sync:reports"
 msgid "reports"
 msgstr "отчеты"
 
@@ -611,8 +495,6 @@ msgid "Info"
 msgstr ""
 
 #: models.py:570 models.py:583
-#, fuzzy
-#| msgid "mtr.sync:message"
 msgid "message"
 msgstr "сообщение"
 
@@ -621,14 +503,10 @@ msgid "step"
 msgstr ""
 
 #: models.py:575
-#, fuzzy
-#| msgid "mtr.sync:input position"
 msgid "input position"
 msgstr "позиция в файле"
 
 #: models.py:577
-#, fuzzy
-#| msgid "mtr.sync:input value"
 msgid "input value"
 msgstr "входящие данные"
 
@@ -637,8 +515,6 @@ msgid "type"
 msgstr ""
 
 #: models.py:584
-#, fuzzy
-#| msgid "mtr.sync:messages"
 msgid "messages"
 msgstr "сообщения"
 
@@ -712,8 +588,6 @@ msgstr ""
 #: templates/mtr/sync/default/export.html:10
 #: templates/mtr/sync/grappelli/dashboard.html:10
 #: templates/mtr/sync/grappelli/export.html:10
-#, fuzzy
-#| msgid "mtr.sync:Data settings"
 msgid "mtr.sync:Data sync"
 msgstr "Настройки данных"
 
@@ -794,63 +668,3 @@ msgstr ""
 #: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:9
 msgid "Add Another"
 msgstr ""
-
-#~ msgid "mtr.sync:String"
-#~ msgstr "Строка"
-
-#~ msgid "mtr.sync:action"
-#~ msgstr "действие"
-
-#~ msgid "mtr.sync:name"
-#~ msgstr "имя"
-
-#~ msgid "mtr.sync:model"
-#~ msgstr "модель данных"
-
-#~ msgid "mtr.sync:format"
-#~ msgstr "формат"
-
-#~ msgid "mtr.sync:file"
-#~ msgstr "файл"
-
-#~ msgid "mtr.sync:value"
-#~ msgstr "значение"
-
-#~ msgid "mtr.sync:regex"
-#~ msgstr "регулярное выражение"
-
-#~ msgid "mtr.sync:skip"
-#~ msgstr "пропустить"
-
-#~ msgid "mtr.sync:update"
-#~ msgstr "обновить"
-
-#~ msgid "mtr.sync:find"
-#~ msgstr "искать"
-
-#~ msgid "mtr.sync:field"
-#~ msgstr "поле"
-
-#~ msgid "mtr.sync:fields"
-#~ msgstr "поля"
-
-#~ msgid "mtr.sync:cell"
-#~ msgstr "ячейка"
-
-#~ msgid "mtr.sync:Error"
-#~ msgstr "Ошибка"
-
-#~ msgid "mtr.sync:status"
-#~ msgstr "статус"
-
-#~ msgid "mtr.sync:report"
-#~ msgstr "отчет"
-
-#~ msgid "mtr.sync:Info"
-#~ msgstr "Інформация"
-
-#~ msgid "mtr.sync:step"
-#~ msgstr "этап"
-
-#~ msgid "mtr.sync:type"
-#~ msgstr "тип"
