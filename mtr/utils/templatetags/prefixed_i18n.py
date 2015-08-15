@@ -25,14 +25,19 @@ class TranslateNode(Node):
         self.request = Variable('request')
 
     def render(self, context):
+        i18n_prefix = self.request.resolve(context).resolver_match.app_name
+        i18n_prefix = context.get('__i18n_prefix', i18n_prefix)
+
         self.filter_expression.var.translate = not self.noop
         if self.message_context:
             self.filter_expression.var.message_context = (
                 self.message_context.resolve(context))
+
         output = self.filter_expression.resolve(context)
+        output = '{}:{}'.format(i18n_prefix, output)
+
         value = render_value_in_context(output, context)
-        # print(self.request.resolve(context).resolver_match.app_name)
-        # TODO: using current app or set context resolve string
+
         if self.asvar:
             context[self.asvar] = value
             return ''
@@ -328,29 +333,6 @@ def do_block_translate(parser, token):
                               asvar=asvar)
 
 
-class SetVarNode(Node):
-
-    def __init__(self, var_name, var_value):
-        self.var_name = var_name
-        self.var_value = var_value
-
-    def render(self, context):
-        try:
-            value = Variable(self.var_value).resolve(context)
-        except VariableDoesNotExist:
-            value = ""
-        context[self.var_name] = value
-        return u""
-
-
-@register.tag('set')
-def set_var(parser, token):
-    """
-        {% set <var_name>  = <var_value> %}
-    """
-    parts = token.split_contents()
-    if len(parts) < 4:
-        raise TemplateSyntaxError(
-            "'set' tag must be of the form:  {% set <var_na"
-            "me>  = <var_value> %}")
-    return SetVarNode(parts[1], parts[3])
+@register.simple_tag(takes_context=True)
+def set_i18n_prefix(context, name):
+    context['__i18n_prefix'] = name

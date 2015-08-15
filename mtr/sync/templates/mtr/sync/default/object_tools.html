@@ -1,8 +1,10 @@
 {% load prefixed_i18n mtr_utils %}
 
+{% set_i18n_prefix 'mtr.sync' %}
+
 <li>
-    <a href="{% if version > '1.6' %}{% url 'admin:mtr_sync_settings_add' %}{% else %}{% url 'admin:sync_settings_add' %}{% endif %}?action=export&amp;model={{ opts.app_label }}.{{ opts.model_name }}{% if request.GET.keys %}&amp;filter={{ request.GET.urlencode|urlencode }}%26fields={{ cl.list_display|join:','|urlencode }}{% endif %}">{% trans 'mtr.sync:Export' %}</a>
+    <a href="{% if version > '1.6' %}{% url 'admin:mtr_sync_settings_add' %}{% else %}{% url 'admin:sync_settings_add' %}{% endif %}?action=export&amp;model={{ opts.app_label }}.{{ opts.model_name }}{% if request.GET.keys %}&amp;filter={{ request.GET.urlencode|urlencode }}%26fields={{ cl.list_display|join:','|urlencode }}{% endif %}">{% trans 'Export' %}</a>
 </li>
 <li>
-    <a href="{% if version > '1.6' %}{% url 'admin:mtr_sync_settings_add' %}{% else %}{% url 'admin:sync_settings_add' %}{% endif %}?action=import&amp;model={{ opts.app_label }}.{{ opts.model_name }}{% if request.GET.keys %}&amp;filter={{ request.GET.urlencode|urlencode }}%26fields={{ cl.list_display|join:','|urlencode }}{% endif %}">{% trans 'mtr.sync:Import' %}</a>
+    <a href="{% if version > '1.6' %}{% url 'admin:mtr_sync_settings_add' %}{% else %}{% url 'admin:sync_settings_add' %}{% endif %}?action=import&amp;model={{ opts.app_label }}.{{ opts.model_name }}{% if request.GET.keys %}&amp;filter={{ request.GET.urlencode|urlencode }}%26fields={{ cl.list_display|join:','|urlencode }}{% endif %}">{% trans 'Import' %}</a>
 </li>

@@ -123,11 +123,11 @@ if django.get_version() >= '1.7':
 # Internationalization
 # https://docs.djangoproject.com/en/1.7/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 LANGUAGES = (
     ('de', _('German')),
-    ('en', _('English')),
+    # ('en', _('English')),
 )
 
 TIME_ZONE = 'UTC'
