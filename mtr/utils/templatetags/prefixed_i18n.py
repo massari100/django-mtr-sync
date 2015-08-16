@@ -4,9 +4,11 @@ import sys
 
 from django.templatetags.i18n import TemplateSyntaxError, Variable, Node, \
     render_value_in_context, TOKEN_TEXT, TOKEN_VAR
-from django.template import Library, VariableDoesNotExist
+from django.template import Library
 from django.template.defaulttags import token_kwargs
 from django.utils import six, translation
+
+from ..settings import GETTEXT
 
 register = Library()
 
@@ -27,14 +29,14 @@ class TranslateNode(Node):
     def render(self, context):
         i18n_prefix = self.request.resolve(context).resolver_match.app_name
         i18n_prefix = context.get('__i18n_prefix', i18n_prefix)
-
+        self.filter_expression.var.literal = GETTEXT['FORMAT'].format(
+            i18n_prefix, self.filter_expression.var.literal)
         self.filter_expression.var.translate = not self.noop
         if self.message_context:
             self.filter_expression.var.message_context = (
                 self.message_context.resolve(context))
 
         output = self.filter_expression.resolve(context)
-        output = '{}:{}'.format(i18n_prefix, output)
 
         value = render_value_in_context(output, context)
 
@@ -143,6 +145,7 @@ class BlockTranslateNode(Node):
         self.message_context = message_context
         self.trimmed = trimmed
         self.asvar = asvar
+        self.request = Variable('request')
 
     def render_token_list(self, tokens):
         result = []
@@ -170,6 +173,9 @@ class BlockTranslateNode(Node):
         # the end of function
         context.update(tmp_context)
         singular, vars = self.render_token_list(self.singular)
+        i18n_prefix = self.request.resolve(context).resolver_match.app_name
+        i18n_prefix = context.get('__i18n_prefix', i18n_prefix)
+        singular = GETTEXT['FORMAT'].format(i18n_prefix, singular)
         if self.plural and self.countervar and self.counter:
             count = self.counter.resolve(context)
             context[self.countervar] = count
