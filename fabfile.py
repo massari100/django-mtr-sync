@@ -90,6 +90,7 @@ def locale(action='make', lang='en'):
             # TODO: strip to regex, move to function
 
             with lcd(app_path):
+                local('django-admin.py makemessages -l {}'.format(lang))
                 po_path = os.path.join(
                     app_path, 'locale', lang, 'LC_MESSAGES', 'django.po')
                 with open(po_path, 'rb') as f:

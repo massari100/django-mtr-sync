@@ -1,7 +1,7 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) 2015 THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2015.
 #
 #, fuzzy
 msgid ""
@@ -12,15 +12,13 @@ msgstr ""
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Generated-By: Babel 1.3\n"
 
 #: admin.py:52
-msgid "mtr.sync:Link to file"
+msgid "Link to file"
 msgstr "Ссылка на файл"
 
 #: admin.py:124
@@ -112,7 +110,7 @@ msgid "open file"
 msgstr ""
 
 #: api/exceptions.py:21
-msgid "create file"
+msgid "eate file"
 msgstr ""
 
 #: api/exceptions.py:22
@@ -124,11 +122,11 @@ msgid "write data"
 msgstr ""
 
 #: api/exceptions.py:24
-msgid "save file"
+msgid "ave file"
 msgstr ""
 
 #: api/exceptions.py:25
-msgid "read file"
+msgid "ead file"
 msgstr ""
 
 #: api/exceptions.py:26
@@ -176,7 +174,7 @@ msgid "action"
 msgstr ""
 
 #: models.py:91 models.py:322 models.py:342 models.py:399 models.py:446
-msgid "name"
+msgid "ame"
 msgstr ""
 
 #: models.py:92
@@ -184,7 +182,7 @@ msgid "Small description of operation"
 msgstr ""
 
 #: models.py:95
-msgid "start row"
+msgid "art row"
 msgstr "начальная строка"
 
 #: models.py:96
@@ -200,7 +198,7 @@ msgid "Reading or writing end index (including itself)"
 msgstr ""
 
 #: models.py:103 models.py:346
-msgid "model"
+msgid "odel"
 msgstr ""
 
 #: models.py:105
@@ -208,7 +206,7 @@ msgid "Choose database model if action need it"
 msgstr ""
 
 #: models.py:108
-msgid "created at"
+msgid "eated at"
 msgstr "дата создания"
 
 #: models.py:110 models.py:489
@@ -236,12 +234,11 @@ msgid "include header"
 msgstr "включая заголовок"
 
 #: models.py:123
-msgid ""
-"Check it if you need to write field names in export or skip it in import"
+msgid "Check it if you need to write field names in export or skip it in import"
 msgstr ""
 
 #: models.py:127
-msgid "custom filename"
+msgid "ustom filename"
 msgstr "имя файла"
 
 #: models.py:128
@@ -272,8 +269,8 @@ msgstr "обработчик данных"
 
 #: models.py:143
 msgid ""
-"What will be done with data, for example, create or some custom opeartion "
-"eg. download image from server"
+"What will be done with data, for example, create or some custom opeartion"
+" eg. download image from server"
 msgstr ""
 
 #: models.py:147
@@ -282,8 +279,8 @@ msgstr "фильтровать пользовательский набор да�
 
 #: models.py:148
 msgid ""
-"Check it if you have custom queryset and want to filter from querystring, "
-"for example from admin button"
+"Check it if you have custom queryset and want to filter from querystring,"
+" for example from admin button"
 msgstr ""
 
 #: models.py:151
@@ -313,8 +310,8 @@ msgstr "Скрыть поля с префиксами перевода"
 
 #: models.py:164
 msgid ""
-"If you don't want to create _lang field settings and dublicate in attribute "
-"list, handy if you using modeltranslation"
+"If you don't want to create _lang field settings and dublicate in "
+"attribute list, handy if you using modeltranslation"
 msgstr ""
 
 #: models.py:169
@@ -355,27 +352,27 @@ msgstr ""
 
 #: models.py:289 models.py:290 models.py:327 models.py:429 models.py:451
 #: models.py:492
-msgid "settings"
+msgid "ettings"
 msgstr "настройки"
 
 #: models.py:330
-msgid "sequence"
+msgid "equence"
 msgstr "синхронизация"
 
 #: models.py:331
-msgid "sequences"
+msgid "equences"
 msgstr "синхронизация"
 
 #: models.py:344 models.py:401
-msgid "model attribute"
+msgid "odel attribute"
 msgstr "атрибут модели"
 
 #: models.py:353 models.py:422
-msgid "replacer category"
+msgid "eplacer category"
 msgstr "категория замещения"
 
 #: models.py:354
-msgid "replacer categories"
+msgid "eplacer categories"
 msgstr "категории замещения"
 
 #: models.py:362 models.py:448
@@ -383,27 +380,27 @@ msgid "value"
 msgstr ""
 
 #: models.py:363
-msgid "change to"
+msgid "hange to"
 msgstr "заменить на"
 
 #: models.py:364
-msgid "regex"
+msgid "egex"
 msgstr ""
 
 #: models.py:366
-msgid "category"
+msgid "ategory"
 msgstr "категория"
 
 #: models.py:373
-msgid "replacer"
+msgid "eplacer"
 msgstr "замещение"
 
 #: models.py:374
-msgid "replacers"
+msgid "eplacers"
 msgstr "замещение"
 
 #: models.py:402
-msgid "skip"
+msgid "kip"
 msgstr ""
 
 #: models.py:404
@@ -415,7 +412,7 @@ msgid "find"
 msgstr ""
 
 #: models.py:408
-msgid "set filter type"
+msgid "et filter type"
 msgstr "фильтр ячейки"
 
 #: models.py:410
@@ -423,7 +420,7 @@ msgid "Not create or update instance if empty cell"
 msgstr ""
 
 #: models.py:413
-msgid "set value"
+msgid "et value"
 msgstr "значение"
 
 #: models.py:416
@@ -435,7 +432,7 @@ msgid "find value"
 msgstr "значение для поиска"
 
 #: models.py:426
-msgid "converters"
+msgid "onverters"
 msgstr "преобразователи"
 
 #: models.py:432
@@ -447,15 +444,15 @@ msgid "fields"
 msgstr ""
 
 #: models.py:447
-msgid "cell"
+msgid "ell"
 msgstr ""
 
 #: models.py:459
-msgid "context"
+msgid "ontext"
 msgstr "контекст"
 
 #: models.py:460
-msgid "contexts"
+msgid "ontexts"
 msgstr "контексты"
 
 #: models.py:474 models.py:564
@@ -471,23 +468,23 @@ msgid "Success"
 msgstr "Успешно завершено"
 
 #: models.py:482
-msgid "status"
+msgid "atus"
 msgstr ""
 
 #: models.py:485
-msgid "started at"
+msgid "arted at"
 msgstr "дата начала"
 
 #: models.py:487
-msgid "completed at"
+msgid "ompleted at"
 msgstr "дата завершения"
 
 #: models.py:502
-msgid "report"
+msgid "eport"
 msgstr ""
 
 #: models.py:503
-msgid "reports"
+msgid "eports"
 msgstr "отчеты"
 
 #: models.py:565
@@ -495,11 +492,11 @@ msgid "Info"
 msgstr ""
 
 #: models.py:570 models.py:583
-msgid "message"
+msgid "essage"
 msgstr "сообщение"
 
 #: models.py:572
-msgid "step"
+msgid "ep"
 msgstr ""
 
 #: models.py:575
@@ -511,11 +508,11 @@ msgid "input value"
 msgstr "входящие данные"
 
 #: models.py:580
-msgid "type"
+msgid "pe"
 msgstr ""
 
 #: models.py:584
-msgid "messages"
+msgid "essages"
 msgstr "сообщения"
 
 #: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:9
@@ -574,36 +571,36 @@ msgstr ""
 #: templates/mtr/sync/grappelli/dashboard.html:5
 #: templates/mtr/sync/grappelli/dashboard.html:15
 #: templates/mtr/sync/grappelli/export.html:5
-msgid "mtr.sync:Data sync dashboard"
+msgid "Data sync dashboard"
 msgstr ""
 
 #: templates/mtr/sync/default/dashboard.html:9
 #: templates/mtr/sync/default/export.html:9
 #: templates/mtr/sync/grappelli/dashboard.html:9
 #: templates/mtr/sync/grappelli/export.html:9
-msgid "mtr.sync:Home"
+msgid "Home"
 msgstr ""
 
 #: templates/mtr/sync/default/dashboard.html:10
 #: templates/mtr/sync/default/export.html:10
 #: templates/mtr/sync/grappelli/dashboard.html:10
 #: templates/mtr/sync/grappelli/export.html:10
-msgid "mtr.sync:Data sync"
+msgid "Data sync"
 msgstr "Настройки данных"
 
 #: templates/mtr/sync/default/dashboard.html:10
 #: templates/mtr/sync/grappelli/dashboard.html:10
-msgid "mtr.sync:Dashboard"
+msgid "Dashboard"
 msgstr ""
 
 #: templates/mtr/sync/default/dashboard.html:26
 #: templates/mtr/sync/grappelli/dashboard.html:26
-msgid "mtr.sync:Last reports"
+msgid "Last reports"
 msgstr ""
 
 #: templates/mtr/sync/default/dashboard.html:55
 #: templates/mtr/sync/grappelli/dashboard.html:55
-msgid "mtr.sync:New settings"
+msgid "New settings"
 msgstr ""
 
 #: templates/mtr/sync/default/export.html:10
@@ -612,12 +609,12 @@ msgstr ""
 #: templates/mtr/sync/grappelli/export.html:10
 #: templates/mtr/sync/grappelli/export.html:15
 #: templates/mtr/sync/grappelli/object_tools.html:4
-msgid "mtr.sync:Export"
+msgid "Export"
 msgstr "Экспорт1"
 
 #: templates/mtr/sync/default/object_tools.html:7
 #: templates/mtr/sync/grappelli/object_tools.html:7
-msgid "mtr.sync:Import"
+msgid "Import"
 msgstr "Импорт1"
 
 #: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:8
@@ -668,3 +665,4 @@ msgstr ""
 #: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:9
 msgid "Add Another"
 msgstr ""
+

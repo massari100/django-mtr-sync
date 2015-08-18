@@ -50,8 +50,7 @@ class ReportAdmin(admin.ModelAdmin):
             obj.get_absolute_url())
 
     buffer_file_link.allow_tags = True
-    buffer_file_link.short_description = _(
-        'mtr.sync:Link to file')
+    buffer_file_link.short_description = _('Link to file')
 
 
 class ObjectInlineMixin(object):
