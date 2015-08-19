@@ -75,7 +75,7 @@ class Migration(SchemaMigration):
         # Adding model 'Field'
         db.create_table(u'sync_field', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('position', self.gf('django.db.models.fields.PositiveIntegerField')(default=1, null=True, blank=True)),
+            ('position', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, null=True, blank=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('attribute', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('skip', self.gf('django.db.models.fields.BooleanField')(default=False)),
@@ -117,7 +117,7 @@ class Migration(SchemaMigration):
         # Adding model 'Message'
         db.create_table(u'sync_message', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
-            ('position', self.gf('django.db.models.fields.PositiveIntegerField')(default=1, null=True, blank=True)),
+            ('position', self.gf('django.db.models.fields.PositiveIntegerField')(default=0, null=True, blank=True)),
             ('report', self.gf('django.db.models.fields.related.ForeignKey')(related_name='messages', to=orm['sync.Report'])),
             ('message', self.gf('django.db.models.fields.TextField')(max_length=10000)),
             ('step', self.gf('django.db.models.fields.PositiveSmallIntegerField')(default=1)),
@@ -175,7 +175,7 @@ class Migration(SchemaMigration):
             'find_value': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'position': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
+            'position': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
             'replacer_category': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'fields'", 'null': 'True', 'to': u"orm['sync.ReplacerCategory']"}),
             'set_filter': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'set_value': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
@@ -189,7 +189,7 @@ class Migration(SchemaMigration):
             'input_position': ('django.db.models.fields.CharField', [], {'max_length': '10', 'blank': 'True'}),
             'input_value': ('django.db.models.fields.TextField', [], {'max_length': '60000', 'null': 'True', 'blank': 'True'}),
             'message': ('django.db.models.fields.TextField', [], {'max_length': '10000'}),
-            'position': ('django.db.models.fields.PositiveIntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
+            'position': ('django.db.models.fields.PositiveIntegerField', [], {'default': '0', 'null': 'True', 'blank': 'True'}),
             'report': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'messages'", 'to': u"orm['sync.Report']"}),
             'step': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '1'}),
             'type': ('django.db.models.fields.PositiveSmallIntegerField', [], {'default': '0'})
