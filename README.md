@@ -48,6 +48,9 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 
 ## Working on
 - Documentation
+- Move utils to separate lib
+- Copy past model
+- Fast export, import in object_list
 - Replacer model for minimizing dublication content
 - Different source input (url)
 - Dashboard without admin
