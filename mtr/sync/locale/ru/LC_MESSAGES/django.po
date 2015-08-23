@@ -19,63 +19,63 @@ msgstr ""
 
 #: admin.py:53
 msgid "mtr.sync:Link to file"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Ссылка на файл"
 
 #: admin.py:125
 msgid "mtr.sync:Data settings"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Настройки данных"
 
 #: admin.py:132
 msgid "mtr.sync:Worksheet settings"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Настройки документа"
 
 #: admin.py:140
 msgid "mtr.sync:Language settings"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Настройки языка"
 
 #: admin.py:144
 msgid "mtr.sync:Field settings"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Настройки полей"
 
 #: admin.py:188 admin.py:231
 msgid "mtr.sync:Data synchronization started in background."
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Синхронизация данных запущена в фоновом режиме"
 
 #: admin.py:189 admin.py:232
 msgid "mtr.sync:Sync data"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Синхронизировать"
 
 #: admin.py:199
 msgid "mtr.sync:Copies successfully created"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Копии успешно созданы"
 
 #: admin.py:200
 msgid "mtr.sync:Create a copy of settings"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Создать копии настроек"
 
 #: admin.py:211
 msgid "mtr.sync:Latest run messages"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Последние сообщение"
 
 #: admin.py:248
 msgid "mtr.sync:Latest sync"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Последняя синхронизация"
 
 #: apps.py:13
 msgid "mtr.sync:Data sync"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Синхронизация"
 
 #: lib/actions.py:126
 msgid "mtr.sync:Create only"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Только создать"
 
 #: lib/actions.py:182
 msgid "mtr.sync:Create or update"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Создать или обновить"
 
 #: lib/actions.py:188
 msgid "mtr.sync:Update only"
-msgstr "mtr.sync:"
+msgstr "mtr.sync:Только обновить"
 
 #: lib/converters.py:10
 msgid "mtr.sync:Decimal"
@@ -503,22 +503,6 @@ msgstr "mtr.sync:"
 #: templates/mtr/sync/grappelli/1.6/admin/edit_inline/stacked.html:26
 #: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:76
 msgid "mtr.sync:Remove"
-msgstr "mtr.sync:"
-
-#: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:27
-#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:75
-#: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:27
-#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:77
-#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:28
-#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:80
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/stacked.html:27
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:75
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:52
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:89
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:52
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:89
-#, python-format
-msgid "mtr.sync:Add another %(verbose_name)s"
 msgstr "mtr.sync:"
 
 #: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:17
