@@ -6,16 +6,20 @@ class Manager(object):
     """Manager for different kind of functions"""
 
     def __init__(self):
-        self.registered = {}
-        self.imported = False
+        self._registered = {}
+        self._imported = False
 
-    def _register_dict(self, type_name, func_name, label, **kwargs):
+    def get(self, type_name, func_name, inner=None):
+        return self._registered.get(type_name, {}).get(func_name, None)
+
+    def _register_dict(
+            self, type_name, func_name, label, inner=None, **kwargs):
         """Return decorator for adding functions as key, value
         to instance, dict"""
 
         def decorator(func):
             key = type_name
-            values = self.registered.get(key, OrderedDict())
+            values = self._registered.get(key, OrderedDict())
             position = \
                 getattr(func, 'position', 0) or kwargs.get('position', 0)
             new_name = func_name or func.__name__
@@ -30,13 +34,15 @@ class Manager(object):
                     sorted(
                         values.items(),
                         key=lambda p: getattr(p[1], 'position', 0)))
-            self.registered[key] = values
+            self._registered[key] = values
 
             return func
 
         return decorator
 
-    def register(self, type_name, label=None, name=None, item=None, **kwargs):
+    def register(
+            self, type_name, label=None, name=None,
+            item=None, inner=None, **kwargs):
         """Decorator and function to config new handlers"""
 
         func = self._register_dict(type_name, name, label, **kwargs)
