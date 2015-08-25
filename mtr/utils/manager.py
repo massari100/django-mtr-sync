@@ -10,7 +10,10 @@ class Manager(object):
         self._imported = False
 
     def get(self, type_name, func_name, inner=None):
-        return self._registered.get(type_name, {}).get(func_name, None)
+        funcs = self._registered.get(type_name, {})
+        if inner and funcs:
+            funcs = funcs.get(inner, {})
+        return funcs.get(func_name, None)
 
     def _register_dict(
             self, type_name, func_name, label, inner=None, **kwargs):
@@ -19,7 +22,11 @@ class Manager(object):
 
         def decorator(func):
             key = type_name
+            outer = None
             values = self._registered.get(key, OrderedDict())
+            if inner:
+                outer = values
+                values = values.get(inner, OrderedDict())
             position = \
                 getattr(func, 'position', 0) or kwargs.get('position', 0)
             new_name = func_name or func.__name__
@@ -34,6 +41,9 @@ class Manager(object):
                     sorted(
                         values.items(),
                         key=lambda p: getattr(p[1], 'position', 0)))
+            if inner and outer:
+                outer[key] = inner
+                values = outer
             self._registered[key] = values
 
             return func
@@ -49,10 +59,10 @@ class Manager(object):
 
         return func(item) if item else func
 
-    def unregister(self, type_name, item=None):
+    def unregister(self, type_name, item=None, inner=None):
         """Decorator to pop dict items"""
 
-        items = self.registered.get(type_name, None)
+        items = self._registered.get(type_name, None)
         if items is not None:
             items.pop(getattr(item, '__name__', item), None)
 
