@@ -492,9 +492,11 @@ class I18nTagTests(SimpleTestCase):
             output = self.engine.render_to_string('i18n36')
         self.assertEqual(output, 'Page not found')
 
-    @setup({'i18n37': '{% load i18n %}'
-                      '{% trans "Page not found" as page_not_found %}'
-                      '{% blocktrans %}Error: {{ page_not_found }}{% endblocktrans %}'})
+    @setup({
+        'i18n37': '{% load i18n %}'
+            '{% trans "Page not found" as page_not_found %}'
+            '{% blocktrans %}Error: {{ page_not_found }}{% endblocktrans %}'
+        })
     def test_i18n37(self):
         with translation.override('de'):
             output = self.engine.render_to_string('i18n37')
@@ -510,14 +512,16 @@ class I18nTagTests(SimpleTestCase):
             output = self.engine.render_to_string('i18n38')
         self.assertEqual(output, 'de: German/Deutsch/německy bidi=False')
 
-    @setup({'i18n38_2': '{% load i18n custom %}'
-                        '{% get_language_info_list for langcodes|noop:"x y" as langs %}'
-                        '{% for l in langs %}{{ l.code }}: {{ l.name }}/'
-                        '{{ l.name_local }}/{{ l.name_translated }} '
-                        'bidi={{ l.bidi }}; {% endfor %}'})
+    @setup({
+        'i18n38_2': '{% load i18n custom %}'
+            '{% get_language_info_list for langcodes|noop:"x y" as langs %}'
+            '{% for l in langs %}{{ l.code }}: {{ l.name }}/'
+            '{{ l.name_local }}/{{ l.name_translated }} '
+            'bidi={{ l.bidi }}; {% endfor %}'})
     def test_i18n38_2(self):
         with translation.override('cs'):
-            output = self.engine.render_to_string('i18n38_2', {'langcodes': ['it', 'fr']})
+            output = self.engine.render_to_string(
+                'i18n38_2', {'langcodes': ['it', 'fr']})
         self.assertEqual(
             output,
             'it: Italian/italiano/italsky bidi=False; '
@@ -525,29 +529,36 @@ class I18nTagTests(SimpleTestCase):
         )
 
     # blocktrans tag with asvar
-    @setup({'i18n39': '{% load i18n %}'
-                      '{% blocktrans asvar page_not_found %}Page not found{% endblocktrans %}'
-                      '>{{ page_not_found }}<'})
+    @setup({
+        'i18n39': '{% load i18n %}'
+            '{% blocktrans asvar page_not_found %}Page not'
+            ' found{% endblocktrans %}'
+            '>{{ page_not_found }}<'
+    })
     def test_i18n39(self):
         with translation.override('de'):
             output = self.engine.render_to_string('i18n39')
         self.assertEqual(output, '>Seite nicht gefunden<')
 
-    @setup({'i18n40': '{% load i18n %}'
-                      '{% trans "Page not found" as pg_404 %}'
-                      '{% blocktrans with page_not_found=pg_404 asvar output %}'
-                      'Error: {{ page_not_found }}'
-                      '{% endblocktrans %}'})
+    @setup({
+        'i18n40': '{% load i18n %}'
+            '{% trans "Page not found" as pg_404 %}'
+            '{% blocktrans with page_not_found=pg_404 asvar output %}'
+            'Error: {{ page_not_found }}'
+            '{% endblocktrans %}'
+    })
     def test_i18n40(self):
         output = self.engine.render_to_string('i18n40')
         self.assertEqual(output, '')
 
-    @setup({'i18n41': '{% load i18n %}'
-                      '{% trans "Page not found" as pg_404 %}'
-                      '{% blocktrans with page_not_found=pg_404 asvar output %}'
-                      'Error: {{ page_not_found }}'
-                      '{% endblocktrans %}'
-                      '>{{ output }}<'})
+    @setup({
+        'i18n41': '{% load i18n %}'
+            '{% trans "Page not found" as pg_404 %}'
+            '{% blocktrans with page_not_found=pg_404 asvar output %}'
+            'Error: {{ page_not_found }}'
+            '{% endblocktrans %}'
+            '>{{ output }}<'
+    })
     def test_i18n41(self):
         with translation.override('de'):
             output = self.engine.render_to_string('i18n41')
@@ -571,9 +582,13 @@ class I18nTagTests(SimpleTestCase):
         with self.assertRaisesMessage(TemplateSyntaxError, msg):
             self.engine.render_to_string('template')
 
-    @setup({'template': '{% load i18n %}{% blocktrans asvar %}Yes{% endblocktrans %}'})
+    @setup({
+        'template': '{% load i18n %}{% blocktrans asvar %}'
+            'Yes{% endblocktrans %}'
+    })
     def test_blocktrans_syntax_error_missing_assignment(self):
-        msg = "No argument provided to the 'blocktrans' tag for the asvar option."
+        msg = "No argument provided to the 'blocktrans' " \
+            "tag for the asvar option."
         with self.assertRaisesMessage(TemplateSyntaxError, msg):
             self.engine.render_to_string('template')
 
@@ -585,17 +600,21 @@ class I18nTagTests(SimpleTestCase):
 
     @setup({'template': '{% load i18n %}{% trans "Yes" context as var %}'})
     def test_syntax_error_context_as(self):
-        msg = "Invalid argument 'as' provided to the 'trans' tag for the context option"
+        msg = "Invalid argument 'as' provided to" \
+            " the 'trans' tag for the context option"
         with self.assertRaisesMessage(TemplateSyntaxError, msg):
             self.engine.render_to_string('template')
 
     @setup({'template': '{% load i18n %}{% trans "Yes" context noop %}'})
     def test_syntax_error_context_noop(self):
-        msg = "Invalid argument 'noop' provided to the 'trans' tag for the context option"
+        msg = "Invalid argument 'noop' provided to the " \
+            "'trans' tag for the context option"
         with self.assertRaisesMessage(TemplateSyntaxError, msg):
             self.engine.render_to_string('template')
 
-    @setup({'template': '{% load i18n %}{% trans "Yes" noop noop %}'})
+    @setup({
+        'template': '{% load i18n %}{% trans "Yes" noop noop %}'
+    })
     def test_syntax_error_duplicate_option(self):
         msg = "The 'noop' option was specified more than once."
         with self.assertRaisesMessage(TemplateSyntaxError, msg):
@@ -606,7 +625,9 @@ class I18nTagTests(SimpleTestCase):
         output = self.engine.render_to_string('template')
         self.assertEqual(output, '%s')
 
-    @setup({'template': '{% load i18n %}{% blocktrans %}%s{% endblocktrans %}'})
+    @setup({
+        'template': '{% load i18n %}{% blocktrans %}%s{% endblocktrans %}'
+    })
     def test_blocktrans_tag_using_a_string_that_looks_like_str_fmt(self):
         output = self.engine.render_to_string('template')
         self.assertEqual(output, '%s')
