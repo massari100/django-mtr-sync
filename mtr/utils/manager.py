@@ -16,7 +16,7 @@ class Manager(object):
         return funcs.get(func_name, None)
 
     def _register_dict(
-            self, type_name, func_name, label, related=None, **kwargs):
+            self, type_name, label, func_name, related=None, **kwargs):
         """Return decorator for adding functions as key, value
         to instance, dict"""
 
@@ -55,7 +55,7 @@ class Manager(object):
             item=None, **kwargs):
         """Decorator and function to config new handlers"""
 
-        func = self._register_dict(type_name, name, label, **kwargs)
+        func = self._register_dict(type_name, label, name, **kwargs)
 
         return func(item) if item else func
 
