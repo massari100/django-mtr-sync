@@ -3,8 +3,6 @@ from django.test import TestCase
 from mtr.sync.tests import ApiTestMixin
 from mtr.sync.lib import Processor
 from mtr.sync.lib.processors.xls import XlsProcessor
-from mtr.sync.lib.exceptions import ItemAlreadyRegistered, \
-    ItemDoesNotRegistered
 
 from ...models import Person, Office, Tag
 
@@ -38,11 +36,11 @@ class ManagerTest(ApiTestMixin, TestCase):
     def test_register_already_registered_processor(self):
         self.manager.register('processor', item=TestProcessor)
 
-        with self.assertRaises(ItemAlreadyRegistered):
+        with self.assertRaises(ValueError):
             self.manager.register('processor', item=TestProcessor)
 
     def test_make_processor_not_exist(self):
-        with self.assertRaises(ItemDoesNotRegistered):
+        with self.assertRaises(ValueError):
             self.manager.make_processor(self.settings)
 
     def test_processor_ordering(self):

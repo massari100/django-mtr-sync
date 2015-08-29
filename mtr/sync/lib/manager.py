@@ -7,7 +7,6 @@ from django.utils.translation import activate
 from django.http import QueryDict
 from django.contrib.admin.views.main import IGNORED_PARAMS
 
-from .exceptions import ItemAlreadyRegistered, ItemDoesNotRegistered
 from .helpers import make_model_class, model_settings, \
     process_attribute, model_fields, cell_value
 from ..settings import SETTINGS
@@ -283,7 +282,7 @@ class Manager(ProcessorManagerMixin):
         value = value.get(key, None)
 
         if value is None:
-            raise ItemDoesNotRegistered(
+            raise ValueError(
                 '{} not registered at {}'.format(key, name))
 
         return value
@@ -309,7 +308,7 @@ class Manager(ProcessorManagerMixin):
 
             if values is not None:
                 if values.get(new_name, None) is not None:
-                    raise ItemAlreadyRegistered(
+                    raise ValueError(
                         '{} already registred at {}'.format(new_name, key))
 
                 values[new_name] = func

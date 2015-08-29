@@ -9,11 +9,3 @@ class ErrorChoicesMixin(object):
         (IMPORT_DATA, _('import data')),
         (UNDEFINED, _('unexpected error'))
     )
-
-
-class ItemDoesNotRegistered(Exception):
-    pass
-
-
-class ItemAlreadyRegistered(Exception):
-    pass
