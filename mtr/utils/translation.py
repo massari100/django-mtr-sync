@@ -30,3 +30,5 @@ def make_prefixed_gettext(makeprefix, makeformat=None):
 
     return make_prefixed_string(
         gettext, makeprefix, makeformat=makeformat)
+
+_ = make_prefixed_gettext_lazy('utils')
