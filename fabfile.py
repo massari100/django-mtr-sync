@@ -1,4 +1,5 @@
 import os
+import re
 
 import django
 
@@ -9,6 +10,13 @@ APPS = ['mtr.sync', 'mtr.utils']
 PROJECT_APPS = ['app']
 PROJECT_DIR = 'tests'
 DOCS_DIR = 'docs'
+
+
+def lreplace(pattern, sub, string):
+    """Replaces 'pattern' in 'string' with 'sub'
+    if 'pattern' starts 'string'."""
+
+    return re.sub('^%s' % pattern, sub, string)
 
 
 @task
@@ -90,15 +98,15 @@ def locale(action='make', lang='en'):
             # TODO: strip to regex, move to function
 
             with lcd(app_path):
-                local('django-admin.py makemessages -l {}'.format(lang))
                 po_path = os.path.join(
                     app_path, 'locale', lang, 'LC_MESSAGES', 'django.po')
+                if not os.path.exists(po_path):
+                    local('django-admin.py makemessages -l {}'.format(lang))
                 with open(po_path, 'rb') as f:
                     catalog = read_po(f)
                     for message in catalog:
-                        message.id = message.id.lstrip('{}:'.format(app))
-                        message.string = \
-                            message.string.lstrip('{}:'.format(app))
+                        message.id = lreplace(
+                            '{}:'.format(app), '', message.id)
                 with open(po_path, 'wb') as f:
                     write_po(f, catalog, include_previous=True)
                 local('django-admin.py makemessages -l {}'.format(lang))
@@ -107,15 +115,12 @@ def locale(action='make', lang='en'):
                     for message in catalog:
                         if lang == 'en':
                             message.string = str(message.id)
-                        else:
-                            message.string = \
-                                '{}:{}'.format(app, message.string)
                         message.id = '{}:{}'.format(app, message.id)
                 with open(po_path, 'wb') as f:
                     write_po(f, catalog, include_previous=True)
     elif action == 'compile':
         for app in APPS:
-            with lcd(os.path.join(*app.split('.'))):
+            with lcd(app_path):
                 local('django-admin.py compilemessages -l {}'.format(lang))
     else:
         print(
