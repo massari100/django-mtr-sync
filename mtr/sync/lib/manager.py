@@ -1,18 +1,20 @@
 from __future__ import unicode_literals
 
-from collections import OrderedDict
-
 from django.utils.six.moves import filterfalse
 from django.utils.translation import activate
 from django.http import QueryDict
 from django.contrib.admin.views.main import IGNORED_PARAMS
+
+from ...utils.manager import BaseManager
 
 from .helpers import make_model_class, model_settings, \
     process_attribute, model_fields, cell_value
 from ..settings import SETTINGS
 
 
-class ProcessorManagerMixin(object):
+class Manager(BaseManager):
+
+    """Manager for data processors"""
 
     def convert_value(self, value, field, export=False, action=None):
         """Process value with filters and actions"""
@@ -27,7 +29,7 @@ class ProcessorManagerMixin(object):
     def processor_choices(self):
         """Return all registered processors"""
 
-        for name, processor in self.processors.items():
+        for name, processor in self.all('processors').items():
             yield (
                 name,
                 '{} | {}'.format(
@@ -37,13 +39,13 @@ class ProcessorManagerMixin(object):
     def dataset_choices(self):
         """Return all registered data sources"""
 
-        for name, dataset in self.datasets.items():
+        for name, dataset in self.all('datasets').items():
             yield(name, getattr(dataset, 'label', dataset.__name__))
 
     def action_choices(self):
         """Return all registered actions"""
 
-        for name, action in self.actions.items():
+        for name, action in self.all('actions').items():
             yield(name, getattr(action, 'label', action.__name__))
 
     def make_processor(self, settings, from_extension=False):
@@ -53,13 +55,13 @@ class ProcessorManagerMixin(object):
 
         if from_extension:
             extension = settings.buffer_file.path.split('.')[-1]
-            for pr in self.processors.values():
+            for pr in self.all('processors').values():
                 if pr.file_format.strip('.') == extension:
                     processor = pr
                     settings.processor = processor.__name__
                     break
 
-        processor = self.get_or_raise('processor', settings.processor)
+        processor = self.get('processor', settings.processor)
 
         return processor(settings, self)
 
@@ -123,7 +125,7 @@ class ProcessorManagerMixin(object):
         current_model = make_model_class(settings)
 
         if settings.dataset:
-            dataset = self.get_or_raise('dataset', settings.dataset)
+            dataset = self.get('dataset', settings.dataset)
             dataset = dataset(current_model, settings)
         else:
             dataset = current_model._default_manager.all()
@@ -234,7 +236,7 @@ class ProcessorManagerMixin(object):
         """Get data from diferent source registered at dataset"""
 
         if settings.dataset:
-            dataset = self.get_or_raise('dataset', settings.dataset)
+            dataset = self.get('dataset', settings.dataset)
             dataset = dataset(model, settings)
 
             for index, row in enumerate(dataset):
@@ -257,99 +259,6 @@ class ProcessorManagerMixin(object):
             yield index, _model
 
 
-class Manager(ProcessorManagerMixin):
-
-    """Manager for data processors"""
-
-    def __init__(self):
-        self.processors = OrderedDict()
-        self.actions = OrderedDict()
-        self.converters = OrderedDict()
-        self.datasets = OrderedDict()
-        self.befores = OrderedDict()
-        self.afters = OrderedDict()
-        self.errors = OrderedDict()
-
-        self.imported = False
-
-    def _make_key(self, key):
-        return '{}s'.format(key)
-
-    def get_or_raise(self, name, key):
-        # TODO: remove method
-
-        value = getattr(self, self._make_key(name), {})
-        value = value.get(key, None)
-
-        if value is None:
-            raise ValueError(
-                '{} not registered at {}'.format(key, name))
-
-        return value
-
-    def has(self, name, key):
-        for value in getattr(self, self._make_key(name), {}).values():
-            if value == key:
-                return True
-        return False
-
-    def _register_dict(self, type_name, func_name, label, **kwargs):
-        """Return decorator for adding functions as key, value
-        to instance, dict"""
-
-        def decorator(func):
-            key = self._make_key(type_name)
-            values = getattr(self, key, OrderedDict())
-            position = getattr(func, 'position', 0)
-            new_name = func_name or func.__name__
-
-            func.label = label
-            func.use_transaction = kwargs.get('use_transaction', False)
-
-            if values is not None:
-                if values.get(new_name, None) is not None:
-                    raise ValueError(
-                        '{} already registred at {}'.format(new_name, key))
-
-                values[new_name] = func
-                if position:
-                    values = OrderedDict(
-                        sorted(
-                            values.items(),
-                            key=lambda p: getattr(p[1], 'position', 0)))
-                setattr(self, key, values)
-
-            return func
-
-        return decorator
-
-    def register(self, type_name, label=None, name=None, item=None, **kwargs):
-        """Decorator and function to config new processors, handlers"""
-
-        func = self._register_dict(type_name, name, label, **kwargs)
-
-        return func(item) if item else func
-
-    def unregister(self, type_name, item=None):
-        """Decorator to pop dict items"""
-
-        items = getattr(self, self._make_key(type_name), None)
-        if items is not None:
-            items.pop(getattr(item, '__name__', item), None)
-
-        return item
-
-    def import_dependecies(self):
-        """Import modules within aditional paths"""
-
-        if not self.imported:
-            modules = SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] \
-                + SETTINGS['CONVERTERS']
-
-            for module in modules:
-                __import__(module)
-
-            self.imported = True
-
 manager = Manager()
-manager.import_dependecies()
+manager.import_modules(
+    SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] + SETTINGS['CONVERTERS'])

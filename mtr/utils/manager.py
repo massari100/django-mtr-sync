@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 
-class Manager(object):
+class BaseManager(object):
 
     """Manager for different kind of functions"""
 
@@ -9,10 +9,14 @@ class Manager(object):
         self._registered = {}
         self._imported = False
 
-    def get(self, type_name, func_name, related=None):
+    def all(self, type_name, related=None):
         funcs = self._registered.get(type_name, {})
         if related and funcs:
             funcs = funcs.get(related, {})
+        return funcs
+
+    def get(self, type_name, func_name, related=None):
+        funcs = self.all(type_name, related=related)
         return funcs.get(func_name, None)
 
     def _register_dict(
@@ -30,6 +34,7 @@ class Manager(object):
             position = \
                 getattr(func, 'position', 0) or kwargs.get('position', 0)
             new_name = func_name or func.__name__
+            func.label = label
 
             if values.get(new_name, None) is not None:
                 raise ValueError(
@@ -71,17 +76,14 @@ class Manager(object):
         return item
 
     def import_modules(self, modules):
-        """Import modules within aditional paths"""
+        """Import modules within additional paths"""
 
-        if not self.imported:
+        if not self._imported:
             for module in modules:
-                try:
-                    __import__(module)
-                except:
-                    pass
+                __import__(module)
 
-            self.imported = True
+            self._imported = True
 
 
-class TemplateContextManager(Manager):
+class TemplateContextManager(BaseManager):
     pass

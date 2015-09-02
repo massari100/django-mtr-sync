@@ -1,12 +1,12 @@
 from unittest import TestCase
 
-from ..manager import Manager
+from ..manager import BaseManager
 
 
 class ManagerTest(TestCase):
 
     def setUp(self):
-        self.manager = Manager()
+        self.manager = BaseManager()
 
     def test_register_unregister_simple(self):
         @self.manager.register('item')
