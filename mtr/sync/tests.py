@@ -9,8 +9,9 @@ from collections import OrderedDict
 
 from django.utils.translation import activate
 
-from mtr.sync.lib import manager
-from mtr.sync.models import Settings
+from .lib.manager import Manager
+from .models import Settings
+from .settings import SETTINGS
 
 
 class ApiTestMixin(object):
@@ -24,7 +25,10 @@ class ApiTestMixin(object):
     def setUp(self):
         self.model = self.MODEL
         self.relatedmodel = self.RELATED_MODEL
-        self.manager = manager
+        self.manager = Manager()
+        self.manager.import_modules(
+            SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS']
+             + SETTINGS['CONVERTERS'])
 
         self.manager.processors = OrderedDict()
 
@@ -49,7 +53,7 @@ class ApiTestMixin(object):
             '&fields=action_checkbox,name,surname,security_level,gender',
             language='de')
 
-        self.queryset = self.manager.get_or_raise(
+        self.queryset = self.manager.get(
             'dataset', 'some_dataset')
         self.queryset = self.queryset(self.MODEL, self.settings)
         self.queryset = self.queryset.filter(
