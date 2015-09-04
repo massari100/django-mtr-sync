@@ -5,16 +5,14 @@ from __future__ import unicode_literals
 import os
 import datetime
 
-from collections import OrderedDict
-
 from django.utils.translation import activate
 
-from .lib.manager import Manager
+from .lib.manager import manager
 from .models import Settings
 from .settings import SETTINGS
 
 
-class ApiTestMixin(object):
+class SyncTestMixin(object):
     MODEL = None
     RELATED_MODEL = None
     RELATED_MANY = None
@@ -25,12 +23,13 @@ class ApiTestMixin(object):
     def setUp(self):
         self.model = self.MODEL
         self.relatedmodel = self.RELATED_MODEL
-        self.manager = Manager()
+        self.manager = manager
+        self.manager._registered = {}
+        self.manager._imported = False
         self.manager.import_modules(
-            SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS']
-             + SETTINGS['CONVERTERS'])
-
-        self.manager.processors = OrderedDict()
+            SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] +
+            SETTINGS['CONVERTERS'])
+        print(self.manager._registered)
 
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.manager.register('processor', item=self.PROCESSOR)
@@ -53,8 +52,7 @@ class ApiTestMixin(object):
             '&fields=action_checkbox,name,surname,security_level,gender',
             language='de')
 
-        self.queryset = self.manager.get(
-            'dataset', 'some_dataset')
+        self.queryset = self.manager.get('dataset', 'some_dataset')
         self.queryset = self.queryset(self.MODEL, self.settings)
         self.queryset = self.queryset.filter(
             security_level__gte=10, surname__icontains='t',
@@ -66,7 +64,7 @@ class ApiTestMixin(object):
             self.fields = self.settings.create_default_fields(add_label=False)
 
 
-class ProcessorTestMixin(ApiTestMixin):
+class ProcessorTestMixin(SyncTestMixin):
 
     def check_file_existence_and_delete(self, report):
         """Delete report file"""

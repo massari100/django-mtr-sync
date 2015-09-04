@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from mtr.sync.tests import ApiTestMixin
+from mtr.sync.tests import SyncTestMixin
 from mtr.sync.lib import Processor
 from mtr.sync.lib.processors.xls import XlsProcessor
 
@@ -19,7 +19,7 @@ class ThirdProcesor(Processor):
     position = 2
 
 
-class ManagerTest(ApiTestMixin, TestCase):
+class ManagerTest(SyncTestMixin, TestCase):
     MODEL = Person
     RELATED_MODEL = Office
     RELATED_MANY = Tag

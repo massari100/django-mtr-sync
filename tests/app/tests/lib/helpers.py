@@ -2,13 +2,13 @@ from django.test import TestCase
 
 from mtr.sync.lib.helpers import column_name, column_index, \
     model_attributes, process_attribute, cell_value
-from mtr.sync.tests import ApiTestMixin
+from mtr.sync.tests import SyncTestMixin
 from mtr.sync.lib.processors import csv
 
 from ...models import Person, Office, Tag
 
 
-class HelpersTest(ApiTestMixin, TestCase):
+class HelpersTest(SyncTestMixin, TestCase):
     MODEL = Person
     RELATED_MODEL = Office
     RELATED_MANY = Tag
