@@ -24,12 +24,11 @@ class SyncTestMixin(object):
         self.model = self.MODEL
         self.relatedmodel = self.RELATED_MODEL
         self.manager = manager
-        self.manager._registered = {}
-        self.manager._imported = False
+        # self.manager._registered = {}
+        # self.manager._imported = False
         self.manager.import_modules(
             SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] +
             SETTINGS['CONVERTERS'])
-        print(self.manager._registered)
 
         if self.CREATE_PROCESSOR_AT_SETUP:
             self.manager.register('processor', item=self.PROCESSOR)

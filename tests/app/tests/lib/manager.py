@@ -19,52 +19,12 @@ class ThirdProcesor(Processor):
     position = 2
 
 
-class ManagerTest(SyncTestMixin, TestCase):
+class ProcessorTest(SyncTestMixin, TestCase):
     MODEL = Person
     RELATED_MODEL = Office
     RELATED_MANY = Tag
     PROCESSOR = XlsProcessor
     CREATE_PROCESSOR_AT_SETUP = False
-
-    def test_registering_and_unregistering_processor(self):
-        self.manager.register('processor', item=TestProcessor)
-        self.assertTrue(self.manager.has('processor', TestProcessor))
-
-        self.manager.unregister('processor', TestProcessor)
-        self.assertFalse(self.manager.has('processor', TestProcessor))
-
-    def test_register_already_registered_processor(self):
-        self.manager.register('processor', item=TestProcessor)
-
-        with self.assertRaises(ValueError):
-            self.manager.register('processor', item=TestProcessor)
-
-    def test_make_processor_not_exist(self):
-        with self.assertRaises(ValueError):
-            self.manager.make_processor(self.settings)
-
-    def test_processor_ordering(self):
-        unordered_processors = [ThirdProcesor, TestProcessor, SecondProcessor]
-        for processor in unordered_processors:
-            self.manager.register('processor', item=processor)
-
-        ordered_processors = [TestProcessor, SecondProcessor, ThirdProcesor]
-        self.assertEqual(
-            list(self.manager.processors.values()), ordered_processors)
-
-    def test_registering_dict_instance_attributes(self):
-        old_converters = self.manager.converters.copy()
-
-        @self.manager.register('converter', name='test')
-        def some_filter():
-            return None
-
-        self.assertIn('test', self.manager.converters.keys())
-        self.assertIn(some_filter, self.manager.converters.values())
-
-        self.assertEqual(self.manager.unregister('converter', 'test'), 'test')
-        self.assertEqual(
-            list(self.manager.converters.keys()), list(old_converters.keys()))
 
     def test_value_manipulation_converters(self):
         self.manager.register('processor', item=self.PROCESSOR)
