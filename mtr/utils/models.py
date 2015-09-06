@@ -3,6 +3,7 @@ from django.utils import timezone
 # from django.core.files.storage import default_storage
 # from django.contrib.postgres.fields import ArrayField
 
+from slugify import slugify
 from mptt.models import MPTTModel, TreeForeignKey
 from mptt.managers import TreeManager
 
