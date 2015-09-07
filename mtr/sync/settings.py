@@ -28,6 +28,11 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
     # path for report file
     'FILE_PATH': get_buffer_file_path,
 
+    'DEFAULT': [
+        'mtr.sync.lib.actions',
+        'mtr.sync.lib.converters'
+    ],
+
     # additional dependensies for import and export to register
     'PROCESSORS': [
         'mtr.sync.lib.processors.xlsx',
@@ -35,6 +40,6 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
         'mtr.sync.lib.processors.ods',
         'mtr.sync.lib.processors.csv',
     ],
-    'ACTIONS': ['mtr.sync.lib.actions'],
-    'CONVERTERS': ['mtr.sync.lib.converters']
+    'ACTIONS': [],
+    'CONVERTERS': []
 })

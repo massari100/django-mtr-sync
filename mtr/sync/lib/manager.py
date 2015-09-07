@@ -261,4 +261,5 @@ class Manager(BaseManager):
 
 manager = Manager()
 manager.import_modules(
-    SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] + SETTINGS['CONVERTERS'])
+    SETTINGS['DEFAULT'] + SETTINGS['PROCESSORS'] +
+    SETTINGS['ACTIONS'] + SETTINGS['CONVERTERS'])
