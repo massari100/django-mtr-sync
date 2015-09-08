@@ -1,3 +1,5 @@
+import importlib
+
 from collections import OrderedDict
 
 
@@ -75,12 +77,21 @@ class BaseManager(object):
 
         return item
 
+    def update(self, manager):
+        for key, values in manager._registered.items():
+            self._registered.setdefault(key, values)
+
     def import_modules(self, modules):
         """Import modules within additional paths"""
 
         if not self._imported:
             for module in modules:
-                __import__(module)
+                if ':' in module:
+                    module, name = module.split(':')
+                    module = importlib.import_module(module)
+                    self.update(getattr(module, name))
+                else:
+                    __import__(module)
 
             self._imported = True
 

@@ -2,6 +2,8 @@ from unittest import TestCase
 
 from ..manager import BaseManager
 
+manager = BaseManager()
+
 
 class ManagerTest(TestCase):
 
@@ -65,3 +67,7 @@ class ManagerTest(TestCase):
         self.assertNotIn('test', self.manager._registered['item']['asd'])
         self.assertNotIn(
             somefunc, self.manager._registered['item']['asd'].values())
+
+    def test_import_modules(self):
+        self.manager.import_modules(('mtr.utils.tests.testmodule:manager',))
+        self.assertIn('item', self.manager._registered.keys())
