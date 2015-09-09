@@ -71,3 +71,4 @@ class ManagerTest(TestCase):
     def test_import_modules(self):
         self.manager.import_modules(('mtr.utils.tests.testmodule:manager',))
         self.assertIn('item', self.manager._registered.keys())
+        self.assertIn('request', self.manager._registered.keys())

@@ -1,4 +1,5 @@
 import os
+import collections
 
 from functools import wraps
 
@@ -71,3 +72,13 @@ def chunks(l, n):
 
     n = max(1, n)
     return [l[i:i + n] for i in range(0, len(l), n)]
+
+
+def update_nested_dict(d, u):
+    for k, v in u.items():
+        if isinstance(v, collections.Mapping):
+            r = update_nested_dict(d.get(k, {}), v)
+            d[k] = r
+        else:
+            d[k] = u[k]
+    return d

@@ -2,6 +2,8 @@ import importlib
 
 from collections import OrderedDict
 
+from .helpers import update_nested_dict
+
 
 class BaseManager(object):
 
@@ -78,20 +80,18 @@ class BaseManager(object):
         return item
 
     def update(self, manager):
-        for key, values in manager._registered.items():
-            self._registered.setdefault(key, values)
+        update_nested_dict(self._registered, manager._registered)
 
     def import_modules(self, modules):
         """Import modules within additional paths"""
 
         if not self._imported:
             for module in modules:
+                name = 'manager'
                 if ':' in module:
                     module, name = module.split(':')
-                    module = importlib.import_module(module)
-                    self.update(getattr(module, name))
-                else:
-                    __import__(module)
+                module = importlib.import_module(module)
+                self.update(getattr(module, name))
 
             self._imported = True
 
