@@ -174,7 +174,7 @@ class Manager(BaseManager):
 
     def prepare_handlers(self, key_name, processor, model, context=None):
         prepares = []
-        handlers = getattr(self, self._make_key(key_name))
+        handlers = getattr(self, key_name, {})
         for handler in handlers.keys():
             if processor.settings.data_action in handler:
                 prepares.append(handlers[handler])

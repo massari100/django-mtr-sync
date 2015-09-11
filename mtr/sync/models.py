@@ -170,7 +170,7 @@ class Settings(ActionsMixin):
             if field.converters:
                 for converter in field.converters.split(','):
                     field.ordered_converters.append(
-                        manager.get_or_raise('converter', converter))
+                        manager.get('converter', converter))
 
             yield field
 

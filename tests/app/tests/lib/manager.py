@@ -27,7 +27,7 @@ class ProcessorTest(SyncTestMixin, TestCase):
     CREATE_PROCESSOR_AT_SETUP = False
 
     def test_value_manipulation_converters(self):
-        self.manager.register('processor', item=self.PROCESSOR)
+        # self.manager.register('processor', item=self.PROCESSOR)
         self.processor = self.manager.make_processor(self.settings)
         self.fields = self.settings.create_default_fields()
 

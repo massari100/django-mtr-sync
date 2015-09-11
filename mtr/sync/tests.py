@@ -7,7 +7,7 @@ import datetime
 
 from django.utils.translation import activate
 
-from .lib.manager import manager
+from .lib.manager import Manager
 from .models import Settings
 from .settings import SETTINGS
 
@@ -23,15 +23,9 @@ class SyncTestMixin(object):
     def setUp(self):
         self.model = self.MODEL
         self.relatedmodel = self.RELATED_MODEL
-        self.manager = manager
-        # self.manager._registered = {}
-        # self.manager._imported = False
-        self.manager.import_modules(
-            SETTINGS['PROCESSORS'] + SETTINGS['ACTIONS'] +
-            SETTINGS['CONVERTERS'])
+        self.manager = Manager()
 
-        if self.CREATE_PROCESSOR_AT_SETUP:
-            self.manager.register('processor', item=self.PROCESSOR)
+        self.manager.import_modules(SETTINGS['ACTIONS'])
 
         activate('de')
 

@@ -191,7 +191,7 @@ class Processor(DataProcessor):
 
         data = self.manager.prepare_import_data(self, model)
         params = self.manager.filter_dataset(self.settings) or {}
-        action = self.manager.get_or_raise('action', self.settings.data_action)
+        action = self.manager.get('action', self.settings.data_action)
         context = self.manager.prepare_context(self.settings, path)
         context = self.manager.prepare_handlers('before', self, model, context)
 
