@@ -82,3 +82,9 @@ def update_nested_dict(d, u):
         else:
             d[k] = u[k]
     return d
+
+
+def make_from_params(model, params):
+    if params.get('id', None):
+        return model.objects.get(id=params['id'])
+    return model(**params)

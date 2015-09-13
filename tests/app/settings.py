@@ -48,6 +48,8 @@ INSTALLED_APPS = (
 
     'debug_toolbar',
 
+    'celery',
+
     'app',
 
     'mtr.sync',
