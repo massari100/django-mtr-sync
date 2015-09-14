@@ -22,7 +22,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 5. Create settings for import or export data at `/admin/mtr_sync/settings/` and run action `Sync data` to start process.
 
 ## Features
-- Import (only creating), export data
+- Import and export data
 - Processor API for supporting other formats
 - Uses Celery for background tasks and for processing large volumes of data
 - Creates reports about importing and exporting operations

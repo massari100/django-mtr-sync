@@ -6,13 +6,14 @@
 Welcome to django-mtr-sync's documentation!
 ===========================================
 
-Contents:
+API:
 
 .. toctree::
-   :maxdepth: 2
+    :titlesonly:
 
-   modules.rst
-
+    pages/overview
+    pages/install
+    pages/tutorial
 
 
 Indices and tables
