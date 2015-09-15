@@ -312,46 +312,6 @@ class Sequence(models.Model):
 
 
 @python_2_unicode_compatible
-class ReplacerCategory(models.Model):
-
-    """Categories for groups of values, to simplify editing in admin"""
-
-    name = models.CharField(_('name'), max_length=255)
-    attribute = models.CharField(
-        _('model attribute'), max_length=255)
-    model = models.CharField(
-        _('model'), max_length=255,
-        choices=model_choices(), blank=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _('replacer category')
-        verbose_name_plural = _('replacer categories')
-
-
-@python_2_unicode_compatible
-class Replacer(models.Model):
-
-    """Replace vlaues from report to values used in database"""
-
-    value = models.TextField(_('value'), max_length=100000)
-    change_to = models.TextField(_('change to'), max_length=100000)
-    regex = models.TextField(_('regex'), max_length=1000)
-    category = models.ForeignKey(
-        ReplacerCategory, verbose_name=_('category'),
-        related_name='replacers', null=True, blank=True)
-
-    def __str__(self):
-        return self.name
-
-    class Meta:
-        verbose_name = _('replacer')
-        verbose_name_plural = _('replacers')
-
-
-@python_2_unicode_compatible
 class Field(PositionRelatedMixin):
 
     """Data mapping field for Settings"""
@@ -394,10 +354,6 @@ class Field(PositionRelatedMixin):
         choices=FILTER_CHOICES, default='exact')
     find_value = models.CharField(
         _('find value'), max_length=255, blank=True)
-
-    replacer_category = models.ForeignKey(
-        ReplacerCategory, verbose_name=_('replacer category'),
-        related_name='fields', null=True, blank=True)
 
     converters = models.CharField(
         _('converters'), max_length=255, blank=True)

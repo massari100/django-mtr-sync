@@ -8,8 +8,7 @@ from django.core.urlresolvers import reverse
 
 from mtr.utils.helpers import themed
 
-from .models import Report, Settings, Field, Message, Context, Sequence, \
-    Replacer, ReplacerCategory
+from .models import Report, Settings, Field, Message, Context, Sequence
 from .lib.helpers import model_attributes
 from .settings import SETTINGS
 from .translation import gettext_lazy as _
@@ -93,7 +92,7 @@ class FieldInline(
         ('skip', 'find', 'update'),
         ('find_filter', 'find_value'),
         ('set_filter', 'set_value'),
-        ('converters', 'replacer_category'))
+        ('converters',))
     sortable_field_name = 'position'
 
 
@@ -249,20 +248,8 @@ class SequenceAdmin(admin.ModelAdmin):
     latest_sync.allow_tags = True
 
 
-class ReplacerCategoryAdmin(admin.ModelAdmin):
-    list_display = ['id', 'name']
-    list_editable = ['name']
-
-
-class ReplacerAdmin(admin.ModelAdmin):
-    list_display = ['id', 'value', 'change_to', 'regex', 'category']
-    list_editable = ['value', 'change_to', 'regex', 'category']
-
-
 if SETTINGS['REGISTER_IN_ADMIN']:
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Message, MessageAdmin)
     admin.site.register(Settings, SettingsAdmin)
     admin.site.register(Sequence, SequenceAdmin)
-    admin.site.register(Replacer, ReplacerAdmin)
-    admin.site.register(ReplacerCategory, ReplacerCategoryAdmin)
