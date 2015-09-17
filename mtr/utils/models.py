@@ -129,32 +129,6 @@ class PositionRelatedMixin(models.Model):
         super(PositionRelatedMixin, self).save(*args, **kwargs)
 
 
-class TreePositionMixin(models.Model):
-    POSITION_PARENT_FIELD = 'parent'
-
-    position = models.PositiveIntegerField(
-        _('position'), null=True, blank=True, default=0)
-
-    class Meta:
-        abstract = True
-
-        ordering = ('position',)
-
-    def save(self, *args, **kwargs):
-        if self.position is None:
-            parent = getattr(self, self.POSITION_PARENT_FIELD, None)
-            if parent is None:
-                self.position = self.__class__.objects
-            else:
-                self.position = self.__class__.objects \
-                    .filter(**{self.POSITION_PARENT_FIELD: parent})
-            self.position = self.position \
-                .aggregate(models.Max('position'))['position__max']
-            self.position = self.position + 1 if self.position else 0
-
-        super(TreePositionMixin, self).save(*args, **kwargs)
-
-
 class SlugifyNameMixin(models.Model):
     SLUG_PREFIXED_DUBLICATE = False
 
@@ -186,7 +160,9 @@ class SlugifyNameMixin(models.Model):
 
 class CategoryMixin(
         MPTTModel, SlugifyNameMixin,
-        TreePublishedMixin, TreePositionMixin):
+        TreePublishedMixin, PositionRelatedMixin):
+    POSITION_RELATED_FIELD = 'parent'
+
     parent = TreeForeignKey(
         'self', null=True, blank=True,
         related_name='children', verbose_name=_('parent'), db_index=True)
