@@ -7,7 +7,8 @@ Subpackages
 .. toctree::
 
     mtr.sync.lib
-    mtr.sync.templatetags
+    mtr.sync.migrations
+    mtr.sync.south_migrations
 
 Submodules
 ----------
@@ -32,14 +33,6 @@ mtr.sync.forms module
 ---------------------
 
 .. automodule:: mtr.sync.forms
-    :members:
-    :undoc-members:
-    :show-inheritance:
-
-mtr.sync.helpers module
------------------------
-
-.. automodule:: mtr.sync.helpers
     :members:
     :undoc-members:
     :show-inheritance:
@@ -72,6 +65,14 @@ mtr.sync.tests module
 ---------------------
 
 .. automodule:: mtr.sync.tests
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+mtr.sync.translation module
+---------------------------
+
+.. automodule:: mtr.sync.translation
     :members:
     :undoc-members:
     :show-inheritance:

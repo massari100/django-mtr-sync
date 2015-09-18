@@ -7,6 +7,7 @@ Welcome to django-mtr-sync's documentation!
 ===========================================
 
 Contents:
+
 .. toctree::
     :titlesonly:
 
