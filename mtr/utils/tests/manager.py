@@ -84,3 +84,6 @@ class ManagerTest(TestCase):
         self.assertEqual(
             self.manager.get('item', 'some_item_func', related='asd')(2, 3, 4),
             sum((2, 3, 4)))
+
+    def test_get_all_related_instances(self):
+        pass

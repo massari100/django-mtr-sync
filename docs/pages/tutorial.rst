@@ -1,4 +1,3 @@
-
 ========
 Tutorial
 ========
@@ -41,12 +40,12 @@ Now migrate app
 
 Note: as you can see we use low dash to split submodule, this convetion is for urls and database tables, so for example, your own app `sync` will not conflict at least for django 1.7+
 
-Start manage your data
+Start import or export your data
 ----------------------
 
-content placeholder
+Start a server and go to admin section 'http://localhost:8000/admin/mtr_sync/'
 
 Subclass admin mixins for shortcut urls
 ---------------------------------------
 
-content placeholder
+Use class `SyncAdminMixin` for admin shortcut links and `SyncTabularInlineMixin` with `SyncStackedInlineMixin` for tabular and stacked inlines respectively. 
