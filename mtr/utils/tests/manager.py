@@ -86,4 +86,13 @@ class ManagerTest(TestCase):
             sum((2, 3, 4)))
 
     def test_get_all_related_instances(self):
-        pass
+        @self.manager.register('nested', related='asd')
+        def nested_one(data):
+            return data * 4
+
+        @self.manager.register('nested', related='bcd')
+        def netsed_two(data):
+            return data * 5
+
+        self.assertIn('nested_one', self.manager.all('nested', values=True))
+        self.assertIn('nested_two', self.manager.all('nested', values=True))
