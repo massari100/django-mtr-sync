@@ -12,7 +12,7 @@ setup(
     name='django-mtr-sync',
     packages=find_packages(),
     # package_data={'': ['']},
-    version='0.1',
+    version='0.1a',
     author='mtr group',
     author_email='inboxmtr@gmail.com',
     url='https://github.com/mtrgroup/django-mtr-sync',

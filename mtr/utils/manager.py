@@ -18,7 +18,7 @@ class BaseManager(object):
         if related and funcs:
             funcs = funcs.get(related, {})
         if isinstance(funcs, dict) and values:
-            funcs = funcs.values()
+            funcs = map(lambda v: v, funcs.values())
         return funcs
 
     def get(self, type_name, func_name, related=None):
