@@ -101,7 +101,8 @@ class PositionRootMixin(models.Model):
         if self.position is None:
             self.position = self.__class__.objects \
                 .aggregate(models.Max('position'))['position__max']
-            self.position = self.position + 1 if self.position else 1
+            self.position = self.position + 1 \
+                if self.position is not None else 1
 
         super(PositionRootMixin, self).save(*args, **kwargs)
 
@@ -124,7 +125,8 @@ class PositionRelatedMixin(models.Model):
             self.position = self.__class__.objects.filter(**{
                 self.POSITION_RELATED_FIELD: related_field}) \
                 .aggregate(models.Max('position'))['position__max']
-            self.position = self.position + 1 if self.position else 1
+            self.position = self.position + 1 \
+                if self.position is not None else 1
 
         super(PositionRelatedMixin, self).save(*args, **kwargs)
 
