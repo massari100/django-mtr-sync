@@ -13,12 +13,10 @@ class BaseManager(object):
         self._registered = {}
         self._imported = False
 
-    def all(self, type_name, related=None, values=False):
+    def all(self, type_name, related=None):
         funcs = self._registered.get(type_name, {})
         if related and funcs:
             funcs = funcs.get(related, {})
-        if isinstance(funcs, dict) and values:
-            funcs = list(map(lambda v: v, funcs.values()))
         return funcs
 
     def get(self, type_name, func_name, related=None):

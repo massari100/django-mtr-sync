@@ -91,8 +91,12 @@ class ManagerTest(TestCase):
             return data * 4
 
         @self.manager.register('nested', related='bcd')
-        def netsed_two(data):
+        def nested_two(data):
             return data * 5
 
-        self.assertIn('nested_one', self.manager.all('nested', values=True))
-        self.assertIn('nested_two', self.manager.all('nested', values=True))
+        for key, related in self.manager.all('nested').items():
+            self.assertIn(key, ('asd', 'bcd'))
+
+            for rkey, value in related.items():
+                self.assertIn(rkey, ('nested_one', 'nested_two'))
+                self.assertIn(value, (nested_one, nested_two))
