@@ -94,9 +94,21 @@ class ManagerTest(TestCase):
         def nested_two(data):
             return data * 5
 
-        for key, related in self.manager.all('nested').items():
-            self.assertIn(key, ('asd', 'bcd'))
+        @self.manager.register('nested')
+        def not_related_one(data):
+            return data * 2
 
-            for rkey, value in related.items():
-                self.assertIn(rkey, ('nested_one', 'nested_two'))
-                self.assertIn(value, (nested_one, nested_two))
+        @self.manager.register('nested')
+        def not_related_two(data):
+            return data
+
+        for key, related in self.manager.all('nested').items():
+            self.assertIn(key, (
+                'asd', 'bcd', 'not_related_one', 'not_related_two'))
+
+            if isinstance(related, dict):
+                for rkey, value in related.items():
+                    self.assertIn(rkey, ('nested_one', 'nested_two'))
+                    self.assertIn(value, (nested_one, nested_two))
+            else:
+                self.assertIn(related, (not_related_one, not_related_two))
