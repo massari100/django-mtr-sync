@@ -1,9 +1,22 @@
 import os
+# import sys
 import re
+
+# sys.path.append(os.path.join(os.path.dirname(__file__), 'tests'))
 
 import django
 
-from fabric.api import local, task, lcd
+# from django.conf import settings as django_settings
+
+# from app import settings as app_settings
+
+# django_settings.configure(default_settings=app_settings, DEBUG=True)
+# django.setup()
+
+# from django.conf import django_settings
+# from django.contrib.auth.backends import get_user_model
+
+from fabric.api import local, task, lcd, settings
 from babel.messages.pofile import read_po, write_po
 
 APPS = ['mtr.sync', 'mtr.utils']
@@ -151,7 +164,7 @@ def migrate():
 
 
 @task
-def recreate():
+def recreate(username='app', password='app'):
     """Recreate new migrations from start and remove database"""
 
     project_prefixed_apps = []
@@ -163,11 +176,13 @@ def recreate():
     for app in apps:
         with lcd(os.path.join(*app.split('.'))):
             if django.get_version() >= '1.7':
-                local('rm -f ./migrations/*.py')
-                local('touch ./migrations/__init__.py')
+                with settings(warn_only=True):
+                    local('rm -f ./migrations/*.py')
+                    local('touch ./migrations/__init__.py')
             else:
-                local('rm -f ./south_migrations/*.py')
-                local('touch ./south_migrations/__init__.py')
+                with settings(warn_only=True):
+                    local('rm -f ./south_migrations/*.py')
+                    local('touch ./south_migrations/__init__.py')
     with lcd(PROJECT_DIR):
         if django.get_version() >= '1.7':
             local('rm -f db.sqlite3')
@@ -178,6 +193,9 @@ def recreate():
 
     manage('createsuperuser --username app --email app@app.com --noinput')
     manage('changepassword app')
+
+    # User = get_user_model()
+    # User.objects.create(username=username, password=password)
 
 
 @task

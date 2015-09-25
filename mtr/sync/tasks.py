@@ -1,5 +1,9 @@
 from django.conf import settings
 
+from .lib.manager import manager
+from .models import Settings
+from ..utils.helpers import make_from_params
+
 if 'celery' in settings.INSTALLED_APPS:
     from celery import shared_task as job
 elif 'django_rq' in settings.INSTALLED_APPS:
@@ -7,10 +11,6 @@ elif 'django_rq' in settings.INSTALLED_APPS:
 else:
     def func(f): return f
     job = func
-
-from .lib.manager import manager
-from .models import Settings
-from ..utils.helpers import make_from_params
 
 
 @job

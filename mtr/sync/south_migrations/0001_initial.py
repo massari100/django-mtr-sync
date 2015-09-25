@@ -41,6 +41,7 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=255)),
             ('buffer_file', self.gf('django.db.models.fields.files.FileField')(db_index=True, max_length=100, blank=True)),
+            ('description', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
         ))
         db.send_create_signal(u'sync', ['Sequence'])
 
@@ -181,6 +182,7 @@ class Migration(SchemaMigration):
         u'sync.sequence': {
             'Meta': {'object_name': 'Sequence'},
             'buffer_file': ('django.db.models.fields.files.FileField', [], {'db_index': 'True', 'max_length': '100', 'blank': 'True'}),
+            'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'settings': ('django.db.models.fields.related.ManyToManyField', [], {'related_name': "'sequences'", 'symmetrical': 'False', 'to': u"orm['sync.Settings']"})

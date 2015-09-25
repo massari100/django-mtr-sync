@@ -303,6 +303,8 @@ class Sequence(models.Model):
     settings = models.ManyToManyField(
         Settings, verbose_name=_('settings'), related_name='sequences')
 
+    description = models.TextField(_('description'), blank=True, null=True)
+
     class Meta:
         verbose_name = _('sequence')
         verbose_name_plural = _('sequences')
