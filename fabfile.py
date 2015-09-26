@@ -133,7 +133,9 @@ def locale(action='make', lang='en'):
                     write_po(f, catalog, include_previous=True)
     elif action == 'compile':
         for app in APPS:
-            with lcd(app_path):
+            app_path = os.path.join(*app.split('.'))
+
+            with lcd(app_path), settings(warn_only=True):
                 local('django-admin.py compilemessages -l {}'.format(lang))
     else:
         print(
@@ -174,15 +176,13 @@ def recreate(username='app', password='app'):
     apps = APPS + project_prefixed_apps
 
     for app in apps:
-        with lcd(os.path.join(*app.split('.'))):
+        with lcd(os.path.join(*app.split('.'))), settings(warn_only=True):
             if django.get_version() >= '1.7':
-                with settings(warn_only=True):
-                    local('rm -f ./migrations/*.py')
-                    local('touch ./migrations/__init__.py')
+                local('rm -f ./migrations/*.py')
+                local('touch ./migrations/__init__.py')
             else:
-                with settings(warn_only=True):
-                    local('rm -f ./south_migrations/*.py')
-                    local('touch ./south_migrations/__init__.py')
+                local('rm -f ./south_migrations/*.py')
+                local('touch ./south_migrations/__init__.py')
     with lcd(PROJECT_DIR):
         if django.get_version() >= '1.7':
             local('rm -f db.sqlite3')

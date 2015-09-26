@@ -342,3 +342,4 @@ def do_block_translate(parser, token):
 @register.simple_tag(takes_context=True)
 def set_i18n_prefix(context, name):
     context['__i18n_prefix'] = name
+    return ''
