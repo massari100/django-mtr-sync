@@ -2,17 +2,22 @@ from setuptools import setup, find_packages
 
 import os
 
+from mtr.sync import VERSION
+
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 README = read('README.md')
 
+version_tuple = VERSION
+version = ".".join(str(v) for v in version_tuple)
+
 setup(
     name='django-mtr-sync',
     packages=find_packages(),
     # package_data={'': ['']},
-    version='0.1a',
+    version=version,
     author='mtr group',
     author_email='inboxmtr@gmail.com',
     url='https://github.com/mtrgroup/django-mtr-sync',
