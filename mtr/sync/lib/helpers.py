@@ -89,10 +89,6 @@ def column_index(value):
     raise IndexError
 
 
-def model_settings(model):
-    return getattr(model, 'sync_settings', {})
-
-
 def models_list():
     if django.get_version() <= '1.7':
         mlist = models.get_models()
@@ -101,8 +97,8 @@ def models_list():
 
         mlist = apps.get_models()
 
-    mlist = filterfalse(
-        lambda m: model_settings(m).get('ignore', False), mlist)
+    # mlist = filterfalse(
+        # lambda m: model_settings(m).get('ignore', False), mlist)
 
     return mlist
 
@@ -118,7 +114,6 @@ def model_fields(model, settings=None):
         list(opts.concrete_fields) +
         list(sortable_virtual_fields) + list(opts.many_to_many))
 
-    msettings = model_settings(model)
     exclude = msettings.get('exclude', [])
     custom_fields = msettings.get('custom_fields', [])
     ordered_fields = []
