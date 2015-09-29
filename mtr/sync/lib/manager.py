@@ -140,9 +140,9 @@ class Manager(BaseManager):
 
         settings = processor.settings
         model = make_model_class(settings)
-        # msettings = model_settings(model)
 
-        # exclude = msettings.get('exclude', [])
+        msettings = self.get('settings', related=app_model)
+        exclude = msettings.get('exclude', [])
 
         fields = settings.fields_with_converters()
         fields = list(filterfalse(

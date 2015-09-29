@@ -114,8 +114,3 @@ class Person(models.Model):
 
     def __str__(self):
         return self.name
-
-    sync_settings = {
-        'custom_fields': ['custom_method', 'none_param'],
-        'exclude': ['some_excluded_field']
-    }

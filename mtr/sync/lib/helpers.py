@@ -114,6 +114,7 @@ def model_fields(model, settings=None):
         list(opts.concrete_fields) +
         list(sortable_virtual_fields) + list(opts.many_to_many))
 
+    msettings = manager.get('settings', related=app_model)
     exclude = msettings.get('exclude', [])
     custom_fields = msettings.get('custom_fields', [])
     ordered_fields = []
