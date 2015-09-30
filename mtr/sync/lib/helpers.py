@@ -106,6 +106,8 @@ def models_list():
 def model_fields(model, settings=None):
     """Return model field or custom method"""
 
+    from .manager import manager
+
     opts = model._meta
     sortable_virtual_fields = [
         f for f in opts.virtual_fields
@@ -114,7 +116,7 @@ def model_fields(model, settings=None):
         list(opts.concrete_fields) +
         list(sortable_virtual_fields) + list(opts.many_to_many))
 
-    msettings = manager.get('settings', related=app_model)
+    msettings = manager.get('settings', model_full_app_name(model))
     exclude = msettings.get('exclude', [])
     custom_fields = msettings.get('custom_fields', [])
     ordered_fields = []
@@ -136,6 +138,10 @@ def model_fields(model, settings=None):
             ordered_fields.append((field, getattr(model, field, None)))
 
     return OrderedDict(ordered_fields)
+
+
+def model_full_app_name(model):
+    return '{}.{}'.format(model._meta.app_label, model.__name__).lower()
 
 
 def model_attributes(settings, prefix=None, model=None, parent=None, level=0):
@@ -187,10 +193,9 @@ def model_attributes(settings, prefix=None, model=None, parent=None, level=0):
 def make_model_class(settings):
     """Return class for name in model"""
 
-    for mmodel in models_list():
-        if settings.model == '{}.{}'.format(
-                mmodel._meta.app_label, mmodel.__name__).lower():
-            return mmodel
+    for model in models_list():
+        if settings.model == model_full_app_name(model):
+            return model
 
 
 def model_choices():
