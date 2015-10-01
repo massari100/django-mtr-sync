@@ -6,7 +6,7 @@ def some_dataset(model, settings):
     return model.objects.filter(security_level__gte=30)
 
 
-@manager.register('settings', related='app.Person')
+@manager.register('settings', name='app.person')
 def person_settings(model):
     return {
         'custom_fields': ['custom_method', 'none_param'],

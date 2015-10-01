@@ -8,7 +8,7 @@ from django.contrib.admin.views.main import IGNORED_PARAMS
 from ...utils.manager import BaseManager
 
 from .helpers import make_model_class, process_attribute, \
-    model_fields, cell_value
+    model_fields, cell_value, model_full_app_name
 from ..settings import SETTINGS
 
 
@@ -141,7 +141,7 @@ class Manager(BaseManager):
         settings = processor.settings
         model = make_model_class(settings)
 
-        msettings = self.get('settings', related=app_model)
+        msettings = self.get('settings', model_full_app_name(model))(model)
         exclude = msettings.get('exclude', [])
 
         fields = settings.fields_with_converters()

@@ -103,10 +103,8 @@ def models_list():
     return mlist
 
 
-def model_fields(model, settings=None):
+def model_fields(model, settings=None, manager=None):
     """Return model field or custom method"""
-
-    from .manager import manager
 
     opts = model._meta
     sortable_virtual_fields = [
@@ -116,7 +114,10 @@ def model_fields(model, settings=None):
         list(opts.concrete_fields) +
         list(sortable_virtual_fields) + list(opts.many_to_many))
 
-    msettings = manager.get('settings', model_full_app_name(model))
+    if manager:
+        msettings = manager.get('settings', model_full_app_name(model))
+    else:
+        msettings = {}
     exclude = msettings.get('exclude', [])
     custom_fields = msettings.get('custom_fields', [])
     ordered_fields = []
