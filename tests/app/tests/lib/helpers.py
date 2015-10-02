@@ -42,7 +42,7 @@ class HelpersTest(SyncTestMixin, TestCase):
             ])
 
     def test_model_attributes(self):
-        fields = model_attributes(self.settings, manager=self.manager)
+        fields = model_attributes(self.settings)
         fields = list(map(lambda f: f[0], fields))
 
         self.assertEqual([

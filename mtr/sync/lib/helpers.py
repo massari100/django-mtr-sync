@@ -8,6 +8,8 @@ from django.db import models
 from django.conf import settings as django_settings
 from django.db.models.fields import Field as ModelField
 
+from ...utils.helpers import model_settings
+
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 _symbols = (':', '|', ',', '+', '-')
 
@@ -97,13 +99,13 @@ def models_list():
 
         mlist = apps.get_models()
 
-    # mlist = filterfalse(
-        # lambda m: model_settings(m).get('ignore', False), mlist)
+    mlist = filterfalse(
+        lambda m: model_settings(m, 'sync').get('ignore', False), mlist)
 
     return mlist
 
 
-def model_fields(model, settings=None, manager=None):
+def model_fields(model, settings=None):
     """Return model field or custom method"""
 
     opts = model._meta
@@ -114,10 +116,7 @@ def model_fields(model, settings=None, manager=None):
         list(opts.concrete_fields) +
         list(sortable_virtual_fields) + list(opts.many_to_many))
 
-    if manager:
-        msettings = manager.get('settings', model_full_app_name(model))
-    else:
-        msettings = {}
+    msettings = model_settings(model, 'sync')
     exclude = msettings.get('exclude', [])
     custom_fields = msettings.get('custom_fields', [])
     ordered_fields = []

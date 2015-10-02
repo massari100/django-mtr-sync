@@ -88,3 +88,9 @@ def make_from_params(model, params):
     if params.get('id', None):
         return model.objects.get(id=params['id'])
     return model(**params)
+
+
+def model_settings(model, name):
+    """Get specific settings from model"""
+
+    return getattr(getattr(model, 'Settings', {}), name, {})

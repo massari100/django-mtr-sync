@@ -50,6 +50,12 @@ class Person(models.Model):
     office = models.ForeignKey(Office, null=True, blank=True)
     tags = models.ManyToManyField(Tag)
 
+    class Settings:
+        sync = {
+            'custom_fields': ['custom_method', 'none_param'],
+            'exclude': ['some_excluded_field']
+        }
+
     class Meta:
         verbose_name = 'person'
         verbose_name_plural = 'persons'
