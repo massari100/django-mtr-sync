@@ -6,6 +6,7 @@ from functools import wraps
 import django
 
 from django.shortcuts import render
+from django.core.exceptions import PermissionDenied
 
 from .settings import THEMES
 
@@ -94,3 +95,23 @@ def model_settings(model, name):
     """Get specific settings from model"""
 
     return getattr(getattr(model, 'Settings', {}), name, {})
+
+
+def in_group_plain(name, request):
+    return name in list(map(lambda g: g.name, request.user.groups.all()))
+
+
+def in_group(name):
+
+    def decorator(f):
+
+        @wraps(f)
+        def wrapper(request, *args, **kwargs):
+            if in_group_plain(name, request):
+                return f(request, *args, **kwargs)
+            else:
+                raise PermissionDenied
+
+        return wrapper
+
+    return decorator
