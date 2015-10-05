@@ -52,10 +52,12 @@ def render_to(template, *args, **kwargs):
 
 def make_prefixed_themed(prefix):
     """Shortcut for prefixing template dir path"""
+
     def inner(template, version_subdirectory=False):
         return themed(
             os.path.join(prefix, template),
             version_subdirectory=version_subdirectory)
+
     return inner
 
 
@@ -65,17 +67,21 @@ def make_prefixed_render_to(prefix):
     def inner(template, *args, **kwargs):
         return render_to(
             os.path.join(prefix, template), *args, **kwargs)
+
     return inner
 
 
-def chunks(l, n):
-    """Chunk list"""
+def chunks(l, n, as_list=False):
+    """Chunk list by n slices and return iterator or list"""
 
     n = max(1, n)
-    return [l[i:i + n] for i in range(0, len(l), n)]
+    iterator = [l[i:i + n] for i in range(0, len(l), n)]
+    return list(iterator) if as_list else iterator
 
 
 def update_nested_dict(d, u):
+    """Simple function to update nested dict"""
+
     for k, v in u.items():
         if isinstance(v, collections.Mapping):
             r = update_nested_dict(d.get(k, {}), v)
@@ -86,6 +92,8 @@ def update_nested_dict(d, u):
 
 
 def make_from_params(model, params):
+    """Create model instance from dict or get by id from database"""
+
     if params.get('id', None):
         return model.objects.get(id=params['id'])
     return model(**params)
@@ -97,17 +105,20 @@ def model_settings(model, name):
     return getattr(getattr(model, 'Settings', {}), name, {})
 
 
-def in_group_plain(name, request):
-    return name in list(map(lambda g: g.name, request.user.groups.all()))
+def in_group_plain(name, user):
+    """Check user name if listed in groups"""
+
+    return name in list(map(lambda g: g.name, user.groups.all()))
 
 
 def in_group(name):
+    """Check if user in group and run view func or raise PermissionDenied"""
 
     def decorator(f):
 
         @wraps(f)
         def wrapper(request, *args, **kwargs):
-            if in_group_plain(name, request):
+            if in_group_plain(name, request.user):
                 return f(request, *args, **kwargs)
             else:
                 raise PermissionDenied
