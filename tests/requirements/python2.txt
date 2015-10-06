@@ -1,10 +1,11 @@
-django>=1.7
+django<1.7
 django-modeltranslation
 django-debug-toolbar
-django-grappelli
+django-mptt
+django-pure-pagination
 
+fabric
 pytz
-git+https://github.com/pashinin/fabric@6783d2f7ad7a449c97cd1ee0df9a2dbc29422fce#egg=fabric
 ipython
 celery
 hg+https://bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
@@ -17,7 +18,6 @@ sphinx
 lxml
 sphinx_rtd_theme
 unicodecsv
+south
 
-git+git://github.com/mtrgroup/django-pure-pagination#egg=django-pure-pagination
-django-mptt
 python-slugify

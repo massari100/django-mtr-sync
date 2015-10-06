@@ -1,5 +1,5 @@
 import os
-# import sys
+import sys
 import re
 
 # sys.path.append(os.path.join(os.path.dirname(__file__), 'tests'))
@@ -148,7 +148,8 @@ def install():
     """Install packages for testing"""
 
     with lcd(PROJECT_DIR):
-        local('pip install -r requirements.txt')
+        local('pip install -r requirements/python{}.txt'.format(
+            sys.version_info[0]))
 
 
 @task

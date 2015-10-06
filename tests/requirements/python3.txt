@@ -1,7 +1,7 @@
 django>=1.7
 django-modeltranslation
 django-debug-toolbar
-django-grappelli
+django-mptt
 
 pytz
 git+https://github.com/pashinin/fabric@6783d2f7ad7a449c97cd1ee0df9a2dbc29422fce#egg=fabric
@@ -19,5 +19,4 @@ sphinx_rtd_theme
 unicodecsv
 
 git+git://github.com/mtrgroup/django-pure-pagination#egg=django-pure-pagination
-django-mptt
 python-slugify
