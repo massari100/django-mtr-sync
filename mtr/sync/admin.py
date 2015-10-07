@@ -16,14 +16,23 @@ from .forms import SettingsAdminForm
 
 
 class SyncAdminMixin(object):
+
+    """Mixin for change list with export and import buttons"""
+
     change_list_template = themed('admin/change_list.html', True)
 
 
 class SyncTabularInlineMixin(object):
+
+    """Mixin for tabular inline export and import buttons"""
+
     template = themed('admin/edit_inline/tabular.html', True)
 
 
 class SyncStackedInlineMixin(object):
+
+    """Mixin for stacked inline export and import buttons"""
+
     template = themed('admin/edit_inline/stacked.html', True)
 
 
