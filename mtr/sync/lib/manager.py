@@ -29,7 +29,7 @@ class Manager(BaseManager):
     def processor_choices(self):
         """Return all registered processors"""
 
-        for name, processor in self.all('processors').items():
+        for name, processor in self.all('processor').items():
             yield (
                 name,
                 '{} | {}'.format(
@@ -39,13 +39,13 @@ class Manager(BaseManager):
     def dataset_choices(self):
         """Return all registered data sources"""
 
-        for name, dataset in self.all('datasets').items():
+        for name, dataset in self.all('dataset').items():
             yield(name, getattr(dataset, 'label', dataset.__name__))
 
     def action_choices(self):
         """Return all registered actions"""
 
-        for name, action in self.all('actions').items():
+        for name, action in self.all('action').items():
             yield(name, getattr(action, 'label', action.__name__))
 
     def make_processor(self, settings, from_extension=False):
