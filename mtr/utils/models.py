@@ -153,7 +153,7 @@ class SlugifyNameMixin(models.Model):
             if self.SLUG_PREFIXED_DUBLICATE:
                 count = self.__class__.objects.filter(slug=self.slug).count()
                 if count:
-                    self.slug = '{}-{}'.format(self.slug, count)
+                    self.slug = '{}-{}'.format(self.slug, self.id)
 
         super(SlugifyNameMixin, self).save(*args, **kwargs)
 
