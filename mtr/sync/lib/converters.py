@@ -58,3 +58,8 @@ def integer(value, action):
         return int(value)
     else:
         return value
+
+
+@manager.register('converter', label=_('None'))
+def none(value, action):
+    return None
