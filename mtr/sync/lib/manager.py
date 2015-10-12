@@ -48,6 +48,12 @@ class Manager(BaseManager):
         for name, action in self.all('action').items():
             yield(name, getattr(action, 'label', action.__name__))
 
+    def converter_choices(self):
+        """Returns all registered converters"""
+
+        for name, converter in self.all('converter').items():
+            yield(name, getattr(converter, 'label', converter.__name__))
+
     def make_processor(self, settings, from_extension=False):
         """Create new processor instance if exists"""
 

@@ -358,7 +358,8 @@ class Field(PositionRelatedMixin):
         _('find value'), max_length=255, blank=True)
 
     converters = models.CharField(
-        _('converters'), max_length=255, blank=True)
+        _('converters'), max_length=255, blank=True,
+        choices=manager.converter_choices())
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('settings'), related_name='fields')
