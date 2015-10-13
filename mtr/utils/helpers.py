@@ -126,3 +126,13 @@ def in_group(name):
         return wrapper
 
     return decorator
+
+
+def update_instance(instance, attrs):
+    """Updates instance with given attrs dict"""
+
+    for key, value in attrs.items():
+        setattr(instance, key, value)
+    instance.save()
+
+    return instance

@@ -1,15 +1,8 @@
 from django.db import models
 
 from .manager import manager
+from ...utils.helpers import update_instance
 from ..translation import gettext_lazy as _
-
-
-def update_instance(instance, attrs):
-    for key, value in attrs.items():
-        setattr(instance, key, value)
-    instance.save()
-
-    return instance
 
 
 def find_instance(filters, model):
