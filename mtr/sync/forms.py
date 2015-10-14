@@ -1,16 +1,11 @@
 from django import forms
 
+from ..utils.forms import GlobalInitialFormMixin
+
 from .models import Settings
 
 
-class SettingsAdminForm(forms.ModelForm):
-    INITIAL = {}
-
-    def __init__(self, *args, **kwargs):
-        if kwargs.get('initial', None):
-            kwargs['initial'].update(self.INITIAL)
-
-        super(SettingsAdminForm, self).__init__(*args, **kwargs)
+class SettingsAdminForm(GlobalInitialFormMixin, forms.ModelForm):
 
     class Meta:
         exclude = []
