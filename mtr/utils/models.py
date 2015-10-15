@@ -131,18 +131,28 @@ class PositionRelatedMixin(models.Model):
 
 class SlugifyNameMixin(models.Model):
     SLUG_PREFIXED_DUBLICATE = False
+    SLUG_PREFIXED_PARENT = None
 
-    slug = models.CharField(
+    slug = CharNullField(
         _('slug'), max_length=300, db_index=True, blank=True)
+    base_slug = models.CharField(
+        _('base slug'), max_length=300, blank=True)
     name = models.CharField(_('name'), max_length=300, db_index=True)
 
     class Meta:
         abstract = True
 
     def save(self, *args, **kwargs):
-        if not self.slug and self.name:
+        overwrite_slug = kwargs.pop('overwrite_slug', False)
+        prefixed_dublicate = kwargs.pop(
+            'prefixed_dublicate', self.SLUG_PREFIXED_DUBLICATE)
+
+        # TODO: refactor add more flexebility
+
+        if not self.slug and self.name or overwrite_slug:
             slugs = None
             self.slug = slugify(self.name)
+
             if getattr(self, 'parent', None):
                 super().save(*args, **kwargs)
                 slugs = list(map(lambda p: p.slug, self.get_ancestors()))
@@ -150,12 +160,22 @@ class SlugifyNameMixin(models.Model):
             if slugs:
                 self.slug = '/'.join(slugs + [self.slug])
 
-            if self.SLUG_PREFIXED_DUBLICATE:
-                count = self.__class__.objects.filter(slug=self.slug).count()
-                if count:
-                    self.slug = '{}-{}'.format(self.slug, self.id)
+            if self.SLUG_PREFIXED_PARENT is not None:
+                parent = getattr(getattr(
+                    self, self.SLUG_PREFIXED_PARENT, None), 'slug', None)
+                if parent:
+                    self.slug = '/'.join([parent, self.slug])
 
-        super(SlugifyNameMixin, self).save(*args, **kwargs)
+            if not self.base_slug:
+                self.base_slug = self.slug
+
+            if prefixed_dublicate:
+                count = self.__class__.objects \
+                    .filter(base_slug=self.base_slug).count()
+                if count:
+                    self.slug = '{}-{}'.format(self.base_slug, count)
+
+        super().save(*args, **kwargs)
 
 
 class CategoryMixin(
