@@ -5,6 +5,7 @@ from functools import wraps
 
 import django
 
+from django.db import models
 from django.shortcuts import render
 from django.core.exceptions import PermissionDenied
 
@@ -136,3 +137,12 @@ def update_instance(instance, attrs):
     instance.save()
 
     return instance
+
+
+def find_dublicates(model, fields):
+    """Find all dublicate instances and returns queryset"""
+
+    duplicates = model.objects.values(fields).order_by() \
+        .annotate(max_id=models.Max('id'), count_id=models.Count('id')) \
+        .filter(count_id__gt=1)
+    return model.objects.filter(id__in=map(lambda d: d['max_id'], duplicates))
