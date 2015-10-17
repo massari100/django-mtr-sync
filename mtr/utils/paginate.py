@@ -5,7 +5,7 @@ class PaginatorRedirect(Exception):
     pass
 
 
-class Paginate:
+class Paginate(object):
 
     def __new__(
             self, request, queryset, page=1, per_page=30, max_per_page=200):
