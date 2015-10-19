@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-08-23 23:28+0300\n"
+"POT-Creation-Date: 2015-10-19 23:43+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,47 +17,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: admin.py:53
+#: admin.py:61
 msgid "mtr.sync:Link to file"
 msgstr "mtr.sync:Ссылка на файл"
 
-#: admin.py:125
+#: admin.py:133
 msgid "mtr.sync:Data settings"
 msgstr "mtr.sync:Настройки данных"
 
-#: admin.py:132
+#: admin.py:140
 msgid "mtr.sync:Worksheet settings"
 msgstr "mtr.sync:Настройки документа"
 
-#: admin.py:140
+#: admin.py:148
 msgid "mtr.sync:Language settings"
 msgstr "mtr.sync:Настройки языка"
 
-#: admin.py:144
+#: admin.py:152
 msgid "mtr.sync:Field settings"
 msgstr "mtr.sync:Настройки полей"
 
-#: admin.py:188 admin.py:231
+#: admin.py:196 admin.py:239
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "mtr.sync:Синхронизация данных запущена в фоновом режиме"
 
-#: admin.py:189 admin.py:232
+#: admin.py:197 admin.py:240
 msgid "mtr.sync:Sync data"
 msgstr "mtr.sync:Синхронизировать"
 
-#: admin.py:199
+#: admin.py:207
 msgid "mtr.sync:Copies successfully created"
 msgstr "mtr.sync:Копии успешно созданы"
 
-#: admin.py:200
+#: admin.py:208
 msgid "mtr.sync:Create a copy of settings"
 msgstr "mtr.sync:Создать копии настроек"
 
-#: admin.py:211
+#: admin.py:219
 msgid "mtr.sync:Latest run messages"
 msgstr "mtr.sync:Последние сообщение"
 
-#: admin.py:248
+#: admin.py:256
 msgid "mtr.sync:Latest sync"
 msgstr "mtr.sync:Последняя синхронизация"
 
@@ -65,15 +65,15 @@ msgstr "mtr.sync:Последняя синхронизация"
 msgid "mtr.sync:Data sync"
 msgstr "mtr.sync:Синхронизация"
 
-#: lib/actions.py:126
+#: lib/actions.py:119
 msgid "mtr.sync:Create only"
 msgstr "mtr.sync:Только создать"
 
-#: lib/actions.py:182
+#: lib/actions.py:175
 msgid "mtr.sync:Create or update"
 msgstr "mtr.sync:Создать или обновить"
 
-#: lib/actions.py:188
+#: lib/actions.py:181
 msgid "mtr.sync:Update only"
 msgstr "mtr.sync:Только обновить"
 
@@ -100,6 +100,10 @@ msgstr "mtr.sync:"
 #: lib/converters.py:55
 msgid "mtr.sync:Integer"
 msgstr "mtr.sync:"
+
+#: lib/converters.py:63
+msgid "mtr.sync:None"
+msgstr ""
 
 #: lib/exceptions.py:9
 msgid "mtr.sync:import data"
@@ -139,7 +143,7 @@ msgstr "mtr.sync:"
 msgid "mtr.sync:action"
 msgstr "mtr.sync:"
 
-#: models.py:70 models.py:299 models.py:319 models.py:376 models.py:421
+#: models.py:70 models.py:299 models.py:338 models.py:380
 msgid "mtr.sync:name"
 msgstr "mtr.sync:"
 
@@ -163,7 +167,7 @@ msgstr "mtr.sync:"
 msgid "mtr.sync:Reading or writing end index (including itself)"
 msgstr "mtr.sync:"
 
-#: models.py:82 models.py:323
+#: models.py:82
 msgid "mtr.sync:model"
 msgstr "mtr.sync:"
 
@@ -175,7 +179,7 @@ msgstr "mtr.sync:"
 msgid "mtr.sync:created at"
 msgstr "mtr.sync:"
 
-#: models.py:89 models.py:464
+#: models.py:89 models.py:423
 msgid "mtr.sync:updated at"
 msgstr "mtr.sync:"
 
@@ -213,7 +217,7 @@ msgstr "mtr.sync:"
 msgid "mtr.sync:Custom filename for export"
 msgstr "mtr.sync:"
 
-#: models.py:109 models.py:301 models.py:455
+#: models.py:109 models.py:301 models.py:414
 msgid "mtr.sync:file"
 msgstr "mtr.sync:"
 
@@ -318,168 +322,144 @@ msgid ""
 "checking this option, you can edit attributes"
 msgstr "mtr.sync:"
 
-#: models.py:268 models.py:269 models.py:304 models.py:406 models.py:426
-#: models.py:467
+#: models.py:268 models.py:269 models.py:304 models.py:365 models.py:385
+#: models.py:426
 msgid "mtr.sync:settings"
 msgstr "mtr.sync:"
 
-#: models.py:307
+#: models.py:306
+msgid "mtr.sync:description"
+msgstr ""
+
+#: models.py:309
 msgid "mtr.sync:sequence"
 msgstr "mtr.sync:"
 
-#: models.py:308
+#: models.py:310
 msgid "mtr.sync:sequences"
 msgstr "mtr.sync:"
 
-#: models.py:321 models.py:378
+#: models.py:340
 msgid "mtr.sync:model attribute"
 msgstr "mtr.sync:"
 
-#: models.py:330 models.py:399
-msgid "mtr.sync:replacer category"
-msgstr "mtr.sync:"
-
-#: models.py:331
-msgid "mtr.sync:replacer categories"
-msgstr "mtr.sync:"
-
-#: models.py:339 models.py:423
-msgid "mtr.sync:value"
-msgstr "mtr.sync:"
-
-#: models.py:340
-msgid "mtr.sync:change to"
-msgstr "mtr.sync:"
-
 #: models.py:341
-msgid "mtr.sync:regex"
-msgstr "mtr.sync:"
-
-#: models.py:343
-msgid "mtr.sync:category"
-msgstr "mtr.sync:"
-
-#: models.py:350
-msgid "mtr.sync:replacer"
-msgstr "mtr.sync:"
-
-#: models.py:351
-msgid "mtr.sync:replacers"
-msgstr "mtr.sync:"
-
-#: models.py:379
 msgid "mtr.sync:skip"
 msgstr "mtr.sync:"
 
-#: models.py:381
+#: models.py:343
 msgid "mtr.sync:update"
 msgstr "mtr.sync:"
 
-#: models.py:382
+#: models.py:344
 msgid "mtr.sync:find"
 msgstr "mtr.sync:"
 
-#: models.py:385
+#: models.py:347
 msgid "mtr.sync:set filter type"
 msgstr "mtr.sync:"
 
-#: models.py:387
+#: models.py:349
 msgid "mtr.sync:Not create or update instance if empty cell"
 msgstr "mtr.sync:"
 
-#: models.py:390
+#: models.py:352
 msgid "mtr.sync:set value"
 msgstr "mtr.sync:"
 
-#: models.py:393
+#: models.py:355
 msgid "mtr.sync:find filter type"
 msgstr "mtr.sync:"
 
-#: models.py:396
+#: models.py:358
 msgid "mtr.sync:find value"
 msgstr "mtr.sync:"
 
-#: models.py:403
+#: models.py:361
 msgid "mtr.sync:converters"
 msgstr "mtr.sync:"
 
-#: models.py:409
+#: models.py:368
 msgid "mtr.sync:field"
 msgstr "mtr.sync:"
 
-#: models.py:410
+#: models.py:369
 msgid "mtr.sync:fields"
 msgstr "mtr.sync:"
 
-#: models.py:422
+#: models.py:381
 msgid "mtr.sync:cell"
 msgstr "mtr.sync:"
 
-#: models.py:434
+#: models.py:382
+msgid "mtr.sync:value"
+msgstr "mtr.sync:"
+
+#: models.py:393
 msgid "mtr.sync:context"
 msgstr "mtr.sync:"
 
-#: models.py:435
+#: models.py:394
 msgid "mtr.sync:contexts"
 msgstr "mtr.sync:"
 
-#: models.py:449 models.py:537
+#: models.py:408 models.py:496
 msgid "mtr.sync:Error"
 msgstr "mtr.sync:"
 
-#: models.py:450
+#: models.py:409
 msgid "mtr.sync:Running"
 msgstr "mtr.sync:"
 
-#: models.py:451
+#: models.py:410
 msgid "mtr.sync:Success"
 msgstr "mtr.sync:"
 
-#: models.py:457
+#: models.py:416
 msgid "mtr.sync:status"
 msgstr "mtr.sync:"
 
-#: models.py:460
+#: models.py:419
 msgid "mtr.sync:started at"
 msgstr "mtr.sync:"
 
-#: models.py:462
+#: models.py:421
 msgid "mtr.sync:completed at"
 msgstr "mtr.sync:"
 
-#: models.py:477
+#: models.py:436
 msgid "mtr.sync:report"
 msgstr "mtr.sync:"
 
-#: models.py:478
+#: models.py:437
 msgid "mtr.sync:reports"
 msgstr "mtr.sync:"
 
-#: models.py:538
+#: models.py:497
 msgid "mtr.sync:Info"
 msgstr "mtr.sync:"
 
-#: models.py:543 models.py:556
+#: models.py:502 models.py:515
 msgid "mtr.sync:message"
 msgstr "mtr.sync:"
 
-#: models.py:545
+#: models.py:504
 msgid "mtr.sync:step"
 msgstr "mtr.sync:"
 
-#: models.py:548
+#: models.py:507
 msgid "mtr.sync:input position"
 msgstr "mtr.sync:"
 
-#: models.py:550
+#: models.py:509
 msgid "mtr.sync:input value"
 msgstr "mtr.sync:"
 
-#: models.py:553
+#: models.py:512
 msgid "mtr.sync:type"
 msgstr "mtr.sync:"
 
-#: models.py:557
+#: models.py:516
 msgid "mtr.sync:messages"
 msgstr "mtr.sync:"
 
@@ -504,6 +484,22 @@ msgstr "mtr.sync:"
 #: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:76
 msgid "mtr.sync:Remove"
 msgstr "mtr.sync:"
+
+#: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:27
+#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:75
+#: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:27
+#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:77
+#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:28
+#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:80
+#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/stacked.html:27
+#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:75
+#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:52
+#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:89
+#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:52
+#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:89
+#, python-format
+msgid "mtr.sync:Add another %(verbose_name)s"
+msgstr ""
 
 #: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:17
 #: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:17
@@ -565,4 +561,25 @@ msgstr "mtr.sync:"
 #: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:9
 msgid "mtr.sync:Add Another"
 msgstr "mtr.sync:"
+
+#~ msgid "replacer category"
+#~ msgstr "mtr.sync:"
+
+#~ msgid "replacer categories"
+#~ msgstr "mtr.sync:"
+
+#~ msgid "change to"
+#~ msgstr "mtr.sync:"
+
+#~ msgid "regex"
+#~ msgstr "mtr.sync:"
+
+#~ msgid "category"
+#~ msgstr "mtr.sync:"
+
+#~ msgid "replacer"
+#~ msgstr "mtr.sync:"
+
+#~ msgid "replacers"
+#~ msgstr "mtr.sync:"
 

@@ -5,21 +5,6 @@ Installation
 .. contents::
    :depth: 3
 
-Official releases
-=================
-
-Official releases will be available from `PyPI`_.
-
-Download the .zip distribution file and unpack it. Inside is a script
-named ``setup.py``. Enter this command::
-
-   python setup.py install
-
-...and the package will install automatically.
-
-.. _`PyPI`: http://pypi.python.org/pypi/django-mtr-sync/
-
-
 Development version
 ===================
 

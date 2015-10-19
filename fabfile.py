@@ -2,19 +2,7 @@ import os
 import sys
 import re
 
-# sys.path.append(os.path.join(os.path.dirname(__file__), 'tests'))
-
 import django
-
-# from django.conf import settings as django_settings
-
-# from app import settings as app_settings
-
-# django_settings.configure(default_settings=app_settings, DEBUG=True)
-# django.setup()
-
-# from django.conf import django_settings
-# from django.contrib.auth.backends import get_user_model
 
 from fabric.api import local, task, lcd, settings
 from babel.messages.pofile import read_po, write_po
