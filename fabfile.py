@@ -116,6 +116,9 @@ def locale(action='make', lang='en'):
                     for message in catalog:
                         if lang == 'en':
                             message.string = str(message.id)
+                        else:
+                            if not message.string:
+                                message.string = str(message.id)
                         message.id = '{}:{}'.format(app, message.id)
                 with open(po_path, 'wb') as f:
                     write_po(f, catalog, include_previous=True)
