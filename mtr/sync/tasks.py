@@ -15,11 +15,9 @@ else:
 
 @job
 def export_data(params, data=None):
-    manager.export_data(
-        make_from_params(Settings, params), data)
+    manager.export_data(make_from_params(Settings, params), data)
 
 
 @job
 def import_data(params, path=None):
-    manager.import_data(
-        make_from_params(Settings, params), path)
+    manager.import_data(make_from_params(Settings, params), path)
