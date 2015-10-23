@@ -241,7 +241,7 @@ class SequenceAdmin(admin.ModelAdmin):
 
     def get_readonly_fields(self, request, obj=None):
         if not request.user.is_superuser:
-            return ('name', 'settings')
+            return ('name', 'settings', 'description')
         return tuple()
 
     def latest_sync(self, obj):

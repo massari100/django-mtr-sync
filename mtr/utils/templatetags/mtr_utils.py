@@ -53,3 +53,18 @@ def request_path_replace(request, key, value=None):
 @register.filter
 def split(string, separator):
     return string.split(separator)
+
+
+@register.filter
+def substract(md, sd):
+    return md - sd
+
+
+@register.filter
+def get(item, key):
+    return item.get(key, None)
+
+
+@register.filter
+def in_group(user, group):
+    return group in list(map(lambda g: g.name, user.groups.all()))
