@@ -1,6 +1,6 @@
 from rest_framework import generics
 from rest_framework.response import Response
-from rest_framework import serializers, permissions, exceptions
+from rest_framework import serializers, exceptions
 
 from .model import Settings, Field
 

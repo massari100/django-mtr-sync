@@ -16,7 +16,6 @@ version = ".".join(str(v) for v in version_tuple)
 setup(
     name='django-mtr-sync',
     packages=find_packages(),
-    # package_data={'': ['']},
     version=version,
     author='mtr group',
     author_email='inboxmtr@gmail.com',
@@ -30,6 +29,6 @@ setup(
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
     ],
-    keywords=['xlsx', 'import data', 'export data'],
+    keywords=['xlsx', 'import data', 'export data', 'csv', 'ods', 'xls'],
     install_requires=['Django >= 1.6'],
 )

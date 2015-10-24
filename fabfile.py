@@ -96,7 +96,6 @@ def locale(action='make', lang='en'):
     if action == 'make':
         for app in APPS:
             app_path = os.path.join(*app.split('.'))
-            # TODO: strip to regex, move to function
 
             with lcd(app_path):
                 po_path = os.path.join(
