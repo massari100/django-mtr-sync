@@ -1,6 +1,5 @@
-from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework import serializers, exceptions
+from rest_framework import viewsets
+from rest_framework import serializers
 
 from .model import Settings, Field
 
@@ -17,9 +16,11 @@ class FieldSerializer(serializers.ModelSerializers):
         model = Field
 
 
-class SettingsAPIView(generics.ListCreateAPIView):
-    pass
+class SettingsAPIView(viewsets.ModelViewSet):
+    queryset = Settings.objects.all()
+    serializer_class = SettingsSerializer
 
 
-class FieldAPIView(generics.ListCreateAPIView):
-    pass
+class FieldAPIView(viewsets.ModelViewSet):
+    queryset = Field.objects.all()
+    serializer_class = FieldSerializer
