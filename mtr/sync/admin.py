@@ -1,3 +1,4 @@
+import os
 from functools import partial
 
 from django.utils import formats
@@ -113,7 +114,7 @@ class ContextInline(admin.TabularInline):
 class SettingsAdmin(SyncAdminMixin, admin.ModelAdmin):
     list_display = (
         '__str__', 'action', 'model',
-        'processor', 'created_at', 'latest_run_messages'
+        'processor', 'created_at', 'latest_download', 'latest_run_messages'
     )
     list_filter = ('sequences',)
     list_display_links = ('__str__', 'model')
@@ -206,6 +207,17 @@ class SettingsAdmin(SyncAdminMixin, admin.ModelAdmin):
             request,
             _('Copies successfully created'))
     copy.short_description = _('Create a copy of settings')
+
+    def latest_download(self, obj):
+        report = obj.reports.first()
+        if report and report.status == report.SUCCESS \
+                and report.action == report.EXPORT:
+            return smart_text('<a href="{}">{}</a>').format(
+                report.buffer_file.url,
+                os.path.basename(report.buffer_file.name))
+        return _('No file provided')
+    latest_download.short_description = _('Download latest report')
+    latest_download.allow_tags = True
 
     def latest_run_messages(self, obj):
         report = obj.reports.first()
