@@ -44,8 +44,8 @@ class MessageAdmin(admin.ModelAdmin):
 
 class ReportAdmin(admin.ModelAdmin):
     list_display = (
-        'action', 'status', 'settings',
-        'started_at', 'completed_at', 'buffer_file_link')
+        'action', 'status', 'settings', 'started_at',
+        'latest_run_messages', 'buffer_file_link')
     list_filter = (
         'action', 'status', 'settings', 'started_at', 'completed_at')
     search_fields = ('buffer_file',)
@@ -54,12 +54,24 @@ class ReportAdmin(admin.ModelAdmin):
 
     def buffer_file_link(self, obj):
         """Display download link"""
-
-        return smart_text('<a href="{0}">{0}</a>').format(
-            obj.get_absolute_url())
+        url = obj.get_absolute_url()
+        if url is not None:
+            name = os.path.basename(obj.buffer_file.name)
+            url = smart_text('<a href="{}">{}</a>').format(url, name)
+        return url
 
     buffer_file_link.allow_tags = True
     buffer_file_link.short_description = _('Link to file')
+
+    def latest_run_messages(self, obj):
+        return smart_text('<a href="{}{}">{} - {}</a>').format(
+            reverse('admin:mtr_sync_message_changelist'),
+            '?report__id__exact={}'.format(obj.id),
+            formats.localize(obj.started_at),
+            obj.get_status_display())
+    latest_run_messages.short_description = _('Latest run messages')
+    latest_run_messages.allow_tags = True
+    latest_run_messages.admin_order_field = 'completed_at'
 
 
 class ObjectInlineMixin(object):

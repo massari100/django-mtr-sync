@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-19 23:43+0300\n"
+"POT-Creation-Date: 2015-10-27 23:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,47 +17,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: admin.py:61
+#: admin.py:64
 msgid "mtr.sync:Link to file"
 msgstr "mtr.sync:Ссылка на файл"
 
-#: admin.py:133
-msgid "mtr.sync:Data settings"
-msgstr "mtr.sync:Настройки данных"
-
-#: admin.py:140
-msgid "mtr.sync:Worksheet settings"
-msgstr "mtr.sync:Настройки документа"
-
-#: admin.py:148
-msgid "mtr.sync:Language settings"
-msgstr "mtr.sync:Настройки языка"
-
-#: admin.py:152
-msgid "mtr.sync:Field settings"
-msgstr "mtr.sync:Настройки полей"
-
-#: admin.py:196 admin.py:239
-msgid "mtr.sync:Data synchronization started in background."
-msgstr "mtr.sync:Синхронизация данных запущена в фоновом режиме"
-
-#: admin.py:197 admin.py:240
-msgid "mtr.sync:Sync data"
-msgstr "mtr.sync:Синхронизировать"
-
-#: admin.py:207
-msgid "mtr.sync:Copies successfully created"
-msgstr "mtr.sync:Копии успешно созданы"
-
-#: admin.py:208
-msgid "mtr.sync:Create a copy of settings"
-msgstr "mtr.sync:Создать копии настроек"
-
-#: admin.py:219
+#: admin.py:72 admin.py:243
 msgid "mtr.sync:Latest run messages"
 msgstr "mtr.sync:Последние сообщение"
 
-#: admin.py:256
+#: admin.py:146
+msgid "mtr.sync:Data settings"
+msgstr "mtr.sync:Настройки данных"
+
+#: admin.py:153
+msgid "mtr.sync:Worksheet settings"
+msgstr "mtr.sync:Настройки документа"
+
+#: admin.py:161
+msgid "mtr.sync:Language settings"
+msgstr "mtr.sync:Настройки языка"
+
+#: admin.py:165
+msgid "mtr.sync:Field settings"
+msgstr "mtr.sync:Настройки полей"
+
+#: admin.py:209 admin.py:263
+msgid "mtr.sync:Data synchronization started in background."
+msgstr "mtr.sync:Синхронизация данных запущена в фоновом режиме"
+
+#: admin.py:210 admin.py:264
+msgid "mtr.sync:Sync data"
+msgstr "mtr.sync:Синхронизировать"
+
+#: admin.py:220
+msgid "mtr.sync:Copies successfully created"
+msgstr "mtr.sync:Копии успешно созданы"
+
+#: admin.py:221
+msgid "mtr.sync:Create a copy of settings"
+msgstr "mtr.sync:Создать копии настроек"
+
+#: admin.py:230
+msgid "mtr.sync:No file provided"
+msgstr "No file provided"
+
+#: admin.py:231
+msgid "mtr.sync:Download latest report"
+msgstr "Download latest report"
+
+#: admin.py:280
 msgid "mtr.sync:Latest sync"
 msgstr "mtr.sync:Последняя синхронизация"
 
@@ -103,7 +111,7 @@ msgstr "mtr.sync:"
 
 #: lib/converters.py:63
 msgid "mtr.sync:None"
-msgstr ""
+msgstr "None"
 
 #: lib/exceptions.py:9
 msgid "mtr.sync:import data"
@@ -329,7 +337,7 @@ msgstr "mtr.sync:"
 
 #: models.py:306
 msgid "mtr.sync:description"
-msgstr ""
+msgstr "description"
 
 #: models.py:309
 msgid "mtr.sync:sequence"
@@ -499,7 +507,7 @@ msgstr "mtr.sync:"
 #: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:89
 #, python-format
 msgid "mtr.sync:Add another %(verbose_name)s"
-msgstr ""
+msgstr "Add another %(verbose_name)s"
 
 #: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:17
 #: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:17
