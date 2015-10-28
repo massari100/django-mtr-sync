@@ -88,6 +88,9 @@ class Settings(ActionsMixin):
     updated_at = models.DateTimeField(
         _('updated at'), auto_now=True)
 
+    show_in_quick_menu = models.BooleanField(
+        _('show in quick menu list'), default=False)
+
     processor = models.CharField(
         _('format'), max_length=255,
         choices=manager.processor_choices(),
