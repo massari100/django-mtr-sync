@@ -181,7 +181,7 @@ msgstr "модель"
 
 #: models.py:84
 msgid "mtr.sync:Choose database model if action need it"
-msgstr ""
+msgstr "Выберите модель для действия если необходимо"
 
 #: models.py:87
 msgid "mtr.sync:created at"
@@ -193,33 +193,33 @@ msgstr "дата обновления"
 
 #: models.py:92
 msgid "mtr.sync:show in quick menu list"
-msgstr "показывать "
+msgstr "показывать в списке быстрых действий"
 
 #: models.py:95
 msgid "mtr.sync:format"
-msgstr ""
+msgstr "формат"
 
 #: models.py:98
 msgid "mtr.sync:Choose file type"
-msgstr ""
+msgstr "Выберите тип файла"
 
 #: models.py:100
 msgid "mtr.sync:worksheet page"
-msgstr ""
+msgstr "страница документа"
 
 #: models.py:101
 msgid "mtr.sync:Page name of sheet book"
-msgstr ""
+msgstr "Название страницы в документе"
 
 #: models.py:103
 msgid "mtr.sync:include header"
-msgstr ""
+msgstr "включить строку заголовку"
 
 #: models.py:105
 msgid ""
 "mtr.sync:Check it if you need to write field names in export or skip it "
 "in import"
-msgstr ""
+msgstr "Отметьте если необходимо записать названия колонок при экспорте или пропустить при импорте"
 
 #: models.py:109
 msgid "mtr.sync:custom filename"

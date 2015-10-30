@@ -18,9 +18,16 @@ from .forms import SettingsAdminForm
 
 class SyncAdminMixin(object):
 
-    """Mixin for change list with export and import buttons"""
+    """Mixin for changelist with export and import buttons"""
 
     change_list_template = themed('admin/change_list.html', True)
+
+
+class SyncWithQuickSettingsAdminMixin(object):
+
+    """Mixin for changelist same as SyncAdminMixin with quick settings run"""
+
+    change_list_template = themed('admin/change_list_quick.html', True)
 
 
 class SyncTabularInlineMixin(object):
