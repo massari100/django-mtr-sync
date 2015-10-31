@@ -22,12 +22,7 @@ class SyncAdminMixin(object):
 
     change_list_template = themed('admin/change_list.html', True)
 
-
-class SyncWithQuickSettingsAdminMixin(object):
-
-    """Mixin for changelist same as SyncAdminMixin with quick settings run"""
-
-    change_list_template = themed('admin/change_list_quick.html', True)
+    show_quick_settings_menu = False
 
 
 class SyncTabularInlineMixin(object):
