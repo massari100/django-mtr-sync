@@ -3,7 +3,6 @@
 {% load prefixed_i18n %}
 
 {% block object-tools-items %}
-    {# {{ cl.model_admin.show_quick_settings_menu }} #}
-    {% include 'mtr/sync/default/object_tools.html' with version='1.8' %}
+    {% include 'mtr/sync/default/object_tools.html' with version='1.8' admin=cl.model_admin %}
     {{ block.super }}
 {% endblock %}

@@ -134,6 +134,7 @@ class SettingsAdmin(SyncAdminMixin, admin.ModelAdmin):
     list_display_links = ('__str__', 'model')
     date_hierarchy = 'created_at'
     inlines = (FieldInline, ContextInline)
+    show_quick_settings_menu = True
     actions = ['run', 'copy']
     fieldsets = (
         (None, {
@@ -141,7 +142,8 @@ class SettingsAdmin(SyncAdminMixin, admin.ModelAdmin):
                 ('model', 'action'),
                 'processor',
                 ('name', 'filename'),
-                'buffer_file'
+                'buffer_file',
+                'show_in_quick_menu'
             )
         }),
 
