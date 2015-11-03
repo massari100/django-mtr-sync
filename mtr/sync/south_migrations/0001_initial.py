@@ -18,6 +18,7 @@ class Migration(SchemaMigration):
             ('model', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('created_at', self.gf('django.db.models.fields.DateTimeField')(auto_now_add=True, blank=True)),
             ('updated_at', self.gf('django.db.models.fields.DateTimeField')(auto_now=True, blank=True)),
+            ('show_in_quick_menu', self.gf('django.db.models.fields.BooleanField')(default=False)),
             ('processor', self.gf('django.db.models.fields.CharField')(default='XlsxProcessor', max_length=255)),
             ('worksheet', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('include_header', self.gf('django.db.models.fields.BooleanField')(default=True)),
@@ -209,6 +210,7 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100', 'blank': 'True'}),
             'populate_from_file': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'processor': ('django.db.models.fields.CharField', [], {'default': "'XlsxProcessor'", 'max_length': '255'}),
+            'show_in_quick_menu': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'start_row': ('django.db.models.fields.PositiveIntegerField', [], {'null': 'True', 'blank': 'True'}),
             'updated_at': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'worksheet': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'})

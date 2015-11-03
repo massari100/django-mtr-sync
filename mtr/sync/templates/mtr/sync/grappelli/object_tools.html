@@ -3,7 +3,7 @@
 {% set_i18n_prefix 'mtr.sync' %}
 
 {% if admin.show_quick_settings_menu and False %}
-<select>
+<select name="quick_settings">
 {% for st in mtr.sync.settings %}
 <option value="{{ st.id }}">{{ st }}</option>
 {% endfor %}
