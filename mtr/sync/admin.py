@@ -125,7 +125,7 @@ class ContextInline(admin.TabularInline):
     extra = 0
 
 
-class SettingsAdmin(SyncAdminMixin, admin.ModelAdmin):
+class SettingsAdmin(admin.ModelAdmin):
     list_display = (
         '__str__', 'action', 'model',
         'processor', 'created_at', 'latest_download', 'latest_run_messages'
@@ -134,7 +134,6 @@ class SettingsAdmin(SyncAdminMixin, admin.ModelAdmin):
     list_display_links = ('__str__', 'model')
     date_hierarchy = 'created_at'
     inlines = (FieldInline, ContextInline)
-    show_quick_settings_menu = True
     actions = ['run', 'copy']
     fieldsets = (
         (None, {
