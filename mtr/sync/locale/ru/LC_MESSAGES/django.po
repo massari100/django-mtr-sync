@@ -59,7 +59,7 @@ msgstr "Создать копии настроек"
 
 #: admin.py:230
 msgid "mtr.sync:No file provided"
-msgstr "No file provided"
+msgstr "Файл не задан"
 
 #: admin.py:231
 msgid "mtr.sync:Download latest report"
@@ -87,55 +87,55 @@ msgstr "Только обновить"
 
 #: lib/converters.py:10
 msgid "mtr.sync:Decimal"
-msgstr ""
+msgstr "Число с запятой"
 
 #: lib/converters.py:20
 msgid "mtr.sync:String"
-msgstr ""
+msgstr "Строка"
 
 #: lib/converters.py:28
 msgid "mtr.sync:Coma separated list"
-msgstr ""
+msgstr "Список разделенной запятой"
 
 #: lib/converters.py:39
 msgid "mtr.sync:Boolean"
-msgstr ""
+msgstr "Логический"
 
 #: lib/converters.py:47
 msgid "mtr.sync:File path"
-msgstr ""
+msgstr "Путь к файлу"
 
 #: lib/converters.py:55
 msgid "mtr.sync:Integer"
-msgstr ""
+msgstr "Целое число"
 
 #: lib/converters.py:63
 msgid "mtr.sync:None"
-msgstr "None"
+msgstr "Ничего (None)"
 
 #: lib/exceptions.py:9
 msgid "mtr.sync:import data"
-msgstr ""
+msgstr "импортировать данные"
 
 #: lib/exceptions.py:10
 msgid "mtr.sync:unexpected error"
-msgstr ""
+msgstr "другая ошибка"
 
 #: lib/processors/csv.py:18
 msgid "mtr.sync:CSV"
-msgstr ""
+msgstr "CSV"
 
 #: lib/processors/ods.py:13
 msgid "mtr.sync:ODF Spreadsheet"
-msgstr ""
+msgstr "Документ ODF"
 
 #: lib/processors/xls.py:12
 msgid "mtr.sync:Microsoft Excel 97/2000/XP/2003"
-msgstr ""
+msgstr "Microsoft Excel 97/2000/XP/2003"
 
 #: lib/processors/xlsx.py:15
 msgid "mtr.sync:Microsoft Excel 2007/2010/2013 XML"
-msgstr ""
+msgstr "Microsoft Excel 2007/2010/2013 XML"
 
 #: models.py:53 templates/mtr/sync/default/object_tools.html:6
 #: templates/mtr/sync/grappelli/object_tools.html:6
