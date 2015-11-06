@@ -157,7 +157,7 @@ msgstr "имя"
 
 #: models.py:71
 msgid "mtr.sync:Small description of operation"
-msgstr ""
+msgstr "Описание операции"
 
 #: models.py:74
 msgid "mtr.sync:start row"
@@ -165,7 +165,7 @@ msgstr "начальная ячейка"
 
 #: models.py:75
 msgid "mtr.sync:Reading or writing start index (including itself)"
-msgstr ""
+msgstr "Считывать и писать начиная с начального индекса (включая его самого)"
 
 #: models.py:78
 msgid "mtr.sync:end row"
@@ -173,7 +173,7 @@ msgstr "конечная ячейка"
 
 #: models.py:79
 msgid "mtr.sync:Reading or writing end index (including itself)"
-msgstr ""
+msgstr "Считывать и писать начиная с конечного индекса (включая его самого)"
 
 #: models.py:82
 msgid "mtr.sync:model"
@@ -223,23 +223,23 @@ msgstr "Отметьте если необходимо записать назв
 
 #: models.py:109
 msgid "mtr.sync:custom filename"
-msgstr ""
+msgstr "собственное имя файла"
 
 #: models.py:110
 msgid "mtr.sync:Custom filename for export"
-msgstr ""
+msgstr "Укажите другое имя файла для экспорта"
 
 #: models.py:112 models.py:304 models.py:417
 msgid "mtr.sync:file"
-msgstr ""
+msgstr "файл"
 
 #: models.py:113
 msgid "mtr.sync:File for import action"
-msgstr ""
+msgstr "Файл для импорта"
 
 #: models.py:116
 msgid "mtr.sync:dataset"
-msgstr ""
+msgstr "набор данных"
 
 #: models.py:119
 msgid ""
@@ -249,7 +249,7 @@ msgstr ""
 
 #: models.py:122
 msgid "mtr.sync:data action"
-msgstr ""
+msgstr "действие"
 
 #: models.py:125
 msgid ""
@@ -279,7 +279,7 @@ msgstr ""
 
 #: models.py:138
 msgid "mtr.sync:language"
-msgstr ""
+msgstr "язык"
 
 #: models.py:140
 msgid ""
@@ -300,7 +300,7 @@ msgstr ""
 
 #: models.py:151
 msgid "mtr.sync:Create settings for fields"
-msgstr ""
+msgstr "Создать настройки для полей"
 
 #: models.py:152
 msgid "mtr.sync:Automaticaly creates all settings for model fields"
