@@ -32,6 +32,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
 
     'celery',
+    'django_rq',
 
     'app',
 
@@ -133,6 +134,14 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_ALWAYS_EAGER = True
 CELERY_EAGER_PROPAGATES_EXCEPTIONS = True
 
+RQ_QUEUES = {
+    'default': {
+        'HOST': 'localhost',
+        'PORT': 6379,
+        'DB': 0,
+        'DEFAULT_TIMEOUT': 360,
+    },
+}
 
 SYNC_SETTINGS = {
     'ACTIONS': ['mtr.sync.lib.actions', 'app.sync']

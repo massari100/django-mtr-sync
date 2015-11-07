@@ -230,20 +230,20 @@ class Settings(ActionsMixin):
 
         # TODO: move to tasks
 
-        if 'celery' in django_settings.INSTALLED_APPS:
-            from .tasks import export_data, import_data
-
-            if self.action == self.EXPORT:
-                export_data.apply_async(args=[{'id': self.id}])
-            elif self.action == self.IMPORT:
-                import_data.apply_async(args=[{'id': self.id}])
-        elif 'django_rq' in django_settings.INSTALLED_APPS:
+        if 'django_rq' in django_settings.INSTALLED_APPS:
             from .tasks import export_data, import_data
 
             if self.action == self.EXPORT:
                 export_data.delay({'id': self.id})
             elif self.action == self.IMPORT:
                 import_data.delay({'id': self.id})
+        elif 'celery' in django_settings.INSTALLED_APPS:
+            from .tasks import export_data, import_data
+
+            if self.action == self.EXPORT:
+                export_data.apply_async(args=[{'id': self.id}])
+            elif self.action == self.IMPORT:
+                import_data.apply_async(args=[{'id': self.id}])
         else:
             if self.action == self.EXPORT:
                 manager.export_data(self)

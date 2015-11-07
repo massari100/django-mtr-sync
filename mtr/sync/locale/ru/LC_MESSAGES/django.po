@@ -312,11 +312,11 @@ msgstr ""
 
 #: models.py:156
 msgid "mtr.sync:Read start row, end row and first worksheet page from given file"
-msgstr ""
+msgstr "Считать начальную и конечную ячейки с файла (из первой страницы)"
 
 #: models.py:159
 msgid "mtr.sync:Include related fields"
-msgstr ""
+msgstr "Включить зависящие поля"
 
 #: models.py:160
 msgid ""
@@ -326,7 +326,7 @@ msgstr ""
 
 #: models.py:163
 msgid "mtr.sync:Edit field attributes"
-msgstr ""
+msgstr "Редактировать атрибуты поля вручную"
 
 #: models.py:164
 msgid ""
@@ -337,39 +337,39 @@ msgstr ""
 #: models.py:271 models.py:272 models.py:307 models.py:368 models.py:388
 #: models.py:429
 msgid "mtr.sync:settings"
-msgstr ""
+msgstr "настройки"
 
 #: models.py:309
 msgid "mtr.sync:description"
-msgstr "description"
+msgstr "описание"
 
 #: models.py:312
 msgid "mtr.sync:sequence"
-msgstr ""
+msgstr "синхронизация"
 
 #: models.py:313
 msgid "mtr.sync:sequences"
-msgstr ""
+msgstr "синхронизация"
 
 #: models.py:343
 msgid "mtr.sync:model attribute"
-msgstr ""
+msgstr "атрибут модели"
 
 #: models.py:344
 msgid "mtr.sync:skip"
-msgstr ""
+msgstr "пропустить"
 
 #: models.py:346
 msgid "mtr.sync:update"
-msgstr ""
+msgstr "обновить"
 
 #: models.py:347
 msgid "mtr.sync:find"
-msgstr ""
+msgstr "найти"
 
 #: models.py:350
 msgid "mtr.sync:set filter type"
-msgstr ""
+msgstr "задать тип фильтра"
 
 #: models.py:352
 msgid "mtr.sync:Not create or update instance if empty cell"
@@ -377,7 +377,7 @@ msgstr ""
 
 #: models.py:355
 msgid "mtr.sync:set value"
-msgstr ""
+msgstr "задать значение"
 
 #: models.py:358
 msgid "mtr.sync:find filter type"
@@ -385,95 +385,95 @@ msgstr ""
 
 #: models.py:361
 msgid "mtr.sync:find value"
-msgstr ""
+msgstr "значения для поиска"
 
 #: models.py:364
 msgid "mtr.sync:converters"
-msgstr ""
+msgstr "преобразовать"
 
 #: models.py:371
 msgid "mtr.sync:field"
-msgstr ""
+msgstr "поле"
 
 #: models.py:372
 msgid "mtr.sync:fields"
-msgstr ""
+msgstr "поля"
 
 #: models.py:384
 msgid "mtr.sync:cell"
-msgstr ""
+msgstr "ячейка"
 
 #: models.py:385
 msgid "mtr.sync:value"
-msgstr ""
+msgstr "значение"
 
 #: models.py:396
 msgid "mtr.sync:context"
-msgstr ""
+msgstr "контекст"
 
 #: models.py:397
 msgid "mtr.sync:contexts"
-msgstr ""
+msgstr "контексты"
 
 #: models.py:411 models.py:499
 msgid "mtr.sync:Error"
-msgstr ""
+msgstr "Ошибка"
 
 #: models.py:412
 msgid "mtr.sync:Running"
-msgstr ""
+msgstr "В процессе"
 
 #: models.py:413
 msgid "mtr.sync:Success"
-msgstr ""
+msgstr "Успешно завершено"
 
 #: models.py:419
 msgid "mtr.sync:status"
-msgstr ""
+msgstr "статус"
 
 #: models.py:422
 msgid "mtr.sync:started at"
-msgstr ""
+msgstr "время начало"
 
 #: models.py:424
 msgid "mtr.sync:completed at"
-msgstr ""
+msgstr "время завершения"
 
 #: models.py:439
 msgid "mtr.sync:report"
-msgstr ""
+msgstr "отчет"
 
 #: models.py:440
 msgid "mtr.sync:reports"
-msgstr ""
+msgstr "отчеты"
 
 #: models.py:500
 msgid "mtr.sync:Info"
-msgstr ""
+msgstr "Информация"
 
 #: models.py:505 models.py:518
 msgid "mtr.sync:message"
-msgstr ""
+msgstr "сообщение"
 
 #: models.py:507
 msgid "mtr.sync:step"
-msgstr ""
+msgstr "шаг"
 
 #: models.py:510
 msgid "mtr.sync:input position"
-msgstr ""
+msgstr "позиция"
 
 #: models.py:512
 msgid "mtr.sync:input value"
-msgstr ""
+msgstr "значение"
 
 #: models.py:515
 msgid "mtr.sync:type"
-msgstr ""
+msgstr "тип"
 
 #: models.py:519
 msgid "mtr.sync:messages"
-msgstr ""
+msgstr "сообщения"
 
 #: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:9
 #: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:30
@@ -484,7 +484,7 @@ msgstr ""
 #: templates/mtr/sync/grappelli/1.6/admin/edit_inline/stacked.html:9
 #: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:30
 msgid "mtr.sync:View on site"
-msgstr ""
+msgstr "Посмотреть на сайте"
 
 #: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:26
 #: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:76
@@ -495,7 +495,7 @@ msgstr ""
 #: templates/mtr/sync/grappelli/1.6/admin/edit_inline/stacked.html:26
 #: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:76
 msgid "mtr.sync:Remove"
-msgstr ""
+msgstr "Удалить"
 
 #: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:27
 #: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:75

@@ -4,10 +4,12 @@ from .lib.manager import manager
 from .models import Settings
 from ..utils.helpers import make_from_params
 
-if 'celery' in settings.INSTALLED_APPS:
+if 'django_rq' in settings.INSTALLED_APPS:
+    from django_rq import job as rq_job
+
+    def job(f): return rq_job(f, timeout=86400)
+elif 'celery' in settings.INSTALLED_APPS:
     from celery import shared_task as job
-elif 'django_rq' in settings.INSTALLED_APPS:
-    from django_rq import job
 else:
     def func(f): return f
     job = func
