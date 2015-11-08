@@ -250,23 +250,6 @@ class Settings(ActionsMixin):
             elif self.action == self.IMPORT:
                 manager.import_data(self)
 
-    def create_copy(self):
-        fields = self.fields.all()
-        contexts = self.contexts.all()
-
-        self.id = None
-        self.save()
-
-        for field in fields:
-            field.id = None
-            field.settings_id = self.id
-            field.save()
-
-        for context in contexts:
-            context.id = None
-            context.settings_id = self.id
-            context.save()
-
     class Meta:
         verbose_name = _('settings')
         verbose_name_plural = _('settings')

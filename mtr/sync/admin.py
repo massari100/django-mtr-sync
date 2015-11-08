@@ -8,6 +8,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 
 from mtr.utils.helpers import themed
+from mtr.utils.admin import CopyActionMixin
 
 from .models import Report, Settings, Field, Message, Context, Sequence
 from .lib.helpers import model_attributes
@@ -125,7 +126,7 @@ class ContextInline(admin.TabularInline):
     extra = 0
 
 
-class SettingsAdmin(admin.ModelAdmin):
+class SettingsAdmin(admin.ModelAdmin, CopyActionMixin):
     list_display = (
         '__str__', 'action', 'model',
         'processor', 'created_at', 'latest_download', 'latest_run_messages'
@@ -134,7 +135,7 @@ class SettingsAdmin(admin.ModelAdmin):
     list_display_links = ('__str__', 'model')
     date_hierarchy = 'created_at'
     inlines = (FieldInline, ContextInline)
-    actions = ['run', 'copy']
+    actions = ['run', 'copy_object']
     fieldsets = (
         (None, {
             'fields': (
@@ -211,17 +212,6 @@ class SettingsAdmin(admin.ModelAdmin):
             request,
             _('Data synchronization started in background.'))
     run.short_description = _('Sync data')
-
-    def copy(self, request, queryset):
-        """Copy selected settings"""
-
-        for settings in queryset:
-            settings.create_copy()
-
-        self.message_user(
-            request,
-            _('Copies successfully created'))
-    copy.short_description = _('Create a copy of settings')
 
     def latest_download(self, obj):
         report = obj.reports.first()
