@@ -23,6 +23,9 @@ class BaseManager(object):
         funcs = self.all(type_name, related=related)
         return funcs.get(func_name, None)
 
+    def _make_func_name(self, func):
+        return '{}.{}'.format(func.__module__, func.__name__)
+
     def _register_dict(
             self, type_name, label, func_name, related=None, **kwargs):
         """Return decorator for adding functions as key, value
@@ -37,7 +40,7 @@ class BaseManager(object):
                 values = values.get(related, OrderedDict())
             position = \
                 getattr(func, 'position', 0) or kwargs.get('position', 0)
-            new_name = func_name or func.__name__
+            new_name = func_name or self._make_func_name(func)
             func.label = label
 
             if values.get(new_name, None) is not None:
