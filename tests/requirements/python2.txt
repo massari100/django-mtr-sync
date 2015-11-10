@@ -19,5 +19,6 @@ lxml
 sphinx_rtd_theme
 unicodecsv
 south
+django-rq
 
 python-slugify

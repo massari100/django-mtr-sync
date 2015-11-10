@@ -9,9 +9,10 @@ class BaseManager(object):
 
     """Manager for different kind of functions"""
 
-    def __init__(self):
+    def __init__(self, use_module_name=False):
         self._registered = {}
         self._imported = False
+        self._use_module_name = use_module_name
 
     def all(self, type_name, related=None):
         funcs = self._registered.get(type_name, {})
@@ -24,7 +25,9 @@ class BaseManager(object):
         return funcs.get(func_name, None)
 
     def _make_func_name(self, func):
-        return '{}.{}'.format(func.__module__, func.__name__)
+        if self._use_module_name:
+            return '{}.{}'.format(func.__module__, func.__name__)
+        return func.__name__
 
     def _register_dict(
             self, type_name, label, func_name, related=None, **kwargs):
@@ -40,6 +43,7 @@ class BaseManager(object):
                 values = values.get(related, OrderedDict())
             position = \
                 getattr(func, 'position', 0) or kwargs.get('position', 0)
+
             new_name = func_name or self._make_func_name(func)
             func.label = label
 
