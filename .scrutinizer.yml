@@ -4,7 +4,7 @@ build:
     dependencies:
         before:
             - 'sudo apt-get install -y mercurial'
-            - 'pip install -r tests/requirements.txt'
+            - 'pip install -r tests/requirements/python3.txt'
     tests:
         override:
             -
