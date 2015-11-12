@@ -3,6 +3,7 @@ django-modeltranslation
 django-debug-toolbar
 django-mptt
 django-pure-pagination
+djangorestframework
 
 fabric
 pytz

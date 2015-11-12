@@ -1,26 +1,33 @@
-from rest_framework import viewsets
+from rest_framework import generics
 from rest_framework import serializers
+from rest_framework.permissions import IsAuthenticated
 
-from .model import Settings, Field
+from .models import Settings, Field
 
 
-class SettingsSerializer(serializers.ModelSerializers):
+class SettingsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Settings
 
 
-class FieldSerializer(serializers.ModelSerializers):
+class FieldSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Field
 
 
-class SettingsAPIView(viewsets.ModelViewSet):
+class SettingsAPI(
+        generics.ListCreateAPIView, generics.RetrieveDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Settings.objects.all()
     serializer_class = SettingsSerializer
 
 
-class FieldAPIView(viewsets.ModelViewSet):
+class FieldAPI(
+        generics.ListCreateAPIView, generics.RetrieveDestroyAPIView):
+    permission_classes = (IsAuthenticated,)
+
     queryset = Field.objects.all()
     serializer_class = FieldSerializer

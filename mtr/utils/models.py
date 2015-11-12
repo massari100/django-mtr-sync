@@ -150,15 +150,7 @@ class SlugifyNameMixin(models.Model):
         # TODO: refactor add more flexebility
 
         if not self.slug and self.name or overwrite_slug:
-            slugs = None
             self.slug = slugify(self.name)
-
-            if getattr(self, 'parent', None):
-                super().save(*args, **kwargs)
-                slugs = list(map(lambda p: p.slug, self.get_ancestors()))
-
-            if slugs:
-                self.slug = '/'.join(slugs + [self.slug])
 
             if self.SLUG_PREFIXED_PARENT is not None:
                 parent = getattr(getattr(

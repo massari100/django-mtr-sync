@@ -33,6 +33,7 @@ INSTALLED_APPS = (
 
     'celery',
     'django_rq',
+    'rest_framework',
 
     'app',
 
