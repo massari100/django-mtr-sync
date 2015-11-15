@@ -66,6 +66,7 @@ class PublishedMixin(models.Model):
     class Meta:
         abstract = True
         index_together = ('published_at', 'published_to', 'published')
+        ordering = ('published_at', 'published')
 
 
 class TreePublishedMixin(PublishedMixin):
@@ -158,7 +159,7 @@ class SlugifyNameMixin(models.Model):
                 if parent:
                     self.slug = '/'.join([parent, self.slug])
 
-            if not self.base_slug:
+            if not self.base_slug or overwrite_slug:
                 self.base_slug = self.slug
 
             if prefixed_dublicate:
