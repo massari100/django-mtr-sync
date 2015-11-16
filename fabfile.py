@@ -185,9 +185,6 @@ def recreate(username='app', password='app'):
     manage('createsuperuser --username app --email app@app.com --noinput')
     manage('changepassword app')
 
-    # User = get_user_model()
-    # User.objects.create(username=username, password=password)
-
 
 @task
 def subl():

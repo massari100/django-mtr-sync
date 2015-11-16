@@ -41,5 +41,6 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
         'mtr.sync.lib.processors.csv',
     ],
     'ACTIONS': [],
-    'CONVERTERS': []
+    'CONVERTERS': [],
+    'BROKER': 'rq',
 })

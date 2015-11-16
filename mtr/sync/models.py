@@ -230,14 +230,16 @@ class Settings(ActionsMixin):
 
         # TODO: move to tasks
 
-        if 'django_rq' in django_settings.INSTALLED_APPS:
+        if 'django_rq' in django_settings.INSTALLED_APPS \
+                and SETTINGS['BROKER'] == 'rq':
             from .tasks import export_data, import_data
 
             if self.action == self.EXPORT:
                 export_data.delay({'id': self.id})
             elif self.action == self.IMPORT:
                 import_data.delay({'id': self.id})
-        elif 'celery' in django_settings.INSTALLED_APPS:
+        elif 'celery' in django_settings.INSTALLED_APPS \
+                and SETTINGS['BROKER'] == 'celery':
             from .tasks import export_data, import_data
 
             if self.action == self.EXPORT:
