@@ -1,9 +1,9 @@
 from django.conf import settings
 
-from .lib.manager import manager
 from .models import Settings
-from ..utils.helpers import make_from_params
 from .settings import SETTINGS
+from .lib.manager import manager
+from ..utils.helpers import make_from_params
 
 if 'django_rq' in settings.INSTALLED_APPS and SETTINGS['BROKER'] == 'rq':
     from django_rq import job as rq_job

@@ -13,6 +13,6 @@ def anonymous_required(f):
     def inner(request, *args, **kwargs):
         if request.user.is_authenticated():
             return redirect(request.GET.get(
-                'next', getattr(settings, 'LOGIN_REDIRECT_URL', '/')))
+                'next', getattr(settings, 'DEFAULT_AUTH_URL', '/')))
         return f(request, *args, **kwargs)
     return inner

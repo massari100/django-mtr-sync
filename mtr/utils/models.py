@@ -148,8 +148,6 @@ class SlugifyNameMixin(models.Model):
         prefixed_dublicate = kwargs.pop(
             'prefixed_dublicate', self.SLUG_PREFIXED_DUBLICATE)
 
-        # TODO: refactor add more flexebility
-
         if not self.slug and self.name or overwrite_slug:
             self.slug = slugify(self.name)
 
