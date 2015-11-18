@@ -43,4 +43,5 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
     'ACTIONS': [],
     'CONVERTERS': [],
     'BROKER': 'rq',
+    'INCLUDE_API': True
 })

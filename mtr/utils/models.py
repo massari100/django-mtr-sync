@@ -85,6 +85,7 @@ class CreatedAtUpdatedAtMixin(models.Model):
 
     class Meta:
         abstract = True
+        ordering = ('created_at',)
 
 
 class PositionRootMixin(models.Model):
