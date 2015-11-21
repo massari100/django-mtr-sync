@@ -22,9 +22,6 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
     # default processor
     'DEFAULT_PROCESSOR': 'XlsxProcessor',
 
-    # register models at admin
-    'REGISTER_IN_ADMIN': True,
-
     # path for report file
     'FILE_PATH': get_buffer_file_path,
 
@@ -43,5 +40,9 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
     'ACTIONS': [],
     'CONVERTERS': [],
     'BROKER': 'rq',
-    'INCLUDE_API': True
+
+    'INCLUDE': {
+        'API': True,
+        'ADMIN': True,
+    }
 })

@@ -1,7 +1,7 @@
 from .settings import SETTINGS
 from django.conf.urls import patterns, url
 
-if SETTINGS['INCLUDE_API']:
+if SETTINGS['INCLUDE']['API']:
     urlpatterns = patterns(
         'mtr.sync.views',
     )
