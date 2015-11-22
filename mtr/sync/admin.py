@@ -1,5 +1,4 @@
 import os
-from functools import partial
 
 from django.utils import formats
 from django.utils.encoding import smart_text
@@ -8,7 +7,7 @@ from django import forms
 from django.core.urlresolvers import reverse
 
 from mtr.utils.helpers import themed
-from mtr.utils.admin import CopyActionMixin
+from mtr.utils.admin import CopyActionMixin, ObjectInlineMixin
 
 from .models import Report, Settings, Field, Message, Context, Sequence
 from .lib.helpers import model_attributes
@@ -75,17 +74,6 @@ class ReportAdmin(admin.ModelAdmin):
     latest_run_messages.short_description = _('Latest run messages')
     latest_run_messages.allow_tags = True
     latest_run_messages.admin_order_field = 'completed_at'
-
-
-class ObjectInlineMixin(object):
-
-    def get_formset(self, request, obj=None, **kwargs):
-        """Pass parent object to inline form"""
-
-        kwargs['formfield_callback'] = partial(
-            self.formfield_for_dbfield, request=request, obj=obj)
-        return super(ObjectInlineMixin, self) \
-            .get_formset(request, obj, **kwargs)
 
 
 class AttributeChoicesInlineMixin(object):

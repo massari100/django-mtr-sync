@@ -1,3 +1,5 @@
+from functools import partial
+
 from .translation import _
 
 
@@ -41,3 +43,14 @@ class CopyActionMixin(object):
                 request,
                 _('Copies successfully created'))
     copy_object.short_description = _('Create a copy of settings')
+
+
+class ObjectInlineMixin(object):
+
+    def get_formset(self, request, obj=None, **kwargs):
+        """Pass parent object to inline form"""
+
+        kwargs['formfield_callback'] = partial(
+            self.formfield_for_dbfield, request=request, obj=obj)
+        return super(ObjectInlineMixin, self) \
+            .get_formset(request, obj, **kwargs)
