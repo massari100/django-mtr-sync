@@ -12,13 +12,10 @@ from django.core.exceptions import PermissionDenied
 from .settings import THEMES
 
 
-THEMES = THEMES['mtr.sync']
-
-
-def themed(template, version_subdirectory=False):
+def themed(template, version_subdirectory=False, settings=THEMES['mtr.sync']):
     """Changing template themes by setting THEME_PATH and django version"""
 
-    path = os.path.join(THEMES['DIR'], THEMES['THEME'])
+    path = os.path.join(settings['DIR'], settings['THEME'])
 
     if version_subdirectory:
         path = os.path.join(path, django.get_version()[:3])

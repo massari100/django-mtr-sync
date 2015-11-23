@@ -7,5 +7,5 @@ def settings_global():
 
 def settings(request):
     return {'mtr': {'sync': {
-        'settings': lambda: settings_global()
+        'settings': settings_global
     }}}
