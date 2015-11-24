@@ -66,7 +66,7 @@ class PublishedMixin(models.Model):
     class Meta:
         abstract = True
         index_together = ('published_at', 'published_to', 'published')
-        ordering = ('published_at', 'published')
+        ordering = ('-published_at', 'published')
 
 
 class TreePublishedMixin(PublishedMixin):
@@ -85,7 +85,7 @@ class CreatedAtUpdatedAtMixin(models.Model):
 
     class Meta:
         abstract = True
-        ordering = ('created_at',)
+        ordering = ('-created_at',)
 
 
 class PositionRootMixin(models.Model):
