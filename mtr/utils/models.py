@@ -136,7 +136,7 @@ class SlugifyNameMixin(models.Model):
     SLUG_PREFIXED_PARENT = None
 
     slug = CharNullField(
-        _('slug'), max_length=300, db_index=True, blank=True)
+        _('slug'), max_length=300, db_index=True, blank=True, null=True)
     base_slug = models.CharField(
         _('base slug'), max_length=300, blank=True)
     name = models.CharField(_('name'), max_length=300, db_index=True)
@@ -174,6 +174,9 @@ class CategoryMixin(
         MPTTModel, SlugifyNameMixin,
         TreePublishedMixin, PositionRelatedMixin):
     POSITION_RELATED_FIELD = 'parent'
+
+    SLUG_PREFIXED_PARENT = 'parent'
+    SLUG_PREFIXED_DUBLICATE = True
 
     parent = TreeForeignKey(
         'self', null=True, blank=True,
