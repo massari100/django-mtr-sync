@@ -1,7 +1,11 @@
+import math
+
 from django import template
 from django.conf import settings
 from django.utils.formats import get_format
 from django.utils.translation import get_language
+
+from ..helpers import chunks as chunks_helper
 
 register = template.Library()
 
@@ -68,3 +72,19 @@ def get(item, key):
 @register.filter
 def in_group(user, group):
     return group in list(map(lambda g: g.name, user.groups.all()))
+
+
+@register.filter
+def chunks(l, m):
+    if l is None:
+        return l
+    return chunks_helper(l, m)
+
+
+@register.filter
+def chunks_by(l, m):
+    if l is None:
+        return l
+    if len(l) < 6:
+        return [l]
+    return chunks_helper(l, math.ceil(len(l) / m))
