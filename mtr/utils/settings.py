@@ -17,11 +17,9 @@ def getattr_with_prefix(prefix, name, default):
     return default
 
 THEMES = getattr_with_prefix('THEMES', 'SETTINGS', {
-    'mtr.sync': {
-        'DIR': 'mtr/sync',
-        'THEME': 'default',
-        'USE_IN_RENDER': True,
-    }
+    'DIR': 'themes',
+    'THEME': 'default',
+    'USE_IN_RENDER': True,
 })
 
 GETTEXT = getattr_with_prefix('GETTEXT', 'SETTINGS', {

@@ -6,7 +6,7 @@ from django.contrib import admin
 from django import forms
 from django.core.urlresolvers import reverse
 
-from mtr.utils.helpers import themed
+from mtr.utils.helpers import make_prefixed_themed
 from mtr.utils.admin import CopyActionMixin, ObjectInlineMixin
 
 from .models import Report, Settings, Field, Message, Context, Sequence
@@ -14,6 +14,9 @@ from .lib.helpers import model_attributes
 from .settings import SETTINGS
 from .translation import gettext_lazy as _
 from .forms import SettingsAdminForm
+
+
+themed = make_prefixed_themed('mtr/sync')
 
 
 class SyncAdminMixin(object):
