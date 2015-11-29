@@ -123,8 +123,6 @@ def create(model, model_attrs, related_attrs, context, **kwargs):
     add_after = {}
     fk_updated_attrs, m_updated_attrs = None, None
 
-    # TODO: refactor to one loop preparation and DOCS!
-
     instance_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'])
     fk_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_fk_|')
     m_filters = filter_fields(kwargs['raw_attrs'], kwargs['fields'], '|_m_|')
