@@ -170,7 +170,7 @@ class SlugifyNameMixin(models.Model):
         super().save(*args, **kwargs)
 
 
-class CategoryMixin(
+class TreeParentMixin(
         MPTTModel, SlugifyNameMixin,
         TreePublishedMixin, PositionRelatedMixin):
     POSITION_RELATED_FIELD = 'parent'
