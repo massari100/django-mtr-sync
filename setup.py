@@ -30,5 +30,5 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     keywords=['xlsx', 'import data', 'export data', 'csv', 'ods', 'xls'],
-    install_requires=['Django >= 1.6'],
+    install_requires=['Django>=1.6'],
 )
