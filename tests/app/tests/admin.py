@@ -19,7 +19,7 @@ class AdminMixinTest(TestCase):
         content = self.client.get(reverse('admin:app_person_changelist'))
 
         self.assertIn(
-            themed('admin/change_list.html', True),
+            themed('mtr/sync/admin/change_list.html', True),
             map(lambda t: t.name, content.templates))
 
         self.assertContains(content, 'Export')

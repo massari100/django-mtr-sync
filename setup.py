@@ -15,7 +15,7 @@ version = ".".join(str(v) for v in version_tuple)
 
 setup(
     name='django-mtr-sync',
-    packages=find_packages(),
+    packages=find_packages(exclude=('tests/', 'docs/')),
     version=version,
     author='mtr group',
     author_email='inboxmtr@gmail.com',
