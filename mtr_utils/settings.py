@@ -18,7 +18,7 @@ def getattr_with_prefix(prefix, name, default):
 
 THEMES = getattr_with_prefix('THEMES', 'SETTINGS', {
     'DIR': 'themes',
-    'THEME': 'default',
+    'THEME': 'suit',
     'USE_IN_RENDER': True,
 })
 
