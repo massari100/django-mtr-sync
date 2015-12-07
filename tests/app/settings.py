@@ -18,6 +18,7 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = (
     'modeltranslation',
+    'suit',
 
     'django.contrib.admin',
     'django.contrib.auth',
