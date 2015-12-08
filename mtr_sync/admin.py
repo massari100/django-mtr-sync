@@ -140,26 +140,26 @@ class SettingsAdmin(admin.ModelAdmin, CopyActionMixin):
 
         (_('Data settings'), {
             'fields': (
-                ('dataset', 'data_action'),
-                ('filter_dataset', 'filter_querystring')
+                'dataset', 'data_action',
+                'filter_dataset', 'filter_querystring'
             )
         }),
 
         (_('Worksheet settings'), {
             'fields': (
                 ('start_row', 'end_row'),
-                ('include_header', 'populate_from_file'),
+                'include_header', 'populate_from_file',
                 'worksheet',
             )
         }),
 
         (_('Language settings'), {
-            'fields': (('language', 'hide_translation_fields'),)
+            'fields': ('language', 'hide_translation_fields',)
         }),
 
         (_('Field settings'), {
             'fields': (
-                ('create_fields', 'include_related', 'edit_attributes'),
+                'create_fields', 'include_related', 'edit_attributes',
             )
         }),
     )

@@ -90,7 +90,7 @@ class CreatedAtUpdatedAtMixin(models.Model):
 
 class PositionRootMixin(models.Model):
     position = models.PositiveIntegerField(
-        _('position'), null=True, blank=True, default=0)
+        _('position'), null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -102,7 +102,7 @@ class PositionRootMixin(models.Model):
             self.position = self.__class__.objects \
                 .aggregate(models.Max('position'))['position__max']
             self.position = self.position + 1 \
-                if self.position is not None else 1
+                if self.position is not None else 0
 
         super(PositionRootMixin, self).save(*args, **kwargs)
 
@@ -111,7 +111,7 @@ class PositionRelatedMixin(models.Model):
     POSITION_RELATED_FIELD = None
 
     position = models.PositiveIntegerField(
-        _('position'), null=True, blank=True, default=0)
+        _('position'), null=True, blank=True)
 
     class Meta:
         abstract = True
@@ -126,7 +126,7 @@ class PositionRelatedMixin(models.Model):
                 self.POSITION_RELATED_FIELD: related_field}) \
                 .aggregate(models.Max('position'))['position__max']
             self.position = self.position + 1 \
-                if self.position is not None else 1
+                if self.position is not None else 0
 
         super(PositionRelatedMixin, self).save(*args, **kwargs)
 

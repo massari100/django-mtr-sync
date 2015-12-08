@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-29 23:42+0200\n"
+"POT-Creation-Date: 2015-12-08 23:45+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,55 +17,47 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 1.3\n"
 
-#: admin.py:64
+#: admin.py:69
 msgid "mtr.sync:Link to file"
 msgstr "Link to file"
 
-#: admin.py:72 admin.py:243
+#: admin.py:77 admin.py:227
 msgid "mtr.sync:Latest run messages"
 msgstr "Latest run messages"
 
-#: admin.py:146
+#: admin.py:141
 msgid "mtr.sync:Data settings"
 msgstr "Data settings"
 
-#: admin.py:153
+#: admin.py:148
 msgid "mtr.sync:Worksheet settings"
 msgstr "Worksheet settings"
 
-#: admin.py:161
+#: admin.py:156
 msgid "mtr.sync:Language settings"
 msgstr "Language settings"
 
-#: admin.py:165
+#: admin.py:160
 msgid "mtr.sync:Field settings"
 msgstr "Field settings"
 
-#: admin.py:209 admin.py:263
+#: admin.py:204 admin.py:247
 msgid "mtr.sync:Data synchronization started in background."
 msgstr "Data synchronization started in background."
 
-#: admin.py:210 admin.py:264
+#: admin.py:205 admin.py:248
 msgid "mtr.sync:Sync data"
 msgstr "Sync data"
 
-#: admin.py:220
-msgid "mtr.sync:Copies successfully created"
-msgstr "Copies successfully created"
-
-#: admin.py:221
-msgid "mtr.sync:Create a copy of settings"
-msgstr "Create a copy of settings"
-
-#: admin.py:230
+#: admin.py:214
 msgid "mtr.sync:No file provided"
 msgstr "No file provided"
 
-#: admin.py:231
+#: admin.py:215
 msgid "mtr.sync:Download latest report"
 msgstr "Download latest report"
 
-#: admin.py:280
+#: admin.py:264
 msgid "mtr.sync:Latest sync"
 msgstr "Latest sync"
 
@@ -77,11 +69,11 @@ msgstr "Data sync"
 msgid "mtr.sync:Create only"
 msgstr "Create only"
 
-#: lib/actions.py:175
+#: lib/actions.py:173
 msgid "mtr.sync:Create or update"
 msgstr "Create or update"
 
-#: lib/actions.py:181
+#: lib/actions.py:179
 msgid "mtr.sync:Update only"
 msgstr "Update only"
 
@@ -137,13 +129,17 @@ msgstr "Microsoft Excel 97/2000/XP/2003"
 msgid "mtr.sync:Microsoft Excel 2007/2010/2013 XML"
 msgstr "Microsoft Excel 2007/2010/2013 XML"
 
-#: models.py:53 templates/mtr/sync/default/object_tools.html:6
-#: templates/mtr/sync/grappelli/object_tools.html:6
+#: models.py:53
+#: templates/themes/default/base/mtr/sync/admin/object_tools.html:14
+#: templates/themes/grappelli/base/mtr/sync/admin/object_tools.html:14
+#: templates/themes/suit/base/mtr/sync/admin/object_tools.html:14
 msgid "mtr.sync:Export"
 msgstr "Export"
 
-#: models.py:54 templates/mtr/sync/default/object_tools.html:9
-#: templates/mtr/sync/grappelli/object_tools.html:9
+#: models.py:54
+#: templates/themes/default/base/mtr/sync/admin/object_tools.html:17
+#: templates/themes/grappelli/base/mtr/sync/admin/object_tools.html:17
+#: templates/themes/suit/base/mtr/sync/admin/object_tools.html:17
 msgid "mtr.sync:Import"
 msgstr "Import"
 
@@ -151,7 +147,7 @@ msgstr "Import"
 msgid "mtr.sync:action"
 msgstr "action"
 
-#: models.py:70 models.py:302 models.py:341 models.py:383
+#: models.py:70 models.py:287 models.py:326 models.py:368
 msgid "mtr.sync:name"
 msgstr "name"
 
@@ -187,7 +183,7 @@ msgstr "Choose database model if action need it"
 msgid "mtr.sync:created at"
 msgstr "created at"
 
-#: models.py:89 models.py:426
+#: models.py:89 models.py:411
 msgid "mtr.sync:updated at"
 msgstr "updated at"
 
@@ -229,7 +225,7 @@ msgstr "custom filename"
 msgid "mtr.sync:Custom filename for export"
 msgstr "Custom filename for export"
 
-#: models.py:112 models.py:304 models.py:417
+#: models.py:112 models.py:289 models.py:402
 msgid "mtr.sync:file"
 msgstr "file"
 
@@ -351,245 +347,274 @@ msgstr ""
 "If you want to add custom attributes for custom action, by checking this "
 "option, you can edit attributes"
 
-#: models.py:271 models.py:272 models.py:307 models.py:368 models.py:388
-#: models.py:429
+#: models.py:256 models.py:257 models.py:292 models.py:353 models.py:373
+#: models.py:414
 msgid "mtr.sync:settings"
 msgstr "settings"
 
-#: models.py:309
+#: models.py:294
 msgid "mtr.sync:description"
 msgstr "description"
 
-#: models.py:312
+#: models.py:297
 msgid "mtr.sync:sequence"
 msgstr "sequence"
 
-#: models.py:313
+#: models.py:298
 msgid "mtr.sync:sequences"
 msgstr "sequences"
 
-#: models.py:343
+#: models.py:328
 msgid "mtr.sync:model attribute"
 msgstr "model attribute"
 
-#: models.py:344
+#: models.py:329
 msgid "mtr.sync:skip"
 msgstr "skip"
 
-#: models.py:346
+#: models.py:331
 msgid "mtr.sync:update"
 msgstr "update"
 
-#: models.py:347
+#: models.py:332
 msgid "mtr.sync:find"
 msgstr "find"
 
-#: models.py:350
+#: models.py:335
 msgid "mtr.sync:set filter type"
 msgstr "set filter type"
 
-#: models.py:352
+#: models.py:337
 msgid "mtr.sync:Not create or update instance if empty cell"
 msgstr "Not create or update instance if empty cell"
 
-#: models.py:355
+#: models.py:340
 msgid "mtr.sync:set value"
 msgstr "set value"
 
-#: models.py:358
+#: models.py:343
 msgid "mtr.sync:find filter type"
 msgstr "find filter type"
 
-#: models.py:361
+#: models.py:346
 msgid "mtr.sync:find value"
 msgstr "find value"
 
-#: models.py:364
+#: models.py:349
 msgid "mtr.sync:converters"
 msgstr "converters"
 
-#: models.py:371
+#: models.py:356
 msgid "mtr.sync:field"
 msgstr "field"
 
-#: models.py:372
+#: models.py:357
 msgid "mtr.sync:fields"
 msgstr "fields"
 
-#: models.py:384
+#: models.py:369
 msgid "mtr.sync:cell"
 msgstr "cell"
 
-#: models.py:385
+#: models.py:370
 msgid "mtr.sync:value"
 msgstr "value"
 
-#: models.py:396
+#: models.py:381
 msgid "mtr.sync:context"
 msgstr "context"
 
-#: models.py:397
+#: models.py:382
 msgid "mtr.sync:contexts"
 msgstr "contexts"
 
-#: models.py:411 models.py:499
+#: models.py:396 models.py:484
 msgid "mtr.sync:Error"
 msgstr "Error"
 
-#: models.py:412
+#: models.py:397
 msgid "mtr.sync:Running"
 msgstr "Running"
 
-#: models.py:413
+#: models.py:398
 msgid "mtr.sync:Success"
 msgstr "Success"
 
-#: models.py:419
+#: models.py:404
 msgid "mtr.sync:status"
 msgstr "status"
 
-#: models.py:422
+#: models.py:407
 msgid "mtr.sync:started at"
 msgstr "started at"
 
-#: models.py:424
+#: models.py:409
 msgid "mtr.sync:completed at"
 msgstr "completed at"
 
-#: models.py:439
+#: models.py:424
 msgid "mtr.sync:report"
 msgstr "report"
 
-#: models.py:440
+#: models.py:425
 msgid "mtr.sync:reports"
 msgstr "reports"
 
-#: models.py:500
+#: models.py:485
 msgid "mtr.sync:Info"
 msgstr "Info"
 
-#: models.py:505 models.py:518
+#: models.py:490 models.py:503
 msgid "mtr.sync:message"
 msgstr "message"
 
-#: models.py:507
+#: models.py:492
 msgid "mtr.sync:step"
 msgstr "step"
 
-#: models.py:510
+#: models.py:495
 msgid "mtr.sync:input position"
 msgstr "input position"
 
-#: models.py:512
+#: models.py:497
 msgid "mtr.sync:input value"
 msgstr "input value"
 
-#: models.py:515
+#: models.py:500
 msgid "mtr.sync:type"
 msgstr "type"
 
-#: models.py:519
+#: models.py:504
 msgid "mtr.sync:messages"
 msgstr "messages"
 
-#: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:9
-#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:30
-#: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:9
-#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:30
-#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:10
-#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:33
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/stacked.html:9
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:30
+#: templates/themes/default/1.6/mtr/sync/admin/edit_inline/stacked.html:9
+#: templates/themes/default/1.6/mtr/sync/admin/edit_inline/tabular.html:30
+#: templates/themes/default/1.7/mtr/sync/admin/edit_inline/stacked.html:9
+#: templates/themes/default/1.7/mtr/sync/admin/edit_inline/tabular.html:30
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:10
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:33
+#: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/stacked.html:9
+#: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/tabular.html:30
+#: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/stacked.html:9
+#: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/tabular.html:30
+#: templates/themes/suit/1.7/mtr/sync/admin/edit_inline/stacked.html:9
+#: templates/themes/suit/1.7/mtr/sync/admin/edit_inline/tabular.html:30
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/stacked.html:10
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/tabular.html:33
 msgid "mtr.sync:View on site"
 msgstr "View on site"
 
-#: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:26
-#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:76
-#: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:26
-#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:78
-#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:27
-#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:81
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/stacked.html:26
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:76
+#: templates/themes/default/1.6/mtr/sync/admin/edit_inline/stacked.html:26
+#: templates/themes/default/1.6/mtr/sync/admin/edit_inline/tabular.html:76
+#: templates/themes/default/1.7/mtr/sync/admin/edit_inline/stacked.html:26
+#: templates/themes/default/1.7/mtr/sync/admin/edit_inline/tabular.html:78
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:27
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:81
+#: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/stacked.html:26
+#: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/tabular.html:76
+#: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/stacked.html:26
+#: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/tabular.html:76
+#: templates/themes/suit/1.7/mtr/sync/admin/edit_inline/stacked.html:26
+#: templates/themes/suit/1.7/mtr/sync/admin/edit_inline/tabular.html:78
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/stacked.html:27
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/tabular.html:81
 msgid "mtr.sync:Remove"
 msgstr "Remove"
 
-#: templates/mtr/sync/default/1.6/admin/edit_inline/stacked.html:27
-#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:75
-#: templates/mtr/sync/default/1.7/admin/edit_inline/stacked.html:27
-#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:77
-#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:28
-#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:80
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/stacked.html:27
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:75
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:52
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:89
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:52
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:89
+#: templates/themes/default/1.6/mtr/sync/admin/edit_inline/stacked.html:27
+#: templates/themes/default/1.6/mtr/sync/admin/edit_inline/tabular.html:75
+#: templates/themes/default/1.7/mtr/sync/admin/edit_inline/stacked.html:27
+#: templates/themes/default/1.7/mtr/sync/admin/edit_inline/tabular.html:77
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:28
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:80
+#: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/stacked.html:27
+#: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/tabular.html:75
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:52
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/tabular.html:89
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:52
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/tabular.html:89
+#: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/stacked.html:27
+#: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/tabular.html:75
+#: templates/themes/suit/1.7/mtr/sync/admin/edit_inline/stacked.html:27
+#: templates/themes/suit/1.7/mtr/sync/admin/edit_inline/tabular.html:77
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/stacked.html:28
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/tabular.html:80
 #, python-format
 msgid "mtr.sync:Add another %(verbose_name)s"
 msgstr "Add another %(verbose_name)s"
 
-#: templates/mtr/sync/default/1.6/admin/edit_inline/tabular.html:17
-#: templates/mtr/sync/default/1.7/admin/edit_inline/tabular.html:17
-#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:17
-#: templates/mtr/sync/grappelli/1.6/admin/edit_inline/tabular.html:17
+#: templates/themes/default/1.6/mtr/sync/admin/edit_inline/tabular.html:17
+#: templates/themes/default/1.7/mtr/sync/admin/edit_inline/tabular.html:17
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:17
+#: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/tabular.html:17
+#: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/tabular.html:17
+#: templates/themes/suit/1.7/mtr/sync/admin/edit_inline/tabular.html:17
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/tabular.html:17
 msgid "mtr.sync:Delete?"
 msgstr "Delete?"
 
-#: templates/mtr/sync/default/1.8/admin/edit_inline/stacked.html:8
-#: templates/mtr/sync/default/1.8/admin/edit_inline/tabular.html:31
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:8
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:31
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/stacked.html:8
+#: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/tabular.html:31
 msgid "mtr.sync:Change"
 msgstr "Change"
 
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:8
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:8
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:8
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:8
 msgid "mtr.sync:Open All Items"
 msgstr "Open All Items"
 
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:9
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:9
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:9
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:9
 msgid "mtr.sync:Close All Items"
 msgstr "Close All Items"
 
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:10
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:54
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:91
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:10
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:54
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:91
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:10
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:54
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/tabular.html:91
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:10
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:54
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/tabular.html:91
 msgid "mtr.sync:Add Item"
 msgstr "Add Item"
 
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:23
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:64
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:23
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:64
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:23
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/tabular.html:64
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:23
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/tabular.html:64
 msgid "mtr.sync:View on Site"
 msgstr "View on Site"
 
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:25
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:66
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:25
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:66
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:25
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/tabular.html:66
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:25
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/tabular.html:66
 msgid "mtr.sync:Move Item"
 msgstr "Move Item"
 
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:29
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/stacked.html:34
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:70
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:75
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:29
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/stacked.html:34
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:70
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:75
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:29
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:34
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/tabular.html:70
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/tabular.html:75
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:29
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/stacked.html:34
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/tabular.html:70
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/tabular.html:75
 msgid "mtr.sync:Delete Item"
 msgstr "Delete Item"
 
-#: templates/mtr/sync/grappelli/1.7/admin/edit_inline/tabular.html:9
-#: templates/mtr/sync/grappelli/1.8/admin/edit_inline/tabular.html:9
+#: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/tabular.html:9
+#: templates/themes/grappelli/1.8/mtr/sync/admin/edit_inline/tabular.html:9
 msgid "mtr.sync:Add Another"
 msgstr "Add Another"
+
+#~ msgid "Copies successfully created"
+#~ msgstr "Copies successfully created"
+
+#~ msgid "Create a copy of settings"
+#~ msgstr "Create a copy of settings"
 
 #~ msgid "replacer category"
 #~ msgstr "replacer category"
