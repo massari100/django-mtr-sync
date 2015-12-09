@@ -207,7 +207,7 @@ class SettingsAdmin(admin.ModelAdmin, CopyActionMixin):
     def latest_download(self, obj):
         report = obj.reports.first()
         if report and report.status == report.SUCCESS \
-                and report.action == report.EXPORT:
+                and report.action == report.EXPORT and report.buffer_file:
             return smart_text('<a href="{}">{}</a>').format(
                 report.buffer_file.url,
                 os.path.basename(report.buffer_file.name))
