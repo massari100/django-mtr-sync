@@ -1,5 +1,6 @@
 {% load cycle from future %}
 {% load prefixed_i18n grp_tags %}
+{% set_i18n_prefix 'mtr.sync' %}
 
 <!-- group -->
 <div class="grp-group grp-tabular{% if inline_admin_formset.opts.classes %} {{ inline_admin_formset.opts.classes|join:" " }}{% endif %}"

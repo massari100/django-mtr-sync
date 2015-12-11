@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-12-08 23:45+0200\n"
+"POT-Creation-Date: 2015-12-11 18:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -492,8 +492,8 @@ msgstr "messages"
 #: templates/themes/default/1.6/mtr/sync/admin/edit_inline/tabular.html:30
 #: templates/themes/default/1.7/mtr/sync/admin/edit_inline/stacked.html:9
 #: templates/themes/default/1.7/mtr/sync/admin/edit_inline/tabular.html:30
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:10
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:33
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:11
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:34
 #: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/stacked.html:9
 #: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/tabular.html:30
 #: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/stacked.html:9
@@ -509,8 +509,8 @@ msgstr "View on site"
 #: templates/themes/default/1.6/mtr/sync/admin/edit_inline/tabular.html:76
 #: templates/themes/default/1.7/mtr/sync/admin/edit_inline/stacked.html:26
 #: templates/themes/default/1.7/mtr/sync/admin/edit_inline/tabular.html:78
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:27
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:81
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:28
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:82
 #: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/stacked.html:26
 #: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/tabular.html:76
 #: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/stacked.html:26
@@ -526,8 +526,8 @@ msgstr "Remove"
 #: templates/themes/default/1.6/mtr/sync/admin/edit_inline/tabular.html:75
 #: templates/themes/default/1.7/mtr/sync/admin/edit_inline/stacked.html:27
 #: templates/themes/default/1.7/mtr/sync/admin/edit_inline/tabular.html:77
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:28
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:80
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:29
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:81
 #: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/stacked.html:27
 #: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/tabular.html:75
 #: templates/themes/grappelli/1.7/mtr/sync/admin/edit_inline/stacked.html:52
@@ -546,7 +546,7 @@ msgstr "Add another %(verbose_name)s"
 
 #: templates/themes/default/1.6/mtr/sync/admin/edit_inline/tabular.html:17
 #: templates/themes/default/1.7/mtr/sync/admin/edit_inline/tabular.html:17
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:17
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:18
 #: templates/themes/grappelli/1.6/mtr/sync/admin/edit_inline/tabular.html:17
 #: templates/themes/suit/1.6/mtr/sync/admin/edit_inline/tabular.html:17
 #: templates/themes/suit/1.7/mtr/sync/admin/edit_inline/tabular.html:17
@@ -554,8 +554,8 @@ msgstr "Add another %(verbose_name)s"
 msgid "mtr.sync:Delete?"
 msgstr "Delete?"
 
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:8
-#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:31
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/stacked.html:9
+#: templates/themes/default/1.8/mtr/sync/admin/edit_inline/tabular.html:32
 #: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/stacked.html:8
 #: templates/themes/suit/1.8/mtr/sync/admin/edit_inline/tabular.html:31
 msgid "mtr.sync:Change"
