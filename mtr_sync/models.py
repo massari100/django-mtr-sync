@@ -6,8 +6,7 @@ from django.conf import settings as django_settings
 
 from .settings import SETTINGS, strip_media_root
 from .translation import gettext_lazy as _
-from .lib.manager import manager
-from .lib.helpers import model_attributes, model_choices
+from .lib.helpers import model_attributes
 from .lib.signals import export_started, export_completed, \
     import_started, import_completed, error_raised
 from .lib.exceptions import ErrorChoicesMixin
@@ -55,7 +54,7 @@ class ActionsMixin(models.Model):
     )
 
     action = models.PositiveSmallIntegerField(
-        _('action'), choices=ACTION_CHOICES, db_index=True)
+        _('action'), choices=ACTION_CHOICES, db_index=True, default=EXPORT)
 
     class Meta:
         abstract = True
@@ -79,8 +78,7 @@ class Settings(ActionsMixin):
         help_text=_("Reading or writing end index (including itself)"))
 
     model = models.CharField(
-        _('model'), max_length=255,
-        choices=model_choices(), blank=True,
+        _('model'), max_length=255, blank=True,
         help_text=_("Choose database model if action need it"))
 
     created_at = models.DateTimeField(
@@ -93,7 +91,6 @@ class Settings(ActionsMixin):
 
     processor = models.CharField(
         _('format'), max_length=255,
-        choices=manager.processor_choices(),
         default=SETTINGS['DEFAULT_PROCESSOR'],
         help_text=_("Choose file type"))
     worksheet = models.CharField(
@@ -114,13 +111,12 @@ class Settings(ActionsMixin):
 
     dataset = models.CharField(
         _('dataset'), max_length=255, blank=True,
-        choices=manager.dataset_choices(),
         help_text=_(
             "Custom registered dataset if you import or export"
             " data from different source, for example network or ftp server"))
     data_action = models.CharField(
         _('data action'), blank=True,
-        max_length=255, choices=manager.action_choices(),
+        max_length=255,
         help_text=_(
             "What will be done with data, for example,"
             " create or some custom opeartion eg. download image from server"
@@ -167,6 +163,8 @@ class Settings(ActionsMixin):
     def fields_with_converters(self):
         """Return iterator of fields with converters"""
 
+        from .lib.manager import manager
+
         fields = self.fields.exclude(skip=True)
         for field in fields:
             field.ordered_converters = []
@@ -179,6 +177,8 @@ class Settings(ActionsMixin):
 
     def populate_from_buffer_file(self):
         # TODO: move set dimensions in processor open, create methods
+
+        from .lib.manager import manager
 
         processor = manager.make_processor(self, from_extension=True)
         max_row, max_col = processor.open(self.buffer_file.path)
@@ -227,6 +227,8 @@ class Settings(ActionsMixin):
 
     def run(self):
         """Run import or export task from celery"""
+
+        from .lib.manager import manager
 
         # TODO: move to tasks
 
@@ -346,8 +348,7 @@ class Field(PositionRelatedMixin):
         _('find value'), max_length=255, blank=True)
 
     converters = models.CharField(
-        _('converters'), max_length=255, blank=True,
-        choices=manager.converter_choices())
+        _('converters'), max_length=255, blank=True)
 
     settings = models.ForeignKey(
         Settings, verbose_name=_('settings'), related_name='fields')

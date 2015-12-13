@@ -13,7 +13,7 @@ from .models import Report, Settings, Field, Message, Context, Sequence
 from .lib.helpers import model_attributes
 from .settings import SETTINGS
 from .translation import gettext_lazy as _
-from .forms import SettingsAdminForm
+from .forms import SettingsAdminForm, FieldInlineAdminForm
 
 
 themed = make_prefixed_themed('mtr/sync')
@@ -102,6 +102,7 @@ class AttributeChoicesInlineMixin(object):
 class FieldInline(
         ObjectInlineMixin, AttributeChoicesInlineMixin, admin.StackedInline):
     model = Field
+    form = FieldInlineAdminForm
     extra = 0
     fields = (
         ('position', 'name', 'attribute'),
@@ -187,8 +188,8 @@ class SettingsAdmin(admin.ModelAdmin, CopyActionMixin):
         """Show inlines only in saved models"""
 
         if obj:
-            inlines = super(
-                SettingsAdmin, self).get_inline_instances(request, obj)
+            inlines = super(SettingsAdmin, self) \
+                .get_inline_instances(request, obj)
             return inlines
         else:
             return []
