@@ -25,3 +25,8 @@ THEMES = getattr_with_prefix('THEMES', 'SETTINGS', {
 GETTEXT = getattr_with_prefix('GETTEXT', 'SETTINGS', {
     'FORMAT': '{}:{}',
 })
+
+DOMAIN_URL = getattr(settings, 'DOMAIN_URL', 'http://localhost/')
+if not DOMAIN_URL.endswith('/'):
+    DOMAIN_URL = '{}/'.format(DOMAIN_URL)
+MEDIA_URL = settings.MEDIA_URL

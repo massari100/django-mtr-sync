@@ -7,9 +7,10 @@ import django
 
 from django.db import models
 from django.shortcuts import render
+from django.utils.six.moves.urllib.parse import urljoin
 from django.core.exceptions import PermissionDenied
 
-from .settings import THEMES
+from .settings import THEMES, MEDIA_URL, DOMAIN_URL
 
 
 def themed(template, version_subdirectory=False, settings=THEMES):
@@ -146,3 +147,15 @@ def find_dublicates(model, fields):
         .annotate(max_id=models.Max('id'), count_id=models.Count('id')) \
         .filter(count_id__gt=1)
     return model.objects.filter(id__in=map(lambda d: d['max_id'], duplicates))
+
+
+def url_with_domain(path):
+    """Return url with domain in settings for inner functions"""
+
+    return urljoin(DOMAIN_URL, path.lstrip('/'))
+
+
+def url_with_media(path):
+    """Return url with domain in settings for inner functions"""
+
+    return urljoin(MEDIA_URL, path.lstrip('/'))
