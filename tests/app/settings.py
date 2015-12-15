@@ -56,7 +56,8 @@ else:
     )
     SOUTH_MIGRATION_MODULES = {
         'app': 'app.south_migrations',
-        'sync': 'mtr.sync.south_migrations'
+        'sync': 'mtr.sync.south_migrations',
+        'utils': 'mtr.utils.south_migrations',
     }
 
 MIDDLEWARE_CLASSES += (

@@ -149,7 +149,7 @@ msgstr "Импорт"
 
 #: models.py:58
 msgid "mtr.sync:action"
-msgstr "жействие"
+msgstr "действие"
 
 #: models.py:70 models.py:302 models.py:341 models.py:383
 msgid "mtr.sync:name"
