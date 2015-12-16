@@ -433,7 +433,7 @@ msgstr "статус"
 
 #: models.py:422
 msgid "mtr.sync:started at"
-msgstr "время начало"
+msgstr "время начала"
 
 #: models.py:424
 msgid "mtr.sync:completed at"
