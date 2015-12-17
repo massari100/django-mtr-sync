@@ -4,13 +4,12 @@ from django.utils import formats
 from django.utils.encoding import smart_text
 from django.contrib import admin
 from django import forms
-from django.core.urlresolvers import reverse
 
 from mtr.utils.helpers import make_prefixed_themed
 from mtr.utils.admin import CopyActionMixin, ObjectInlineMixin
 
 from .models import Report, Settings, Field, Message, Context, Sequence
-from .lib.helpers import model_attributes
+from .lib.helpers import model_attributes, reverse
 from .settings import SETTINGS
 from .translation import gettext_lazy as _
 from .forms import SettingsAdminForm, FieldInlineAdminForm
@@ -70,7 +69,7 @@ class ReportAdmin(admin.ModelAdmin):
 
     def latest_run_messages(self, obj):
         return smart_text('<a href="{}{}">{} - {}</a>').format(
-            reverse('admin:mtr_sync_message_changelist'),
+            reverse('message_changelist'),
             '?report__id__exact={}'.format(obj.id),
             formats.localize(obj.started_at),
             obj.get_status_display())
@@ -220,7 +219,7 @@ class SettingsAdmin(admin.ModelAdmin, CopyActionMixin):
         report = obj.reports.first()
         if report:
             return smart_text('<a href="{}{}">{} - {}</a>').format(
-                reverse('admin:mtr_sync_message_changelist'),
+                reverse('message_changelist'),
                 '?report__id__exact={}'.format(report.id),
                 formats.localize(report.started_at),
                 report.get_status_display())
@@ -257,7 +256,7 @@ class SequenceAdmin(admin.ModelAdmin):
         report = obj.settings.first().reports.first()
         if report:
             return smart_text('<a href="{}{}">{} - {}</a>').format(
-                reverse('admin:mtr_sync_message_changelist'),
+                reverse('message_changelist'),
                 '?report__id__exact={}'.format(report.id),
                 formats.localize(report.started_at),
                 report.get_status_display())
