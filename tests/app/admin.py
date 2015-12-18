@@ -2,7 +2,7 @@ from django.contrib import admin
 
 from modeltranslation.admin import TabbedTranslationAdmin
 
-from mtr.sync.admin import SyncAdminMixin, SyncStackedInlineMixin
+from mtr.sync.admin import SyncAdminMixin, SyncTabularInlineMixin
 
 from .models import Person, Office, Tag
 
@@ -20,7 +20,7 @@ class PersonAdmin(SyncAdminMixin, TabbedTranslationAdmin):
     copy_100.short_description = 'Copy 100 objects with random data'
 
 
-class PersonStackedInline(SyncStackedInlineMixin, admin.StackedInline):
+class PersonStackedInline(SyncTabularInlineMixin, admin.TabularInline):
     model = Person
     extra = 0
 
