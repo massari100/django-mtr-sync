@@ -90,7 +90,7 @@ class CreatedAtUpdatedAtMixin(models.Model):
 
 class PositionRootMixin(models.Model):
     position = models.PositiveIntegerField(
-        _('position'), null=True, blank=True)
+        _('position'), null=True, blank=True, default=0)
 
     class Meta:
         abstract = True
@@ -98,11 +98,11 @@ class PositionRootMixin(models.Model):
         ordering = ('position',)
 
     def save(self, *args, **kwargs):
-        if self.position is None:
+        print(self.position)
+        if not self.position:
             self.position = self.__class__.objects \
                 .aggregate(models.Max('position'))['position__max']
-            self.position = self.position + 1 \
-                if self.position is not None else 0
+            self.position = self.position + 1 if self.position else 1
 
         super(PositionRootMixin, self).save(*args, **kwargs)
 
@@ -111,7 +111,7 @@ class PositionRelatedMixin(models.Model):
     POSITION_RELATED_FIELD = None
 
     position = models.PositiveIntegerField(
-        _('position'), null=True, blank=True)
+        _('position'), null=True, blank=True, default=0)
 
     class Meta:
         abstract = True
@@ -121,12 +121,14 @@ class PositionRelatedMixin(models.Model):
     def save(self, *args, **kwargs):
         related_field = getattr(self, self.POSITION_RELATED_FIELD, None)
 
-        if self.position is None and related_field is not None:
-            self.position = self.__class__.objects.filter(**{
-                self.POSITION_RELATED_FIELD: related_field}) \
-                .aggregate(models.Max('position'))['position__max']
-            self.position = self.position + 1 \
-                if self.position is not None else 0
+        if not self.position:
+            self.position = self.__class__.objects
+            if related_field is not None:
+                self.position = self.position.filter(**{
+                    self.POSITION_RELATED_FIELD: related_field})
+            self.position = self.position.aggregate(
+                models.Max('position'))['position__max']
+            self.position = self.position + 1 if self.position else 1
 
         super(PositionRelatedMixin, self).save(*args, **kwargs)
 
