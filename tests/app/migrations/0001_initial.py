@@ -34,8 +34,8 @@ class Migration(migrations.Migration):
                 ('surname_en', models.CharField(verbose_name='surname', null=True, max_length=255)),
                 ('gender', models.CharField(verbose_name='gender', choices=[('M', 'Male'), ('F', 'Female')], max_length=255)),
                 ('security_level', models.PositiveIntegerField(verbose_name='security level')),
-                ('some_excluded_field', models.DecimalField(verbose_name='some decimal', decimal_places=3, max_digits=10, null=True)),
-                ('office', models.ForeignKey(null=True, blank=True, to='app.Office')),
+                ('some_excluded_field', models.DecimalField(verbose_name='some decimal', max_digits=10, decimal_places=3, null=True)),
+                ('office', models.ForeignKey(to='app.Office', blank=True, null=True)),
             ],
             options={
                 'verbose_name': 'person',
