@@ -5,10 +5,15 @@ Installation
 .. contents::
    :depth: 3
 
+Stable version
+==============
+
+Use pip to get latest stable version, just type as usual `pip install django-mtr-sync` or add to your `requirements.txt` file. By default it will use `openpyxl` for `xlsx` format. You can change this by changing `PROCESSORS` and `DEFAULT_PROCESSOR`.
+
 Development version
 ===================
 
-Alternatively, you can get the latest source from our `git`_ repository::
+You can get it the latest source from our `git`_ repository::
 
    git clone git://github.com/mtrgroup/django-mtr-sync.git django-mtr-sync
 
@@ -21,7 +26,7 @@ opening a Python interpreter and entering the following commands::
 
    >>> import mtr.sync
    >>> mtr.sync.VERSION
-   (0, 1, '+dev')
+   (0, 1)
 
 When you want to update your copy of the source code, run ``git pull``
 from within the ``django-mtr-sync`` directory.
