@@ -7,7 +7,7 @@ import django
 from fabric.api import local, task, lcd, settings
 from babel.messages.pofile import read_po, write_po
 
-APPS = ['mtr.sync', 'mtr.utils']
+APPS = []
 PROJECT_APPS = ['app']
 PROJECT_DIR = 'tests'
 DOCS_DIR = 'docs'
