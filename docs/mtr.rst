@@ -7,7 +7,6 @@ Subpackages
 .. toctree::
 
     mtr.sync
-    mtr.utils
 
 Module contents
 ---------------

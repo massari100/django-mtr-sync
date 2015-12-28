@@ -22,3 +22,5 @@ django-rq
 
 git+git://github.com/mtrgroup/django-pure-pagination#egg=django-pure-pagination
 python-slugify
+
+git+git://github.com/mtrgroup/django-mtr-utils#egg=django-mtr-utils

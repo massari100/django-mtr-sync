@@ -9,6 +9,7 @@ Subpackages
     mtr.sync.lib
     mtr.sync.migrations
     mtr.sync.south_migrations
+    mtr.sync.templates
 
 Submodules
 ----------
@@ -17,6 +18,14 @@ mtr.sync.admin module
 ---------------------
 
 .. automodule:: mtr.sync.admin
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+mtr.sync.api module
+-------------------
+
+.. automodule:: mtr.sync.api
     :members:
     :undoc-members:
     :show-inheritance:
@@ -73,6 +82,14 @@ mtr.sync.translation module
 ---------------------------
 
 .. automodule:: mtr.sync.translation
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+mtr.sync.urls module
+--------------------
+
+.. automodule:: mtr.sync.urls
     :members:
     :undoc-members:
     :show-inheritance:
