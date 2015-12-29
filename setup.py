@@ -34,5 +34,5 @@ setup(
     ),
     keywords=(
         'django', 'xlsx', 'import data', 'export data', 'csv', 'ods', 'xls'),
-    install_requires=['django>=1.6', 'django-mtr-utils'],
+    install_requires=['django>=1.6'],
 )
