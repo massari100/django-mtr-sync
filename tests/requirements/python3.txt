@@ -19,6 +19,7 @@ lxml
 sphinx_rtd_theme
 unicodecsv
 django-rq
+django-suit
 
 git+git://github.com/mtrgroup/django-pure-pagination#egg=django-pure-pagination
 python-slugify
