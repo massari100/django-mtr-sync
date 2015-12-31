@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 import os
 
-from mtr.sync import VERSION, get_version
+from mtr.sync import get_version
 
 
 def read(fname):
@@ -10,7 +10,6 @@ def read(fname):
 
 README = read('README.md')
 
-version_tuple = VERSION
 version = get_version()
 
 setup(
@@ -20,7 +19,7 @@ setup(
     author='mtr group',
     author_email='inboxmtr@gmail.com',
     url='https://github.com/mtrgroup/django-mtr-sync',
-    description="",
+    description=README,
     long_description=README,
     namespace_packages=('mtr',),
     classifiers=(
@@ -34,5 +33,5 @@ setup(
     ),
     keywords=(
         'django', 'xlsx', 'import data', 'export data', 'csv', 'ods', 'xls'),
-    install_requires=['django>=1.6'],
+    install_requires=('django>=1.6',),
 )
