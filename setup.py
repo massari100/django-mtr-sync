@@ -23,6 +23,7 @@ setup(
     long_description=README,
     namespace_packages=('mtr',),
     zip_safe=False,
+    include_package_data=True,
     classifiers=(
         'Framework :: Django',
         'License :: OSI Approved :: MIT License',

@@ -76,7 +76,7 @@ if django.get_version() >= '1.8':
         'django.template.context_processors.request',
         "django.contrib.messages.context_processors.messages",
 
-        'mtr.sync.templates.context.settings'
+        'mtr.sync.context_processors.settings'
     )
 else:
     TEMPLATE_CONTEXT_PROCESSORS = (
@@ -89,7 +89,7 @@ else:
         'django.core.context_processors.request',
         "django.contrib.messages.context_processors.messages",
 
-        'mtr.sync.templates.context.settings'
+        'mtr.sync.context_processors.settings'
     )
 
 ROOT_URLCONF = 'app.urls'
