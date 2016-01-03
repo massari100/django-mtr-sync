@@ -1,4 +1,4 @@
-from ..models import Settings
+from .models import Settings
 
 
 def settings_global():
