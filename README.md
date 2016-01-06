@@ -44,7 +44,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Multilingual (i18n)
 - Template integration with django-grapelli
 - Action handler for more flexebility (for example not create model but generate source code for it, prepare data for model)
-- Supports: Django 1.6-1.8+ Python 2.7, 3.3+
+- Supports: Django 1.6-1.9 Python 2.7, 3.3+
 
 ## Working on
 - Documentation

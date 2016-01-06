@@ -1,5 +1,5 @@
-django<1.9
-django-modeltranslation
+django
+git+https://github.com/deschler/django-modeltranslation#egg=django-modeltranslation
 django-debug-toolbar
 django-mptt
 djangorestframework
@@ -16,6 +16,7 @@ virtualenvwrapper
 coverage
 sphinx
 lxml
+psycopg2
 sphinx_rtd_theme
 unicodecsv
 django-rq
