@@ -16,7 +16,6 @@ virtualenvwrapper
 coverage
 sphinx
 lxml
-psycopg2
 sphinx_rtd_theme
 unicodecsv
 django-rq
