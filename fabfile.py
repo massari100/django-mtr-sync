@@ -1,33 +1,18 @@
 import os
 import sys
-import re
 
 import django
 
 from fabric.api import local, task, lcd, settings
 from babel.messages.pofile import read_po, write_po
 
+from mtr.fabric.local import clear, subl
+from mtr.utils.helpers import lreplace
+
 APPS = []
 PROJECT_APPS = ['app']
 PROJECT_DIR = 'tests'
 DOCS_DIR = 'docs'
-
-
-def lreplace(pattern, sub, string):
-    """Replaces 'pattern' in 'string' with 'sub'
-    if 'pattern' starts 'string'."""
-
-    return re.sub('^%s' % pattern, sub, string)
-
-
-@task
-def clear():
-    """Delete unnecessary and cached files"""
-
-    local(
-        "find . -name '~*' -or -name '*.pyo' -or -name '*.pyc' "
-        "-or -name '__pycache__' -or -name 'Thubms.db' "
-        "| xargs -I {} rm -vrf '{}'")
 
 
 @task
