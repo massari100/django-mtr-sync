@@ -1,14 +1,17 @@
+# base
 django<1.7
+sout
+
+# for test app
 django-modeltranslation
 django-debug-toolbar
 django-mptt
 django-pure-pagination
 djangorestframework
-
+celery
 fabric
 pytz
 ipython
-celery
 hg+https://bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
 xlwt-future
 xlrd
@@ -19,7 +22,6 @@ sphinx
 lxml
 sphinx_rtd_theme
 unicodecsv
-south
 django-rq
 
 python-slugify
