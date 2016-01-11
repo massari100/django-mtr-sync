@@ -1,27 +1,28 @@
 # base
+south
 django<1.7
-sout
 
-# for test app
+# for development
+tox
 django-modeltranslation
 django-debug-toolbar
-django-mptt
-django-pure-pagination
-djangorestframework
-celery
-fabric
-pytz
-ipython
-hg+https://bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
-xlwt-future
-xlrd
-ezodf
 virtualenvwrapper
 coverage
 sphinx
-lxml
 sphinx_rtd_theme
-unicodecsv
+fabric
+pytz
+ipython
+celery
 django-rq
+django-suit
 
-python-slugify
+# dependencies
+git+git://github.com/mtrgroup/django-mtr-utils#egg=django-mtr-utils
+hg+https://bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
+xlwt-future
+unicodecsv
+lxml
+xlrd
+ezodf
+djangorestframework

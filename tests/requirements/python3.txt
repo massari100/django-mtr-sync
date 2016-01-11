@@ -1,27 +1,26 @@
+# base
 django
+
+# for development
+tox
 git+https://github.com/deschler/django-modeltranslation#egg=django-modeltranslation
 django-debug-toolbar
-django-mptt
-djangorestframework
-
-pytz
-git+https://github.com/pashinin/fabric@6783d2f7ad7a449c97cd1ee0df9a2dbc29422fce#egg=fabric
-ipython
-celery
-hg+https://bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
-xlwt-future
-xlrd
-ezodf
 virtualenvwrapper
 coverage
 sphinx
-lxml
 sphinx_rtd_theme
-unicodecsv
+git+https://github.com/pashinin/fabric@6783d2f7ad7a449c97cd1ee0df9a2dbc29422fce#egg=fabric
+pytz
+ipython
+celery
 django-rq
 django-suit
 
-git+git://github.com/mtrgroup/django-pure-pagination#egg=django-pure-pagination
-python-slugify
-
+# dependencies
 git+git://github.com/mtrgroup/django-mtr-utils#egg=django-mtr-utils
+hg+https://bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
+xlwt-future
+lxml
+xlrd
+ezodf
+djangorestframework
