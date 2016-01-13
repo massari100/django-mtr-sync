@@ -61,7 +61,3 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Periodic import, export for automatic updates
 - Video tutorial how to set up package and use it
 - Plugins for editors ckeditor and redactor — insert file from already exported files
-
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/mtrgroup/django-mtr-sync/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-

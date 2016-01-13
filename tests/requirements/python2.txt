@@ -1,10 +1,9 @@
 # base
 south
-django<1.7
 
 # for development
 tox
-django-modeltranslation
+git+git://github.com/deschler/django-modeltranslation#egg=django-modeltranslation
 django-debug-toolbar
 virtualenvwrapper
 coverage
