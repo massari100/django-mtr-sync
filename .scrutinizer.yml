@@ -1,12 +1,11 @@
 build:
     environment:
-        python: '3.5.0'
+        python: '3.4.1'
     dependencies:
         before:
-            - 'sudo apt-get install -y mercurial'
-            - 'pip install -r tests/requirements/python3.txt'
+            - 'sudo apt-get install -y mercurial python-dev'
         override:
-            - 'python setup.py develop'
+            - true
     tests:
         override:
             -
