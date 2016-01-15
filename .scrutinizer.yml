@@ -4,7 +4,7 @@ build:
     dependencies:
         before:
             - 'sudo apt-get install -y mercurial python-dev'
-            - 'sudo pip3 install tox'
+            - 'sudo pip install tox'
         override:
             - true
     tests:
