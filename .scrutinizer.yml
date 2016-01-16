@@ -10,7 +10,7 @@ build:
     tests:
         override:
             -
-                command: 'tox'
+                command: 'fab test:coverage'
                 coverage:
                     file: '.coverage'
                     format: 'py-cc'
