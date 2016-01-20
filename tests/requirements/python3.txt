@@ -1,3 +1,5 @@
+django
+
 # for development
 tox
 git+https://github.com/deschler/django-modeltranslation#egg=django-modeltranslation
