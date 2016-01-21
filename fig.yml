@@ -1,7 +1,0 @@
-app:
-  build: .
-  command: fab run
-  volumes:
-    - .:/code
-  ports:
-    - "8000:8000"
