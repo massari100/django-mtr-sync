@@ -26,3 +26,4 @@ lxml
 xlrd
 ezodf
 djangorestframework
+django-mptt<0.8
