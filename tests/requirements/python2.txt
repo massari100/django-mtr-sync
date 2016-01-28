@@ -5,7 +5,7 @@ south
 # for development
 tox
 git+git://github.com/deschler/django-modeltranslation#egg=django-modeltranslation
-django-debug-toolbar
+django-debug-toolbar<1.4
 virtualenvwrapper
 coverage
 sphinx
