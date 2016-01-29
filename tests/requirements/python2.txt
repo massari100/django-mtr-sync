@@ -25,5 +25,5 @@ unicodecsv
 lxml
 xlrd
 ezodf
-djangorestframework
+djangorestframework<3.3
 django-mptt<0.8
