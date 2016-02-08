@@ -1,12 +1,10 @@
-"""
-Sphinx plugins for Django documentation.
-"""
 import json
 import os
 import re
 
 from docutils import nodes
 from docutils.parsers.rst import directives
+
 from sphinx import __version__ as sphinx_ver, addnodes
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.util.compat import Directive
@@ -70,6 +68,7 @@ def setup(app):
 
 
 class snippet_with_filename(nodes.literal_block):
+
     """
     Subclass the literal_block to override the visit/depart event handlers
     """
@@ -169,6 +168,7 @@ def depart_snippet_latex(self, node):
 
 
 class SnippetWithFilename(Directive):
+
     """
     The 'snippet' directive that allows to add the filename (optional)
     of a code snippet in the document. This is modeled after CodeBlock.
@@ -215,16 +215,19 @@ class VersionDirective(Directive):
         node['type'] = self.name
         if self.content:
             self.state.nested_parse(self.content, self.content_offset, node)
-        env.note_versionchange(node['type'], node['version'], node, self.lineno)
+        env.note_versionchange(
+            node['type'], node['version'], node, self.lineno)
         return ret
 
 
 class DjangoHTMLTranslator(SmartyPantsHTMLTranslator):
+
     """
     Django-specific reST to HTML tweaks.
     """
 
     # Don't use border=1, which docutils does by default.
+
     def visit_table(self, node):
         self.context.append(self.compact_p)
         self.compact_p = True
@@ -334,6 +337,7 @@ def parse_django_adminopt_node(env, sig, signode):
 
 
 class DjangoStandaloneHTMLBuilder(StandaloneHTMLBuilder):
+
     """
     Subclass to add some extra things we need.
     """
@@ -347,8 +351,10 @@ class DjangoStandaloneHTMLBuilder(StandaloneHTMLBuilder):
         templatebuiltins = {
             "ttags": [n for ((t, n), (l, a)) in xrefs.items()
                       if t == "templatetag" and l == "ref/templates/builtins"],
-            "tfilters": [n for ((t, n), (l, a)) in xrefs.items()
-                         if t == "templatefilter" and l == "ref/templates/builtins"],
+            "tfilters": [
+                n for ((t, n), (l, a)) in xrefs.items()
+                    if t == "templatefilter" and
+                        l == "ref/templates/builtins"],
         }
         outfilename = os.path.join(self.outdir, "templatebuiltins.js")
         with open(outfilename, 'w') as fp:
