@@ -48,7 +48,6 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 
 ## Working on
 - Documentation
-- Move utils to separate lib (move all lib to prefix mtr_ and create virtual package mtr. for redirecting imports "Python don't search in other dirs after it find main module")
 - Copy-past model
 - Fast export, import in object_list
 - Replacer model for minimizing dublication content
