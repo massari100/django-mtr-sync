@@ -18,7 +18,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
    `pip install git+https://github.com/mtrgroup/django-mtr-sync.git`
 2. Add `mtr.sync` to `INSTALLED_APPS` in your settings file
 3. Migrate models `./manage.py migrate`
-4. Configure `Celery`
+4. Configure `Celery` or `RQ`
 5. Create settings for import or export data at `/admin/mtr_sync/settings/` and run action `Sync data` to start process.
 
 ## Features
