@@ -15,8 +15,7 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 
 ## How to use
 1. Install packages from git:
-   `pip install git+https://github.com/mtrgroup/django-mtr-utils.git#egg=django-mtr-utils`
-   `pip install git+https://github.com/mtrgroup/django-mtr-sync.git#egg=django-mtr-sync`
+   `pip install git+https://github.com/mtrgroup/django-mtr-utils.git#egg=django-mtr-utils git+https://github.com/mtrgroup/django-mtr-sync.git#egg=django-mtr-sync`
 2. Add `mtr.sync` to `INSTALLED_APPS` in your settings file
 3. Migrate models `./manage.py migrate`
 4. Configure `Celery` or `RQ`
