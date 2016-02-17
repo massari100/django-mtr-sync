@@ -11,7 +11,7 @@ from .lib.signals import export_started, export_completed, \
     import_started, import_completed, error_raised
 from .lib.exceptions import ErrorChoicesMixin
 
-from mtr.utils.models import PositionRelatedMixin
+from mtr.utils.models.mixins import PositionRelatedMixin
 
 
 class ExportManager(models.Manager):
