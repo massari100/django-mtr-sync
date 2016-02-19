@@ -16,6 +16,7 @@ Development version
 You can get it the latest source from our `git`_ repository::
 
    git clone git://github.com/mtrgroup/django-mtr-sync.git django-mtr-sync
+   git clone git://github.com/mtrgroup/django-mtr-utils.git django-mtr-utils
 
 Add the resulting folder to your `PYTHONPATH`_ or symlink the ``mtr`` directory
 inside it into a directory which is on your PYTHONPATH, such as your Python
