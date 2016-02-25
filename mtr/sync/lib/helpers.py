@@ -2,14 +2,13 @@ from collections import OrderedDict
 
 import django
 
-from django.utils.six.moves import filterfalse
 from django.utils.encoding import smart_text
 from django.core.urlresolvers import reverse as reverse_original
 from django.db import models
 from django.conf import settings as django_settings
 from django.db.models.fields import Field as ModelField
 
-from ...utils.helpers import model_settings
+from mtr.utils.helpers import model_settings, models_list
 
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 _symbols = (':', '|', ',', '+', '-')
@@ -90,20 +89,6 @@ def column_index(value):
             return index
 
     raise IndexError
-
-
-def models_list():
-    if django.get_version() <= '1.7':
-        mlist = models.get_models()
-    else:
-        from django.apps import apps
-
-        mlist = apps.get_models()
-
-    mlist = filterfalse(
-        lambda m: model_settings(m, 'sync').get('ignore', False), mlist)
-
-    return mlist
 
 
 def model_fields(model, settings=None):
