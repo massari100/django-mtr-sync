@@ -1,8 +1,9 @@
 from django.db import models
 
 from .manager import manager
-from ...utils.helpers import update_instance
 from ..translation import gettext_lazy as _
+
+from mtr.utils.helpers import update_instance
 
 
 def find_instance(filters, model):

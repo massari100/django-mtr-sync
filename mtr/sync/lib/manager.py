@@ -5,7 +5,7 @@ from django.utils.translation import activate
 from django.http import QueryDict
 from django.contrib.admin.views.main import IGNORED_PARAMS
 
-from ...utils.manager import BaseManager
+from mtr.utils.manager import BaseManager
 
 from .helpers import make_model_class, process_attribute, \
     model_fields, cell_value, model_settings
