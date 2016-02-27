@@ -12,9 +12,7 @@ if django.get_version() < '1.7':
 urlpatterns = i18n_patterns(
     '',
 
-    # url(r'^grappelli/', include('grappelli.urls')),
     url(r'^admin/', include(admin.site.urls)),
-
     url(r'^sync/', include('mtr.sync.urls')),
 )
 
