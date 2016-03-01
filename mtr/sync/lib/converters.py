@@ -38,10 +38,12 @@ def comalist(value, action):
 
 @manager.register('converter', label=_('Boolean'))
 def boolean(value, action):
-    if value:
-        return True
-    else:
-        return False
+    if isinstance(value, str):
+        if value.isdigit():
+            value = int(value)
+    elif not isinstance(value, int):
+        value = 0
+    return bool(value)
 
 
 @manager.register('converter', label=_('File path'))
