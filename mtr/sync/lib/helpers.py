@@ -8,7 +8,7 @@ from django.db import models
 from django.conf import settings as django_settings
 from django.db.models.fields import Field as ModelField
 
-from mtr.utils.helpers import model_settings, models_list
+from mtr.utils.helpers import model_settings, models_list, model_app_name
 
 _chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 _symbols = (':', '|', ',', '+', '-')
@@ -126,10 +126,6 @@ def model_fields(model, settings=None):
     return OrderedDict(ordered_fields)
 
 
-def model_full_app_name(model):
-    return '{}.{}'.format(model._meta.app_label, model.__name__).lower()
-
-
 def model_attributes(settings, prefix=None, model=None, parent=None, level=0):
     """Return iterator of fields names by given model in settings"""
 
@@ -180,7 +176,7 @@ def make_model_class(settings):
     """Return class for name in model"""
 
     for model in models_list():
-        if settings.model == model_full_app_name(model):
+        if settings.model == model_app_name(model):
             return model
 
 
