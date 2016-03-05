@@ -9,7 +9,6 @@ Subpackages
     mtr.sync.lib
     mtr.sync.migrations
     mtr.sync.south_migrations
-    mtr.sync.templates
 
 Submodules
 ----------
@@ -34,6 +33,14 @@ mtr.sync.apps module
 --------------------
 
 .. automodule:: mtr.sync.apps
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+mtr.sync.context_processors module
+----------------------------------
+
+.. automodule:: mtr.sync.context_processors
     :members:
     :undoc-members:
     :show-inheritance:

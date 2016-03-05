@@ -180,21 +180,6 @@ def make_model_class(settings):
             return model
 
 
-def model_choices():
-    """Return all registered django models as choices"""
-
-    yield ('', '-' * 9)
-
-    for model in models_list():
-        yield (
-            '{}.{}'.format(
-                model._meta.app_label.lower(),
-                model.__name__.lower()),
-            smart_text('{} | {}').format(
-                model._meta.app_label.title(),
-                model._meta.verbose_name.title()))
-
-
 def _process_fk_attribute(model, attribute):
     attributes = attribute.split('|_fk_|')
     attr = getattr(model, attributes[0], None)

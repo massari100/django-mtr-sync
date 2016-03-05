@@ -1,8 +1,8 @@
 from django import forms
 
 from mtr.utils.forms import GlobalInitialFormMixin
+from mtr.utils.helpers import model_choices
 
-from .lib.helpers import model_choices
 from .lib.manager import manager
 
 from .models import Settings, Field
