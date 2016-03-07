@@ -18,11 +18,11 @@ django-rq
 django-suit
 
 # dependencies
+lxml
 git+git://github.com/mtrgroup/django-mtr-utils#egg=django-mtr-utils
-hg+https://bitbucket.org/openpyxl/openpyxl@2.1#egg=openpyxl
+openpyxl<=2.1
 xlwt-future
 unicodecsv
-lxml
 xlrd
 ezodf
 djangorestframework<3.3
