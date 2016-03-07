@@ -147,6 +147,7 @@ SYNC_SETTINGS = {
     'ACTIONS': ['mtr.sync.lib.actions', 'app.sync'],
     'BROKER': 'celery',
     'INCLUDE': {
-        'API': True
+        'API': True,
+        'ADMIN': True,
     }
 }
