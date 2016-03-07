@@ -2,15 +2,13 @@ from setuptools import setup, find_packages
 
 import os
 
-from mtr.sync import get_version
-
 
 def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 README = read('README.md')
 
-version = get_version()
+version = '0.1'  # hardcoded, because of circular namespace dependencies
 
 setup(
     name='django-mtr-sync',
@@ -40,7 +38,7 @@ setup(
             '#egg=django-mtr-utils-0.1',
     ],
     install_requires=[
-        'django>=1.6', 'django-mtr-utils', 'xlrd', 'ezodf', 'lxml',
+        'django>=1.6', 'django-mtr-utils==0.1', 'xlrd', 'ezodf', 'lxml',
         'openpyxl<=2.1', 'xlwt-future', 'unicodecsv'
     ],
 )
