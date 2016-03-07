@@ -42,7 +42,7 @@ SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
     'BROKER': 'rq',
 
     'INCLUDE': {
-        'API': True,
+        'API': False,
         'ADMIN': True,
     }
 })
