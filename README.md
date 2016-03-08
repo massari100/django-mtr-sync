@@ -6,7 +6,7 @@
 
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/?branch=master) [![Build Status](https://travis-ci.org/mtrgroup/django-mtr-sync.svg?branch=master)](https://travis-ci.org/mtrgroup/django-mtr-sync) [![Documentation Status](https://readthedocs.org/projects/django-mtr-sync/badge/?version=latest)](https://readthedocs.org/projects/django-mtr-sync/?badge=latest)
 
-Project updates here [http://mtr.website](http://mtr.website)
+Project updates here [http://mtrgroup.github.io/](http://mtrgroup.github.io/)
 
 Thank you guys for funding this project at [kickstarter](https://www.kickstarter.com/projects/1625615835/django-opensource-improved-import-export-package)
 
