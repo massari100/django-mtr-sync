@@ -144,7 +144,7 @@ RQ_QUEUES = {
 }
 
 SYNC_SETTINGS = {
-    'ACTIONS': ['mtr.sync.lib.actions', 'app.sync'],
+    'ACTIONS': ['app.sync'],
     'BROKER': 'celery',
     'INCLUDE': {
         'API': True,
