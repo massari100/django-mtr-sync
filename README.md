@@ -60,3 +60,4 @@ Includes only docstrings from module [http://django-mtr-sync.rtfd.org/](http://d
 - Periodic import, export for automatic updates
 - Video tutorial how to set up package and use it
 - Plugins for editors ckeditor and redactor — insert file from already exported files
+- Insert to columns (inline, stacked) from table, for fast creation of inline objects when you don't need to create sync
