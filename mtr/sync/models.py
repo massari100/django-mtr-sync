@@ -11,7 +11,8 @@ from .lib.signals import export_started, export_completed, \
     import_started, import_completed, error_raised
 from .lib.exceptions import ErrorChoicesMixin
 
-from mtr.utils.models.mixins import PositionRelatedMixin
+from mtr.utils.models.mixins import PositionRelatedMixin, \
+    CreatedAtUpdatedAtMixin
 
 
 class ExportManager(models.Manager):
@@ -61,7 +62,7 @@ class ActionsMixin(models.Model):
 
 
 @python_2_unicode_compatible
-class Settings(ActionsMixin):
+class Settings(ActionsMixin, CreatedAtUpdatedAtMixin):
 
     """Settings for imported and exported files"""
 
@@ -80,11 +81,6 @@ class Settings(ActionsMixin):
     model = models.CharField(
         _('model'), max_length=255, blank=True,
         help_text=_("Choose database model if action need it"))
-
-    created_at = models.DateTimeField(
-        _('created at'), auto_now_add=True)
-    updated_at = models.DateTimeField(
-        _('updated at'), auto_now=True)
 
     show_in_quick_menu = models.BooleanField(
         _('show in quick menu list'), default=False)
