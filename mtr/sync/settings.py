@@ -1,6 +1,6 @@
 import os
 
-from django.conf import settings
+from django.conf import settings as dsettings
 
 from mtr.utils.settings import getattr_with_prefix, strip_media_root
 
@@ -8,41 +8,36 @@ from mtr.utils.settings import getattr_with_prefix, strip_media_root
 def get_buffer_file_path(instance, filename, absolute=False):
     """Generate file path for report"""
 
+    # TODO: simplify, not understandable
+
     action = getattr(instance, 'action', 1)
     action = 'import' if action else 'export'
     path = os.path.join(
-        settings.MEDIA_ROOT, 'sync', action, filename.lower())
+        dsettings.MEDIA_ROOT, 'sync', action, filename.lower())
 
     if not absolute:
         path = strip_media_root(path)
 
     return path
 
-SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
-    # default processor
-    'DEFAULT_PROCESSOR': 'XlsxProcessor',
-
+settings = getattr_with_prefix('SYNC', 'SETTINGS', {
     # path for report file
-    'FILE_PATH': get_buffer_file_path,
+    'report_path': get_buffer_file_path,
 
-    'DEFAULT': [
-        'mtr.sync.lib.actions',
-        'mtr.sync.lib.converters'
-    ],
+    # TODO: move to settings model
+    'default_processor': 'XlsxProcessor',
 
-    # additional dependensies for import and export to register
-    'PROCESSORS': [
+    'actions': ['mtr.sync.lib.actions'],
+    'converters': ['mtr.sync.lib.converters'],
+    'processors': [
         'mtr.sync.lib.processors.xlsx',
         'mtr.sync.lib.processors.xls',
         'mtr.sync.lib.processors.ods',
         'mtr.sync.lib.processors.csv',
     ],
-    'ACTIONS': [],
-    'CONVERTERS': [],
-    'BROKER': 'rq',
-
-    'INCLUDE': {
-        'API': False,
-        'ADMIN': True,
+    'broker': 'rq',
+    'include': {
+        'api': False,
+        'admin': True,
     }
 })

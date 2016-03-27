@@ -134,6 +134,8 @@ class Processor(DataProcessor):
 
         self.save()
 
+        # BUGFIX: created_at timezone +hours
+
         # send signal to save report
         for response in export_completed.send(
                 self, date=timezone.now(),
