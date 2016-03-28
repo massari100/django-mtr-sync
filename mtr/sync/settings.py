@@ -20,9 +20,9 @@ def get_buffer_file_path(instance, filename, absolute=False):
 
     return path
 
-settings = getattr_with_prefix('SYNC', 'SETTINGS', {
+SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
     # path for report file
-    'report_path': get_buffer_file_path,
+    'path': get_buffer_file_path,
 
     # TODO: move to settings model
     'default_processor': 'XlsxProcessor',

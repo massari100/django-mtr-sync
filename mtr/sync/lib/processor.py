@@ -93,7 +93,7 @@ class Processor(DataProcessor):
 
         filename = '{}{}'.format(
             self.settings.filename or str(self.report.id), self.file_format)
-        path = SETTINGS['FILE_PATH'](self.report, '', absolute=True)
+        path = SETTINGS['path'](self.report, '', absolute=True)
         if not os.path.exists(path):
             os.makedirs(path)
 
@@ -139,7 +139,7 @@ class Processor(DataProcessor):
         # send signal to save report
         for response in export_completed.send(
                 self, date=timezone.now(),
-                path=SETTINGS['FILE_PATH'](self.report, filename)):
+                path=SETTINGS['path'](self.report, filename)):
             self.report = response[1]
 
         return self.report

@@ -8,7 +8,7 @@ Installation
 .. Stable version
 .. ==============
 
-.. Use pip to get latest stable version, just type as usual `pip install django-mtr-sync` or add to your `requirements.txt` file. By default it will use `openpyxl` for `xlsx` format. You can change this by changing `PROCESSORS` and `DEFAULT_PROCESSOR`.
+.. Use pip to get latest stable version, just type as usual `pip install django-mtr-sync` or add to your `requirements.txt` file. By default it will use `openpyxl` for `xlsx` format. You can change this by changing `PROCESSORS` and `default_processor`.
 
 Development version
 ===================

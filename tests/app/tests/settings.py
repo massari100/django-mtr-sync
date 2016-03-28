@@ -17,5 +17,5 @@ class SettingsTest(TestCase):
 
         with self.settings(**new_settings):
             self.assertEqual(
-                SETTINGS['FILE_PATH'](instance, 'filename.xls'),
+                SETTINGS['path'](instance, 'filename.xls'),
                 'sync/import/filename.xls')
