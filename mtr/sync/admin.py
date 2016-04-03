@@ -5,7 +5,7 @@ from django.utils.encoding import smart_text
 from django.contrib import admin
 from django import forms
 
-from mtr.utils.helpers import make_prefixed_themed
+from mtr.utils.helpers import make_prefixed_themed_path
 from mtr.utils.admin import CopyActionMixin, ObjectInlineMixin
 
 from .models import Report, Settings, Field, Message, Context, Sequence
@@ -15,7 +15,7 @@ from .translation import gettext_lazy as _
 from .forms import SettingsAdminForm, FieldInlineAdminForm
 
 
-themed = make_prefixed_themed('mtr/sync')
+themed = make_prefixed_themed_path('mtr/sync')
 
 
 class SyncAdminMixin(object):

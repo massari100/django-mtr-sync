@@ -21,12 +21,8 @@ def get_buffer_file_path(instance, filename, absolute=False):
     return path
 
 SETTINGS = getattr_with_prefix('SYNC', 'SETTINGS', {
-    # path for report file
     'path': get_buffer_file_path,
-
-    # TODO: move to settings model
     'default_processor': 'XlsxProcessor',
-
     'actions': ['mtr.sync.lib.actions'],
     'converters': ['mtr.sync.lib.converters'],
     'processors': [
