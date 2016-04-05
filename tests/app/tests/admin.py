@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse as reverse_original
 
-from mtr.utils.helpers import themed
+from mtr.utils.helpers import themed_path
 from mtr.sync.lib.helpers import reverse
 
 
@@ -19,7 +19,7 @@ class AdminMixinTest(TestCase):
             'admin:app_person_changelist'))
 
         self.assertIn(
-            themed('mtr/sync/admin/change_list.html', True),
+            themed_path('mtr/sync/admin/change_list.html', True),
             map(lambda t: t.name, content.templates))
 
         self.assertContains(content, 'Export')
