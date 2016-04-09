@@ -46,19 +46,10 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 
-if django.get_version() >= '1.7':
-    MIDDLEWARE_CLASSES += (
-        'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
-    )
-else:
-    INSTALLED_APPS += (
-        'south',
-    )
-    SOUTH_MIGRATION_MODULES = {
-        'app': 'app.south_migrations',
-        'sync': 'mtr.sync.south_migrations',
-        'utils': 'mtr.utils.south_migrations',
-    }
+MIDDLEWARE_CLASSES += (
+    'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
+)
+
 
 MIDDLEWARE_CLASSES += (
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -99,12 +90,9 @@ WSGI_APPLICATION = 'app.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'olddb.sqlite3'),
+        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
-if django.get_version() >= '1.7':
-    DATABASES['default']['NAME'] = os.path.join(BASE_DIR, 'db.sqlite3')
 
 LANGUAGE_CODE = 'en'
 

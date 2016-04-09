@@ -38,7 +38,7 @@ setup(
             '#egg=django-mtr-utils-0.1',
     ],
     install_requires=[
-        'django>=1.6', 'django-mtr-utils==0.1', 'xlrd', 'ezodf', 'lxml',
+        'django>=1.7', 'django-mtr-utils==0.1', 'xlrd', 'ezodf', 'lxml',
         'openpyxl<=2.1', 'xlwt-future', 'unicodecsv'
     ],
 )
