@@ -1,9 +1,6 @@
 from collections import OrderedDict
 
-import django
-
 from django.utils.encoding import smart_text
-from django.core.urlresolvers import reverse as reverse_original
 from django.db import models
 from django.conf import settings as django_settings
 from django.db.models.fields import Field as ModelField
@@ -226,10 +223,3 @@ def process_attribute(model, attribute):
         attr = getattr(model, attribute, None)
 
     return attr
-
-
-def reverse(path):
-    prefix = ''
-    if django.get_version()[:3] >= '1.7':
-        prefix = 'mtr_'
-    return reverse_original('admin:{}sync_{}'.format(prefix, path))

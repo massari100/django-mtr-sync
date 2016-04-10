@@ -1,6 +1,7 @@
 import os
 
 from django.utils import formats
+from django.core.urlresolvers import reverse
 from django.utils.encoding import smart_text
 from django.contrib import admin
 from django import forms
@@ -9,7 +10,7 @@ from mtr.utils.helpers import make_prefixed_themed_path
 from mtr.utils.admin import CopyActionMixin, ObjectInlineMixin
 
 from .models import Report, Settings, Field, Message, Context, Sequence
-from .lib.helpers import model_attributes, reverse
+from .lib.helpers import model_attributes
 from .settings import SETTINGS
 from .translation import gettext_lazy as _
 from .forms import SettingsAdminForm, FieldInlineAdminForm

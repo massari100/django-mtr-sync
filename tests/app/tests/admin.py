@@ -1,9 +1,8 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse as reverse_original
+from django.core.urlresolvers import reverse
 
 from mtr.utils.helpers import themed_path
-from mtr.sync.lib.helpers import reverse
 
 
 class AdminMixinTest(TestCase):
@@ -15,7 +14,7 @@ class AdminMixinTest(TestCase):
         self.client.login(username=self.user.username, password=self.password)
 
     def test_mixin_has_buttons_in_change_view(self):
-        content = self.client.get(reverse_original(
+        content = self.client.get(reverse(
             'admin:app_person_changelist'))
 
         self.assertIn(
@@ -26,7 +25,7 @@ class AdminMixinTest(TestCase):
         self.assertContains(content, 'Import')
 
     def test_settings_export_import_modified_by_link(self):
-        link = reverse('settings_add')
+        link = reverse('admin:mtr_sync_settings_add')
 
         content = self.client.get(
             '{}?action=export&model=app.person&filter='
