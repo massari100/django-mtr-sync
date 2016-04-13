@@ -17,16 +17,19 @@ class SyncTestMixin(object):
     RELATED_MODEL = None
     RELATED_MANY = None
     PROCESSOR = None
-    MODEL_COUNT = 20
+    MODEL_COUNT = 15
     CREATE_PROCESSOR_AT_SETUP = True
 
+    @classmethod
+    def setUpClass(cls):
+        super(SyncTestMixin, cls).setUpClass()
+
+        cls.model = cls.MODEL
+        cls.relatedmodel = cls.RELATED_MODEL
+        cls.manager = Manager()
+        cls.manager.import_modules(SETTINGS['ACTIONS'])
+
     def setUp(self):
-        self.model = self.MODEL
-        self.relatedmodel = self.RELATED_MODEL
-        self.manager = Manager()
-
-        self.manager.import_modules(SETTINGS['ACTIONS'])
-
         activate('de')
 
         self.instance, self.r_instance, self.m_instances = \
