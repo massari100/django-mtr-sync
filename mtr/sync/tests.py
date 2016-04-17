@@ -29,9 +29,9 @@ class SyncTestMixin(object):
         cls.manager = Manager()
         cls.manager.import_modules(SETTINGS['ACTIONS'])
 
-    def setUp(self):
         activate('de')
 
+    def setUp(self):
         self.instance, self.r_instance, self.m_instances = \
             self.model.populate_for_test(self.MODEL_COUNT)
 
