@@ -39,10 +39,10 @@ def cell_value(row, cols, processor=None):
         for col in item.split(','):
             if processor and ':' in col:
                 col, row = col.split(':')
-                row = processor.read(int(row)-1)
+                row = processor.read(int(row) - 1)
             if '-' in col:
                 start, end = col.split('-')
-                value += row[column_index(start):column_index(end)+1]
+                value += row[column_index(start):column_index(end) + 1]
             else:
                 value.append(row[column_index(col)])
         if joiner is not None:
@@ -156,8 +156,8 @@ def model_attributes(settings, prefix=None, model=None, parent=None, level=0):
         if m_prefix:
             child_attrs = []
             child_attrs = model_attributes(
-                    settings, m_prefix.format(name),
-                    model=field.rel.to, parent=model, level=level+1)
+                settings, m_prefix.format(name),
+                model=field.rel.to, parent=model, level=level + 1)
         if prefix:
             name = ''.join((prefix, name))
 

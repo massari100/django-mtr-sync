@@ -1,4 +1,4 @@
-default_app_config = 'mtr.sync.apps.MtrSyncConfig'
+default_app_config = 'mtr.sync.apps.AppConfig'
 
 VERSION = (0, 1)
 
