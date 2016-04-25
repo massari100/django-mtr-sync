@@ -4,6 +4,8 @@
 
 ### WARNING: it's under development and has major changes around commits (no migrations before release, `fabfile.py recreate command`). After release in PIP it will have stable API
 
+### (Warning) Project will be moved to new repository
+
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/mtrgroup/django-mtr-sync/?branch=master) [![Build Status](https://travis-ci.org/mtrgroup/django-mtr-sync.svg?branch=master)](https://travis-ci.org/mtrgroup/django-mtr-sync) [![Documentation Status](https://readthedocs.org/projects/django-mtr-sync/badge/?version=latest)](https://readthedocs.org/projects/django-mtr-sync/?badge=latest)
 
 Project updates here [http://mtrgroup.github.io/](http://mtrgroup.github.io/)
