@@ -20,18 +20,14 @@ class SyncTestMixin(object):
     MODEL_COUNT = 20
     CREATE_PROCESSOR_AT_SETUP = True
 
-    @classmethod
-    def setUpClass(cls):
-        super(SyncTestMixin, cls).setUpClass()
-
-        cls.model = cls.MODEL
-        cls.relatedmodel = cls.RELATED_MODEL
-        cls.manager = Manager()
-        cls.manager.import_modules(SETTINGS['ACTIONS'])
+    def setUp(self):
+        self.model = self.MODEL
+        self.relatedmodel = self.RELATED_MODEL
+        self.manager = Manager()
+        self.manager.import_modules(SETTINGS['ACTIONS'])
 
         activate('de')
 
-    def setUp(self):
         self.instance, self.r_instance, self.m_instances = \
             self.model.populate_for_test(self.MODEL_COUNT)
 
