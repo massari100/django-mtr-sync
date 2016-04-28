@@ -12,7 +12,7 @@ from .lib.signals import export_started, export_completed, \
 from .lib.exceptions import ErrorChoicesMixin
 
 from mtr.utils.models.mixins import PositionRelatedMixin, \
-    CreatedAtUpdatedAtMixin
+    TimeStampedMixin
 
 
 class ExportManager(models.Manager):
@@ -62,7 +62,7 @@ class ActionsMixin(models.Model):
 
 
 @python_2_unicode_compatible
-class Settings(ActionsMixin, CreatedAtUpdatedAtMixin):
+class Settings(ActionsMixin, TimeStampedMixin):
 
     """Settings for imported and exported files"""
 
