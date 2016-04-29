@@ -116,7 +116,8 @@ class Settings(ActionsMixin, TimeStampedMixin):
         help_text=_(
             "What will be done with data, for example,"
             " create or some custom opeartion eg. download image from server"
-            ))
+        )
+    )
     filter_dataset = models.BooleanField(
         _('filter custom dataset'), default=True, help_text=_(
             "Check it if you have custom queryset and want to filter"
