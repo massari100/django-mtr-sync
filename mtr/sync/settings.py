@@ -8,8 +8,6 @@ from mtr.utils.settings import getattr_with_prefix, strip_media_root
 def get_buffer_file_path(instance, filename, absolute=False):
     """Generate file path for report"""
 
-    # TODO: simplify, not understandable
-
     action = getattr(instance, 'action', 1)
     action = 'import' if action else 'export'
     path = os.path.join(
