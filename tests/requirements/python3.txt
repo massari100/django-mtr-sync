@@ -24,4 +24,4 @@ unicodecsv
 xlrd
 ezodf
 djangorestframework
-Crypto
+pycrypto
