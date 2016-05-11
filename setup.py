@@ -35,7 +35,7 @@ setup(
         'django', 'xlsx', 'import data', 'export data', 'csv', 'ods', 'xls'),
     dependency_links=[
         'https://github.com/mtrgroup/django-mtr-utils/tarball/master'
-            '#egg=django-mtr-utils-0.1',
+        '#egg=django-mtr-utils-0.1',
     ],
     install_requires=[
         'django>=1.7', 'django-mtr-utils==0.1', 'xlrd', 'ezodf', 'lxml',
