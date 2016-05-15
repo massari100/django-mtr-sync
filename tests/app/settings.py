@@ -143,10 +143,10 @@ RQ_QUEUES = {
 }
 
 SYNC_SETTINGS = {
-    'ACTIONS': ['app.sync'],
-    'BROKER': 'celery',
-    'INCLUDE': {
-        'API': True,
-        'ADMIN': True,
+    'actions': ['app.sync'],
+    'broker': 'celery',
+    'include': {
+        'api': True,
+        'admin': True,
     }
 }

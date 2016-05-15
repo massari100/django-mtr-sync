@@ -266,7 +266,7 @@ class SequenceAdmin(admin.ModelAdmin):
     latest_sync.allow_tags = True
 
 
-if SETTINGS['INCLUDE']['ADMIN']:
+if SETTINGS['include']['admin']:
     admin.site.register(Report, ReportAdmin)
     admin.site.register(Message, MessageAdmin)
     admin.site.register(Settings, SettingsAdmin)

@@ -8,6 +8,8 @@ from .lib.manager import manager
 from .models import Settings, Field
 
 
+# TODO: refactor
+
 class SettingsAdminForm(GlobalInitialFormMixin, forms.ModelForm):
 
     class Meta:

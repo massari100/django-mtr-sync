@@ -24,7 +24,7 @@ class SyncTestMixin(object):
         self.model = self.MODEL
         self.relatedmodel = self.RELATED_MODEL
         self.manager = Manager()
-        self.manager.import_modules(SETTINGS['ACTIONS'])
+        self.manager.import_modules(SETTINGS['actions'])
 
         activate('de')
 

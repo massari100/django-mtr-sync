@@ -1,7 +1,8 @@
-from .settings import SETTINGS
 from django.conf.urls import url
 
-if SETTINGS['INCLUDE']['API']:
+from .settings import SETTINGS
+
+if SETTINGS['include']['api']:
     from .api import SettingsAPI, FieldAPI
 
     urlpatterns = (
