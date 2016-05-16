@@ -5,12 +5,12 @@ from .settings import SETTINGS
 from .lib.manager import manager
 from ..utils.helpers import make_from_params
 
-if 'django_rq' in settings.INSTALLED_APPS and SETTINGS['BROKER'] == 'rq':
+if 'django_rq' in settings.INSTALLED_APPS and SETTINGS['broker'] == 'rq':
     from django_rq import job as rq_job
 
     def job(f):
         return rq_job(f, timeout=86400)
-elif 'celery' in settings.INSTALLED_APPS and SETTINGS['BROKER'] == 'celery':
+elif 'celery' in settings.INSTALLED_APPS and SETTINGS['broker'] == 'celery':
     from celery import shared_task as job
 else:
     def func(f):

@@ -383,8 +383,7 @@ class Context(models.Model):
 @python_2_unicode_compatible
 class Report(ActionsMixin):
 
-    """Reports for imported and exported operations and link to files
-    """
+    """Reports for imported and exported operations and link to files"""
 
     ERROR = 0
     RUNNING = 1

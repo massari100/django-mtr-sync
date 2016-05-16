@@ -131,12 +131,10 @@ class ProcessorTestMixin(SyncTestMixin):
             last = instances[-1]
 
         worksheet = self.open_report(report)
-        self.check_values(
-            worksheet, first, start_row)
+        self.check_values(worksheet, first, start_row)
 
         worksheet = self.open_report(report)
-        self.check_values(
-            worksheet, last, end_row)
+        self.check_values(worksheet, last, end_row)
 
         self.check_file_existence_and_delete(report)
 
