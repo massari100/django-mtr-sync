@@ -47,7 +47,7 @@ def cell_value(row, cols, processor=None):
                 value.append(row[column_index(col)])
         if joiner is not None:
             joiner = joiner or ' '
-            value = joiner.join(map(lambda v: smart_text(v), value))
+            value = joiner.join(smart_text(v) for v in value)
 
         if '+' in cols:
             items.append(value)

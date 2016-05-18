@@ -29,7 +29,7 @@ def string(value, action):
 def comalist(value, action):
     if action == 'export':
         if isinstance(value, list):
-            return ','.join(map(lambda v: smart_text(v), value))
+            return ','.join(smart_text(v) for v in value)
     else:
         if isinstance(value, text_type):
             return value.split(',')

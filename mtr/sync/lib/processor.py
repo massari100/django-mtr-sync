@@ -101,9 +101,10 @@ class Processor(DataProcessor):
 
     def write_header(self, data):
         if self.settings.include_header and data['fields']:
-            header_data = list(map(
-                lambda f: f.name or f.attribute,
-                data['fields']))
+            header_data = [
+                field.name or field.attribute
+                for field in data['fields']
+            ]
 
             self.write(self.start['row'], header_data)
 

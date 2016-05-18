@@ -19,7 +19,7 @@ class AdminMixinTest(TestCase):
 
         self.assertIn(
             themed_path('mtr/sync/admin/change_list.html', True),
-            map(lambda t: t.name, content.templates))
+            [template.name for template in content.templates])
 
         self.assertContains(content, 'Export')
         self.assertContains(content, 'Import')
