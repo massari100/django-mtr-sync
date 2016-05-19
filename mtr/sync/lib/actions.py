@@ -69,7 +69,7 @@ def filter_fields(
         model_attrs, fields, key=None, can_create=True, params=None):
     filter_params = params or {}
 
-    for field in filter(lambda f: f.find, fields):
+    for field in (field for field in fields if field.find):
         field_value = field.find_value or model_attrs[field.attribute]
 
         if field.find_filter:

@@ -62,7 +62,7 @@ class XlsxProcessor(Processor):
         except StopIteration:
             return [''] * (self._max_cells + 1)
 
-        return list(map(lambda v: v.value, value))
+        return [v.value for v in value]
 
     def read(self, row, cells=None):
         readed = []

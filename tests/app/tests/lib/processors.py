@@ -32,7 +32,7 @@ class XlsProcessorTest(ProcessorTestMixin, TestCase):
                 sheet_value = ''
 
             if isinstance(value, list):
-                value = ','.join(map(lambda v: smart_text(v), value))
+                value = ','.join(smart_text(v) for v in value)
             elif value:
                 value = smart_text(value)
 
@@ -68,7 +68,7 @@ class XlsxProcessorTest(ProcessorTestMixin, TestCase):
             sheet_value = '' if sheet_value is None else sheet_value
 
             if isinstance(value, list):
-                value = ','.join(map(lambda v: smart_text(v), value))
+                value = ','.join(smart_text(v) for v in value)
             elif value:
                 value = smart_text(value)
 
@@ -101,7 +101,7 @@ class CsvProcessorTest(ProcessorTestMixin, TestCase):
             sheet_value = row_values[index]
 
             if isinstance(value, list):
-                value = ','.join(map(lambda v: smart_text(v), value))
+                value = ','.join(smart_text(v) for v in value)
             elif value:
                 value = smart_text(value)
 
@@ -132,7 +132,7 @@ class OdsProcessorTest(ProcessorTestMixin, TestCase):
             sheet_value = row_values[index].value
 
             if isinstance(value, list):
-                value = ','.join(map(lambda v: smart_text(v), value))
+                value = ','.join(smart_text(v) for v in value)
             elif value:
                 value = smart_text(value)
 
