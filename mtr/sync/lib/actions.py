@@ -92,7 +92,7 @@ def filter_fields(
 
 
 def filter_attrs(raw_attrs, fields, mfields, name=None):
-    update_fields = list(filter(lambda f: f.update, fields)) or fields
+    update_fields = [f.update for f in fields] or fields
     update_values = {}
 
     for field in update_fields:
