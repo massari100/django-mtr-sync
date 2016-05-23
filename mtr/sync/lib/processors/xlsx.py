@@ -20,7 +20,6 @@ class XlsxProcessor(Processor):
         self._worksheet = self._workbook.create_sheet()
         self._worksheet.title = self.settings.worksheet
 
-        # prepend rows and cols
         if self.start['row'] > 1:
             for i in range(0, self.start['row']):
                 self._worksheet.append([])
